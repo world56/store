@@ -1,7 +1,11 @@
 import ReactDOM from 'react-dom';
-import App from './App';
+import { Entrance } from '@/router';
+
+const Root = (
+  <Entrance />
+);
 
 ReactDOM.render(
-  <App />,
+  Root,
   document.getElementById('root')
 );
