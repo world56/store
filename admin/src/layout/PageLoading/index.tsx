@@ -1,9 +1,9 @@
 import { Spin } from 'antd';
-import style from './index.styl';
+import styles from './index.styl';
 
-const { loadingView, sping } = style;
+const { loadingView, sping } = styles;
 
-const PageLoading = (): JSX.Element => (
+const PageLoading = () => (
   <div className={loadingView}>
     <Spin size="large" className={sping} />
   </div>

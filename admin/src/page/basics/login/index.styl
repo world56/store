@@ -1,0 +1,94 @@
+.login
+  width 100%
+  height 600px
+  background-color rgb(249, 249, 249)
+
+  .loginCtx
+    width 900px
+    height 100%
+    margin auto
+    position relative
+    background-size 700px 100%
+    background-repeat no-repeat
+    background-position left center
+    background-image url('../../../resource/loginBackground.webp')
+
+  form
+    right 0
+    top 180px
+    width 350px
+    overflow hidden
+    color #303133
+    transition 0.3s
+    text-align right
+    border-radius 6px
+    position absolute
+    text-align center
+    background-color rgba(#fff, 0.8)
+    box-shadow 0 1px 4px rgba(1, 21, 41, 0.1)
+
+    :global(.ant-btn)
+      width 89%
+      margin 24px 20px
+
+    :global(.ant-row)
+      margin 27px 20px 0 20px
+
+    :global(.ant-form-item-explain)
+      position absolute
+      bottom -26px
+      font-size 12px
+
+    :global(.ant-form-item-required::before)
+      display none !important
+
+  svg
+    fill #999
+
+.header
+  width 900px
+  height 90px
+  margin auto
+  line-height 90px
+  user-select none
+
+  .gayhub
+    width 30px
+    height 30px
+    float right
+    margin 30px 0
+    cursor pointer
+
+  div
+    float left
+
+    img
+      width 50px
+      height 50px
+
+    h2
+      margin 0
+      margin-left 10px
+      display inline-block
+      vertical-align middle
+
+      span
+        font-weight 200
+        margin-left 8px
+
+.footer
+  height 60px
+  color #666
+  font-size 12px
+  line-height 60px
+  text-align center
+  user-select none
+
+.hint
+  background #fff8f0
+  vertical-align middle
+  color #999
+  font-size 12px
+  text-align center
+  line-height 36px
+  user-select none

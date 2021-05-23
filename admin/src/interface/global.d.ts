@@ -9,6 +9,11 @@ declare namespace NodeJS {
   }
 }
 
+interface Window {
+  __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: Function;
+  __REDUX_DEVTOOLS_EXTENSION__?: object;
+};
+
 declare module '*.avif' {
   const src: string;
   export default src;

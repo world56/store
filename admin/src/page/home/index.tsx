@@ -1,6 +1,7 @@
-
 const Home = () => {
-  return <h1>首页</h1>
+  return <>
+    <h1>Home</h1>
+  </>
 };
 
 export default Home;

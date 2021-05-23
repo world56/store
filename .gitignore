@@ -9,4 +9,17 @@ yarn-error.log*
 lerna-debug.log*
 
 admin/node_modules/
+admin/dist/
+
 server/node_modules/
+server/dist/
+
+# OS
+.DS_Store
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json

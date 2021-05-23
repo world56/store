@@ -13,7 +13,7 @@ const routes: RouteTypes.RoutePropsList = [
         name: "login",
         path: "/user/login",
         exact: true,
-        component: lazy(() => import("@/page/login")),
+        component: lazy(() => import("@/page/basics/login")),
       },
     ],
   },
