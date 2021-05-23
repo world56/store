@@ -11,8 +11,8 @@ lerna-debug.log*
 admin/node_modules/
 admin/dist/
 
-server/node_modules/
-server/dist/
+service/node_modules/
+service/dist/
 
 # OS
 .DS_Store
