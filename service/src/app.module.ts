@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MONGOOSE_ADDRESS } from '@/config/database';
 import { AdminModule } from './module/admin/admin.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -9,8 +10,7 @@ import { AdminModule } from './module/admin/admin.module';
       useNewUrlParser: true,
     }),
     AdminModule,
+    CommonModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}

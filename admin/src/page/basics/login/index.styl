@@ -29,7 +29,6 @@
 
     :global(.ant-btn)
       width 89%
-      margin 24px 20px
 
     :global(.ant-row)
       margin 27px 20px 0 20px
@@ -41,6 +40,12 @@
 
     :global(.ant-form-item-required::before)
       display none !important
+
+    :global(.ant-btn):nth-last-child(2)
+      margin 20px 20px 0 20px
+
+    :global(.ant-btn):nth-last-child(1)
+      margin 20px 20px 20px 20px
 
   svg
     fill #999
@@ -75,6 +80,12 @@
       span
         font-weight 200
         margin-left 8px
+
+.register
+  width 420px !important
+
+  :global(.ant-modal-body)
+    padding 24px 24px 4px 24px
 
 .footer
   height 60px

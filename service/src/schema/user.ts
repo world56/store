@@ -11,7 +11,7 @@ export class AdminUser {
   @Prop({ type: String, required: true })
   password: string;
 
-  @Prop({ type: String, minlength: 4, maxlength: 2 })
+  @Prop({ type: String, minlength: 2, maxlength: 4 })
   name: string;
 
   @Prop({ type: String, minlength: 11, maxlength: 11 })

@@ -42,7 +42,7 @@ request.interceptors.response.use(
           // 需要走清除、重新登录逻辑
           return Promise.reject();
         default:
-          message.warn(HTTP_STATUS_CODE[500]);
+          message.warn(data.message);
           return Promise.reject(data.content);
       }
     } catch (e) {
