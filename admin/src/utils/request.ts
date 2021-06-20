@@ -1,3 +1,4 @@
+import store from "@/store";
 import { message } from "antd";
 import { Response } from "express";
 import { extend } from "umi-request";
@@ -20,13 +21,15 @@ const request = extend({
 });
 
 request.interceptors.request.use(
-  (url, options) => ({
-    url,
-    options: {
-      ...options,
-      interceptors: true,
-    },
-  }),
+  (url, options) => {
+    const headers = {
+      Authorization: store.getState().user.token as string,
+    };
+    return {
+      url,
+      options: { ...options, headers },
+    };
+  },
   { global: true },
 );
 

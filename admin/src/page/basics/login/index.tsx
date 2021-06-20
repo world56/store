@@ -12,9 +12,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import type * as UserType from '@/interface/user';
 
-/**
- * @name Login 登录页
- */
+
 const Login = () => {
 
   const actions = useActions({ userLogin });
@@ -32,7 +30,7 @@ const Login = () => {
 
   return (
     <Container>
-      <Form name='@Ming' form={form}>
+      <Form form={form}>
         <Hint />
         <Form.Item name="account" rules={[{ required: true, message: '账号不得为空' }]}>
           <Input placeholder='请输入账号' prefix={<UserOutlined />} />

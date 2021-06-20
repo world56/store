@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import type { RouteComponentProps } from "react-router-dom";
+// import type { RouteComponentProps } from "react-router-dom";
 
 export interface Routes {
   nav?: 1 | 0;
@@ -8,7 +8,7 @@ export interface Routes {
   title?: string;
   exact?: boolean;
   routes?: Routes[];
-  component: ComponentType<InitProps>;
+  component: ComponentType<RouteMap>;
 };
 
 export type RoutePropsList = Routes[];
@@ -17,4 +17,4 @@ export type RouteMap = {
   routes: RoutePropsList;
 };
 
-export type InitProps = RouteComponentProps & RouteMap;
+// export type InitProps = RouteComponentProps & RouteMap;

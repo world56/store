@@ -21,6 +21,7 @@ const routes: RouteTypes.RoutePropsList = [
     name: "home",
     path: "/",
     component: lazy(() => import("@/page/home")),
+    routes: [],
   },
 ];
 

@@ -1,9 +1,9 @@
 import * as USER_ACTION from "../action/user";
 
-import type { UserState } from "../reducers/user";
+// import type { UserState } from "../reducers/user";
 import type * as UserType from "@/interface/user";
 
-export const setUserInfo = (params: UserState) => ({
+export const setUserInfo = (params: UserType.Login.UserInfo) => ({
   type: USER_ACTION.USER_LOGIN.SET_USER_INFO,
   params,
 });

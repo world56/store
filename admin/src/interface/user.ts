@@ -1,4 +1,6 @@
 export namespace Login {
+  export type PubilcKey = string;
+
   export interface AccountSecret {
     account: string;
     password: string;
@@ -12,7 +14,6 @@ export namespace Login {
 
   export interface UserInfo extends Omit<RegisterUser, "password"> {
     token: string;
-    ctime: string;
     isSuper: string;
   }
 }

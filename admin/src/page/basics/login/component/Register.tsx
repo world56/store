@@ -1,7 +1,8 @@
 import styles from '../index.styl';
 import * as REG from '@/constant/reg';
-import { register } from '@/api/user';
+import { encryption } from "@/utils/crypto";
 import { Modal, Form, Input, message } from 'antd';
+import { register, getPubilcKey } from '@/api/user';
 
 import type * as UserType from '@/interface/user';
 
@@ -32,6 +33,8 @@ const Register: React.FC<RegisterProps> = ({
 
   async function onSumbit() {
     const values = await form.validateFields();
+    const key = await getPubilcKey();
+    values.password = encryption(key, values.password);
     await register(values);
     message.success('注册成功');
     onCancel();
