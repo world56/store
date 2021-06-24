@@ -1,6 +1,7 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import * as CONSTANT_USER from '@/constant/user';
 
+import type { Model, Document } from 'mongoose';
 import type * as COMMON_TYPE from '@/interface/common';
 
 @Schema()
@@ -25,3 +26,5 @@ export class AdminUser {
 }
 
 export const AdminUserSchema = SchemaFactory.createForClass(AdminUser);
+
+export type AdminUserSchemaType = Model<AdminUser & Document>;

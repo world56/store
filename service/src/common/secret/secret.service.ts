@@ -9,10 +9,13 @@ export class SecretService {
   private key?: SecretType.KeyToRSA;
 
   get secret() {
-    return this.key;
+    if (this.key) {
+      return this.key;
+    }
+    return this.createRSA();
   }
 
-  async createRSA() {
+  createRSA() {
     const key = generateKeyPairSync('rsa', {
       modulusLength: 1024,
       publicKeyEncoding: { type: 'pkcs1', format: 'pem' },

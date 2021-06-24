@@ -34,8 +34,8 @@ const Register: React.FC<RegisterProps> = ({
   async function onSumbit() {
     const values = await form.validateFields();
     const key = await getPubilcKey();
-    values.password = encryption(key, values.password);
-    await register(values);
+    const userInfo = encryption(key, JSON.stringify(values));
+    await register(userInfo);
     message.success('注册成功');
     onCancel();
   };

@@ -1,25 +1,28 @@
-import { AdminUser } from '@/schema/user';
+import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { AuthService } from '@/common/auth/auth.service';
 import { SecretService } from '@/common/secret/secret.service';
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 
-import type { Model, Document } from 'mongoose';
+import { AdminUser } from '@/schema/user';
+
 import type * as UserType from '@/interface/user';
+import type { AdminUserSchemaType } from '@/schema/user';
 
 @Injectable()
 export class UserService {
-  public constructor(
+  constructor(
     @InjectModel(AdminUser.name)
-    private readonly UserModel: Model<AdminUser & Document>,
+    private readonly UserModel: AdminUserSchemaType,
+    private readonly AuthService: AuthService,
     private readonly SecretService: SecretService,
   ) {}
 
-  createRSA() {
-    return this.SecretService.createRSA();
+  get secret() {
+    return this.SecretService.secret;
   }
 
   private decode(user: UserType.AdminUser.LoginAccountSecret | string) {
-    const { privateKey } = this.SecretService.secret;
+    const { privateKey } = this.secret;
     if (typeof user === 'object') {
       const pwd = this.SecretService.decrypt(user.password, privateKey);
       user.password = this.SecretService.md5(pwd);
@@ -33,17 +36,35 @@ export class UserService {
     }
   }
 
-  async findUser(account: UserType.AdminUser.LoginAccountSecret | string) {
+  public async findUser(
+    account: UserType.AdminUser.LoginAccountSecret | string,
+  ) {
     const param = this.decode(account);
     return this.UserModel.findOne(param);
   }
 
-  async login(data: string) {
-    const user = await this.findUser(data);
+  async register(account: string) {
+    const param = this.decode(account);
+    const user = await this.UserModel.findOne({ account: param.account });
     if (user) {
-      // const token = this.JwtService.sign(user.toJSON());
+      throw new HttpException(
+        '该账号名已经被注册',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    } else {
+      await this.UserModel.create(param);
+      return;
+    }
+  }
+
+  async login(data: string) {
+    const param = this.decode(data);
+    const user = await this.UserModel.findOne(param);
+    console.log('@登录', user);
+    if (user) {
+      const token = this.AuthService.createJWT(user.toJSON());
       const { name, phone, is_super } = user;
-      return { name, phone, is_super };
+      return { name, phone, is_super, token };
     }
     throw new HttpException('请检查账号密码是否正确', HttpStatus.BAD_REQUEST);
   }

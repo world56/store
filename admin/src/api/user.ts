@@ -15,16 +15,9 @@ export function login(data:string) {
   });
 }
 
-export function register(params: UserType.Login.RegisterUser) {
+export function register(data: string) {
   return request("/admin/user/register", {
     method: "POST",
-    params,
-  });
-}
-
-
-export function testJWT(){
-  return request("/admin/user/list", {
-    method: "GET",
+    data,
   });
 }

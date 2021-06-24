@@ -1,25 +1,21 @@
 import { JwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
-import { UserService } from '@/module/user/user.service';
+
+import { AdminUser } from '@/schema/user';
 
 @Injectable()
 export class AuthService {
-  public constructor(
-    private readonly JwtService: JwtService,
-    private readonly UserService: UserService,
-  ) {}
+  constructor(private readonly JwtService: JwtService) {}
 
-  async validate(account: string) {
-    const user = await this.UserService.findUser(account);
-    if (user) {
-      const { password, ...result } = user;
-      return result;
+  createJWT(user: AdminUser) {
+    return this.JwtService.sign(user);
+  }
+
+  decodeJwt(key: string) {
+    try {
+      return this.JwtService.verify(key);
+    } catch (error) {
+      return false;
     }
-    return null;
   }
-
-  handerReqest(){
-    console.log('@111')
-  }
-
 }

@@ -1,10 +1,13 @@
 import store from "@/store";
 import { message } from "antd";
-import { Response } from "express";
+import Cookies from "js-cookie";
 import { extend } from "umi-request";
 import { HTTP_STATUS_CODE } from "@/constant/http";
 import { REQUEST_TIMEOUT, REQUEST_PREFIX } from "@/config/request";
 
+import * as ENUM_HTTP from "@/enum/http";
+
+import type { Response } from "express";
 import type { ResponseError } from "umi-request";
 import type { ResGateway } from "@/interface/common";
 
@@ -38,11 +41,12 @@ request.interceptors.response.use(
     try {
       const data = await res.clone().json();
       switch (data.code) {
-        case 200:
+        case ENUM_HTTP.HTTP_STATUS.OK:
           return Promise.resolve(data.content);
-        case 401:
-          message.warn(HTTP_STATUS_CODE[401]);
-          // 需要走清除、重新登录逻辑
+        case ENUM_HTTP.HTTP_STATUS.UNAUTHORIZED:
+          Cookies.remove("_token");
+          message.warn(HTTP_STATUS_CODE[ENUM_HTTP.HTTP_STATUS.UNAUTHORIZED]);
+          setTimeout(() => window.location.reload(), 1800);
           return Promise.reject();
         default:
           message.warn(data.message);
