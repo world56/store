@@ -45,7 +45,10 @@ request.interceptors.response.use(
           return Promise.resolve(data.content);
         case ENUM_HTTP.HTTP_STATUS.UNAUTHORIZED:
           Cookies.remove("_token");
-          message.warn(HTTP_STATUS_CODE[ENUM_HTTP.HTTP_STATUS.UNAUTHORIZED]);
+          message.warn(
+            data?.message ||
+              HTTP_STATUS_CODE[ENUM_HTTP.HTTP_STATUS.UNAUTHORIZED],
+          );
           setTimeout(() => window.location.reload(), 1800);
           return Promise.reject();
         default:
@@ -57,7 +60,9 @@ request.interceptors.response.use(
       return Promise.reject(e);
     }
   },
-  { global: true },
+  {
+    global: true,
+  },
 );
 
 export default request;

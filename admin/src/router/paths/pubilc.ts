@@ -1,4 +1,6 @@
 import { lazy } from "react";
+import privateRoutes from "./private";
+
 import type * as RouteTypes from "@/interface/route";
 
 const Connection = lazy(() => import("../component/Connection"));
@@ -20,8 +22,8 @@ const routes: RouteTypes.RoutePropsList = [
   {
     name: "home",
     path: "/",
-    component: lazy(() => import("@/page/home")),
-    routes: [],
+    component: lazy(() => import("@/layout/Home")),
+    routes: privateRoutes,
   },
 ];
 

@@ -1,1 +1,3 @@
-export default undefined;
+const routes:any = [];
+
+export default routes;

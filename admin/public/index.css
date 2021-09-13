@@ -11,9 +11,9 @@ body,
   min-width: 1200px;
 }
 
-/* body {
-  background: rgb(240, 242, 245) !important;
-} */
+.ant-layout {
+  height: 100%;
+}
 
 .ant-table-thead tr th {
   text-align: center !important;

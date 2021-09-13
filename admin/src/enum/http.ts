@@ -1,3 +1,8 @@
+export enum REQUEST_MODE {
+  GET = "GET",
+  POST = "POST",
+}
+
 export enum HTTP_STATUS {
   CONTINUE = 100,
   SWITCHING_PROTOCOLS = 101,
