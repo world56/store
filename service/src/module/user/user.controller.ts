@@ -1,6 +1,8 @@
 import { UserService } from './user.service';
 import { UserGuard } from '@/guard/user.guard';
-import { Get, Post, Body, Controller, UseGuards } from '@nestjs/common';
+import { Req, Get, Post, Body, Controller, UseGuards } from '@nestjs/common';
+
+import type { FastifyRequest } from 'fastify';
 
 @Controller('admin/user')
 export class UserController {
@@ -26,5 +28,10 @@ export class UserController {
   @Post('/register')
   register(@Body() account: string) {
     return this.UserService.register(account);
+  }
+
+  @Get('/logout')
+  logout(@Req() req: FastifyRequest) {
+    return this.UserService.logout(req.headers.authorization);
   }
 }

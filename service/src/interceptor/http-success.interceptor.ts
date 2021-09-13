@@ -21,7 +21,7 @@ export class HttpSucessInterceptor<T>
     const response = http.getResponse();
     return next.handle().pipe(
       map((content) => {
-        response.status(200);
+        response.status(HttpStatus.OK);
         return {
           content,
           message: 'sucess',

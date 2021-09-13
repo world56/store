@@ -60,12 +60,15 @@ export class UserService {
   async login(data: string) {
     const param = this.decode(data);
     const user = await this.UserModel.findOne(param);
-    console.log('@登录', user);
     if (user) {
       const token = this.AuthService.createJWT(user.toJSON());
       const { name, phone, is_super } = user;
       return { name, phone, is_super, token };
     }
     throw new HttpException('请检查账号密码是否正确', HttpStatus.BAD_REQUEST);
+  }
+
+  async logout(authorization: string) {
+    throw new HttpException('退出成功', HttpStatus.UNAUTHORIZED);
   }
 }
