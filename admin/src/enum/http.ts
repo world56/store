@@ -1,6 +1,7 @@
 export enum REQUEST_MODE {
   GET = "GET",
   POST = "POST",
+  DELETE = "DELETE",
 }
 
 export enum HTTP_STATUS {

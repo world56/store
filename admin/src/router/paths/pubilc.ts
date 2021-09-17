@@ -22,7 +22,7 @@ const routes: TypeRoute.RouteListType = [
   {
     name: "home",
     path: "/",
-    component: lazy(() => import("@/layout/Home")),
+    component: lazy(() => import("@/page/home")),
     routes: privateRoutes,
   },
 ];
