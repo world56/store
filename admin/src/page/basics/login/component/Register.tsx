@@ -4,7 +4,7 @@ import { encryption } from "@/utils/crypto";
 import { Modal, Form, Input, message } from 'antd';
 import { register, getPubilcKey } from '@/api/user';
 
-import type * as UserType from '@/interface/user';
+import type { TypeUser } from '@/interface/user';
 
 interface RegisterProps {
   window: boolean;
@@ -29,7 +29,7 @@ const Register: React.FC<RegisterProps> = ({
   onClose
 }) => {
 
-  const [form] = Form.useForm<UserType.Login.RegisterUser>();
+  const [form] = Form.useForm<TypeUser.RegisterUser>();
 
   async function onSumbit() {
     const values = await form.validateFields();

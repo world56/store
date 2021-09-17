@@ -13,8 +13,8 @@ export class UserService {
   constructor(
     @InjectModel(AdminUser.name)
     private readonly UserModel: AdminUserSchemaType,
-    private readonly AuthService: AuthService,
     private readonly SecretService: SecretService,
+    public readonly AuthService: AuthService,
   ) {}
 
   get secret() {
@@ -61,14 +61,12 @@ export class UserService {
     const param = this.decode(data);
     const user = await this.UserModel.findOne(param);
     if (user) {
-      const token = this.AuthService.createJWT(user.toJSON());
-      const { name, phone, is_super } = user;
-      return { name, phone, is_super, token };
+      return this.AuthService.createJWT(user.toJSON());
     }
     throw new HttpException('请检查账号密码是否正确', HttpStatus.BAD_REQUEST);
   }
 
-  async logout(authorization: string) {
+  async logout() {
     throw new HttpException('退出成功', HttpStatus.UNAUTHORIZED);
   }
 }

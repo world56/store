@@ -1,4 +1,3 @@
-import store from "@/store";
 import { message } from "antd";
 import Cookies from "js-cookie";
 import { extend } from "umi-request";
@@ -6,6 +5,7 @@ import { HTTP_STATUS_CODE } from "@/constant/http";
 import { REQUEST_TIMEOUT, REQUEST_PREFIX } from "@/config/request";
 
 import * as ENUM_HTTP from "@/enum/http";
+import { TOKEN_KEY } from "@/config/user";
 
 import type { Response } from "express";
 import type { ResponseError } from "umi-request";
@@ -25,9 +25,7 @@ const request = extend({
 
 request.interceptors.request.use(
   (url, options) => {
-    const headers = {
-      Authorization: store.getState().user.token as string,
-    };
+    const headers = { Authorization: Cookies.get(TOKEN_KEY) as string };
     return {
       url,
       options: { ...options, headers },
@@ -44,7 +42,7 @@ request.interceptors.response.use(
         case ENUM_HTTP.HTTP_STATUS.OK:
           return Promise.resolve(data.content);
         case ENUM_HTTP.HTTP_STATUS.UNAUTHORIZED:
-          Cookies.remove("_token");
+          Cookies.remove(TOKEN_KEY);
           message.warn(
             data?.message ||
               HTTP_STATUS_CODE[ENUM_HTTP.HTTP_STATUS.UNAUTHORIZED],
@@ -56,7 +54,7 @@ request.interceptors.response.use(
           return Promise.reject(data.content);
       }
     } catch (e) {
-      message.warn(e);
+      message.warn(String(e));
       return Promise.reject(e);
     }
   },

@@ -1,17 +1,13 @@
 import { useDispatch } from "react-redux";
 import { bindActionCreators } from "redux";
 import { useMemo, DependencyList } from "react";
-
-import type { ActionCreatorsMapObject } from "redux";
+import { UserAction } from "@/store/action";
 
 /* eslint-disable react-hooks/exhaustive-deps */
-export default function useActions(
-  actions: ActionCreatorsMapObject,
-  deps?: DependencyList,
-) {
+export default function useActions(deps?: DependencyList) {
   const dispatch = useDispatch();
   return useMemo(
-    () => bindActionCreators(actions, dispatch),
+    () => bindActionCreators({ ...UserAction }, dispatch),
     deps ? [dispatch, ...deps] : [dispatch],
   );
 }

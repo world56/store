@@ -1,31 +1,20 @@
 import Cookie from "js-cookie";
-import { Reducer } from "redux";
-import * as USER_ACTION_ENUM from "../action/user";
 
-import type * as UserType from "@/interface/user";
+import { TOKEN_KEY } from "@/config/user";
+import { ENUM_STORE_ACTION_TYPE } from "@/enum/store";
 
-export type UserState = Partial<typeof USER>;
+import type { TypeStoreUserModule } from "@/interface/store";
 
-export type UserAction = {
-  params: UserType.Login.UserInfo;
-  type: keyof typeof USER_ACTION_ENUM.USER_LOGIN;
-};
+const USER = {};
 
-const USER = {
-  name: Cookie.get("_name"),
-  token: Cookie.get("_token"),
-};
-
-const userHandle: Reducer<UserState, UserAction> = (state = USER, action) => {
+const userHandle: TypeStoreUserModule.Reducers = (state = USER, action) => {
   switch (action.type) {
-    case USER_ACTION_ENUM.USER_LOGIN.SET_USER_INFO:
-      const { params } = action;
-      const expires = { expires: params ? 7 : 1 };
-      Cookie.set("_token", params.token, expires);
-      Cookie.set("_name", params.name, expires);
-      return params;
-    case USER_ACTION_ENUM.USER_LOGIN.DEL_USER_INFO:
-      Cookie.remove("_token");
+    case ENUM_STORE_ACTION_TYPE.LOGIN.SET_USER_INFO:
+      console.log("@store", action);
+      const { payload } = action;
+      return { ...payload };
+    case ENUM_STORE_ACTION_TYPE.LOGIN.DEL_USER_INFO:
+      Cookie.remove(TOKEN_KEY);
       return {};
     default:
       return state;

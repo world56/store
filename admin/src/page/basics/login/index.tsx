@@ -1,25 +1,20 @@
-import {
-  useState,
-  useCallback
-} from 'react';
 import Hint from './component/Hint';
 import { useActions } from '@/hooks';
 import { Form, Input, Button } from 'antd';
 import Register from './component/Register';
 import Container from './component/Container';
-import { userLogin } from '@/store/distributed/user';
+import { useState, useCallback } from 'react';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
-import type * as UserType from '@/interface/user';
-
+import type { TypeUser } from '@/interface/user';
 
 const Login = () => {
 
-  const actions = useActions({ userLogin });
+  const actions = useActions();
 
   const [window, setWindow] = useState(false);
 
-  const [form] = Form.useForm<UserType.Login.AccountSecret>();
+  const [form] = Form.useForm<TypeUser.AccountSecret>();
 
   async function onSumbit() {
     const values = await form.validateFields();
@@ -36,7 +31,7 @@ const Login = () => {
           <Input placeholder='请输入账号' prefix={<UserOutlined />} />
         </Form.Item>
         <Form.Item name="password" rules={[{ required: true, message: '密码不得为空' }]} >
-          <Input type='password' placeholder='请输入密码' prefix={<LockOutlined />} />
+          <Input onPressEnter={onSumbit} type='password' placeholder='请输入密码' prefix={<LockOutlined />} />
         </Form.Item>
         <Button onClick={onSumbit} type='primary'>登录</Button>
         <Button onClick={openRegister} type="dashed">快速注册</Button>

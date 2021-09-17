@@ -9,10 +9,7 @@ import { AdminUser, AdminUserSchema as UserModel } from '@/schema/user';
 @Module({
   imports: [
     MongooseModule.forFeature([
-      {
-        name: AdminUser.name,
-        schema: UserModel,
-      },
+      { name: AdminUser.name, schema: UserModel }
     ]),
     AuthModule,
     SecretModule,

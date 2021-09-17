@@ -18,9 +18,7 @@ export class UserGuard implements CanActivate {
     const {
       headers: { authorization },
     } = context.switchToHttp().getRequest();
-    if (this.AuthService.decodeJwt(authorization)) {
-      return true;
-    }
+    if (this.AuthService.decodeJwt(authorization)) return true;
     throw new HttpException('账号过期,请重新登录', HttpStatus.UNAUTHORIZED);
   }
 }

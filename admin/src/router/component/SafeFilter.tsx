@@ -1,19 +1,25 @@
-import React from 'react';
 import store from '@/store';
+import Cookies from 'js-cookie';
+import { TOKEN_KEY } from "@/config/user";
 import { Redirect } from 'react-router-dom';
+import { UserAction } from '@/store/action';
+import { RedirectUrl } from '@/config/routes';
 import { CreditWhiteList } from '@/config/routes';
 
-import type * as RouteTypes from '@/interface/route';
+import type { ReactNode } from 'react';
+import type { TypeRoute } from '@/interface/route';
 import type { RouteComponentProps } from "react-router-dom";
 
 export default function SafeFilter(
   props: RouteComponentProps,
-  { routes = [], component: C }: RouteTypes.Routes
-): React.ReactNode {
-  const { token } = store.getState().user;
-  const { pathname } = props.location
+  { routes = [], component: C }: TypeRoute.RouteParamType
+): ReactNode {
+  const { user } = store.getState();
+  const { pathname } = props.location;
+  const token = Cookies.get(TOKEN_KEY);
+  const Module = <C {...props} routes={routes} />;
   const urlState = !CreditWhiteList.includes(pathname);
-  const Module = <C routes={routes} />;
-  if (token) return urlState ? Module : <Redirect to='/' />;
+  token && !user.id && store.dispatch(UserAction.getUserInfo());
+  if (token) return urlState ? Module : <Redirect to={RedirectUrl} />;
   else return urlState ? <Redirect to='/user/login' /> : Module;
 };

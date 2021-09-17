@@ -1,0 +1,8 @@
+export namespace ENUM_STORE_ACTION_TYPE {
+  export enum LOGIN {
+    SET_USER_INFO = "SET_USER_INFO",
+    DEL_USER_INFO = "DEL_USER_INFO",
+    GET_USER_INFO = "GET_USER_INFO",
+    USER_LOGIN = "USER_LOGIN",
+  }
+}

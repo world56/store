@@ -1,3 +1,4 @@
+export const SAGA_DEBOUNCE = 1000 * 2;
 
 export const REQUEST_TIMEOUT = 1000 * 30;
 

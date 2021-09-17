@@ -8,12 +8,6 @@ import type { FastifyRequest } from 'fastify';
 export class UserController {
   public constructor(private readonly UserService: UserService) {}
 
-  @UseGuards(UserGuard)
-  @Get('/list')
-  async list() {
-    return [];
-  }
-
   @Get('/establish')
   async createKey() {
     const { publicKey } = this.UserService.secret;
@@ -25,13 +19,22 @@ export class UserController {
     return this.UserService.login(account);
   }
 
+  @UseGuards(UserGuard)
+  @Post('/userInfo')
+  async getUserInfo(@Req() req: FastifyRequest) {
+    const { authorization } = req.headers;
+    const { password, iat, exp, ...param } =
+      this.UserService.AuthService.decodeJwt(authorization);
+    return param;
+  }
+
   @Post('/register')
   register(@Body() account: string) {
     return this.UserService.register(account);
   }
 
   @Get('/logout')
-  logout(@Req() req: FastifyRequest) {
-    return this.UserService.logout(req.headers.authorization);
+  logout() {
+    return this.UserService.logout();
   }
 }
