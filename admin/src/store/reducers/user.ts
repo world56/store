@@ -5,9 +5,9 @@ import { ENUM_STORE_ACTION_TYPE } from "@/enum/store";
 
 import type { TypeStoreUserModule } from "@/interface/store";
 
-const USER = {};
+const USER_DEFAULT = {};
 
-const userHandle: TypeStoreUserModule.Reducers = (state = USER, action) => {
+const userHandle: TypeStoreUserModule.Reducers = (state = USER_DEFAULT, action) => {
   switch (action.type) {
     case ENUM_STORE_ACTION_TYPE.LOGIN.SET_USER_INFO:
       const { payload } = action;

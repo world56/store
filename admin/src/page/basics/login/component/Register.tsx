@@ -1,8 +1,9 @@
 import styles from '../index.styl';
-import * as REG from '@/constant/reg';
 import { encryption } from "@/utils/crypto";
 import { Modal, Form, Input, message } from 'antd';
 import { register, getPubilcKey } from '@/api/user';
+
+import { CONSTANT_REG } from '@/constant/reg';
 
 import type { TypeUser } from '@/interface/user';
 
@@ -13,7 +14,7 @@ interface RegisterProps {
 
 const textRule = {
   message: '只允许包含数字、字母、下划线',
-  pattern: REG.NUMBER_LETTER,
+  pattern: CONSTANT_REG.NUMBER_LETTER,
 };
 
 const formLayout = {
@@ -81,7 +82,7 @@ const Register: React.FC<RegisterProps> = ({
           name='phone'
           rules={[
             { required: true, message: '请输入登录密码' },
-            { message: '仅支持11位手机号', pattern: REG.PHONE_NUMBER }]}>
+            { message: '仅支持11位手机号', pattern: CONSTANT_REG.PHONE_NUMBER }]}>
           <Input placeholder='请输入11位电话号码' />
         </Form.Item>
       </Form>

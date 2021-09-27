@@ -6,13 +6,13 @@ import { SecretService } from '@/common/secret/secret.service';
 import { AdminUser } from '@/schema/user';
 
 import type * as UserType from '@/interface/user';
-import type { AdminUserSchemaType } from '@/schema/user';
+import type { TypeAdminUserSchema } from '@/schema/user';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(AdminUser.name)
-    private readonly UserModel: AdminUserSchemaType,
+    private readonly UserModel: TypeAdminUserSchema,
     private readonly SecretService: SecretService,
     public readonly AuthService: AuthService,
   ) {}

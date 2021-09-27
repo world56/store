@@ -1,15 +1,34 @@
+import Cookies from 'js-cookie';
 import styles from './index.styl';
-import { Menu, Dropdown } from 'antd';
+import { useStore } from '@/hooks';
+import { TOKEN_KEY } from '@/config/user';
+import { useHistory } from 'react-router-dom';
+import { Menu, Dropdown, message } from 'antd';
 import UserIcon from '@/resource/userIcon.jpeg';
 import { SettingOutlined, LoginOutlined } from '@ant-design/icons';
+
+import type { MenuInfo } from 'rc-menu/lib/interface';
 
 /**
  * @name UserHandler 用户头像控制模块
  */
 const UserHandler = () => {
 
+  const { user } = useStore();
+  const navigate = useHistory();
+
+  function onClick({ key }: MenuInfo) {
+    if (key === '2') {
+      Cookies.remove(TOKEN_KEY);
+      message.warn('退出成功');
+      navigate.push('/user/login');
+    }
+  }
+
   const menu = (
-    <Menu className={styles.userSelect}>
+    <Menu
+      onClick={onClick}
+      className={styles.userSelect}>
       <Menu.Item key='1'>
         <SettingOutlined />
         <span>个人设置</span>
@@ -26,7 +45,7 @@ const UserHandler = () => {
       <Dropdown overlay={menu}>
         <div>
           <img className={styles.icon} src={UserIcon} alt="#" />
-          <span>管理员</span>
+          <span>{user.name}</span>
         </div>
       </Dropdown>
     </div>

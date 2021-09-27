@@ -1,20 +1,16 @@
 import type { ComponentType } from "react";
-import type { RouteComponentProps } from "react-router-dom";
 
 /**
  * @name RouteType 路由类型
  */
 export namespace TypeRoute {
-  export type InitRoutePropsType = RouteComponentProps & RouteMapType;
-
   export interface RouteParamType {
-    nav?: boolean;
     name: string;
     path: string;
     title?: string;
     exact?: boolean;
+    hidden?: boolean;
     routes?: RouteParamType[];
-    isHidden?:boolean;
     component: ComponentType<InitRoutePropsType>;
   }
 
@@ -23,4 +19,6 @@ export namespace TypeRoute {
   export interface RouteMapType {
     routes: RouteListType;
   }
+
+  export type InitRoutePropsType = RouteMapType;
 }

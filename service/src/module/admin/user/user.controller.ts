@@ -1,6 +1,5 @@
 import { UserService } from './user.service';
-import { UserGuard } from '@/guard/user.guard';
-import { Req, Get, Post, Body, Controller, UseGuards } from '@nestjs/common';
+import { Req, Get, Post, Body, Controller } from '@nestjs/common';
 
 import type { FastifyRequest } from 'fastify';
 
@@ -19,11 +18,10 @@ export class UserController {
     return this.UserService.login(account);
   }
 
-  @UseGuards(UserGuard)
   @Post('/userInfo')
   async getUserInfo(@Req() req: FastifyRequest) {
     const { authorization } = req.headers;
-    const { password, iat, exp, ...param } =
+    const { password, iat, exp, __v, ...param } =
       this.UserService.AuthService.decodeJwt(authorization);
     return param;
   }

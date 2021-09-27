@@ -24,10 +24,10 @@ export namespace TypeUser {
 
   /**
    * @name UserInfo 用户模块-基本信息
-   * @param id      用户ID
+   * @param _id     用户ID
    * @param token   用户token
    * @param isSuper 是否超管
    */
   export type UserInfo = Omit<RegisterUser, "password"> &
-    Record<"id" | "token" | "isSuper", string>;
+    Record<"_id" | "token" | "isSuper", string>;
 }

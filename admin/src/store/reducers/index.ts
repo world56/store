@@ -1,6 +1,8 @@
-import userHandle from './user';
-import { combineReducers } from 'redux';
+import userHandle from "./user";
+import systemHandel from "./system";
+import { combineReducers } from "redux";
 
 export default combineReducers({
-    user: userHandle
+  user: userHandle,
+  system: systemHandel,
 });
