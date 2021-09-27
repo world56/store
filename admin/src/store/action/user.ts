@@ -1,12 +1,12 @@
 import type { TypeUser } from "@/interface/user";
-import { ENUM_STORE_ACTION_TYPE } from "@/enum/store";
+import { ENUM_STORE_ACTION } from "@/enum/store";
 
 /**
  * @name userLogin 用户登录
  */
 export function userLogin(payload: TypeUser.AccountSecret) {
   return {
-    type: ENUM_STORE_ACTION_TYPE.LOGIN.USER_LOGIN,
+    type: ENUM_STORE_ACTION.LOGIN.USER_LOGIN,
     payload,
   };
 }
@@ -16,7 +16,7 @@ export function userLogin(payload: TypeUser.AccountSecret) {
  */
 export function getUserInfo() {
   return {
-    type: ENUM_STORE_ACTION_TYPE.LOGIN.GET_USER_INFO,
+    type: ENUM_STORE_ACTION.LOGIN.GET_USER_INFO,
   };
 }
 
@@ -25,7 +25,7 @@ export function getUserInfo() {
  */
 export function setUserInfo(payload: TypeUser.UserInfo) {
   return {
-    type: ENUM_STORE_ACTION_TYPE.LOGIN.SET_USER_INFO,
+    type: ENUM_STORE_ACTION.LOGIN.SET_USER_INFO,
     payload,
   };
 }
@@ -35,6 +35,6 @@ export function setUserInfo(payload: TypeUser.UserInfo) {
  */
 export function delUserInfo() {
   return {
-    type: ENUM_STORE_ACTION_TYPE.LOGIN.DEL_USER_INFO,
+    type: ENUM_STORE_ACTION.LOGIN.DEL_USER_INFO,
   };
 }

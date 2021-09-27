@@ -1,5 +1,5 @@
 import { isVoid } from "@/utils";
-import { ENUM_STORE_ACTION_TYPE } from "@/enum/store";
+import { ENUM_STORE_ACTION } from "@/enum/store";
 import { SYSTEM_NAV_STATUS_KEY } from "@/config/system";
 
 import type { TypeStoreSystemModule } from "@/interface/store";
@@ -15,7 +15,7 @@ const systemHandle: TypeStoreSystemModule.Reducers = (
   action,
 ) => {
   switch (action.type) {
-    case ENUM_STORE_ACTION_TYPE.SYSTEM.SET_NAV_STATUS:
+    case ENUM_STORE_ACTION.SYSTEM.SET_NAV_STATUS:
       const { payload } = action;
       const status = isVoid(payload) ? !state[SYSTEM_NAV_STATUS_KEY] : payload;
       localStorage.setItem(SYSTEM_NAV_STATUS_KEY, JSON.stringify(status));

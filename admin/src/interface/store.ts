@@ -1,4 +1,4 @@
-import { ENUM_STORE_ACTION_TYPE } from "@/enum/store";
+import { ENUM_STORE_ACTION } from "@/enum/store";
 import { SYSTEM_NAV_STATUS_KEY } from "@/config/system";
 
 import type { Reducer } from "redux";
@@ -11,10 +11,7 @@ export type TypeStoreAction<A extends string, P = void> = {
 
 export type TypeStoreReducers<S, E extends string, P = S> = Reducer<
   Partial<S>,
-  {
-    payload?: P;
-    type: `${E}`;
-  }
+  { payload?: P; type: `${E}` }
 >;
 
 /**
@@ -31,19 +28,19 @@ export interface TypeStoreStatus {
 export namespace TypeStoreUserModule {
   export interface Store extends TypeUser.UserInfo {}
 
-  export type Reducers = TypeStoreReducers<Store, ENUM_STORE_ACTION_TYPE.LOGIN>;
+  export type Reducers = TypeStoreReducers<Store, ENUM_STORE_ACTION.LOGIN>;
 
   /**
    * @name ActionUserLogin Action-用户登陆
    */
   export type ActionUserLogin =
-    TypeStoreAction<ENUM_STORE_ACTION_TYPE.LOGIN.USER_LOGIN>;
+    TypeStoreAction<ENUM_STORE_ACTION.LOGIN.USER_LOGIN>;
 
   /**
    * @name ActionSetUserInfo Action-存储用户信息
    */
   export type ActionSetUserInfo = TypeStoreAction<
-    ENUM_STORE_ACTION_TYPE.LOGIN.SET_USER_INFO,
+    ENUM_STORE_ACTION.LOGIN.SET_USER_INFO,
     Store
   >;
 }
@@ -58,7 +55,7 @@ export namespace TypeStoreSystemModule {
 
   export type Reducers = TypeStoreReducers<
     Store,
-    ENUM_STORE_ACTION_TYPE.SYSTEM,
+    ENUM_STORE_ACTION.SYSTEM,
     boolean
   >;
 
@@ -67,7 +64,7 @@ export namespace TypeStoreSystemModule {
    * @param {boolean} payload 可传递指定开启、关闭状态，传void 该方法自动将布尔值求反
    */
   export type ActionSetNavCollapsed = TypeStoreAction<
-    ENUM_STORE_ACTION_TYPE.SYSTEM.SET_NAV_STATUS,
+    ENUM_STORE_ACTION.SYSTEM.SET_NAV_STATUS,
     boolean | void
   >;
 }

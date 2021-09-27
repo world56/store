@@ -1,7 +1,7 @@
 /**
- * @name ENUM_STORE_ACTION_TYPE 枚举-redux action
+ * @name ENUM_STORE_ACTION 枚举-redux action
  */
-export namespace ENUM_STORE_ACTION_TYPE {
+export namespace ENUM_STORE_ACTION {
   /**
    * @name LOGIN 登录类型
    */

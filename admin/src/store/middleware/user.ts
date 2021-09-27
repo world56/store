@@ -7,7 +7,7 @@ import { login, getUserInfo, getPubilcKey } from "@/api/user";
 import { put, call, throttle, takeLatest } from "redux-saga/effects";
 
 import * as CONFIG_REQUEST from "@/config/request";
-import { ENUM_STORE_ACTION_TYPE } from "@/enum/store";
+import { ENUM_STORE_ACTION } from "@/enum/store";
 
 import type { TypeUser } from "@/interface/user";
 import type { TypeStoreUserModule } from "@/interface/store";
@@ -26,10 +26,10 @@ function* taskInGetUserInfo() {
 }
 
 export default function* () {
-  yield takeLatest(ENUM_STORE_ACTION_TYPE.LOGIN.USER_LOGIN, taskInUserLogin);
+  yield takeLatest(ENUM_STORE_ACTION.LOGIN.USER_LOGIN, taskInUserLogin);
   yield throttle(
     CONFIG_REQUEST.SAGA_DEBOUNCE,
-    ENUM_STORE_ACTION_TYPE.LOGIN.GET_USER_INFO,
+    ENUM_STORE_ACTION.LOGIN.GET_USER_INFO,
     taskInGetUserInfo,
   );
 }
