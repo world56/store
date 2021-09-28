@@ -2,6 +2,7 @@ import { useAsyncFn } from 'react-use';
 import { Form, Card, Table } from 'antd';
 import Search from '@/components/Search';
 import { getRoleList } from '@/api/system';
+import EditRole from './components/EditRole';
 import { useEffect, useCallback } from 'react';
 
 import { ENUM_COMMON } from '@/enum/common';
@@ -48,6 +49,7 @@ const Role = () => {
         columns={columns}
         loading={data.loading}
         dataSource={data.value} />
+      <EditRole />
     </Card>
   );
 };
