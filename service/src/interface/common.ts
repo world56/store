@@ -1,0 +1,1 @@
+export type ConstantVal<T> = T[keyof T];

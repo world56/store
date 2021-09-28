@@ -1,26 +1,29 @@
 import { lazy } from "react";
-import type * as RouteTypes from "@/interface/route";
+import privateRoutes from "./private";
 
-const Connection = lazy(() => import("../component/Connection"));
+import type { TypeRoute } from "@/interface/route";
 
-const routes: RouteTypes.RoutePropsList = [
+const Middleware = lazy(() => import("../component/Middleware"));
+
+const routes: TypeRoute.RouteListType = [
   {
     name: "user",
     path: "/user",
-    component: Connection,
+    component: Middleware,
     routes: [
       {
         name: "login",
         path: "/user/login",
         exact: true,
-        component: lazy(() => import("@/page/login")),
+        component: lazy(() => import("@/page/basics/login")),
       },
     ],
   },
   {
     name: "home",
     path: "/",
-    component: lazy(() => import("@/page/home")),
+    component: lazy(() => import("@/components/Entrance")),
+    routes: privateRoutes,
   },
 ];
 

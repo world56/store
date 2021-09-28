@@ -1,20 +1,24 @@
-import { ComponentType } from "react";
-import { RouteComponentProps } from "react-router-dom";
+import type { ComponentType } from "react";
 
-export interface Routes {
-  nav?: 1 | 0;
-  name: string;
-  path: string;
-  title?: string;
-  exact?: boolean;
-  routes?: Routes[];
-  component: ComponentType<InitProps>;
-};
+/**
+ * @name RouteType 路由类型
+ */
+export namespace TypeRoute {
+  export interface RouteParamType {
+    name: string;
+    path: string;
+    title?: string;
+    exact?: boolean;
+    hidden?: boolean;
+    routes?: RouteParamType[];
+    component: ComponentType<InitRoutePropsType>;
+  }
 
-export type RoutePropsList = Routes[];
+  export type RouteListType = RouteParamType[];
 
-export type RouteMap = {
-  routes: RoutePropsList;
-};
+  export interface RouteMapType {
+    routes: RouteListType;
+  }
 
-export type InitProps = RouteComponentProps & RouteMap;
+  export type InitRoutePropsType = RouteMapType;
+}

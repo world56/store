@@ -1,10 +1,10 @@
-import { BrowserRouter, Switch } from 'react-router-dom';
 import RouteView from './RoutView';
-import { Router } from '@/router';
+import { RouterTree, History } from '@/router';
+import { Switch, Router } from 'react-router-dom';
 export default () => (
-  <BrowserRouter>
+  <Router history={History} >
     <Switch>
-      <RouteView routes={Router} />
+      <RouteView routes={RouterTree} />
     </Switch>
-  </BrowserRouter>
+  </Router>
 );
