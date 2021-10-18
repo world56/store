@@ -1,4 +1,4 @@
-import {ENUM_ADMIN_SYSTEM} from '@/enum/system'
+import { ENUM_ADMIN_SYSTEM } from "@/enum/system";
 
 /**
  * @name TypeSystemRole 系统管理-角色管理
@@ -11,7 +11,7 @@ export namespace TypeSystemRole {
    */
   export interface ReqRoleList {
     name?: string;
-    status?: 0 | 1;
+    status?: ENUM_ADMIN_SYSTEM.ROLE_STATUS;
   }
 
   /**

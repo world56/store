@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { RoleService } from './role.service';
 import { RoleController } from './role.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AdminRoleSchema, AdminRole } from '@/schema/role';
+import { AdminRoleSchema, AdminRole } from '@/schema/admin/system/role';
 
 /**
  * @name RoleModule 角色模块

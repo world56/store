@@ -1,8 +1,8 @@
-import { AdminRole } from '@/schema/role';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { AdminRole } from '@/schema/admin/system/role';
 
-import type { TypeAdminRoleSchema } from '@/schema/role';
+import type { TypeAdminRoleSchema } from '@/schema/admin/system/role';
 
 @Injectable()
 export class RoleService {

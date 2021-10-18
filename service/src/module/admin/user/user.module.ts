@@ -4,7 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserController } from './user.controller';
 import { AuthModule } from '@/common/auth/auth.module';
 import { SecretModule } from '@/common/secret/secret.module';
-import { AdminUser, AdminUserSchema } from '@/schema/user';
+import { AdminUser, AdminUserSchema } from '@/schema/admin/system/user';
 
 /**
  * @name UserModule 用户模块

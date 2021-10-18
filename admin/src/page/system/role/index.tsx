@@ -1,15 +1,16 @@
 import { useAsyncFn } from 'react-use';
-import { Form, Card, Table } from 'antd';
 import Search from '@/components/Search';
 import { getRoleList } from '@/api/system';
 import EditRole from './components/EditRole';
-import { useEffect, useCallback } from 'react';
+import { Form, Card, Table, Button } from 'antd';
+import { UserAddOutlined } from '@ant-design/icons';
+import { useState, useEffect, useCallback } from 'react';
 
 import { ENUM_COMMON } from '@/enum/common';
 
 import type { TypeSystemRole } from '@/interface/system/role';
 
-const searchColumns = [
+const query = [
   { key: 'name', name: '角色名称', type: ENUM_COMMON.COMPONENT_TYPE.INPUT },
   { key: 'status', name: '角色状态', type: ENUM_COMMON.COMPONENT_TYPE.SELECT }
 ];
@@ -27,29 +28,36 @@ const columns = [
  */
 const Role = () => {
 
+  const [window, setWindow] = useState(false);
   const [data, fetch] = useAsyncFn(getRoleList);
   const [search] = Form.useForm<TypeSystemRole.ReqRoleList>();
 
-  const initialization = useCallback(() => {
+  const initialize = useCallback(() => {
     const values = search?.getFieldsValue();
-    return fetch({ ...values });
+    return fetch(values);
   }, [search, fetch]);
 
+  const openEditModal = useCallback(() => {
+    setWindow(b => !b);
+  }, []);
+
   useEffect(() => {
-    initialization();
-  }, [initialization]);
+    initialize();
+  }, [initialize]);
 
   return (
     <Card title='角色管理'>
-      <Search
-        form={search}
-        columns={searchColumns}
-        onSearch={initialization} />
+      <Search form={search} columns={query} onSearch={initialize}>
+        <Button onClick={openEditModal}>
+          <UserAddOutlined /> 新增角色
+        </Button>
+      </Search>
+
       <Table
         columns={columns}
         loading={data.loading}
         dataSource={data.value} />
-      <EditRole />
+      <EditRole visible={window} onClose={openEditModal} />
     </Card>
   );
 };

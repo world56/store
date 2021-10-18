@@ -16,8 +16,9 @@ export function getRoleList(params: TypeSystemRole.ReqRoleList) {
 /**
  * @name addRole 系统管理-新增角色
  */
-export function addRole() {
+export function addRole(data:TypeSystemRole.EditRoleParam) {
   return request("system/role/add", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
+    data
   });
 }
