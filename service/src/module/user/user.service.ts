@@ -3,16 +3,16 @@ import { AuthService } from '@/common/auth/auth.service';
 import { SecretService } from '@/common/secret/secret.service';
 import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 
-import { AdminUser } from '@/schema/admin/system/user';
+import { Administrator } from '@/schema/system/user';
 
 import type * as TypeUser from '@/interface/user';
-import type { TypeAdminUserSchema } from '@/schema/admin/system/user';
+import type { TypeSchemaAdministrator } from '@/schema/system/user';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectModel(AdminUser.name)
-    private readonly UserModel: TypeAdminUserSchema,
+    @InjectModel(Administrator.name)
+    private readonly UserModel: TypeSchemaAdministrator,
     private readonly SecretService: SecretService,
     public readonly AuthService: AuthService,
   ) {}

@@ -1,22 +1,23 @@
+import * as mongoose from 'mongoose';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 
 import { ENUM_ADMIN_SYSTEM } from '@/enum/system';
 
 import type { TypeDatabase } from '@/interface/db';
 
-export type TypeAdminRoleSchema = TypeDatabase.TypeMongoose<AdminRole>;
+export type TypeSchemaRole = TypeDatabase.TypeMongoose<Role>;
 
 /**
- * @name AdminRole 角色
+ * @name Role 角色
  * @param name 角色名称
  * @param status 角色状态（默认激活）
  * @param createTime 创建时间
  * @param description 角色简介
- * 
+ *
  * @description 管理系统-RBAC角色
  */
-@Schema()
-export class AdminRole {
+@Schema({ versionKey: false })
+export class Role {
   @Prop({ type: String, required: true })
   name: string;
 
@@ -37,4 +38,4 @@ export class AdminRole {
   createTime: number;
 }
 
-export const AdminRoleSchema = SchemaFactory.createForClass(AdminRole);
+export const SchemaRole = SchemaFactory.createForClass(Role);

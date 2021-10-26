@@ -4,7 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserController } from './user.controller';
 import { AuthModule } from '@/common/auth/auth.module';
 import { SecretModule } from '@/common/secret/secret.module';
-import { AdminUser, AdminUserSchema } from '@/schema/admin/system/user';
+import { Administrator, SchemaAdministrator } from '@/schema/system/user';
 
 /**
  * @name UserModule 用户模块
@@ -12,7 +12,7 @@ import { AdminUser, AdminUserSchema } from '@/schema/admin/system/user';
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: AdminUser.name, schema: AdminUserSchema },
+      { name: Administrator.name, schema: SchemaAdministrator },
     ]),
     AuthModule,
     SecretModule,

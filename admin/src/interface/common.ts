@@ -5,6 +5,14 @@ import { ENUM_HTTP } from "@/enum/http";
  */
 export namespace TypeCommon {
   /**
+   * @name DatabaseMainParameter 数据库主要参数
+   * @param _id 主键
+   */
+  export interface DatabaseMainParameter {
+    _id: string;
+  }
+
+  /**
    * @name GenericObject 通用对象
    */
   export type GenericObject = Record<React.Key, React.Key>;

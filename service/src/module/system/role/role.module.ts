@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { RoleService } from './role.service';
 import { RoleController } from './role.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AdminRoleSchema, AdminRole } from '@/schema/admin/system/role';
+import { SchemaRole, Role } from '@/schema/system/role';
 
 /**
  * @name RoleModule 角色模块
@@ -10,7 +10,7 @@ import { AdminRoleSchema, AdminRole } from '@/schema/admin/system/role';
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: AdminRole.name, schema: AdminRoleSchema },
+      { name: Role.name, schema: SchemaRole },
     ]),
   ],
   controllers: [RoleController],

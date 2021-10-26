@@ -1,28 +1,21 @@
-import { ENUM_ADMIN_SYSTEM } from "@/enum/system";
-
-import type { TypeCommon } from "../common";
+import { ENUM_ADMIN_SYSTEM } from '@/enum/system';
 
 /**
  * @name TypeSystemRole 系统管理-角色管理
  */
 export namespace TypeSystemRole {
   /**
-   * @name ReqList 请求-角色列表
+   * @name ReqList 🕵️‍♂️查询-角色列表
    * @param name 角色名称
    * @param status 角色状态
    */
-  export interface ReqRoleList extends TypeCommon.DatabaseMainParameter {
+  export interface ReqRoleList {
     name?: string;
     status?: ENUM_ADMIN_SYSTEM.ROLE_STATUS;
   }
 
   /**
-   * @name ResRoleList 返回-角色列表
-   */
-  export type ResRoleList = EditRoleParam[];
-
-  /**
-   * @name EditRoleParam 编辑、新增角色
+   * @name EditRoleParam 🆕更新-编辑、新增角色
    * @param _id 角色ID
    * @param name 角色名称
    * @param status 状态
@@ -30,9 +23,9 @@ export namespace TypeSystemRole {
    * @param createTime 创建时间
    */
   export interface EditRoleParam
-    extends Record<"name" | "description", string> {
+    extends Record<'name' | 'description', string> {
     _id?: string;
     status: number;
-    createTime: number;
+    createTime?: number;
   }
 }
