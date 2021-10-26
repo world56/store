@@ -50,7 +50,7 @@ export interface Columns {
   list?: ReadonlyArray<CascaderList> | ConfCascaderList;
   /**
    * @name props 各类组件props
-   * @description 不具体定义 参考antd官方文档对各类组件的定义
+   * @description 暂不具体定义 参考antd官方文档对各类组件的定义
    */
   props?: any;
 };
@@ -62,8 +62,7 @@ export interface SearchFormProps<T = TypeCommon.GenericObject> {
   columns: Columns[];
   initRequest?: boolean;
   onSearch(props: T): void;
-  extendBtn?: React.ReactChild;
-  tailElement?: React.ReactChild | null;
+  children?: React.ReactNode;
 };
 
 const { Option } = Select;
@@ -73,22 +72,20 @@ const { COMPONENT_TYPE, COMPONENT_TO_VALUE } = ENUM_COMMON;
 /**
  * @name SearchForm 搜索
  */
-/* eslint-disable react-hooks/exhaustive-deps */
 const SearchForm: React.FC<SearchFormProps> = ({
   form,
   size,
   columns,
   onSearch,
+  children,
   initRequest,
-  tailElement,
   spanSize = 5,
-  extendBtn = [],
 }) => {
 
-  const onSumbit = async () => {
+  const onSumbit = useCallback(async () => {
     const values = await form.validateFields();
     onSearch(values);
-  };
+  }, [form, onSearch]);
 
   function onClear() {
     form.resetFields();
@@ -96,7 +93,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
   const Columns = useMemo(() => initColumns(columns), [columns]);
 
-  const toComType = (value: Columns) => {
+  const toComType = useCallback((value: Columns) => {
     const {
       type,
       list,
@@ -150,7 +147,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
       default:
         return <span>NULL</span>
     };
-  };
+  }, [size, onSumbit]);
 
   const init = useCallback(props =>
     Columns.map(v => {
@@ -171,14 +168,12 @@ const SearchForm: React.FC<SearchFormProps> = ({
       }
       return ele;
     }),
-    [Columns, form]
+    [spanSize, Columns, toComType]
   );
 
   useEffect(() => {
-    if (initRequest) {
-      onSumbit();
-    };
-  }, []);
+    initRequest && onSumbit();
+  }, [initRequest, onSumbit]);
 
   return (
     <Form
@@ -204,14 +199,11 @@ const SearchForm: React.FC<SearchFormProps> = ({
                 <DeleteOutlined />
                 重置
               </Button>
-              {extendBtn}
+              {children ? children : null}
             </Col>
           </Row>
         )}
       </Form.Item>
-      {tailElement && <div className={styles.tailEle}>
-        {tailElement}
-      </div>}
     </Form>
   );
 };

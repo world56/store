@@ -13,16 +13,22 @@ import type { TypeUser } from "@/interface/user";
 import type { TypeStoreUserModule } from "@/interface/store";
 
 function* taskInUserLogin(data: TypeStoreUserModule.ActionUserLogin) {
-  const key: string = yield getPubilcKey();
-  const params = encryption(key, JSON.stringify(data.payload));
-  const token: string = yield call(login, params);
-  Cookies.set(TOKEN_KEY, token);
-  History.push("/");
+  try {
+    const key: string = yield getPubilcKey();
+    const params = encryption(key, JSON.stringify(data.payload));
+    const token: string = yield call(login, params);
+    Cookies.set(TOKEN_KEY, token);
+    History.push("/");
+  } finally {
+  }
 }
 
 function* taskInGetUserInfo() {
-  const user: TypeUser.UserInfo = yield getUserInfo();
-  yield put(UserAction.setUserInfo(user));
+  try {
+    const user: TypeUser.UserInfo = yield getUserInfo();
+    yield put(UserAction.setUserInfo(user));
+  } finally {
+  }
 }
 
 export default function* () {

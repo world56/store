@@ -14,7 +14,7 @@
 
   /**
    * @name ROLE_STATUS 角色状态
-   * @param OPEN 开启
+   * @param OPEN 激活
    * @param FREEZE 冻结
    */
   export enum ROLE_STATUS {

@@ -27,9 +27,7 @@ export class UserLoginPipe implements PipeTransform {
   ) {
     const format = plainToClass(UserLoginValidator, value);
     const errors = await validate(format);
-    if (errors.length > 0) {
-      throw new BadRequestException(errors);
-    }
+    if (errors.length) throw new BadRequestException(errors);
     return value;
   }
 }

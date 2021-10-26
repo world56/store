@@ -1,18 +1,18 @@
-import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { AuthService } from '@/common/auth/auth.service';
 import { SecretService } from '@/common/secret/secret.service';
+import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 
-import { AdminUser } from '@/schema/user';
+import { Administrator } from '@/schema/system/user';
 
-import type * as UserType from '@/interface/user';
-import type { TypeAdminUserSchema } from '@/schema/user';
+import type * as TypeUser from '@/interface/user';
+import type { TypeSchemaAdministrator } from '@/schema/system/user';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectModel(AdminUser.name)
-    private readonly UserModel: TypeAdminUserSchema,
+    @InjectModel(Administrator.name)
+    private readonly UserModel: TypeSchemaAdministrator,
     private readonly SecretService: SecretService,
     public readonly AuthService: AuthService,
   ) {}
@@ -21,14 +21,14 @@ export class UserService {
     return this.SecretService.secret;
   }
 
-  private decode(user: UserType.AdminUser.LoginAccountSecret | string) {
+  private decode(user: TypeUser.AdminUser.LoginAccountSecret | string) {
     const { privateKey } = this.secret;
     if (typeof user === 'object') {
       const pwd = this.SecretService.decrypt(user.password, privateKey);
       user.password = this.SecretService.md5(pwd);
       return user;
     } else {
-      const userInfo: UserType.AdminUser.LoginAccountSecret = JSON.parse(
+      const userInfo: TypeUser.AdminUser.LoginAccountSecret = JSON.parse(
         this.SecretService.decrypt(user, privateKey),
       );
       userInfo.password = this.SecretService.md5(userInfo.password);
@@ -37,7 +37,7 @@ export class UserService {
   }
 
   public async findUser(
-    account: UserType.AdminUser.LoginAccountSecret | string,
+    account: TypeUser.AdminUser.LoginAccountSecret | string,
   ) {
     const param = this.decode(account);
     return this.UserModel.findOne(param);

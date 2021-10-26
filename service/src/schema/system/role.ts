@@ -1,34 +1,32 @@
-import { ENUM_ADMIN_SYSTEM } from '@/enum/system';
+import * as mongoose from 'mongoose';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+
+import { ENUM_ADMIN_SYSTEM } from '@/enum/system';
 
 import type { TypeDatabase } from '@/interface/db';
 
-export type TypeAdminRoleSchema = TypeDatabase.TypeMongoose<AdminRole>;
+export type TypeSchemaRole = TypeDatabase.TypeMongoose<Role>;
 
 /**
- * @name AdminRole 角色
+ * @name Role 角色
+ * @param name 角色名称
+ * @param status 角色状态（默认激活）
+ * @param createTime 创建时间
+ * @param description 角色简介
+ *
  * @description 管理系统-RBAC角色
  */
-@Schema()
-export class AdminRole {
-  /**
-   * @name name 名称
-   */
+@Schema({ versionKey: false })
+export class Role {
   @Prop({ type: String, required: true })
   name: string;
 
-  /**
-   * @name description 简介
-   */
   @Prop({ type: String })
   description?: string;
 
-  /**
-   * @name status 当前状态
-   * @description 默认激活
-   */
   @Prop({
     type: Number,
+    default: ENUM_ADMIN_SYSTEM.ROLE_STATUS.OPEN,
     enum: [
       ENUM_ADMIN_SYSTEM.ROLE_STATUS.OPEN,
       ENUM_ADMIN_SYSTEM.ROLE_STATUS.FREEZE,
@@ -36,11 +34,8 @@ export class AdminRole {
   })
   status: ENUM_ADMIN_SYSTEM.ROLE_STATUS;
 
-  /**
-   * @name createTime 创建时间
-   */
   @Prop({ type: Number, default: new Date().getTime() })
   createTime: number;
 }
 
-export const AdminRoleSchema = SchemaFactory.createForClass(AdminRole);
+export const SchemaRole = SchemaFactory.createForClass(Role);
