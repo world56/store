@@ -30,9 +30,7 @@ export class RoleService {
   }
 
   async update(data: TypeSystemRole.EditRoleParam) {
-    console.log('@@update-1', data);
     const { _id, ...params } = data;
-    console.log('@@update-2', data);
     return await this.RoleModel.findByIdAndUpdate({ _id }, params);
   }
 }
