@@ -1,25 +1,19 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 
-import * as CONSTANT_USER from '@/constant/user';
+import { ENUM_ADMIN } from '@/enum/admin';
 
-import type { TypeDatabase } from '@/interface/db';
 import type { TypeCommon } from '@/interface/common';
+import type { TypeSystemUser } from '@/interface/system/user';
 
-export type TypeSchemaAdministrator = TypeDatabase.TypeMongoose<Administrator>;
+export type TypeSchemaAdministratorUser =
+  TypeCommon.TypeMongoose<AdministratorUser>;
 
 /**
- * @name Administrator 管理员账号
- * @param account 账号
- * @param password 密码
- * @param name 用户名称
- * @param phone 电话号码
- * @param createTime 注册时间
- * @param is_super 是否超级管理员（默认普通管理员）
- *
+ * @name AdministratorUser 管理员账号
  * @description 管理系统-登录账号
  */
-@Schema()
-export class Administrator {
+@Schema({ versionKey: false })
+export class AdministratorUser implements TypeSystemUser.UserInfo {
   @Prop({ type: String, required: true })
   account: string;
 
@@ -29,18 +23,19 @@ export class Administrator {
   @Prop({ type: String, minlength: 2, maxlength: 4 })
   name: string;
 
-  @Prop({ type: String, minlength: 11, maxlength: 11 })
-  phone: string;
+  @Prop({ type: Number, minlength: 11, maxlength: 11 })
+  phone: number;
 
-  @Prop({ type: Date, default: new Date().getTime() })
+  @Prop({ type: Number, default: new Date().getTime() })
   createTime: number;
 
   @Prop({
     type: Number,
-    default: CONSTANT_USER.ADMIN_USER.NOT_SUPER,
-    enum: [CONSTANT_USER.ADMIN_USER.SUPER, CONSTANT_USER.ADMIN_USER.NOT_SUPER],
+    default: ENUM_ADMIN.ADMINISTRATOR.NOT_SUPER,
+    enum: [ENUM_ADMIN.ADMINISTRATOR.NOT_SUPER, ENUM_ADMIN.ADMINISTRATOR.SUPER],
   })
-  isSuper: TypeCommon.ConstantVal<typeof CONSTANT_USER.ADMIN_USER>;
+  isSuper: ENUM_ADMIN.ADMINISTRATOR;
 }
 
-export const SchemaAdministrator = SchemaFactory.createForClass(Administrator);
+export const SchemaAdministratorUser =
+  SchemaFactory.createForClass(AdministratorUser);

@@ -6,7 +6,7 @@ import Container from './component/Container';
 import { useState, useCallback } from 'react';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
-import type { TypeUser } from '@/interface/user';
+import type { TypeSystemUser } from '@/interface/system/user';
 
 const Login = () => {
 
@@ -14,7 +14,7 @@ const Login = () => {
 
   const [window, setWindow] = useState(false);
 
-  const [form] = Form.useForm<TypeUser.AccountSecret>();
+  const [form] = Form.useForm<TypeSystemUser.AccountSecret>();
 
   async function onSumbit() {
     const values = await form.validateFields();

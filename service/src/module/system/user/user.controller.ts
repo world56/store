@@ -7,23 +7,24 @@ import type { FastifyRequest } from 'fastify';
 export class UserController {
   public constructor(private readonly UserService: UserService) {}
 
+  @Get('/list')
+  getList() {}
+
   @Get('/establish')
-  async createKey() {
+  createKey() {
     const { publicKey } = this.UserService.secret;
     return publicKey;
   }
 
   @Post('/login')
-  async login(@Body() account: string) {
+  login(@Body() account: string) {
     return this.UserService.login(account);
   }
 
   @Post('/userInfo')
-  async getUserInfo(@Req() req: FastifyRequest) {
+  getUserInfo(@Req() req: FastifyRequest) {
     const { authorization } = req.headers;
-    const { password, iat, exp, __v, ...param } =
-      this.UserService.AuthService.decodeJwt(authorization);
-    return param;
+    return this.UserService.getUserInfo(authorization);
   }
 
   @Post('/register')

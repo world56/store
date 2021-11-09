@@ -37,6 +37,14 @@ export namespace TypeCommon {
   }
 
   /**
+   * @name ServiceReturn 返回的标准List
+   */
+  export interface ServiceReturn<T> extends PageTurning {
+    list: T[];
+    total: number;
+  }
+
+  /**
    * @name TypePageTurning 翻页
    * @param {number} pageSize 每页条数
    * @param {number} currentPage 当前页码

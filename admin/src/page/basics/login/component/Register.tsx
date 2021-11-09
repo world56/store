@@ -5,7 +5,7 @@ import { register, getPubilcKey } from '@/api/user';
 
 import { CONSTANT_REG } from '@/constant/reg';
 
-import type { TypeUser } from '@/interface/user';
+import type { TypeSystemUser } from '@/interface/system/user';
 
 interface RegisterProps {
   window: boolean;
@@ -30,7 +30,7 @@ const Register: React.FC<RegisterProps> = ({
   onClose
 }) => {
 
-  const [form] = Form.useForm<TypeUser.RegisterUser>();
+  const [form] = Form.useForm<TypeSystemUser.RegisterUser>();
 
   async function onSumbit() {
     const values = await form.validateFields();
@@ -49,8 +49,8 @@ const Register: React.FC<RegisterProps> = ({
   return (
     <Modal
       okText='注册'
-      title='注册用户'
       onOk={onSumbit}
+      title='注册管理员'
       visible={window}
       onCancel={onCancel}
       className={styles.register}>
@@ -60,21 +60,21 @@ const Register: React.FC<RegisterProps> = ({
           name='account'
           initialValue='admin'
           rules={[{ required: true, message: '请输入登录账号' }, textRule]}>
-          <Input placeholder='请输入账号' disabled />
+          <Input placeholder='请输入账号' allowClear />
         </Form.Item>
 
         <Form.Item
           label='登录密码'
           name='password'
           rules={[{ required: true, message: '请输入登录密码' }, textRule]}>
-          <Input placeholder='请输入密码' type='password' />
+          <Input placeholder='请输入密码' type='password' allowClear />
         </Form.Item>
 
         <Form.Item
           label='用户昵称'
           name='name'
           rules={[{ required: true, min: 2, max: 4, message: '请输入用户昵称(2-4个字符)' }]}>
-          <Input placeholder='请输入用户名称' />
+          <Input placeholder='请输入用户名称' allowClear />
         </Form.Item>
 
         <Form.Item
@@ -83,7 +83,7 @@ const Register: React.FC<RegisterProps> = ({
           rules={[
             { required: true, message: '请输入登录密码' },
             { message: '仅支持11位手机号', pattern: CONSTANT_REG.PHONE_NUMBER }]}>
-          <Input placeholder='请输入11位电话号码' />
+          <Input placeholder='请输入11位电话号码' allowClear />
         </Form.Item>
       </Form>
     </Modal>

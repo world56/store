@@ -1,4 +1,8 @@
-export namespace TypeUser {
+
+/**
+ * @name TypeSystemUser 系统管理-用户
+ */
+export namespace TypeSystemUser {
   /**
    * @name PubilcKey 用户模块-公匙
    */
@@ -10,8 +14,7 @@ export namespace TypeUser {
    * @param password 密码
    * @param expires  有效期
    */
-  export interface AccountSecret
-    extends Record<"account" | "password" | "expires", string> {}
+  export interface AccountSecret extends Record<"account" | "password" | "expires", string> {}
 
   /**
    * @name RegisterUser 用户模块-注册信息

@@ -2,9 +2,9 @@ import Cookies from 'js-cookie';
 import styles from './index.styl';
 import { useStore } from '@/hooks';
 import { TOKEN_KEY } from '@/config/user';
+import UserIcon from '@/resource/icon.jpg';
 import { useHistory } from 'react-router-dom';
 import { Menu, Dropdown, message } from 'antd';
-import UserIcon from '@/resource/userIcon.jpeg';
 import { SettingOutlined, LoginOutlined } from '@ant-design/icons';
 
 import type { MenuInfo } from 'rc-menu/lib/interface';

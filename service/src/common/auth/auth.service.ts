@@ -1,13 +1,13 @@
 import { JwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
 
-import { Administrator } from '@/schema/system/user';
+import { AdministratorUser } from '@/schema/system/user';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly JwtService: JwtService) {}
 
-  createJWT(user: Administrator) {
+  createJWT(user: AdministratorUser) {
     return this.JwtService.sign(user);
   }
 

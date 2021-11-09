@@ -1,5 +1,7 @@
 import { join } from 'path';
 import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
+
 import {
   FastifyAdapter,
   NestFastifyApplication,
@@ -15,6 +17,11 @@ async function bootstrap() {
   );
 
   app.enableCors();
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  );
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new HttpSucessInterceptor());
   app.useStaticAssets({

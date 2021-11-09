@@ -47,11 +47,11 @@ request.interceptors.response.use(
           setTimeout(() => window.location.reload(), 1800);
           return Promise.reject();
         default:
-          message.warn(data.message);
-          return Promise.reject(data.content);
+          message.error(data.message);
+          return Promise.reject(data);
       }
     } catch (e) {
-      message.warn(String(e));
+      message.error(String(e));
       return Promise.reject(e);
     }
   },

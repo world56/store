@@ -9,7 +9,7 @@ import { put, call, throttle, takeLatest } from "redux-saga/effects";
 import * as CONFIG_REQUEST from "@/config/request";
 import { ENUM_STORE_ACTION } from "@/enum/store";
 
-import type { TypeUser } from "@/interface/user";
+import type { TypeSystemUser } from "@/interface/system/user";
 import type { TypeStoreUserModule } from "@/interface/store";
 
 function* taskInUserLogin(data: TypeStoreUserModule.ActionUserLogin) {
@@ -25,7 +25,7 @@ function* taskInUserLogin(data: TypeStoreUserModule.ActionUserLogin) {
 
 function* taskInGetUserInfo() {
   try {
-    const user: TypeUser.UserInfo = yield getUserInfo();
+    const user: TypeSystemUser.UserInfo = yield getUserInfo();
     yield put(UserAction.setUserInfo(user));
   } finally {
   }

@@ -16,8 +16,21 @@ export namespace ENUM_COMMON {
     TIME_SCOPE = "TIME_SCOPE",
   }
 
+  /**
+   * @name COMPONENT_TO_VALUE 组件键值对
+   */
   export enum COMPONENT_TO_VALUE {
     KEY = "KEY",
     VALUE = "VALUE",
+  }
+
+  /**
+   * @name STATUS 状态
+   * @param FREEZE 冻结
+   * @param ACTIVATE 激活
+   */
+  export enum STATUS {
+    FREEZE,
+    ACTIVATE,
   }
 }

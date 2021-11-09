@@ -67,8 +67,6 @@ export interface SearchFormProps<T = TypeCommon.GenericObject> {
 
 const { Option } = Select;
 
-const { COMPONENT_TYPE, COMPONENT_TO_VALUE } = ENUM_COMMON;
-
 /**
  * @name SearchForm 搜索
  */
@@ -99,12 +97,12 @@ const SearchForm: React.FC<SearchFormProps> = ({
       list,
       props = {},
       placeholder,
-      bindValue = COMPONENT_TO_VALUE.KEY,
+      bindValue = ENUM_COMMON.COMPONENT_TO_VALUE.KEY,
     } = value;
     const allowClear = true;
     const traverse = Array.isArray(list) ? list : [];
     switch (type) {
-      case COMPONENT_TYPE.INPUT:
+      case ENUM_COMMON.COMPONENT_TYPE.INPUT:
         return (
           <Input
             size={size}
@@ -113,7 +111,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
             placeholder={placeholder}
             {...props} />
         );
-      case COMPONENT_TYPE.SELECT:
+      case ENUM_COMMON.COMPONENT_TYPE.SELECT:
         return (
           <Select
             showSearch
@@ -123,13 +121,15 @@ const SearchForm: React.FC<SearchFormProps> = ({
             filterOption={searchSelect}
             optionFilterProp="children" {...props}>
             {traverse.map(({ key, value: val }) => (
-              <Option key={key} value={bindValue === COMPONENT_TO_VALUE.KEY ? key : val}>
+              <Option
+                key={key}
+                value={bindValue === ENUM_COMMON.COMPONENT_TO_VALUE.KEY ? key : val}>
                 {val}
               </Option>
             ))}
           </Select>
         );
-      case COMPONENT_TYPE.CASCADER:
+      case ENUM_COMMON.COMPONENT_TYPE.CASCADER:
         return (
           <Cascader
             options={traverse}
@@ -138,7 +138,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
             fieldNames={CONF.CASCADER_FIELD}
             {...props} />
         );
-      case COMPONENT_TYPE.TIME_SCOPE:
+      case ENUM_COMMON.COMPONENT_TYPE.TIME_SCOPE:
         return (
           <DatePicker.RangePicker
             className={styles.component}
@@ -157,8 +157,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
             name={v.key}
             label={v.name}
             rules={v.rules}
-            initialValue={v.value}
-          >
+            initialValue={v.value}>
             {toComType(v)}
           </Form.Item>
         </Col>
@@ -194,8 +193,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
               <Button
                 danger
                 onClick={onClear}
-                className="formSearchClear"
-              >
+                className="formSearchClear">
                 <DeleteOutlined />
                 重置
               </Button>

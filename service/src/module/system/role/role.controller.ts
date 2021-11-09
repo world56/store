@@ -1,5 +1,7 @@
 import { RoleService } from './role.service';
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { EditRolePipe } from './pipe/edit-role.pipe';
+import { PageTurningPipe } from '@/pipe/page-turning.pipe';
+import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
 
 import type { TypeCommon } from '@/interface/common';
 import type { TypeSystemRole } from '@/interface/system/role';
@@ -12,6 +14,7 @@ export class RoleController {
   public constructor(private readonly RoleService: RoleService) {}
 
   @Get('list')
+  @UsePipes(new PageTurningPipe())
   list(@Query() param: TypeSystemRole.ReqRoleList) {
     return this.RoleService.getList(param);
   }
@@ -22,8 +25,15 @@ export class RoleController {
   }
 
   @Post('add')
+  @UsePipes(new EditRolePipe())
   add(@Body() body: TypeSystemRole.EditRoleParam) {
     return this.RoleService.add(body);
+  }
+
+  @Post('update')
+  @UsePipes(new EditRolePipe())
+  update(@Body() body: TypeSystemRole.EditRoleParam) {
+    return this.RoleService.update(body);
   }
 
   @Get('remove')
@@ -31,8 +41,8 @@ export class RoleController {
     return this.RoleService.remove(params);
   }
 
-  @Post('update')
-  update(@Body() body: TypeSystemRole.EditRoleParam) {
-    return this.RoleService.update(body);
+  @Get('fieldCheck')
+  fieldNameCheck(@Query() param: TypeSystemRole.ReqCheckRoleName) {
+    return this.RoleService.fieldNameCheck(param);
   }
 }

@@ -3,15 +3,19 @@ import { ENUM_HTTP } from "@/enum/http";
 
 import type { TypeCommon } from "@/interface/common";
 import type { TypeSystemRole } from "@/interface/system/role";
+import type { TypeSystemPermission } from "@/interface/system/permission";
 
 /**
  * @name getRoleList 系统管理-获取角色列表
  */
 export function getRoleList(params: TypeSystemRole.ReqRoleList) {
-  return request<TypeSystemRole.ResRoleList>("system/role/list", {
-    method: ENUM_HTTP.REQUEST_MODE.GET,
-    params,
-  });
+  return request<TypeCommon.ServiceReturn<TypeSystemRole.EditRoleParam>>(
+    "system/role/list",
+    {
+      method: ENUM_HTTP.REQUEST_MODE.GET,
+      params,
+    },
+  );
 }
 
 /**
@@ -51,5 +55,40 @@ export function removeRole(params: TypeCommon.DatabaseMainParameter) {
   return request("system/role/remove", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
     params,
+  });
+}
+
+/**
+ * @name checkRoleField 系统管理-字段是否重复
+ */
+export function checkRoleField(params: Record<string, string | void>) {
+  return request("system/role/fieldCheck", {
+    method: ENUM_HTTP.REQUEST_MODE.GET,
+    params,
+  });
+}
+
+/**
+ * @name getRoleList 系统管理-获取权限列表
+ */
+export function getPermissionList(
+  params: TypeSystemPermission.ReqPermissionList,
+) {
+  return request<TypeCommon.ServiceReturn<TypeSystemPermission.EditPermission>>(
+    "system/permission/list",
+    {
+      method: ENUM_HTTP.REQUEST_MODE.GET,
+      params,
+    },
+  );
+}
+
+/**
+ * @name addCommodityDetails 系统管理-新增商品
+ */
+export function addCommodityDetails(data: TypeSystemPermission.EditPermission) {
+  return request("system/permission/add", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
   });
 }

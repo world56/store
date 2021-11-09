@@ -1,13 +1,13 @@
 import request from "@/utils/request";
 import { ENUM_HTTP } from "@/enum/http";
 
-import type { TypeUser } from "@/interface/user";
+import type { TypeSystemUser } from "@/interface/system/user";
 
 /**
  * @name getPubilcKey 用户-获取公匙
  */
 export function getPubilcKey() {
-  return request<TypeUser.PubilcKey>("user/establish", {
+  return request<TypeSystemUser.PubilcKey>("user/establish", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
   });
 }
@@ -26,7 +26,7 @@ export function login(data: string) {
  * @name getUserInfo 用户-获取用户信息
  */
 export function getUserInfo() {
-  return request<TypeUser.UserInfo>("user/userInfo", {
+  return request<TypeSystemUser.UserInfo>("user/userInfo", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
   });
 }

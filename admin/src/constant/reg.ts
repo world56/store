@@ -3,6 +3,16 @@
  */
 export namespace CONSTANT_REG {
   /**
+   * @name EN reg校验-仅允许英文
+   */
+  export const EN = /^[A-Za-z]+$/;
+
+  /**
+   * @name CN reg校验-仅允许中文
+   */
+  export const CN = /^[\u4e00-\u9fa5]{0,}$/;
+
+  /**
    * @name NUMBER_LETTER reg校验-含数字、字母、下划线
    */
   export const NUMBER_LETTER = /^[0-9a-zA-Z_]{1,}$/;
