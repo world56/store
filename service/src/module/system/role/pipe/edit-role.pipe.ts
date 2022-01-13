@@ -15,9 +15,11 @@ import type { TypeSystemRole } from '@/interface/system/role';
 
 class EditRoleValidator
   implements
-    Omit<
-      TypeSystemRole.EditRoleParam,
-      keyof TypeCommon.DatabaseMainParameter | 'createTime'
+    Readonly<
+      Omit<
+        TypeSystemRole.EditRoleParam,
+        keyof TypeCommon.DatabaseMainParameter | 'createTime'
+      >
     >
 {
   @Length(2, 6)

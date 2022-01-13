@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { AuthService } from './auth.service';
+import { JwtAuthService } from './auth.service';
 
 import { JWT_KEY } from '@/config/secret';
 
@@ -11,7 +11,7 @@ import { JWT_KEY } from '@/config/secret';
       signOptions: { expiresIn: '1 days' },
     }),
   ],
-  providers: [AuthService],
-  exports: [AuthService],
+  providers: [JwtAuthService],
+  exports: [JwtAuthService],
 })
-export class AuthModule {}
+export class JwtAuthModule {}

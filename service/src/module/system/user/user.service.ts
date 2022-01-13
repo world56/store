@@ -1,83 +1,73 @@
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { AdministratorUser } from '@/schema/system/user';
-import { AuthService } from '@/common/auth/auth.service';
 import { SecretService } from '@/common/secret/secret.service';
-import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
+import { AdminUser as AdminUserModel } from '@/schema/system/user';
 
 import { ENUM_ADMIN } from '@/enum/admin';
+import { ADMIN_USER_DEFAULT_PW } from '@/config/secret';
 
 import type { TypeSystemUser } from '@/interface/system/user';
-import type { TypeSchemaAdministratorUser } from '@/schema/system/user';
+import type { TypeSchemaAadminUser } from '@/schema/system/user';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectModel(AdministratorUser.name)
-    private readonly UserModel: TypeSchemaAdministratorUser,
+    // @InjectModel(RoleModel.name)
+    // private readonly RoleModel: TypeSchemaRole,
     private readonly SecretService: SecretService,
-    public readonly AuthService: AuthService,
+    @InjectModel(AdminUserModel.name)
+    private readonly AdminUserModel: TypeSchemaAadminUser,
   ) {}
 
-  get secret() {
-    return this.SecretService.secret;
+  async findUserList(query: Omit<TypeSystemUser.QueryList, 'role'>) {
+    const { pageSize, currentPage, pageSkip, ...other } = query;
+    const condition = {
+      ...other,
+      isSuper: { $in: [ENUM_ADMIN.ADMINISTRATOR.NOT_SUPER] },
+    };
+    console.log('@-findUserList', query);
+    const total = await this.AdminUserModel.find(condition).countDocuments();
+    const list = await this.AdminUserModel.find(condition, { isSuper: 0 })
+      .skip(pageSkip)
+      .limit(pageSize)
+      .populate(['role']);
+    return { list, total };
   }
 
-  private decode(user: TypeSystemUser.LoginAccountSecret | string) {
-    const { privateKey } = this.secret;
-    if (typeof user === 'object') {
-      const pwd = this.SecretService.decrypt(user.password, privateKey);
-      user.password = this.SecretService.md5(pwd);
-      return user;
-    } else {
-      const userInfo: TypeSystemUser.UserInfo = JSON.parse(
-        this.SecretService.decrypt(user, privateKey),
-      );
-      userInfo.password = this.SecretService.md5(userInfo.password);
-      return userInfo;
-    }
+  async getDetails(_id: string) {
+    return await this.AdminUserModel.findById(
+      { _id },
+      { password: 0, isSuper: 0 },
+    );
   }
 
-  async register(account: string) {
-    const param = this.decode(account) as TypeSystemUser.UserInfo;
-    param.isSuper = ENUM_ADMIN.ADMINISTRATOR.SUPER;
-    const user = await this.UserModel.findOne({
-      $or: [
-        { account: param.account },
-        { isSuper: ENUM_ADMIN.ADMINISTRATOR.SUPER },
-      ],
+  async add(data: TypeSystemUser.Info) {
+    data.password = this.SecretService.md5(data.password);
+    return await this.AdminUserModel.create(data);
+  }
+
+  async update(data: TypeSystemUser.Info) {
+    const { _id, ...param } = data;
+    await this.AdminUserModel.findByIdAndUpdate({ _id }, param);
+  }
+
+  async checkPepeat(data: Partial<TypeSystemUser.Info>) {
+    const { account, name, phone, _id } = data;
+    const list = await this.AdminUserModel.find({
+      $or: [{ _id }, { name }, { phone }, { account }],
     });
-    if (user) {
-      throw new HttpException(
-        '系统只能注册一个超级管理员',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
-    } else {
-      await this.UserModel.create(param);
-      return;
-    }
+    const [user] = list;
+    return Boolean(
+      !user || (list.length === 1 && user?._id?.toString() === _id),
+    );
   }
 
-  async login(data: string) {
-    const param = this.decode(data);
-    const user = await this.UserModel.findOne(param, { password: 0 });
-    if (user) {
-      return this.AuthService.createJWT(user.toJSON());
-    }
-    throw new HttpException('请检查账号密码是否正确', HttpStatus.BAD_REQUEST);
+  async freeze({ _id, status }: TypeSystemUser.FreezeStatusChange) {
+    return await this.AdminUserModel.updateOne({ _id }, { $set: { status } });
   }
 
-  async getUserInfo(authorization: string) {
-    const params = this.AuthService.decodeJwt(authorization);
-    if (params._id) {
-      const { iat, exp, ...param } = params;
-      return param;
-    }
-    throw new HttpException('账号过期,请重新登录', HttpStatus.UNAUTHORIZED);
+  async resetPassword(_id: string) {
+    const password = this.SecretService.md5(ADMIN_USER_DEFAULT_PW);
+    return this.AdminUserModel.updateOne({ _id }, { $set: { password } });
   }
-
-  async logout() {
-    throw new HttpException('退出成功', HttpStatus.UNAUTHORIZED);
-  }
-
-  async getUserList() {}
 }

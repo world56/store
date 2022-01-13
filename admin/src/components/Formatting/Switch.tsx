@@ -23,7 +23,7 @@ const Switch: React.FC<TypeFormSwitchProps> = ({
 
   function onSwitchValueChange(checked: boolean) {
     onChange?.(Number(checked));
-  }
+  };
 
   return (
     <AntdSwitch

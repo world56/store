@@ -1,6 +1,5 @@
 import { join } from 'path';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
 
 import {
   FastifyAdapter,
@@ -15,20 +14,14 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter(),
   );
-
   app.enableCors();
-  app.useGlobalPipes(
-    new ValidationPipe({
-      transform: true,
-    }),
-  );
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new HttpSucessInterceptor());
   app.useStaticAssets({
     root: join(__dirname, '..', 'public'),
     prefix: '/resource/',
   });
-  await app.listen(3001);
+  await app.listen(9991);
 }
 
 bootstrap();

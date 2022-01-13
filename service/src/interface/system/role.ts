@@ -11,7 +11,7 @@ export namespace TypeSystemRole {
    * @param name 角色名称
    * @param status 角色状态
    */
-  export interface ReqRoleList extends TypeCommon.PageTurning {
+  export interface ReqRoleList extends TypeCommon.QueryListDefaultParam {
     name?: string;
     status?: ENUM_COMMON.STATUS;
   }

@@ -1,4 +1,5 @@
 import { ENUM_HTTP } from "@/enum/http";
+import React from "react";
 
 /**
  * @name TypeCommon 公共接口
@@ -9,7 +10,7 @@ export namespace TypeCommon {
    * @param _id 主键
    */
   export interface DatabaseMainParameter {
-    _id: string;
+    readonly _id: string;
   }
 
   /**
@@ -23,17 +24,29 @@ export namespace TypeCommon {
   export type DefaultKey<T = React.Key> = Record<"key" | "value", T>;
 
   /**
+   * @name QueryDefaulsParam 搜索组件公共参数
+   */
+  export interface QueryDefaulsParam {
+    time?: number[];
+  }
+
+  /**
+   * @name PromiseReturns Promise reject
+   */
+  export type PromiseReturns<T> = T extends Promise<infer R> ? R : never;
+
+  /**
    * @name Gateway 网关
    * @param {number} code 请求状态CODE
    * @param {string} message 返回的消息
    * @param {boolean | void} 接口状态
-   * @param {unknown | void} content 返回的业务数据
+   * @param {unknown | void} content as T 返回的业务数据
    */
   export interface Gateway<T> {
     content: T;
-    message?: string;
-    success: boolean;
-    code: ENUM_HTTP.HTTP_CODE;
+    readonly message?: string;
+    readonly success: boolean;
+    readonly code: ENUM_HTTP.HTTP_CODE;
   }
 
   /**
@@ -45,9 +58,20 @@ export namespace TypeCommon {
   }
 
   /**
-   * @name TypePageTurning 翻页
+   * @name PageTurning 翻页
    * @param {number} pageSize 每页条数
    * @param {number} currentPage 当前页码
    */
   export type PageTurning = Record<"currentPage" | "pageSize", number>;
+
+  /**
+   * @name StandardTreeField Tree标准数据结构
+   * @param key 对应的ID
+   * @param value 对应的name
+   * @param children 子集
+   */
+  export interface StandardTreeField
+    extends Record<"key" | "value", React.Key> {
+    children: StandardTreeField[];
+  }
 }

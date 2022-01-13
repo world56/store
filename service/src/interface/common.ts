@@ -14,9 +14,8 @@ export namespace TypeCommon {
    * @param _id 主键
    */
   export interface DatabaseMainParameter {
-    _id: string;
+    readonly _id: string;
   }
-
   /**
    * @name ConstantVal
    */
@@ -26,6 +25,18 @@ export namespace TypeCommon {
    * @name TypePageTurning 翻页
    * @param {number} pageSize 每页条数
    * @param {number} currentPage 当前页码
+   * @description http的json中，都是string
    */
   export type PageTurning = Record<'currentPage' | 'pageSize', number>;
+
+  /**
+   * @name QueryListDefaultParam 搜索公共参数
+   */
+  export interface QueryListDefaultParam extends PageTurning {
+    startTime?: number;
+    endTime?: number;
+    time?: number[];
+    pageSkip?: number;
+    $or?: any[];
+  }
 }

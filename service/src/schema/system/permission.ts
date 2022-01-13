@@ -4,7 +4,6 @@ import { ENUM_COMMON } from '@/enum/common';
 import { ENUM_SYSTEM } from '@/enum/system';
 
 import type { TypeCommon } from '@/interface/common';
-import type { TypeSystemPermission } from '@/interface/system/permission';
 
 export type TypeSchemaPermission = TypeCommon.TypeMongoose<Permission>;
 
@@ -13,7 +12,8 @@ export type TypeSchemaPermission = TypeCommon.TypeMongoose<Permission>;
  * @description 管理系统-权限
  */
 @Schema({ versionKey: false })
-export class Permission implements TypeSystemPermission.EditPermission {
+export class Permission {
+
   @Prop({
     type: String,
     required: true,
@@ -33,7 +33,7 @@ export class Permission implements TypeSystemPermission.EditPermission {
   location: string[];
 
   @Prop({
-    type: ENUM_SYSTEM.PERMISSION_TYPE,
+    type: Number,
     required: true,
     enum: [
       ENUM_SYSTEM.PERMISSION_TYPE.PAGE,
@@ -45,7 +45,7 @@ export class Permission implements TypeSystemPermission.EditPermission {
   type: ENUM_SYSTEM.PERMISSION_TYPE;
 
   @Prop({
-    type: ENUM_COMMON.STATUS,
+    type: Number,
     default: ENUM_COMMON.STATUS.ACTIVATE,
     enum: [ENUM_COMMON.STATUS.FREEZE, ENUM_COMMON.STATUS.ACTIVATE],
   })

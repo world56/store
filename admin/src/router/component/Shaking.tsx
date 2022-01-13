@@ -5,8 +5,10 @@ import Loading from '@/layout/PageLoading';
 
 import type { TypeRoute } from '@/interface/route';
 
-export default (r: TypeRoute.RouteParamType) => (
+const Shaking = (r: TypeRoute.RouteParamType) => (
   <Suspense fallback={<Loading />}>
     <Route path={r.path} exact={r.exact} render={p => SafeFilter(p, r)} />
   </Suspense>
 );
+
+export default Shaking;

@@ -24,7 +24,7 @@ export function getUserInfo() {
 /**
  * @name setUserInfo 存储用户信息
  */
-export function setUserInfo(payload: TypeSystemUser.UserInfo) {
+export function setUserInfo(payload: TypeSystemUser.Info) {
   return {
     type: ENUM_STORE_ACTION.LOGIN.SET_USER_INFO,
     payload,

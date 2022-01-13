@@ -29,4 +29,5 @@ export namespace CONSTANT_COMMON {
     { key: ENUM_COMMON.STATUS.ACTIVATE, value: "激活" },
     { key: ENUM_COMMON.STATUS.FREEZE, value: "冻结" },
   ]);
+
 }

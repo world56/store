@@ -1,6 +1,5 @@
 import dayjs from "dayjs";
-
-import { FORMAT_TIME } from "@/config/format";
+import { CONFIG_TIME_FORMAT } from "@/config/format";
 
 /**
  * @name isVoid 判断值是否为void
@@ -15,5 +14,5 @@ export function isVoid(param: unknown): param is boolean {
  * @returns {string} 输出格式为 YYYY-MM-DD HH:mm:ss
  */
 export function timestampToTime(timestamp?: number): string {
-  return timestamp ? dayjs(timestamp).format(FORMAT_TIME) : "-";
+  return timestamp ? dayjs(timestamp).format(CONFIG_TIME_FORMAT.STANDARD) : "-";
 }

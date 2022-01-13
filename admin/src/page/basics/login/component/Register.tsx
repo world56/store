@@ -1,20 +1,14 @@
 import styles from '../index.styl';
 import { encryption } from "@/utils/crypto";
-import { Modal, Form, Input, message } from 'antd';
-import { register, getPubilcKey } from '@/api/user';
-
-import { CONSTANT_REG } from '@/constant/reg';
+import { Modal, Form, message } from 'antd';
+import { register, getPubilcKey } from '@/api/auth';
+import { FormEditUserInfo } from '@/components/Form';
 
 import type { TypeSystemUser } from '@/interface/system/user';
 
 interface RegisterProps {
   window: boolean;
   onClose(): void;
-}
-
-const textRule = {
-  message: '只允许包含数字、字母、下划线',
-  pattern: CONSTANT_REG.NUMBER_LETTER,
 };
 
 const formLayout = {
@@ -44,50 +38,21 @@ const Register: React.FC<RegisterProps> = ({
   function onCancel() {
     form.resetFields();
     onClose();
-  }
+  };
 
   return (
     <Modal
       okText='注册'
       onOk={onSumbit}
-      title='注册管理员'
+      title='注册超级管理员'
       visible={window}
       onCancel={onCancel}
       className={styles.register}>
       <Form form={form} {...formLayout}>
-        <Form.Item
-          label='登录账号'
-          name='account'
-          initialValue='admin'
-          rules={[{ required: true, message: '请输入登录账号' }, textRule]}>
-          <Input placeholder='请输入账号' allowClear />
-        </Form.Item>
-
-        <Form.Item
-          label='登录密码'
-          name='password'
-          rules={[{ required: true, message: '请输入登录密码' }, textRule]}>
-          <Input placeholder='请输入密码' type='password' allowClear />
-        </Form.Item>
-
-        <Form.Item
-          label='用户昵称'
-          name='name'
-          rules={[{ required: true, min: 2, max: 4, message: '请输入用户昵称(2-4个字符)' }]}>
-          <Input placeholder='请输入用户名称' allowClear />
-        </Form.Item>
-
-        <Form.Item
-          label='联系电话'
-          name='phone'
-          rules={[
-            { required: true, message: '请输入登录密码' },
-            { message: '仅支持11位手机号', pattern: CONSTANT_REG.PHONE_NUMBER }]}>
-          <Input placeholder='请输入11位电话号码' allowClear />
-        </Form.Item>
+        <FormEditUserInfo />
       </Form>
     </Modal>
-  )
-}
+  );
+};
 
 export default Register;

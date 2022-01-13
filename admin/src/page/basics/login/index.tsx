@@ -1,9 +1,10 @@
+import { useState } from 'react';
 import Hint from './component/Hint';
 import { useActions } from '@/hooks';
 import { Form, Input, Button } from 'antd';
 import Register from './component/Register';
 import Container from './component/Container';
-import { useState, useCallback } from 'react';
+import RegisterBtn from './component/RegisterBtn';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import type { TypeSystemUser } from '@/interface/system/user';
@@ -21,7 +22,9 @@ const Login = () => {
     actions.userLogin(values);
   };
 
-  const openRegister = useCallback(() => setWindow(b => !b), []);
+  async function openRegister() {
+    setWindow(b => !b);
+  };
 
   return (
     <Container>
@@ -34,7 +37,7 @@ const Login = () => {
           <Input onPressEnter={onSumbit} type='password' placeholder='请输入密码' prefix={<LockOutlined />} />
         </Form.Item>
         <Button onClick={onSumbit} type='primary'>登录</Button>
-        <Button onClick={openRegister} type="dashed">快速注册</Button>
+        <RegisterBtn onClick={openRegister} />
       </Form>
       <Register window={window} onClose={openRegister} />
     </Container>

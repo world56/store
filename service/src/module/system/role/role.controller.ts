@@ -1,6 +1,6 @@
 import { RoleService } from './role.service';
 import { EditRolePipe } from './pipe/edit-role.pipe';
-import { PageTurningPipe } from '@/pipe/page-turning.pipe';
+import { QueryListFilterPipe } from '@/pipe/query-list-filter.pipe';
 import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
 
 import type { TypeCommon } from '@/interface/common';
@@ -14,9 +14,14 @@ export class RoleController {
   public constructor(private readonly RoleService: RoleService) {}
 
   @Get('list')
-  @UsePipes(new PageTurningPipe())
+  @UsePipes(new QueryListFilterPipe(['status']))
   list(@Query() param: TypeSystemRole.ReqRoleList) {
     return this.RoleService.getList(param);
+  }
+
+  @Get('/allRoleList')
+  allRoleList(){
+    return this.RoleService.getAllRoleList();
   }
 
   @Get('details')

@@ -1,4 +1,6 @@
-export interface KeyToRSA {
-  publicKey: string;
-  privateKey: string;
+export namespace TypeSecret {
+  export interface KeyToRSA {
+    publicKey: string;
+    privateKey: string;
+  }
 }

@@ -8,7 +8,15 @@ import { ENUM_SYSTEM } from '@/enum/system';
  */
 export namespace TypeSystemPermission {
   /**
-   * @name PermissionParam 新增、编辑权限
+   * @name ReqList 查询-权限管理列表
+   */
+  export interface QueryList
+    extends TypeCommon.DatabaseMainParameter,
+      TypeCommon.QueryListDefaultParam,
+      Pick<Info, 'name' | 'code'> {}
+
+  /**
+   * @name Info 编辑权限
    * @param name 中文名称
    * @param code 英文名称
    * @param location 所属位置
@@ -16,8 +24,7 @@ export namespace TypeSystemPermission {
    * @param status 激活状态
    * @param remark 备注
    */
-  export interface EditPermission
-    extends Partial<TypeCommon.DatabaseMainParameter> {
+  export interface Info extends Partial<TypeCommon.DatabaseMainParameter> {
     name: string;
     code: string;
     location: string[];
@@ -27,10 +34,12 @@ export namespace TypeSystemPermission {
   }
 
   /**
-   * @name ReqPermissionList 获取-权限管理列表
+   * @name Remove 删除权限
    */
-  export interface ReqPermissionList
-    extends TypeCommon.PageTurning,
-      TypeCommon.DatabaseMainParameter,
-      Pick<EditPermission, 'name' | 'code'> {}
+  export interface Remove extends TypeCommon.DatabaseMainParameter {}
+
+  /**
+   * @name CheckFields 检查字段是否重复
+   */
+  export interface CheckFields extends Pick<Info, '_id' | 'name' | 'code'> {}
 }

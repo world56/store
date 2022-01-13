@@ -1,25 +1,33 @@
-import { Role } from '@/schema/system/role';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { HttpStatus, Injectable, HttpException } from '@nestjs/common';
+import { Role as RoleModel } from '@/schema/system/role';
+import { AdminUser as AdminUserModel } from '@/schema/system/user';
 
 import type { TypeCommon } from '@/interface/common';
 import type { TypeSchemaRole } from '@/schema/system/role';
 import type { TypeSystemRole } from '@/interface/system/role';
+import type { TypeSchemaAadminUser } from '@/schema/system/user';
 
 @Injectable()
 export class RoleService {
   public constructor(
-    @InjectModel(Role.name)
+    @InjectModel(RoleModel.name)
     private readonly RoleModel: TypeSchemaRole,
+    @InjectModel(AdminUserModel.name)
+    private readonly AdminUserModel: TypeSchemaAadminUser,
   ) {}
 
   async getList(param: TypeSystemRole.ReqRoleList) {
-    const { pageSize, currentPage, ...otherParam } = param;
+    const { pageSize, currentPage, pageSkip, ...otherParam } = param;
     const total = await this.RoleModel.find(otherParam).countDocuments();
     const list = await this.RoleModel.find(otherParam)
       .limit(pageSize)
-      .skip((currentPage - 1) * pageSize);
+      .skip(pageSkip);
     return { list, total, pageSize, currentPage };
+  }
+
+  async getAllRoleList() {
+    return await this.RoleModel.find();
   }
 
   async getDetails(params: TypeCommon.DatabaseMainParameter) {
@@ -33,6 +41,10 @@ export class RoleService {
   }
 
   async remove({ _id }: TypeCommon.DatabaseMainParameter) {
+    await this.AdminUserModel.updateMany(
+      { role: { $in: [_id] } },
+      { $pull: { role: _id } },
+    );
     return await this.RoleModel.findByIdAndDelete({ _id });
   }
 
@@ -44,12 +56,9 @@ export class RoleService {
 
   async fieldNameCheck({ name, _id }: TypeSystemRole.ReqCheckRoleName) {
     const target = await this.RoleModel.findOne({ name });
-    if (
-      (target && name === target.name && _id === target?._id?.toString()) ||
-      target === null
-    ) {
-      return true;
-    }
-    throw new HttpException('该角色名已被注册', HttpStatus.NOT_ACCEPTABLE);
+    return Boolean(
+      !target ||
+        (target && name === target.name && _id === target?._id?.toString()),
+    );
   }
 }

@@ -26,7 +26,7 @@ export interface TypeStoreStatus {
  * @name TypeStoreUserModule 状态机-用户模块
  */
 export namespace TypeStoreUserModule {
-  export interface Store extends TypeSystemUser.UserInfo {}
+  export interface Store extends TypeSystemUser.Info {}
 
   export type Reducers = TypeStoreReducers<Store, ENUM_STORE_ACTION.LOGIN>;
 

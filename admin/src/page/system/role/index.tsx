@@ -2,9 +2,9 @@ import { useAsyncFn } from 'react-use';
 import Search from '@/components/Search';
 import { usePageTurning } from '@/hooks';
 import { timestampToTime } from '@/utils';
+import { BtnEditDel } from '@/layout/Table';
 import EditRole from './components/EditRole';
 import StatusColor from '@/layout/StatusColor';
-import TabaleEditDel from '@/layout/TabaleEditDel';
 import { UserAddOutlined } from '@ant-design/icons';
 import { getRoleList, removeRole } from '@/api/system';
 import { useState, useEffect, useCallback } from 'react';
@@ -17,7 +17,6 @@ import { CONSTANT_COMMON } from '@/constant/common';
 import type { TypeSystemRole } from '@/interface/system/role';
 
 const query = [
-  { key: DB_PRIMARY_KEY, name: '角色ID', type: ENUM_COMMON.COMPONENT_TYPE.INPUT },
   { key: 'name', name: '角色名称', type: ENUM_COMMON.COMPONENT_TYPE.INPUT },
   {
     key: 'status',
@@ -36,7 +35,7 @@ const Role = () => {
   const [window, setWindow] = useState(false);
 
   const [data, fetch] = useAsyncFn(getRoleList);
-  const [search] = Form.useForm<TypeSystemRole.ReqRoleList>();
+  const [search] = Form.useForm<TypeSystemRole.QueryList>();
 
   const pagination = usePageTurning(data.value?.total);
   const { pageSize, currentPage } = pagination;
@@ -65,27 +64,21 @@ const Role = () => {
   }, [openEditModal]);
 
   const columns = [
-    { title: 'ID', width: 100, key: DB_PRIMARY_KEY, dataIndex: DB_PRIMARY_KEY },
     { title: '角色名称', key: 'name', dataIndex: 'name' },
     {
-      title: '状态',
-      key: 'status',
-      dataIndex: 'status',
+      title: '状态', key: 'status', dataIndex: 'status',
       render: (key: ENUM_COMMON.STATUS) => <StatusColor status={key} />
     },
     {
-      title: '创建时间',
-      key: 'createTime',
-      width: 180,
-      dataIndex: 'createTime',
-      render: timestampToTime
+      title: '创建时间', key: 'createTime',
+      dataIndex: 'createTime', render: timestampToTime
     },
     { title: '描述', key: 'description', dataIndex: 'description' },
     {
       title: '操作',
       key: DB_PRIMARY_KEY,
       dataIndex: DB_PRIMARY_KEY,
-      render: (_id: string) => <TabaleEditDel onEdit={() => edit(_id)} onRemove={() => remove(_id)} />
+      render: (_id: string) => <BtnEditDel value={_id} onEdit={edit} onRemove={remove} />
     },
   ];
 
