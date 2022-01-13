@@ -5,20 +5,20 @@ import {
   HttpException,
   ExecutionContext,
 } from '@nestjs/common';
-import { AuthService } from '@/common/auth/auth.service';
+import { JwtAuthService } from '@/common/jwtAuth/auth.service';
 
 import type { Observable } from 'rxjs';
 
 @Injectable()
 export class UserGuard implements CanActivate {
-  constructor(private readonly AuthService: AuthService) {}
+  constructor(private readonly JwtAuthService: JwtAuthService) {}
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const {
       headers: { authorization },
     } = context.switchToHttp().getRequest();
-    if (this.AuthService.decodeJwt(authorization)) return true;
+    if (this.JwtAuthService.decodeJwt(authorization)) return true;
     throw new HttpException('账号过期,请重新登录', HttpStatus.UNAUTHORIZED);
   }
 }

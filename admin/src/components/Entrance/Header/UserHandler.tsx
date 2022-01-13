@@ -1,10 +1,10 @@
 import Cookies from 'js-cookie';
 import styles from './index.styl';
-import { useStore } from '@/hooks';
 import { TOKEN_KEY } from '@/config/user';
+import UserIcon from '@/resource/icon.jpg';
 import { useHistory } from 'react-router-dom';
 import { Menu, Dropdown, message } from 'antd';
-import UserIcon from '@/resource/userIcon.jpeg';
+import { useStore, useActions } from '@/hooks';
 import { SettingOutlined, LoginOutlined } from '@ant-design/icons';
 
 import type { MenuInfo } from 'rc-menu/lib/interface';
@@ -15,11 +15,13 @@ import type { MenuInfo } from 'rc-menu/lib/interface';
 const UserHandler = () => {
 
   const { user } = useStore();
+  const actions = useActions();
   const navigate = useHistory();
 
   function onClick({ key }: MenuInfo) {
     if (key === '2') {
       Cookies.remove(TOKEN_KEY);
+      actions.delUserInfo();
       message.warn('退出成功');
       navigate.push('/user/login');
     }

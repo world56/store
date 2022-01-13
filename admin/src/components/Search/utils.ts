@@ -6,7 +6,6 @@ import type { Columns, ColumnsList, CascaderList } from ".";
 /**
  * @name filterSelectArray 生成选择项
  */
-
 export function filterSelectArray(
   list: ColumnsList = [],
   obj: Partial<TypeCommon.GenericObject> = {},
@@ -20,14 +19,7 @@ export function filterSelectArray(
         key: v[key] || "unknown",
         value: v[value] || "unknown",
         children: toRecursion
-          ? filterSelectArray(
-              {
-                key,
-                value,
-                data: v.children || [],
-              },
-              obj,
-            ).list
+          ? filterSelectArray({ key, value, data: v.children || [] }, obj).list
           : [],
       };
     }) as CascaderList[];
@@ -39,7 +31,6 @@ export function filterSelectArray(
 /**
  * @name getPlaceholder 获取提示语
  */
-
 export function filterPlaceholder(value: Columns) {
   return value.placeholder
     ? value.placeholder
@@ -50,7 +41,6 @@ export function filterPlaceholder(value: Columns) {
  * @name initColumns 标准化
  * @param {Array<{}>} columns
  */
-
 export function initColumns(columns: Columns[] = []): Columns[] {
   const newColumns = [];
   if (columns.length) {

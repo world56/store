@@ -1,17 +1,15 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { MONGOOSE_ADDRESS } from '@/config/database';
-
-import { UserModule } from '@/module/user/user.module';
-import { AuthModule } from '@/common/auth/auth.module';
+import { AuthModule } from '@/module/auth/auth.module';
 import { SystemModule } from '@/module/system/system.module';
+
+import { MONGOOSE_ADDRESS } from '@/config/db';
 
 @Module({
   imports: [
     MongooseModule.forRoot(MONGOOSE_ADDRESS, {
       useNewUrlParser: true,
     }),
-    UserModule,
     AuthModule,
     SystemModule,
   ],

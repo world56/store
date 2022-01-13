@@ -1,6 +1,8 @@
+import store from "@/store";
 import { message } from "antd";
 import Cookies from "js-cookie";
 import { extend } from "umi-request";
+import { delUserInfo } from "@/store/action/user";
 import { REQUEST_TIMEOUT, REQUEST_PREFIX } from "@/config/request";
 
 import { ENUM_HTTP } from "@/enum/http";
@@ -14,6 +16,8 @@ import type { TypeCommon } from "@/interface/common";
 type Res = Response<TypeCommon.Gateway<unknown>>;
 
 async function errorHandler(res: ResponseError): Promise<Res> {
+  console.log("@res", res);
+  message.warning("系统错误");
   return Promise.reject(res.response);
 }
 
@@ -40,6 +44,7 @@ request.interceptors.response.use(
           return Promise.resolve(data.content);
         case ENUM_HTTP.HTTP_CODE.UNAUTHORIZED:
           Cookies.remove(TOKEN_KEY);
+          store.dispatch(delUserInfo());
           message.warn(
             data?.message ||
               CONSTANT_HTTP.HTTP_CODE_MESSAGE[ENUM_HTTP.HTTP_CODE.UNAUTHORIZED],
@@ -47,11 +52,11 @@ request.interceptors.response.use(
           setTimeout(() => window.location.reload(), 1800);
           return Promise.reject();
         default:
-          message.warn(data.message);
-          return Promise.reject(data.content);
+          message.error(data.message);
+          return Promise.reject(data);
       }
     } catch (e) {
-      message.warn(String(e));
+      message.error(String(e));
       return Promise.reject(e);
     }
   },

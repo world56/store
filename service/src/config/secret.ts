@@ -3,3 +3,5 @@ export const USER_FIND_KEY =
 
 export const JWT_KEY =
   'PZJibW0Y&igksP1dDEJxIf9JP%U8KKWJYAD@%rIlv$bVH73QjXEVv&4ySJuHDilORm7C@w1fzZrIe7FeB2ATMIKW$7h@it^gt4^';
+
+export const ADMIN_USER_DEFAULT_PW = '123456';

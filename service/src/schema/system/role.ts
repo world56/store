@@ -1,19 +1,15 @@
-import * as mongoose from 'mongoose';
-import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Schema as MongooseSchema } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Permission as PermissionModel } from '@/schema/system/permission';
 
-import { ENUM_ADMIN_SYSTEM } from '@/enum/system';
+import { ENUM_COMMON } from '@/enum/common';
 
-import type { TypeDatabase } from '@/interface/db';
+import type { TypeCommon } from '@/interface/common';
 
-export type TypeSchemaRole = TypeDatabase.TypeMongoose<Role>;
+export type TypeSchemaRole = TypeCommon.TypeMongoose<Role>;
 
 /**
  * @name Role 角色
- * @param name 角色名称
- * @param status 角色状态（默认激活）
- * @param createTime 创建时间
- * @param description 角色简介
- *
  * @description 管理系统-RBAC角色
  */
 @Schema({ versionKey: false })
@@ -21,18 +17,20 @@ export class Role {
   @Prop({ type: String, required: true })
   name: string;
 
-  @Prop({ type: String })
-  description?: string;
-
   @Prop({
     type: Number,
-    default: ENUM_ADMIN_SYSTEM.ROLE_STATUS.OPEN,
-    enum: [
-      ENUM_ADMIN_SYSTEM.ROLE_STATUS.OPEN,
-      ENUM_ADMIN_SYSTEM.ROLE_STATUS.FREEZE,
-    ],
+    default: ENUM_COMMON.STATUS.ACTIVATE,
+    enum: [ENUM_COMMON.STATUS.FREEZE, ENUM_COMMON.STATUS.ACTIVATE],
   })
-  status: ENUM_ADMIN_SYSTEM.ROLE_STATUS;
+  status: ENUM_COMMON.STATUS;
+
+  @Prop({
+    type: [{ ref: PermissionModel.name, type: MongooseSchema.Types.ObjectId }],
+  })
+  permission: PermissionModel[] | string[];
+
+  @Prop({ type: String })
+  description: string;
 
   @Prop({ type: Number, default: new Date().getTime() })
   createTime: number;

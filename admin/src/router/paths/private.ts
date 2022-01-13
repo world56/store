@@ -28,7 +28,7 @@ export default [
         title: "权限列表",
         path: "/system/permission",
         component: lazy(() => import("@/page/system/permission")),
-      },
+      }
     ],
   },
 ] as TypeRoute.RouteListType;

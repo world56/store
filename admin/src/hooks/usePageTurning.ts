@@ -11,13 +11,12 @@ function showTotal(total: number) {
 export default function usePageTurning(totalNum: number | undefined) {
   const total = totalNum || 0;
 
-  const [{ pageSize, currentPage }, setPage] = useState<TypeCommon.PageTurning>(
-    {
-      pageSize: 20,
-      currentPage: 1,
-    },
-  );
+  const [pagination, setPage] = useState<TypeCommon.PageTurning>({
+    pageSize: 20,
+    currentPage: 1,
+  });
 
+  const { pageSize, currentPage } = pagination;
   const pageIndex = (currentPage - 1) * pageSize;
 
   const onChange = useCallback(

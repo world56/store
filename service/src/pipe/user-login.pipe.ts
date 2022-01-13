@@ -7,11 +7,9 @@ import {
 import { plainToClass } from 'class-transformer';
 import { IsString, validate } from 'class-validator';
 
-import type * as UserType from '@/interface/user';
+import type { TypeSystemUser } from '@/interface/system/user';
 
-export class UserLoginValidator
-  implements UserType.AdminUser.LoginAccountSecret
-{
+class UserLoginValidator implements TypeSystemUser.LoginAccountSecret {
   @IsString()
   account: string;
 
@@ -22,7 +20,7 @@ export class UserLoginValidator
 @Injectable()
 export class UserLoginPipe implements PipeTransform {
   async transform(
-    value: UserType.AdminUser.LoginAccountSecret,
+    value: TypeSystemUser.LoginAccountSecret,
     metadata: ArgumentMetadata,
   ) {
     const format = plainToClass(UserLoginValidator, value);

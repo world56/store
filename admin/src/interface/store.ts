@@ -2,7 +2,7 @@ import { ENUM_STORE_ACTION } from "@/enum/store";
 import { SYSTEM_NAV_STATUS_KEY } from "@/config/system";
 
 import type { Reducer } from "redux";
-import type { TypeUser } from "./user";
+import type { TypeSystemUser } from "./system/user";
 
 export type TypeStoreAction<A extends string, P = void> = {
   type: A;
@@ -26,7 +26,7 @@ export interface TypeStoreStatus {
  * @name TypeStoreUserModule 状态机-用户模块
  */
 export namespace TypeStoreUserModule {
-  export interface Store extends TypeUser.UserInfo {}
+  export interface Store extends TypeSystemUser.Info {}
 
   export type Reducers = TypeStoreReducers<Store, ENUM_STORE_ACTION.LOGIN>;
 

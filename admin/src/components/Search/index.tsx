@@ -1,22 +1,9 @@
-import {
-  Row,
-  Col,
-  Form,
-  Input,
-  Button,
-  Select,
-  Cascader,
-  DatePicker,
-} from 'antd';
-import {
-  memo,
-  useMemo,
-  useEffect,
-  useCallback,
-} from 'react';
 import styles from './index.styl';
+import { useMemo, useCallback } from 'react';
 import { initColumns, searchSelect } from './utils';
-import { SearchOutlined, DeleteOutlined } from '@ant-design/icons';
+import { DatePicker } from '@/components/Formatting';
+import OperatingButton from './components/OperatingButton';
+import { Row, Col, Form, Input, Select, Cascader } from 'antd';
 
 import type { FormInstance } from 'antd/es';
 import type { TypeCommon } from '@/interface/common';
@@ -45,32 +32,29 @@ export interface Columns {
   rules?: Rule[];
   placeholder?: string;
   noStyle?: (f: FormInstance) => void;
-  bindValue?: ENUM_COMMON.COMPONENT_TO_VALUE;
   type: keyof typeof ENUM_COMMON.COMPONENT_TYPE;
+  bindValue?: `${ENUM_COMMON.COMPONENT_TO_VALUE}`;
   list?: ReadonlyArray<CascaderList> | ConfCascaderList;
   /**
-   * @name props 各类组件props
+   * @param props 各类组件props
    * @description 暂不具体定义 参考antd官方文档对各类组件的定义
    */
   props?: any;
 };
 
-export interface SearchFormProps<T = TypeCommon.GenericObject> {
+export interface SearchFormProps {
   size?: SizeType;
+  onSearch(): void;
   spanSize?: number;
   form: FormInstance;
   columns: Columns[];
-  initRequest?: boolean;
-  onSearch(props: T): void;
-  children?: React.ReactNode;
 };
 
 const { Option } = Select;
 
-const { COMPONENT_TYPE, COMPONENT_TO_VALUE } = ENUM_COMMON;
-
 /**
  * @name SearchForm 搜索
+ * @description 快速创建一个搜索组件（Form）
  */
 const SearchForm: React.FC<SearchFormProps> = ({
   form,
@@ -78,18 +62,8 @@ const SearchForm: React.FC<SearchFormProps> = ({
   columns,
   onSearch,
   children,
-  initRequest,
   spanSize = 5,
 }) => {
-
-  const onSumbit = useCallback(async () => {
-    const values = await form.validateFields();
-    onSearch(values);
-  }, [form, onSearch]);
-
-  function onClear() {
-    form.resetFields();
-  };
 
   const Columns = useMemo(() => initColumns(columns), [columns]);
 
@@ -99,37 +73,33 @@ const SearchForm: React.FC<SearchFormProps> = ({
       list,
       props = {},
       placeholder,
-      bindValue = COMPONENT_TO_VALUE.KEY,
+      bindValue = ENUM_COMMON.COMPONENT_TO_VALUE.KEY,
     } = value;
-    const allowClear = true;
     const traverse = Array.isArray(list) ? list : [];
     switch (type) {
-      case COMPONENT_TYPE.INPUT:
+      case ENUM_COMMON.COMPONENT_TYPE.INPUT:
         return (
           <Input
+            allowClear
             size={size}
-            onPressEnter={onSumbit}
-            allowClear={allowClear}
+            onPressEnter={onSearch}
             placeholder={placeholder}
             {...props} />
         );
-      case COMPONENT_TYPE.SELECT:
+      case ENUM_COMMON.COMPONENT_TYPE.SELECT:
+        const affirmVal = bindValue === ENUM_COMMON.COMPONENT_TO_VALUE.KEY;
         return (
           <Select
+            allowClear
             showSearch
             size={size}
-            allowClear={allowClear}
             placeholder={placeholder}
             filterOption={searchSelect}
             optionFilterProp="children" {...props}>
-            {traverse.map(({ key, value: val }) => (
-              <Option key={key} value={bindValue === COMPONENT_TO_VALUE.KEY ? key : val}>
-                {val}
-              </Option>
-            ))}
+            {traverse.map(({ key, value: val }) => <Option key={key} value={affirmVal ? key : val}>{val}</Option>)}
           </Select>
         );
-      case COMPONENT_TYPE.CASCADER:
+      case ENUM_COMMON.COMPONENT_TYPE.CASCADER:
         return (
           <Cascader
             options={traverse}
@@ -138,74 +108,51 @@ const SearchForm: React.FC<SearchFormProps> = ({
             fieldNames={CONF.CASCADER_FIELD}
             {...props} />
         );
-      case COMPONENT_TYPE.TIME_SCOPE:
+      case ENUM_COMMON.COMPONENT_TYPE.TIME_SCOPE:
         return (
-          <DatePicker.RangePicker
-            className={styles.component}
-            {...props} />
+          <DatePicker className={styles.component} {...props} />
         );
       default:
         return <span>NULL</span>
     };
-  }, [size, onSumbit]);
+  }, [size, onSearch]);
 
-  const init = useCallback(props =>
-    Columns.map(v => {
-      const ele = (
-        <Col span={spanSize} key={v.key} flex={2} style={{ width: '100%' }}>
-          <Form.Item
-            name={v.key}
-            label={v.name}
-            rules={v.rules}
-            initialValue={v.value}
-          >
-            {toComType(v)}
-          </Form.Item>
-        </Col>
-      );
-      if (v.noStyle && v.noStyle(props)) {
-        return null;
-      }
-      return ele;
-    }),
-    [spanSize, Columns, toComType]
-  );
+  const init = useCallback(props => Columns.map(v => {
+    const ele = <Col
+      flex={2}
+      key={v.key}
+      span={spanSize}
+      style={{ width: '100%' }}>
+      <Form.Item
+        name={v.key}
+        label={v.name}
+        rules={v.rules}
+        initialValue={v.value}>
+        {toComType(v)}
+      </Form.Item>
+    </Col>;
+    if (v?.noStyle?.(props)) {
+      return null;
+    }
+    return ele;
+  }), [spanSize, Columns, toComType]);
 
-  useEffect(() => {
-    initRequest && onSumbit();
-  }, [initRequest, onSumbit]);
+  function onClear() {
+    form.resetFields();
+  };
 
   return (
-    <Form
-      form={form}
-      {...CONF.FORM_LAYOUT}
-      className={styles.layout}>
-      <Form.Item
-        shouldUpdate
-        className={styles.shouldUpdate}>
-        {props => (
-          <Row gutter={24}>
-            {init(props)}
-            <Col className={styles.searchBtn}>
-              <Button onClick={onSumbit} type="primary">
-                <SearchOutlined />
-                搜索
-              </Button>
-              <Button
-                danger
-                onClick={onClear}
-                className="formSearchClear"
-              >
-                <DeleteOutlined />
-                重置
-              </Button>
-              {children ? children : null}
-            </Col>
-          </Row>
-        )}
+    <Form form={form} className={styles.layout} {...CONF.FORM_LAYOUT}>
+      <Form.Item shouldUpdate className={styles.shouldUpdate}>
+        {props => <Row gutter={24}>
+          {init(props)}
+          <OperatingButton onEmpty={onClear} onSumbit={onSearch}>
+            {children ? children : null}
+          </OperatingButton>
+        </Row>}
       </Form.Item>
     </Form>
   );
 };
 
-export default memo(SearchForm);
+export default SearchForm;

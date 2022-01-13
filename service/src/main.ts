@@ -1,5 +1,6 @@
 import { join } from 'path';
 import { AppModule } from './app.module';
+
 import {
   FastifyAdapter,
   NestFastifyApplication,
@@ -13,7 +14,6 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter(),
   );
-
   app.enableCors();
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new HttpSucessInterceptor());
@@ -21,7 +21,7 @@ async function bootstrap() {
     root: join(__dirname, '..', 'public'),
     prefix: '/resource/',
   });
-  await app.listen(3001);
+  await app.listen(9991);
 }
 
 bootstrap();
