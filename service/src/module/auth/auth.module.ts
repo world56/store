@@ -1,27 +1,14 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { MongooseModule } from '@nestjs/mongoose';
-import { AuthController } from './auth.controller';
-import { JwtAuthModule } from '@/common/jwtAuth/auth.module';
-import { SecretModule } from '@/common/secret/secret.module';
-import {
-  SchemaAdminUser,
-  AdminUser as AdminUserModel,
-} from '@/schema/system/user';
+import { UserController } from './auth.controller';
+import { UserModule } from '../system/user/user.module';
+import { PrismaService } from '@/common/prisma/prisma.service';
+import { JwtAuthModule } from '@/common/jwtAuth/jwtAuth.module';
+import { EncryptionModule } from '@/common/encryption/encryption.module';
 
-/**
- * @name AuthModule 系统鉴权
- */
 @Module({
-  imports: [
-    MongooseModule.forFeature([
-      { name: AdminUserModel.name, schema: SchemaAdminUser },
-    ]),
-    SecretModule,
-    JwtAuthModule,
-  ],
-  exports: [AuthService],
-  providers: [AuthService],
-  controllers: [AuthController],
+  imports: [EncryptionModule, JwtAuthModule, UserModule],
+  controllers: [UserController],
+  providers: [AuthService, PrismaService],
 })
 export class AuthModule {}

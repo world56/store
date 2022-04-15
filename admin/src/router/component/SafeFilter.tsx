@@ -19,7 +19,7 @@ export default function SafeFilter(
   const token = Cookies.get(TOKEN_KEY);
   const Module = <C routes={routes} />;
   const urlState = !CreditWhiteList.includes(pathname);
-  token && !user._id && store.dispatch(UserAction.getUserInfo());
+  token && !user.account && store.dispatch(UserAction.getUserInfo());
   if (token) return urlState ? Module : <Redirect to={RedirectUrl} />;
   else return urlState ? <Redirect to='/user/login' /> : Module;
 };

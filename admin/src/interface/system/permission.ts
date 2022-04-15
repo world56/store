@@ -8,18 +8,18 @@ import { ENUM_SYSTEM } from "@/enum/system";
  */
 export namespace TypeSystemPermission {
   /**
-   * @name Info 权限基本信息
+   * @name DTO 权限基本信息
    * @param name 中文名称
    * @param code 英文名称
-   * @param location 所属位置
+   * @param parentId 所属模块
    * @param type 权限类型
    * @param status 激活状态
    * @param remark 备注
    */
-  export interface Info extends Partial<TypeCommon.DatabaseMainParameter> {
+  export interface DTO extends TypeCommon.DatabaseMainParameter {
     name: string;
     code: string;
-    location: string[];
+    parentId: number;
     type: ENUM_SYSTEM.PERMISSION_TYPE;
     status: ENUM_COMMON.STATUS;
     remark?: string;
@@ -28,8 +28,9 @@ export namespace TypeSystemPermission {
   /**
    * @name InfoTree 权限树列表
    */
-  export interface InfoTree extends Info {
-    children: InfoTree[];
+  export interface InfoTree extends DTO {
+    disabled?: boolean;
+    children?: InfoTree[];
   }
 
   /**
@@ -38,24 +39,10 @@ export namespace TypeSystemPermission {
   export interface QueryList
     extends TypeCommon.PageTurning,
       TypeCommon.DatabaseMainParameter,
-      Pick<Info, "name" | "code" | "status"> {}
-
-  /**
-   * @name QueryTreeList 获取-权限树列表
-   * @param tree true:返回树 false|void 返回平铺列表
-   */
-  export interface QueryTreeList {
-    tree?: boolean;
-  };
-
-  /**
-   * @name Remove 删除权限
-   */
-  export interface Remove extends TypeCommon.DatabaseMainParameter {}
+      Pick<DTO, "name" | "status"> {}
 
   /**
    * @name CheckFields 检查字段是否重复
    */
-  export interface CheckFields
-    extends Partial<Pick<Info, "_id" | "name" | "code">> {}
+  export interface CheckFields extends Partial<Pick<DTO, "id" | "name">> {}
 }

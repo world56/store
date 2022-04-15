@@ -1,34 +1,37 @@
 import {
-  addPermission,
+  insertPermission,
   updatePermission,
   getPermissionTree,
   getPermissionDetails,
-  checkPermissionField
+  checkPermissionField,
 } from '@/api/system';
 import { memo } from 'react';
 import Modal from '@/layout/Modal';
 import { useGetDetails } from '@/hooks';
 import { FormMajorKey } from '@/components/Form';
 import { Switch } from '@/components/Formatting';
-import FormItemLocation from './FormItemLocation';
-import { Form, Input, Radio, message } from 'antd';
+import { permissionToTree } from '../../../../utils';
+import { Form, Input, Radio, message, TreeSelect } from 'antd';
 
 import { ENUM_SYSTEM } from '@/enum/system';
 import { ENUM_COMMON } from '@/enum/common';
 import { DB_PRIMARY_KEY } from '@/config/db';
 import { CONSTANT_REG } from '@/constant/reg';
+import { CONFIG_ANTD_COMP } from '@/config/format';
 import { CONSTANT_SYSTEM } from '@/constant/system';
 
+import type { TypeCommon } from '@/interface/common';
 import type { TypeSystemPermission } from '@/interface/system/permission';
 
-export interface EditPermissionProps {
-  /** @param id 查询ID */
-  id?: string;
-  /** @param visible 控制开启、关闭弹窗 */
+/** 
+ * @param id 查询ID
+ * @param visible 控制开启、关闭弹窗
+ * @param onClose 关闭窗口回调
+ */
+export interface TypeEditPermissionProps extends Partial<TypeCommon.DatabaseMainParameter> {
   visible: boolean;
-  /** @param onClose 关闭窗口回调 */
   onClose(): void;
-}
+};
 
 const formStyle = {
   labelCol: { xs: { span: 24 }, sm: { span: 4 } },
@@ -38,34 +41,35 @@ const formStyle = {
 /**
  * @name EditPermission 新增、编辑 权限
  */
-const EditPermission: React.FC<EditPermissionProps> = ({
+const EditPermission: React.FC<TypeEditPermissionProps> = ({
   id,
   onClose,
   visible,
 }) => {
 
-  const [form] = Form.useForm<TypeSystemPermission.Info>();
+  const [form] = Form.useForm<TypeSystemPermission.DTO>();
 
   const { loading } = useGetDetails(async () => {
-    const data = await getPermissionDetails({ _id: id! });
+    const data = await getPermissionDetails({ id: id! });
     data && form.setFieldsValue(data);
   }, [id, form]);
 
-  const { value: permissionTree } = useGetDetails(async () => {
-    return visible ? await getPermissionTree({ tree: true }) : [];
-  }, [visible]);
+  const { value: treeData, loading: treeLoad } = useGetDetails(async () => {
+    const res = await getPermissionTree();
+    return permissionToTree(res, 0, id);
+  }, [visible, id]);
 
   async function onSumbit() {
     const values = await form.validateFields();
     if (id) await updatePermission(values);
-    else await addPermission(values);
+    else await insertPermission(values);
     message.success('操作成功');
     onCancel();
   };
 
   async function checkField(field: 'code' | 'name', value: string) {
     const bol = await checkPermissionField({ [DB_PRIMARY_KEY]: id, [field]: value });
-    return bol ? bol : Promise.reject('该字符已被占用，请更换后重试');
+    return bol ? Promise.reject('该字符已被占用，请更换后重试') : bol;
   };
 
   function onCancel() {
@@ -73,15 +77,13 @@ const EditPermission: React.FC<EditPermissionProps> = ({
     form.resetFields();
   };
 
-  const title = id ? '编辑权限' : '新增权限';
-
   return (
     <Modal
-      title={title}
       onOk={onSumbit}
       visible={visible}
       loading={loading}
-      onCancel={onCancel}>
+      onCancel={onCancel}
+      title={id ? '编辑权限' : '新增权限'}>
       <Form form={form} {...formStyle}>
 
         <FormMajorKey />
@@ -90,7 +92,7 @@ const EditPermission: React.FC<EditPermissionProps> = ({
           name='name'
           label='权限名称'
           rules={[
-            { required: true, pattern: CONSTANT_REG.CN, message: '且仅支持中文输入' },
+            { required: true, message: '不得为空' },
             { validator: async (r, v: string) => checkField('name', v) }
           ]}>
           <Input placeholder='请输入权限中文名称' allowClear />
@@ -106,7 +108,15 @@ const EditPermission: React.FC<EditPermissionProps> = ({
           <Input placeholder='请输入权限Key（英文名）' allowClear />
         </Form.Item>
 
-        <FormItemLocation id={id} treeData={permissionTree} />
+        <Form.Item name='parentId' label='所属模块'>
+          <TreeSelect
+            allowClear
+            loading={treeLoad}
+            treeData={treeData}
+            treeDefaultExpandAll
+            placeholder="请选择所属模块"
+            fieldNames={CONFIG_ANTD_COMP.CASCADER_FIELD_PERMISSION} />
+        </Form.Item>
 
         <Form.Item
           label="权限类型"
@@ -125,7 +135,7 @@ const EditPermission: React.FC<EditPermissionProps> = ({
         </Form.Item>
 
         <Form.Item name="remark" label="备注">
-          <Input.TextArea placeholder='请输入相关备注（选填）' />
+          <Input.TextArea allowClear placeholder='请输入相关备注（选填）' />
         </Form.Item>
 
       </Form>

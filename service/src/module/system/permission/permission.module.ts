@@ -1,15 +1,11 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
 import { PermissionService } from './permission.service';
+import { UtilsModule } from '@/common/utils/utils.module';
+import { PrismaModule } from '@/common/prisma/prisma.module';
 import { PermissionController } from './permission.controller';
-import { SchemaPermission, Permission } from '@/schema/system/permission';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([
-      { name: Permission.name, schema: SchemaPermission },
-    ]),
-  ],
+  imports: [PrismaModule, UtilsModule],
   controllers: [PermissionController],
   providers: [PermissionService],
 })

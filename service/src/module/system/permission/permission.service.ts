@@ -1,94 +1,86 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Permission } from '@/schema/system/permission';
-
-import type { TypeSchemaPermission } from '@/schema/system/permission';
-import type { TypeSystemPermission } from '@/interface/system/permission';
+import { PrimaryKeyDTO } from '@/dto/common.dto';
+import { PermissionDTO } from '@/dto/permission.dto';
+import { UtilsService } from '@/common/utils/utils.service';
+import { PrismaService } from '@/common/prisma/prisma.service';
+import { PermissionCheckRepeat } from './dto/permission-check-repeat';
+import { PermissionQueryListDto } from './dto/permission-query-list.dto';
+import { Injectable, PreconditionFailedException } from '@nestjs/common';
 
 @Injectable()
 export class PermissionService {
-  public constructor(
-    @InjectModel(Permission.name)
-    private readonly PermissionModel: TypeSchemaPermission,
+  constructor(
+    private readonly UtilsServer: UtilsService,
+    private readonly PrismaService: PrismaService,
   ) {}
 
-  async examinePermissionvValidity(
-    findParam: TypeSystemPermission.CheckFields,
+  async getPermissionList(
+    query: Omit<PermissionQueryListDto, 'currentPage' | 'pageSize'>,
   ) {
-    const { _id, name, code } = findParam;
-    const list = await this.PermissionModel.find({
-      $or: [{ _id }, { code }, { name }],
+    const { skip, take, ...where } = query;
+    const search = {
+      where: {
+        status: where.status,
+        name: { contains: where.name },
+        code: { contains: where.code },
+      },
+    };
+    const count = await this.PrismaService.permission.count(search);
+    const list = await this.PrismaService.permission.findMany({
+      ...search,
+      take,
+      skip,
     });
-    const [target] = list;
-    return Boolean(
-      !target || (list.length === 1 && target?._id?.toString() === _id),
-    );
+    return { list, count };
   }
 
-  async getDetails(_id: string) {
-    return await this.PermissionModel.findOne({ _id });
+  async findAll() {
+    return this.PrismaService.permission.findMany();
   }
 
-  private filterPermissionListToTree(list: Permission[], fKey?: string) {
-    return list
-      .filter((v) => {
-        const [keys] = v.location.slice(-1);
-        return keys === fKey;
-      })
-      .map((val) => {
-        return {
-          ...JSON.parse(JSON.stringify(val)),
-          children: this.filterPermissionListToTree(list, val.code),
-        };
-      });
+  async getDetails(where: PrimaryKeyDTO) {
+    return await this.PrismaService.permission.findUnique({ where });
   }
 
-  async getPermissionTree(tree: boolean) {
-    const list = await this.PermissionModel.find();
-    return tree ? this.filterPermissionListToTree(list) : list;
-  }
-
-  async getPermissionList(query: TypeSystemPermission.QueryList) {
-    const { pageSize, pageSkip, currentPage, ...params } = query;
-    const total = await this.PermissionModel.find(params).count();
-    const list = await this.PermissionModel.find(params)
-      .limit(pageSize)
-      .skip(pageSkip);
-    return { list, total, pageSize, currentPage };
-  }
-
-  async add(params: TypeSystemPermission.Info) {
-    const { name, code } = params;
-    await this.examinePermissionvValidity({ name, code });
-    return await this.PermissionModel.create(params);
-  }
-
-  async update(body: TypeSystemPermission.Info) {
-    const { _id, ...parameter } = body;
-    await this.locationSort(body);
-    await this.examinePermissionvValidity(body);
-    return await this.PermissionModel.findByIdAndUpdate(_id, parameter);
-  }
-
-  private async locationSort(data: TypeSystemPermission.Info) {
-    const { _id, code, location } = data;
-    const changeLocStr = location?.toString();
-    const editDoc = await this.PermissionModel.findById({ _id });
-    if (editDoc?.location?.toString() !== changeLocStr) {
-      const relevance = await this.PermissionModel.find({
-        code: { $nin: [code] },
-        location: { $in: [code] },
-      });
-      relevance?.forEach((v) => {
-        v.location.splice(0, v.location.indexOf(code));
-        v.location.unshift(...location);
-        v.save();
-      });
+  async checkRepeat(OR: PermissionCheckRepeat, throwError?: boolean) {
+    const { id, name, code } = OR;
+    const list = await this.PrismaService.permission.findMany({
+      where: { OR: { id, name, code } },
+    });
+    const isRepeat = this.UtilsServer.isRepeat(list, id);
+    if (throwError && isRepeat) {
+      throw new PreconditionFailedException('字段值存在重复，无法保存');
     }
-    return;
+    return isRepeat;
   }
 
-  async remove(_id: string) {
-    return await this.PermissionModel.findByIdAndRemove(_id);
+  async insert(data: PermissionDTO) {
+    await this.checkRepeat(data, true);
+    return await this.PrismaService.permission.create({ data });
+  }
+
+  async update(data: PermissionDTO) {
+    const { id, ...other } = data;
+    await this.checkRepeat(data, true);
+    other.parentId = other.parentId ? other.parentId : null;
+    return await this.PrismaService.permission.update({
+      where: { id },
+      data: other,
+    });
+  }
+
+  async delete(where: PrimaryKeyDTO) {
+    const relation = await this.PrismaService.permission.findFirst({
+      where: { parentId: where.id },
+    });
+    if (relation) {
+      throw new PreconditionFailedException('存在层级关联关系，无法删除');
+    }
+    const realtionRole = await this.PrismaService.relRolePermission.findFirst({
+      where: { permissionId: where.id },
+    });
+    if (realtionRole) {
+      throw new PreconditionFailedException('与角色存在关联关系，无法删除');
+    }
+    return this.PrismaService.permission.delete({ where });
   }
 }

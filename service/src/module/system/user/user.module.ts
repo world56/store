@@ -1,18 +1,14 @@
 import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
-import { MongooseModule } from '@nestjs/mongoose';
 import { UserController } from './user.controller';
-import { SecretModule } from '@/common/secret/secret.module';
-import { SchemaAdminUser, AdminUser } from '@/schema/system/user';
+import { UtilsModule } from '@/common/utils/utils.module';
+import { PrismaModule } from '@/common/prisma/prisma.module';
+import { EncryptionModule } from '@/common/encryption/encryption.module';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([
-      { name: AdminUser.name, schema: SchemaAdminUser },
-    ]),
-    SecretModule
-  ],
+  imports: [PrismaModule, UtilsModule, EncryptionModule],
   controllers: [UserController],
   providers: [UserService],
+  exports: [UserService],
 })
 export class UserModule {}

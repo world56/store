@@ -16,8 +16,6 @@ import type { TypeCommon } from "@/interface/common";
 type Res = Response<TypeCommon.Gateway<unknown>>;
 
 async function errorHandler(res: ResponseError): Promise<Res> {
-  console.log("@res", res);
-  message.warning("系统错误");
   return Promise.reject(res.response);
 }
 

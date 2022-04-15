@@ -21,4 +21,10 @@ export namespace CONSTANT_REG {
    * @name PHONE_NUMBER reg校验-13位手机号
    */
   export const PHONE_NUMBER = /^1[3456789]\d{9}$/;
+
+  /**
+   * @name E_MAIL reg校验-电子邮箱
+   */
+  export const E_MAIL =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 }

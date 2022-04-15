@@ -8,13 +8,15 @@ import { addAdminUser, updateAdminUser, getAdminUserInfo, getRoleSelectList } fr
 
 import { ENUM_COMMON } from '@/enum/common';
 
+import type { TypeCommon } from '@/interface/common';
 import type { TypeSystemUser } from '@/interface/system/user';
+import { getPubilcKey } from '@/api/auth';
+import { encryption } from '@/utils/crypto';
 
 const { Option } = Select;
 
-export interface TypeEditUserPorps {
-  /** @param id 角色ID */
-  id?: string;
+/** @param id 角色ID */
+export interface TypeEditUserPorps extends Partial<TypeCommon.DatabaseMainParameter> {
   /** @param visible 是否开启编辑弹窗 */
   visible: boolean;
   /** @param onClose 开启、关闭弹窗回调方法 */
@@ -32,19 +34,24 @@ const EditUser: React.FC<TypeEditUserPorps> = ({
   visible,
   onClose
 }) => {
-  const [form] = Form.useForm<TypeSystemUser.Info>();
+  const [form] = Form.useForm<TypeSystemUser.DTO>();
 
   const { value: roleList } = useGetDetails(getRoleSelectList, [visible]);
 
   const { loading } = useGetDetails(async () => {
-    const data = await getAdminUserInfo({ _id: id! });
+    const data = await getAdminUserInfo({ id: id! });
     data && form.setFieldsValue(data);
   }, [id, form]);
 
   async function onSumbit() {
     const values = await form.validateFields();
-    if (id) await updateAdminUser(values);
-    else await addAdminUser(values);
+    if (id) {
+      await updateAdminUser(values);
+    } else {
+      const key = await getPubilcKey();
+      values.password = encryption(key, values.password);
+      await addAdminUser(values);
+    }
     message.success('操作成功');
     onCancel();
   };
@@ -67,18 +74,16 @@ const EditUser: React.FC<TypeEditUserPorps> = ({
 
         <FormEditUserInfo id={id} />
 
-        <Form.Item name='role' label='所属角色' rules={rules}>
+        <Form.Item name='roles' label='所属角色' rules={rules}>
           <Select
             allowClear
             mode="multiple"
             placeholder="请选择用户角色（多选）">
-            {roleList?.map(v => <Option key={v._id} value={v._id!}>{v.name}</Option>)}
+            {roleList?.map(v => <Option key={v.id} value={v.id!}>{v.name}</Option>)}
           </Select>
         </Form.Item>
 
-        <Form.Item
-          name='status' label='角色状态'
-          initialValue={ENUM_COMMON.STATUS.ACTIVATE}>
+        <Form.Item name='status' label='用户状态' initialValue={ENUM_COMMON.STATUS.ACTIVATE}>
           <Switch />
         </Form.Item>
 

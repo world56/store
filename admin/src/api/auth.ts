@@ -6,8 +6,8 @@ import type { TypeSystemUser } from "@/interface/system/user";
 /**
  * @name register 注册
  */
-export function register(data: string) {
-  return request("auth/register", {
+export function register(data: TypeSystemUser.Register) {
+  return request<boolean>("auth/register", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,
   });
@@ -16,7 +16,7 @@ export function register(data: string) {
 /**
  * @name login 登陆
  */
-export function login(data: string) {
+export function login(data: TypeSystemUser.Login) {
   return request<string>("auth/login", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,
@@ -45,7 +45,7 @@ export function getPubilcKey() {
  * @name getUserInfo 获取当前用户信息
  */
 export function getUserInfo() {
-  return request<TypeSystemUser.Info>("auth/userInfo", {
+  return request<TypeSystemUser.DTO>("auth/userInfo", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
   });
 }

@@ -1,41 +1,42 @@
+import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { Req, Get, Post, Body, Controller } from '@nestjs/common';
+import { AdminUserDTO } from '@/dto/admin-user.dto';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { UserToken } from '@/decorator/user-token.decorator';
+import { AdminUserLoginDTO } from './dto/admin-user-login.dto';
+import { ReqWhiteList } from '@/decorator/req-white-list.decorator';
 
-import type { FastifyRequest } from 'fastify';
+@ApiTags('用户鉴权')
+@Controller('auth')
+export class UserController {
+  constructor(private readonly AuthService: AuthService) {}
 
-@Controller('admin/auth')
-export class AuthController {
-  public constructor(private readonly AuthService: AuthService) {}
-
-  @Get('/establish')
-  createKey() {
-    const { publicKey } = this.AuthService.createKeys();
-    return publicKey;
+  @Get('establish')
+  @ReqWhiteList()
+  getPubilcKey() {
+    return this.AuthService.createKeys();
   }
 
-  @Post('/login')
-  login(@Body() account: string) {
-    return this.AuthService.login(account);
+  @ReqWhiteList()
+  @Get('superAdminStatus')
+  getSuperAdminStatus() {
+    return this.AuthService.superAdminStatus();
   }
 
-  @Post('/userInfo')
-  getUserInfo(@Req() req: FastifyRequest) {
-    const { authorization } = req.headers;
+  @Post('register')
+  @ReqWhiteList()
+  register(@Body() body: AdminUserDTO) {
+    return this.AuthService.register(body);
+  }
+
+  @Post('userInfo')
+  userInfo(@UserToken() authorization: string) {
     return this.AuthService.getUserInfo(authorization);
   }
 
-  @Post('/register')
-  register(@Body() account: string) {
-    return this.AuthService.register(account);
-  }
-
-  @Get('/logout')
-  logout() {
-    return this.AuthService.logout();
-  }
-
-  @Get('/superAdminStatus')
-  superAdminStatus() {
-    return this.AuthService.getSuperAdminStatus();
+  @Post('login')
+  @ReqWhiteList()
+  login(@Body() body: AdminUserLoginDTO) {
+    return this.AuthService.login(body);
   }
 }

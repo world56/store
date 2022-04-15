@@ -9,6 +9,8 @@ interface TypeFormTreeProps<T = React.Key[]> extends Omit<TreeProps, 'onCheck' |
 
 type TypeOnCheckArgs = { checked: React.Key[]; halfChecked: React.Key[]; } | React.Key[];
 
+const styles = { marginTop: 5 };
+
 const Tree: React.FC<TypeFormTreeProps> = ({
   value,
   onChange,
@@ -24,6 +26,7 @@ const Tree: React.FC<TypeFormTreeProps> = ({
       {...props}
       blockNode
       checkable
+      style={styles}
       onCheck={onCheck}
       autoExpandParent
       defaultExpandAll

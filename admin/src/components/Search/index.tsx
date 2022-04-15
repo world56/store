@@ -3,7 +3,7 @@ import { useMemo, useCallback } from 'react';
 import { initColumns, searchSelect } from './utils';
 import { DatePicker } from '@/components/Formatting';
 import OperatingButton from './components/OperatingButton';
-import { Row, Col, Form, Input, Select, Cascader } from 'antd';
+import { Row, Col, Form, Input, Select, Cascader, TreeSelect } from 'antd';
 
 import type { FormInstance } from 'antd/es';
 import type { TypeCommon } from '@/interface/common';
@@ -111,6 +111,16 @@ const SearchForm: React.FC<SearchFormProps> = ({
       case ENUM_COMMON.COMPONENT_TYPE.TIME_SCOPE:
         return (
           <DatePicker className={styles.component} {...props} />
+        );
+      case ENUM_COMMON.COMPONENT_TYPE.TREE_SELECT:
+        return (
+          <TreeSelect
+            allowClear
+            treeData={traverse}
+            treeDefaultExpandAll
+            placeholder={placeholder}
+            {...props}
+          />
         );
       default:
         return <span>NULL</span>

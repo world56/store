@@ -1,14 +1,14 @@
+import { Btn } from '@/layout/Table';
 import { useAsyncFn } from 'react-use';
 import Search from '@/components/Search';
 import { usePageTurning } from '@/hooks';
 import { timestampToTime } from '@/utils';
-import { Hint, Btn } from '@/layout/Table';
 import EditUser from './components/EditUser';
 import StatusColor from '@/layout/StatusColor';
 import { UsergroupAddOutlined } from '@ant-design/icons';
 import { useState, useCallback, useEffect } from 'react';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Card, Form, Table, Button, Modal, message } from 'antd';
+import { ExclamationCircleOutlined, SmileOutlined } from '@ant-design/icons';
 import { getUserList, freezeAdminUser, resetAdminUserPwd } from '@/api/system';
 
 import { ENUM_COMMON } from '@/enum/common';
@@ -42,7 +42,7 @@ const User = () => {
   const [editParam, setEditParam] = useState<Omit<TypeEditUserPorps, 'onClose'>>({ visible: false });
 
   const [data, fetch] = useAsyncFn(getUserList);
-  const pagination = usePageTurning(data.value?.total);
+  const pagination = usePageTurning(data.value?.count);
   const { pageSize, currentPage } = pagination;
 
   const initializa = useCallback(async () => {
@@ -52,13 +52,13 @@ const User = () => {
     fetch(values);
   }, [fetch, search, pageSize, currentPage]);
 
-  const onChangeEdit = useCallback((row?: TypeSystemUser.Info) => {
-    setEditParam(s => ({ visible: !s.visible, id: row?._id }));
+  const onChangeEdit = useCallback((row?: TypeSystemUser.DTO) => {
+    setEditParam(s => ({ visible: !s.visible, id: row?.id }));
     !row && initializa();
   }, [initializa]);
 
-  function onChangeFreeze(data: TypeSystemUser.Info) {
-    const { _id, status } = data;
+  function onChangeFreeze(data: TypeSystemUser.DTO) {
+    const { id, status } = data;
     const userStatus = status === ENUM_COMMON.STATUS.FREEZE ?
       ENUM_COMMON.STATUS.ACTIVATE : ENUM_COMMON.STATUS.FREEZE;
     Modal.confirm({
@@ -68,23 +68,27 @@ const User = () => {
         '激活操作，将会赋予用户在本系统拥有的角色权限。' :
         '冻结操作，将会冻结该用户所有的权限（包括登陆），请谨慎操作！',
       async onOk() {
-        await freezeAdminUser({ _id, status: userStatus });
+        await freezeAdminUser({ id, status: userStatus });
         message.success('操作成功');
         initializa();
       },
     });
   };
 
-  async function resetPwd(row: TypeSystemUser.Info) {
+  async function resetPwd(row: TypeSystemUser.DTO) {
     Modal.confirm({
       title: '您确定要执行该操作？',
       icon: <ExclamationCircleOutlined />,
       content: '该用户密码将重置，仅用于用户忘记密码的场景',
       async onOk() {
-        const { _id } = row;
-        await resetAdminUserPwd({ _id });
-        message.success('重置成功，重新登陆生效哦');
-        initializa();
+        const { id } = row;
+        const psd = await resetAdminUserPwd({ id });
+        Modal.confirm({
+          title: '重制密码成功！',
+          icon: <SmileOutlined />,
+          cancelButtonProps: { className: 'none' },
+          content: `请牢记您的新密码“${psd}”,重新登陆后请尽快更改。`
+        })
       },
     });
   };
@@ -102,15 +106,6 @@ const User = () => {
       render: (key: ENUM_COMMON.STATUS) => <StatusColor status={key} />
     },
     {
-      title: '角色类型',
-      key: 'role',
-      dataIndex: 'role',
-      render: (val: TypeSystemUser.Info[]) => {
-        const text = val.map(v => v.name).join('、');
-        return <Hint width={100} title={text}>{text}</Hint>;
-      }
-    },
-    {
       title: '创建时间',
       key: 'createTime',
       dataIndex: 'createTime',
@@ -119,7 +114,7 @@ const User = () => {
     },
     {
       title: '操作', key: DB_PRIMARY_KEY,
-      render: (row: TypeSystemUser.Info) => {
+      render: (row: TypeSystemUser.DTO) => {
         const color = row.status === ENUM_COMMON.STATUS.ACTIVATE ? 'danger' : 'success';
         return (
           <>

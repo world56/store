@@ -1,20 +1,11 @@
 import { Module } from '@nestjs/common';
 import { RoleService } from './role.service';
 import { RoleController } from './role.controller';
-import { MongooseModule } from '@nestjs/mongoose';
-import { SchemaRole, Role } from '@/schema/system/role';
-import { SchemaAdminUser, AdminUser } from '@/schema/system/user';
+import { UtilsModule } from '@/common/utils/utils.module';
+import { PrismaModule } from '@/common/prisma/prisma.module';
 
-/**
- * @name RoleModule 角色模块
- */
 @Module({
-  imports: [
-    MongooseModule.forFeature([
-      { name: Role.name, schema: SchemaRole },
-      { name: AdminUser.name, schema: SchemaAdminUser },
-    ]),
-  ],
+  imports: [PrismaModule, UtilsModule],
   controllers: [RoleController],
   providers: [RoleService],
 })

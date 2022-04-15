@@ -1,53 +1,50 @@
+import { RoleDto } from '@/dto/role.dto';
+import { ApiTags } from '@nestjs/swagger';
 import { RoleService } from './role.service';
-import { EditRolePipe } from './pipe/edit-role.pipe';
-import { QueryListFilterPipe } from '@/pipe/query-list-filter.pipe';
+import { PrimaryKeyDTO } from '@/dto/common.dto';
+import { QueryListPipe } from '@/pipe/query-list.pipe';
+import { RuleQueryListDTO } from './dto/rule-query-list.dto';
+import { RuleCheckFieldsDTO } from './dto/rule-check-fields.dto';
 import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
 
-import type { TypeCommon } from '@/interface/common';
-import type { TypeSystemRole } from '@/interface/system/role';
-
-/**
- * @name RoleController 角色
- */
-@Controller('admin/system/role')
+@ApiTags('角色管理')
+@Controller('system/role')
 export class RoleController {
-  public constructor(private readonly RoleService: RoleService) {}
+  constructor(private readonly RoleService: RoleService) {}
 
+  @UsePipes(new QueryListPipe())
   @Get('list')
-  @UsePipes(new QueryListFilterPipe(['status']))
-  list(@Query() param: TypeSystemRole.ReqRoleList) {
-    return this.RoleService.getList(param);
+  getRoleList(@Query() query: RuleQueryListDTO) {
+    return this.RoleService.getRoleList(query);
   }
 
-  @Get('/allRoleList')
-  allRoleList(){
-    return this.RoleService.getAllRoleList();
+  @Get('allRole')
+  getAllRole() {
+    return this.RoleService.getAll();
+  }
+
+  @Get('checkFields')
+  checkField(@Query() query: RuleCheckFieldsDTO) {
+    return this.RoleService.checkField(query);
   }
 
   @Get('details')
-  details(@Query() params: TypeCommon.DatabaseMainParameter) {
-    return this.RoleService.getDetails(params);
+  getDetails(@Query() query: PrimaryKeyDTO) {
+    return this.RoleService.getDetails(query);
   }
 
-  @Post('add')
-  @UsePipes(new EditRolePipe())
-  add(@Body() body: TypeSystemRole.EditRoleParam) {
-    return this.RoleService.add(body);
+  @Post('insert')
+  insert(@Body() body: RoleDto) {
+    return this.RoleService.insert(body);
   }
 
   @Post('update')
-  @UsePipes(new EditRolePipe())
-  update(@Body() body: TypeSystemRole.EditRoleParam) {
+  update(@Body() body: RoleDto) {
     return this.RoleService.update(body);
   }
 
-  @Get('remove')
-  remove(@Query() params: TypeCommon.DatabaseMainParameter) {
-    return this.RoleService.remove(params);
-  }
-
-  @Get('fieldCheck')
-  fieldNameCheck(@Query() param: TypeSystemRole.ReqCheckRoleName) {
-    return this.RoleService.fieldNameCheck(param);
+  @Post('remove')
+  remove(@Body() body: PrimaryKeyDTO) {
+    return this.RoleService.remove(body);
   }
 }

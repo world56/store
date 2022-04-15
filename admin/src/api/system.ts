@@ -10,7 +10,7 @@ import type { TypeSystemPermission } from "@/interface/system/permission";
  * @name getUserList 用户管理-获取用户列表
  */
 export function getUserList(params: TypeSystemUser.QueryList) {
-  return request<TypeCommon.ServiceReturn<TypeSystemUser.Info[]>>(
+  return request<TypeCommon.ServiceReturn<TypeSystemUser.DTO[]>>(
     "system/user/list",
     {
       method: ENUM_HTTP.REQUEST_MODE.GET,
@@ -33,7 +33,7 @@ export function resetAdminUserPwd(data: TypeCommon.DatabaseMainParameter) {
  * @name getAdminUserInfo 用户管理-获取用户详情
  */
 export function getAdminUserInfo(params: TypeCommon.DatabaseMainParameter) {
-  return request<TypeSystemUser.Info>("system/user/details", {
+  return request<TypeSystemUser.DTO>("system/user/details", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
     params,
   });
@@ -42,8 +42,8 @@ export function getAdminUserInfo(params: TypeCommon.DatabaseMainParameter) {
 /**
  * @name addAdminUser 用户管理-新增用户
  */
-export function addAdminUser(data: TypeSystemUser.Info) {
-  return request("system/user/add", {
+export function addAdminUser(data: TypeSystemUser.DTO) {
+  return request("system/user/insert", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,
   });
@@ -52,15 +52,18 @@ export function addAdminUser(data: TypeSystemUser.Info) {
 /**
  * @name addAdminUser 用户管理-编辑用户
  */
-export function updateAdminUser(data: TypeSystemUser.Info) {
+export function updateAdminUser(data: TypeSystemUser.DTO) {
   return request("system/user/update", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,
   });
 }
 
-export function checkAdminUserField(params: Partial<TypeSystemUser.Info>) {
-  return request<boolean>("system/user/checkField", {
+/**
+ * @name checkAdminUserField 用户管理-字段查重
+ */
+export function checkAdminUserField(params: Partial<TypeSystemUser.DTO>) {
+  return request<boolean>("system/user/checkFields", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
     params,
   });
@@ -80,7 +83,7 @@ export function freezeAdminUser(data: TypeSystemUser.FreezeStatusChange) {
  * @name getRoleList 角色管理-获取角色列表
  */
 export function getRoleList(params: TypeSystemRole.QueryList) {
-  return request<TypeCommon.ServiceReturn<TypeSystemRole.Info>>(
+  return request<TypeCommon.ServiceReturn<TypeSystemRole.DTO>>(
     "system/role/list",
     {
       method: ENUM_HTTP.REQUEST_MODE.GET,
@@ -93,7 +96,7 @@ export function getRoleList(params: TypeSystemRole.QueryList) {
  * @name getRoleSelectList 角色管理-获取全部角色列表
  */
 export function getRoleSelectList() {
-  return request<TypeSystemRole.Info[]>("system/role/allRoleList", {
+  return request<TypeSystemRole.DTO[]>("system/role/allRole", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
   });
 }
@@ -102,17 +105,17 @@ export function getRoleSelectList() {
  * @name getRoleList 角色管理-获取角色详情
  */
 export function getRoleDetails(params: TypeCommon.DatabaseMainParameter) {
-  return request<TypeSystemRole.Info>("system/role/details", {
+  return request<TypeSystemRole.DTO>("system/role/details", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
     params,
   });
 }
 
 /**
- * @name addRole 角色管理-新增角色
+ * @name insertRole 角色管理-新增角色
  */
-export function addRole(data: TypeSystemRole.Info) {
-  return request("system/role/add", {
+export function insertRole(data: TypeSystemRole.DTO) {
+  return request("system/role/insert", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,
   });
@@ -121,7 +124,7 @@ export function addRole(data: TypeSystemRole.Info) {
 /**
  * @name updateRole 角色管理-更新角色信息
  */
-export function updateRole(data: TypeSystemRole.Info) {
+export function updateRole(data: TypeSystemRole.DTO) {
   return request("system/role/update", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,
@@ -131,18 +134,18 @@ export function updateRole(data: TypeSystemRole.Info) {
 /**
  * @name removeRole 角色管理-删除指定角色
  */
-export function removeRole(params: TypeCommon.DatabaseMainParameter) {
+export function removeRole(data: TypeCommon.DatabaseMainParameter) {
   return request("system/role/remove", {
-    method: ENUM_HTTP.REQUEST_MODE.GET,
-    params,
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
   });
 }
 
 /**
  * @name checkRoleField 角色管理-字段是否重复
  */
-export function checkRoleField(params: Record<string, string | void>) {
-  return request<boolean>("system/role/fieldCheck", {
+export function checkRoleField(params: Record<string, string | number | void>) {
+  return request<boolean>("system/role/checkFields", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
     params,
   });
@@ -152,7 +155,7 @@ export function checkRoleField(params: Record<string, string | void>) {
  * @name getRoleList 权限管理-获取权限列表
  */
 export function getPermissionList(params: TypeSystemPermission.QueryList) {
-  return request<TypeCommon.ServiceReturn<TypeSystemPermission.Info>>(
+  return request<TypeCommon.ServiceReturn<TypeSystemPermission.DTO>>(
     "system/permission/list",
     {
       method: ENUM_HTTP.REQUEST_MODE.GET,
@@ -162,10 +165,10 @@ export function getPermissionList(params: TypeSystemPermission.QueryList) {
 }
 
 /**
- * @name addPermission 权限管理-新增权限
+ * @name insertPermission 权限管理-新增权限
  */
-export function addPermission(data: TypeSystemPermission.Info) {
-  return request("system/permission/add", {
+export function insertPermission(data: TypeSystemPermission.DTO) {
+  return request("system/permission/insert", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,
   });
@@ -174,7 +177,7 @@ export function addPermission(data: TypeSystemPermission.Info) {
 /**
  * @name updatePermission 权限管理-编辑权限
  */
-export function updatePermission(data: TypeSystemPermission.Info) {
+export function updatePermission(data: TypeSystemPermission.DTO) {
   return request("system/permission/update", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,
@@ -184,7 +187,7 @@ export function updatePermission(data: TypeSystemPermission.Info) {
 /**
  * @name removePermission 权限管理-删除权限
  */
-export function removePermission(data: TypeSystemPermission.Remove) {
+export function removePermission(data: TypeCommon.DatabaseMainParameter) {
   return request("system/permission/remove", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,
@@ -205,7 +208,7 @@ export function checkPermissionField(params: TypeSystemPermission.CheckFields) {
  * @name getPermissionDetails 权限管理-获取权限详情
  */
 export function getPermissionDetails(params: TypeCommon.DatabaseMainParameter) {
-  return request("system/permission/getDetails", {
+  return request<TypeSystemPermission.DTO>("system/permission/details", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
     params,
   });
@@ -214,9 +217,8 @@ export function getPermissionDetails(params: TypeCommon.DatabaseMainParameter) {
 /**
  * @name getPermissionTree 权限管理-获取权限树
  */
-export function getPermissionTree(params?: TypeSystemPermission.QueryTreeList) {
-  return request<TypeSystemPermission.InfoTree[]>("system/permission/tree", {
+export function getPermissionTree() {
+  return request<TypeSystemPermission.DTO[]>("system/permission/findAll", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
-    params,
   });
 }

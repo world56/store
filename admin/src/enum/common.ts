@@ -7,6 +7,7 @@ export namespace ENUM_COMMON {
    * @param INPUT 文本输入框
    * @param SELECT 下拉选择框
    * @param CASCADER 级联多级选择器
+   * @param TREE_SELECT 级联单选
    * @param TIME_SCOPE 时间选择
    */
   export enum COMPONENT_TYPE {
@@ -14,6 +15,7 @@ export namespace ENUM_COMMON {
     SELECT = "SELECT",
     CASCADER = "CASCADER",
     TIME_SCOPE = "TIME_SCOPE",
+    TREE_SELECT = "TREE_SELECT",
   }
 
   /**
@@ -46,9 +48,5 @@ export namespace ENUM_COMMON {
     SUCCESS = "#67c23a",
     DANGER = "#f56c6c",
     WARNING = "#e6a23c",
-    default = "#1890ff",
-    success = "#67c23a",
-    danger = "#f56c6c",
-    warning = "#e6a23c",
   }
 }

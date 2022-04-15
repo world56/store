@@ -1,49 +1,51 @@
+import { ApiTags } from '@nestjs/swagger';
+import { PrimaryKeyDTO } from '@/dto/common.dto';
+import { PermissionDTO } from '@/dto/permission.dto';
+import { QueryListPipe } from '@/pipe/query-list.pipe';
 import { PermissionService } from './permission.service';
-// import { PageTurningPipe } from '@/pipe/page-turning.pipe';
-import { QueryListFilterPipe } from '@/pipe/query-list-filter.pipe';
+import { PermissionCheckRepeat } from './dto/permission-check-repeat';
+import { PermissionQueryListDto } from './dto/permission-query-list.dto';
 import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
 
-import { DB_PRIMARY_KEY } from '@/config/db';
 
-import type { TypeSystemPermission } from '@/interface/system/permission';
-
-@Controller('admin/system/permission')
+@ApiTags('权限管理')
+@Controller('system/permission')
 export class PermissionController {
-  public constructor(private readonly PermissionService: PermissionService) {}
+  constructor(private readonly PermissionService: PermissionService) {}
 
-  @Get('check')
-  checkTheRepeat(@Query() query: TypeSystemPermission.CheckFields) {
-    return this.PermissionService.examinePermissionvValidity(query);
-  }
-
-  @Get('getDetails')
-  getDetails(@Query(DB_PRIMARY_KEY) _id: string) {
-    return this.PermissionService.getDetails(_id);
-  }
-
-  @UsePipes(new QueryListFilterPipe(['status']))
+  @UsePipes(new QueryListPipe())
   @Get('list')
-  getList(@Query() query: TypeSystemPermission.QueryList) {
+  getPermission(@Query() query: PermissionQueryListDto) {
     return this.PermissionService.getPermissionList(query);
   }
 
-  @Get('/tree')
-  createPermissionTree(@Query('tree') tree: boolean) {
-    return this.PermissionService.getPermissionTree(tree);
+  @Get('findAll')
+  findAll() {
+    return this.PermissionService.findAll();
   }
 
-  @Post('add')
-  add(@Body() body: TypeSystemPermission.Info) {
-    return this.PermissionService.add(body);
+  @Get('details')
+  getDetails(@Query() query: PrimaryKeyDTO) {
+    return this.PermissionService.getDetails(query);
+  }
+
+  @Get('check')
+  checkRepeat(@Query() query: PermissionCheckRepeat) {
+    return this.PermissionService.checkRepeat(query);
+  }
+
+  @Post('insert')
+  insert(@Body() body: PermissionDTO) {
+    return this.PermissionService.insert(body);
   }
 
   @Post('update')
-  update(@Body() body: TypeSystemPermission.Info) {
+  update(@Body() body: PermissionDTO) {
     return this.PermissionService.update(body);
   }
 
   @Post('remove')
-  remove(@Body(DB_PRIMARY_KEY) _id: string) {
-    return this.PermissionService.remove(_id);
+  delete(@Body() body: PrimaryKeyDTO) {
+    return this.PermissionService.delete(body);
   }
 }

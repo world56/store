@@ -1,6 +1,9 @@
 import dayjs from "dayjs";
 import { CONFIG_TIME_FORMAT } from "@/config/format";
 
+import type { TypeCommon } from "@/interface/common";
+import type { TypeSystemPermission } from "@/interface/system/permission";
+
 /**
  * @name isVoid 判断值是否为void
  */
@@ -15,4 +18,24 @@ export function isVoid(param: unknown): param is boolean {
  */
 export function timestampToTime(timestamp?: number): string {
   return timestamp ? dayjs(timestamp).format(CONFIG_TIME_FORMAT.STANDARD) : "-";
+}
+
+/**
+ * @name permissionToTree 生成权限树
+ * @param list service data
+ */
+ export function permissionToTree(
+  list: TypeSystemPermission.DTO[] = [],
+  parentId = 0,
+  id?: number,
+): TypeSystemPermission.DTO[] {
+  let parentObj: TypeCommon.GenericObject<TypeSystemPermission.InfoTree> = {};
+  list.forEach((o) => (parentObj[o.id] = o));
+  return list
+    .filter((v) => (parentId ? v.parentId === parentId : !parentObj[v.parentId]))
+    .map((o) => ({
+      ...parentObj[o.id],
+      disabled: o.id === id,
+      children: permissionToTree(list, o.id, id),
+    }));
 }

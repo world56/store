@@ -1,53 +1,52 @@
+import { ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
-// import { QueryPrimaryKeyPipe } from '@/pipe/query-primary-key.pipe';
-import { QueryListFilterPipe } from '@/pipe/query-list-filter.pipe';
-import { QueryTimeHorizonPipe } from '@/pipe/query-time-horizon.pipe';
+import { PrimaryKeyDTO } from '@/dto/common.dto';
+import { AdminUserDTO } from '@/dto/admin-user.dto';
+import { QueryListPipe } from '@/pipe/query-list.pipe';
+import { AdminUserQuery } from './dto/admin-user-query.dto';
+import { AdminUserUpdateDTO } from './dto/admin-user-update.dto';
+import { UserCheckFilesDto } from './dto/admin-user-check-fields.dto';
 import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
+import { AdminUserStatusChangeDto } from './dto/admin-user-status-change.dto';
 
-import { DB_PRIMARY_KEY } from '@/config/db';
-
-import type { TypeSystemUser } from '@/interface/system/user';
-
-@Controller('admin/system/user')
+@ApiTags('后台系统用户')
+@Controller('system/user')
 export class UserController {
   constructor(private readonly UserService: UserService) {}
 
+  @UsePipes(new QueryListPipe())
   @Get('list')
-  @UsePipes(
-    new QueryListFilterPipe(['status']),
-    new QueryTimeHorizonPipe('createTime'),
-  )
-  list(@Query() query: TypeSystemUser.QueryList) {
-    return this.UserService.findUserList(query);
-  }
-
-  @Post('add')
-  add(@Body() data: TypeSystemUser.Info) {
-    return this.UserService.add(data);
+  getUserList(@Query() query: AdminUserQuery) {
+    return this.UserService.getList(query);
   }
 
   @Get('details')
-  details(@Query(DB_PRIMARY_KEY) id: string) {
-    return this.UserService.getDetails(id);
+  getuserInfo(@Query() query: PrimaryKeyDTO) {
+    return this.UserService.getDetails(query);
   }
 
-  @Get('checkField')
-  checkFields(@Query() data: Partial<TypeSystemUser.Info>) {
-    return this.UserService.checkPepeat(data);
-  }
-
-  @Post('update')
-  update(@Body() data: TypeSystemUser.Info) {
-    return this.UserService.update(data);
+  @Get('checkFields')
+  checkFields(@Query() query: UserCheckFilesDto) {
+    return this.UserService.check(query);
   }
 
   @Post('freeze')
-  freeze(@Body() data: TypeSystemUser.FreezeStatusChange) {
-    return this.UserService.freeze(data);
+  freeze(@Body() body: AdminUserStatusChangeDto) {
+    return this.UserService.freezeStatus(body);
   }
 
   @Post('resetPassword')
-  resetPassword(@Body(DB_PRIMARY_KEY) id: string) {
-    return this.UserService.resetPassword(id);
+  resetPassword(@Body() body: PrimaryKeyDTO) {
+    return this.UserService.resetPassword(body);
+  }
+
+  @Post('insert')
+  insert(@Body() body: AdminUserDTO) {
+    return this.UserService.insert(body);
+  }
+
+  @Post('update')
+  update(@Body() body: AdminUserUpdateDTO) {
+    return this.UserService.update(body);
   }
 }

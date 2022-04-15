@@ -1,13 +1,13 @@
-import { join } from 'path';
-import { AppModule } from './app.module';
-
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import { AppModule } from './app.module';
 import { NestFactory } from '@nestjs/core';
-import { HttpExceptionFilter } from '@/filters/http-exception.filter';
-import { HttpSucessInterceptor } from '@/interceptor/http-success.interceptor';
+import { ValidationPipe } from '@nestjs/common';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { HttpExceptionFilter } from './filter/http-exception.filter';
+import { HttpSucessInterceptor } from '@/interceptor/http-sucess.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -17,11 +17,17 @@ async function bootstrap() {
   app.enableCors();
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new HttpSucessInterceptor());
-  app.useStaticAssets({
-    root: join(__dirname, '..', 'public'),
-    prefix: '/resource/',
-  });
-  await app.listen(9991);
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+
+  const config = new DocumentBuilder()
+    .setTitle('Admin Server')
+    .setDescription('store admin API')
+    .setVersion('0.1')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+
+  await app.listen(3030);
 }
 
 bootstrap();

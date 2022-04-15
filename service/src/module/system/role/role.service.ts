@@ -1,64 +1,122 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Role as RoleModel } from '@/schema/system/role';
-import { AdminUser as AdminUserModel } from '@/schema/system/user';
-
-import type { TypeCommon } from '@/interface/common';
-import type { TypeSchemaRole } from '@/schema/system/role';
-import type { TypeSystemRole } from '@/interface/system/role';
-import type { TypeSchemaAadminUser } from '@/schema/system/user';
+import { RoleDto } from '@/dto/role.dto';
+import { PrimaryKeyDTO } from '@/dto/common.dto';
+import { UtilsService } from '@/common/utils/utils.service';
+import { RuleQueryListDTO } from './dto/rule-query-list.dto';
+import { PrismaService } from '@/common/prisma/prisma.service';
+import { RuleCheckFieldsDTO } from './dto/rule-check-fields.dto';
+import { Injectable, PreconditionFailedException } from '@nestjs/common';
+import { ENUM_COMMON } from '@/enum/common';
 
 @Injectable()
 export class RoleService {
-  public constructor(
-    @InjectModel(RoleModel.name)
-    private readonly RoleModel: TypeSchemaRole,
-    @InjectModel(AdminUserModel.name)
-    private readonly AdminUserModel: TypeSchemaAadminUser,
+  constructor(
+    private readonly UtilsServer: UtilsService,
+    private readonly PrismaService: PrismaService,
   ) {}
 
-  async getList(param: TypeSystemRole.ReqRoleList) {
-    const { pageSize, currentPage, pageSkip, ...otherParam } = param;
-    const total = await this.RoleModel.find(otherParam).countDocuments();
-    const list = await this.RoleModel.find(otherParam)
-      .limit(pageSize)
-      .skip(pageSkip);
-    return { list, total, pageSize, currentPage };
+  async getRoleList(query: RuleQueryListDTO) {
+    const { skip, take, permissionId, name, status } = query;
+    let roleIds = [];
+    if (permissionId) {
+      const relation = await this.PrismaService.relRolePermission.findMany({
+        where: { permissionId },
+      });
+      roleIds = relation.map((v) => v.roleId);
+    }
+    const params = {
+      where: {
+        status,
+        name: { contains: name },
+        id: { in: roleIds.length ? roleIds : permissionId ? [] : undefined },
+      },
+    };
+    const count = await this.PrismaService.role.count(params);
+    const list = await this.PrismaService.role.findMany({
+      ...params,
+      skip,
+      take,
+    });
+    return { list, count };
   }
 
-  async getAllRoleList() {
-    return await this.RoleModel.find();
+  async getAll() {
+    return this.PrismaService.role.findMany({
+      where: { status: ENUM_COMMON.STATUS.ACTIVATE },
+    });
   }
 
-  async getDetails(params: TypeCommon.DatabaseMainParameter) {
-    return await this.RoleModel.findById(params);
+  async checkField(data: RuleCheckFieldsDTO, tips?: boolean) {
+    const { name, id } = data;
+    const list = await this.PrismaService.role.findMany({
+      where: { OR: [{ name }, { id }] },
+    });
+    const isRepeat = this.UtilsServer.isRepeat(list, id);
+    if (tips && isRepeat) {
+      throw new PreconditionFailedException('字段值存在重复，无法保存');
+    }
+    return isRepeat;
   }
 
-  async add(data: TypeSystemRole.EditRoleParam) {
-    const { name } = data;
-    await this.fieldNameCheck({ name });
-    return await this.RoleModel.create(data);
+  async getDetails(query: PrimaryKeyDTO) {
+    const { id } = query;
+    const data = await this.PrismaService.role.findUnique({ where: { id } });
+    const ids = await this.PrismaService.relRolePermission.findMany({
+      where: { roleId: id },
+    });
+    return { ...data, permissionId: ids.map((v) => v.permissionId) };
   }
 
-  async remove({ _id }: TypeCommon.DatabaseMainParameter) {
-    await this.AdminUserModel.updateMany(
-      { role: { $in: [_id] } },
-      { $pull: { role: _id } },
-    );
-    return await this.RoleModel.findByIdAndDelete({ _id });
+  async insert(info: Omit<RoleDto, 'id'>) {
+    await this.checkField(info, true);
+    const { permissionId, ...data } = info;
+    return await this.PrismaService.$transaction(async (prisma) => {
+      const { id: roleId } = await prisma.role.create({ data });
+      await prisma.relRolePermission.createMany({
+        data: permissionId.map((permissionId) => ({ permissionId, roleId })),
+      });
+      return true;
+    });
   }
 
-  async update(data: TypeSystemRole.EditRoleParam) {
-    const { _id, ...params } = data;
-    await this.fieldNameCheck({ _id, name: params.name });
-    return await this.RoleModel.findByIdAndUpdate({ _id }, params);
+  async update(info: RoleDto) {
+    await this.checkField(info, true);
+    const { id: roleId, remark } = info;
+    info.remark = remark ? remark : null;
+    return await this.PrismaService.$transaction(async (prisma) => {
+      const relation = await prisma.relRolePermission.findMany({
+        where: { roleId },
+      });
+      const [insert, remove] = this.UtilsServer.filterArrayRepeatKeys(
+        info.permissionId,
+        relation.map((v) => v.permissionId),
+      );
+      if (info.permissionId.length) {
+        if (insert?.length) {
+          await prisma.relRolePermission.createMany({
+            data: insert.map((permissionId) => ({ permissionId, roleId })),
+          });
+        }
+        if (remove.length) {
+          await prisma.relRolePermission.deleteMany({
+            where: { permissionId: { in: remove } },
+          });
+        }
+      } else {
+        await prisma.relRolePermission.deleteMany({ where: { roleId } });
+      }
+      const { permissionId, ...data } = info;
+      await prisma.role.update({ where: { id: roleId }, data });
+      return true;
+    });
   }
 
-  async fieldNameCheck({ name, _id }: TypeSystemRole.ReqCheckRoleName) {
-    const target = await this.RoleModel.findOne({ name });
-    return Boolean(
-      !target ||
-        (target && name === target.name && _id === target?._id?.toString()),
-    );
+  async remove({ id }: PrimaryKeyDTO) {
+    await this.PrismaService.$transaction([
+      this.PrismaService.role.delete({ where: { id } }),
+      this.PrismaService.relRolePermission.deleteMany({
+        where: { roleId: { in: id } },
+      }),
+    ]);
+    return true;
   }
 }

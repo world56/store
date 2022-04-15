@@ -20,19 +20,19 @@ export namespace TypeSystemRole {
   }
 
   /**
-   * @name Info 角色基本信息
-   * @param _id 角色ID
+   * @name DTO 角色基本信息
+   * @param id 角色ID
    * @param name 角色名称
    * @param status 状态
    * @param permission 权限
    * @param description 描述
    * @param createTime 创建时间
    */
-  export interface Info
+  export interface DTO
     extends Record<"name" | "description", string>,
       Partial<TypeCommon.DatabaseMainParameter> {
     status: number;
     createTime: number;
-    permission: string[] | TypeSystemPermission.Info[];
+    permission: string[] | TypeSystemPermission.DTO[];
   }
 }

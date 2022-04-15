@@ -33,13 +33,13 @@ const query = [
  */
 const Permission = () => {
 
-  const [id, setId] = useState<string>();
+  const [id, setId] = useState<number>();
   const [window, setWindow] = useState(false);
 
   const [data, fetch] = useAsyncFn(getPermissionList);
   const [search] = Form.useForm<TypeSystemPermission.QueryList>();
 
-  const pagination = usePageTurning(data.value?.total);
+  const pagination = usePageTurning(data.value?.count);
   const { pageSize, currentPage } = pagination;
 
   const initialize = useCallback(async () => {
@@ -49,20 +49,20 @@ const Permission = () => {
     fetch(param);
   }, [fetch, search, pageSize, currentPage]);
 
-  const onClose = useCallback(() => {
-    initialize();
+  const onClose = useCallback((init?: boolean) => {
+    init || initialize();
     setId(undefined);
     setWindow(b => !b);
   }, [initialize]);
 
-  async function remove(_id: string) {
-    await removePermission({ _id });
+  async function remove(id: number) {
+    await removePermission({ id });
     message.success('删除成功');
     initialize();
   };
 
-  async function edit(_id: string) {
-    setId(_id);
+  async function edit(id: number) {
+    setId(id);
     setWindow(b => !b);
   };
 
@@ -81,6 +81,7 @@ const Permission = () => {
       dataIndex: 'status',
       render: (key: ENUM_COMMON.STATUS) => <StatusColor status={key} />
     },
+    { title: '备注', key: 'remark', dataIndex: 'remark' },
     {
       title: '操作',
       key: DB_PRIMARY_KEY,
@@ -96,7 +97,7 @@ const Permission = () => {
   return (
     <Card title='权限列表'>
       <Search form={search} columns={query} onSearch={initialize}>
-        <Button onClick={onClose}>
+        <Button onClick={() => onClose(true)}>
           新增权限 <KeyOutlined />
         </Button>
       </Search>

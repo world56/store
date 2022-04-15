@@ -7,16 +7,16 @@ import React from "react";
 export namespace TypeCommon {
   /**
    * @name DatabaseMainParameter 数据库主要参数
-   * @param _id 主键
+   * @param id 主键
    */
-  export interface DatabaseMainParameter {
-    readonly _id: string;
+  export interface DatabaseMainParameter<T = number> {
+    readonly id: T;
   }
 
   /**
    * @name GenericObject 通用对象
    */
-  export type GenericObject = Record<React.Key, React.Key>;
+  export type GenericObject<T = React.Key> = Record<React.Key, T>;
 
   /**
    * @name DefaultKey 统一约束定义的枚举键值对
@@ -51,10 +51,11 @@ export namespace TypeCommon {
 
   /**
    * @name ServiceReturn 返回的标准List
+   * @param count 总数
    */
   export interface ServiceReturn<T> extends PageTurning {
     list: T[];
-    total: number;
+    readonly count: number;
   }
 
   /**

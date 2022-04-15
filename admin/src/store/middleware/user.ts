@@ -14,14 +14,14 @@ import type { TypeStoreUserModule } from "@/interface/store";
 
 function* taskInUserLogin(data: TypeStoreUserModule.ActionUserLogin) {
   const key: string = yield getPubilcKey();
-  const params: string = encryption(key, JSON.stringify(data.payload));
-  const token: string = yield call(login, params);
+  data.payload.password = encryption(key, data.payload.password);
+  const token: string = yield call(login, data.payload);
   Cookies.set(TOKEN_KEY, token);
   History.push("/");
 }
 
 function* taskInGetUserInfo() {
-  const user: TypeSystemUser.Info = yield getUserInfo();
+  const user: TypeSystemUser.DTO = yield getUserInfo();
   yield put(UserAction.setUserInfo(user));
 }
 

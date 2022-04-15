@@ -19,10 +19,10 @@ declare module "*.avif" {
   export default src;
 }
 
-declare module "crypto-browserify" {
-  const src: any;
+declare module "encryptlong" {
+  const JSEncrypt: any;
   const publicEncrypt: any;
-  export { publicEncrypt };
+  export { JSEncrypt };
   export default src;
 }
 

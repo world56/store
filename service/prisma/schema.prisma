@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider             = "prisma-client-js"
+  referentialIntegrity = "prisma"
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_MYSQL_URL")
+  referentialIntegrity = "prisma"
+}
+
+generator js {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity", "interactiveTransactions"]
+}
+
+// 管理系统用户
+model AdminUser {
+  id         Int      @id @default(autoincrement())
+  account    String   @unique @db.VarChar(50) // 账号
+  password   String   @db.VarChar(100) // 密码
+  name       String   @db.Char(5) // 名称
+  phone      String   @db.Char(11) // 联系电话
+  email      String?   @db.VarChar(100) // 电子邮箱地址
+  status     Int      @default(1) @db.Int() // 状态
+  isSuper    Int      @default(0) @map("is_super") @db.Int() // 是否为超管 
+  remark     String?  @db.VarChar(255) // 备注
+  createTime DateTime @default(now()) @map("create_time") @db.Timestamp(6) // 创建时间
+
+  @@index([account])
+  @@index([name])
+  @@index([phone])
+  @@index([status])
+  @@index([isSuper])
+  @@map("admin_user")
+}
+
+// 角色
+model Role {
+  id         Int       @id @default(autoincrement())
+  name       String    @db.VarChar(20) // 角色名称
+  status     Int       @default(1) @db.Int() // 状态
+  createTime DateTime? @default(now()) @map("create_time") @db.Timestamp(6) // 创建时间
+  remark     String?   @db.VarChar(255) // 备注
+
+  @@index([name])
+  @@index([status])
+  @@map("role")
+}
+
+// 权限点
+model Permission {
+  id       Int     @id @default(autoincrement()) // 权限英文名称
+  code     String  @unique @db.VarChar(20) // 权限英文名称
+  name     String  @unique() @db.VarChar(20) // 权限名称
+  parentId Int?    @map("parrent_id") // 所属模块
+  status   Int     @default(1) @db.Int() // 状态
+  type     Int     @db.Int() // 类型 页面:1 按钮:2 内容:3
+  remark   String? @db.VarChar(255) // 备注
+
+
+  @@index([code])
+  @@index([name])
+  @@index([status])
+  @@map("permission")
+}
+
+model RelRolePermission {
+  roleId       Int @map("role_id") @db.Int()
+  permissionId Int @map("permission_id") @db.Int()
+
+  @@id([roleId, permissionId])
+  @@index([roleId])
+  @@index([permissionId])
+  @@map("rel_role_permission")
+}
+
+model RelAdminUserRole {
+  id          Int @id @default(autoincrement())
+  roleId      Int @map("role_id") @db.Int()
+  adminUserId Int @map("admin_user_id") @db.Int()
+
+  @@unique([roleId, adminUserId])
+  @@index([roleId])
+  @@index([adminUserId])
+  @@map("rel_admin_user_role")
+}

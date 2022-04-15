@@ -1,73 +1,117 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { SecretService } from '@/common/secret/secret.service';
-import { AdminUser as AdminUserModel } from '@/schema/system/user';
-
-import { ENUM_ADMIN } from '@/enum/admin';
-import { ADMIN_USER_DEFAULT_PW } from '@/config/secret';
-
-import type { TypeSystemUser } from '@/interface/system/user';
-import type { TypeSchemaAadminUser } from '@/schema/system/user';
+import { Injectable, PreconditionFailedException } from '@nestjs/common';
+import { AdminUserDTO } from '@/dto/admin-user.dto';
+import { PrismaService } from '@/common/prisma/prisma.service';
+import { AdminUserQuery } from './dto/admin-user-query.dto';
+import { UserCheckFilesDto } from './dto/admin-user-check-fields.dto';
+import { UtilsService } from '@/common/utils/utils.service';
+import { ENUM_SYSTEM } from '@/enum/system';
+import { PrimaryKeyDTO } from '@/dto/common.dto';
+import { EncryptionService } from '@/common/encryption/encryption.service';
+import { AdminUserUpdateDTO } from './dto/admin-user-update.dto';
+import { AdminUserStatusChangeDto } from './dto/admin-user-status-change.dto';
 
 @Injectable()
 export class UserService {
   constructor(
-    // @InjectModel(RoleModel.name)
-    // private readonly RoleModel: TypeSchemaRole,
-    private readonly SecretService: SecretService,
-    @InjectModel(AdminUserModel.name)
-    private readonly AdminUserModel: TypeSchemaAadminUser,
+    private readonly UtilsService: UtilsService,
+    private readonly PrismaService: PrismaService,
+    private readonly EncryptionService: EncryptionService,
   ) {}
 
-  async findUserList(query: Omit<TypeSystemUser.QueryList, 'role'>) {
-    const { pageSize, currentPage, pageSkip, ...other } = query;
-    const condition = {
-      ...other,
-      isSuper: { $in: [ENUM_ADMIN.ADMINISTRATOR.NOT_SUPER] },
+  async getList(query: AdminUserQuery) {
+    const { name, account, phone, status, skip, take } = query;
+    const search = {
+      where: {
+        status,
+        name: { contains: name },
+        phone: { contains: phone },
+        account: { contains: account },
+        isSuper: ENUM_SYSTEM.SUPER_ADMIN.NOT_SUPER,
+      },
     };
-    console.log('@-findUserList', query);
-    const total = await this.AdminUserModel.find(condition).countDocuments();
-    const list = await this.AdminUserModel.find(condition, { isSuper: 0 })
-      .skip(pageSkip)
-      .limit(pageSize)
-      .populate(['role']);
-    return { list, total };
-  }
-
-  async getDetails(_id: string) {
-    return await this.AdminUserModel.findById(
-      { _id },
-      { password: 0, isSuper: 0 },
-    );
-  }
-
-  async add(data: TypeSystemUser.Info) {
-    data.password = this.SecretService.md5(data.password);
-    return await this.AdminUserModel.create(data);
-  }
-
-  async update(data: TypeSystemUser.Info) {
-    const { _id, ...param } = data;
-    await this.AdminUserModel.findByIdAndUpdate({ _id }, param);
-  }
-
-  async checkPepeat(data: Partial<TypeSystemUser.Info>) {
-    const { account, name, phone, _id } = data;
-    const list = await this.AdminUserModel.find({
-      $or: [{ _id }, { name }, { phone }, { account }],
+    const count = await this.PrismaService.adminUser.count(search);
+    const list = await this.PrismaService.adminUser.findMany({
+      ...search,
+      skip,
+      take,
     });
-    const [user] = list;
-    return Boolean(
-      !user || (list.length === 1 && user?._id?.toString() === _id),
-    );
+    return { list, count };
   }
 
-  async freeze({ _id, status }: TypeSystemUser.FreezeStatusChange) {
-    return await this.AdminUserModel.updateOne({ _id }, { $set: { status } });
+  async getDetails(where: PrimaryKeyDTO) {
+    const user = await this.PrismaService.adminUser.findUnique({ where });
+    const roles = await this.PrismaService.relAdminUserRole.findMany({
+      where: { adminUserId: where.id },
+    });
+    return { ...user, roles: roles.map((v) => v.roleId) };
   }
 
-  async resetPassword(_id: string) {
-    const password = this.SecretService.md5(ADMIN_USER_DEFAULT_PW);
-    return this.AdminUserModel.updateOne({ _id }, { $set: { password } });
+  async check(query: UserCheckFilesDto, tips?: boolean) {
+    const { id, account, name, phone, email } = query;
+    const list = await this.PrismaService.adminUser.findMany({
+      where: { OR: [{ account }, { name }, { phone }, { email }] },
+    });
+    const isRepeat = this.UtilsService.isRepeat(list, id);
+    if (tips && isRepeat) {
+      throw new PreconditionFailedException('该字段重复，无法保存');
+    }
+    return isRepeat;
+  }
+
+  async resetPassword(body: PrimaryKeyDTO) {
+    const { id } = body;
+    const pwd = String(new Date().valueOf());
+    await this.PrismaService.adminUser.update({
+      where: { id },
+      data: { password: this.EncryptionService.md5(pwd) },
+    });
+    return pwd;
+  }
+
+  async freezeStatus({ id, status }: AdminUserStatusChangeDto) {
+    await this.PrismaService.adminUser.update({
+      where: { id },
+      data: { status },
+    });
+    return true;
+  }
+
+  async insert(info: AdminUserDTO) {
+    return await this.PrismaService.$transaction(async (prisma) => {
+      const { roles, ...data } = info;
+      const password = this.EncryptionService.decrypt(data.password);
+      data.password = this.EncryptionService.md5(password);
+      const { id: adminUserId } = await prisma.adminUser.create({ data });
+      await prisma.relAdminUserRole.createMany({
+        data: roles.map((roleId) => ({ roleId, adminUserId })),
+      });
+      return true;
+    });
+  }
+
+  async update(info: AdminUserUpdateDTO) {
+    return await this.PrismaService.$transaction(async (prisma) => {
+      const { id, roles, ...data } = info;
+      const ids = await prisma.relAdminUserRole.findMany({
+        where: { adminUserId: id },
+      });
+      const [insert, del] = this.UtilsService.filterArrayRepeatKeys(
+        roles,
+        ids.map((v) => v.roleId),
+      );
+      if (insert.length) {
+        await prisma.relAdminUserRole.createMany({
+          data: insert.map((roleId) => ({ roleId, adminUserId: id })),
+        });
+      }
+      if (del.length) {
+        await prisma.relAdminUserRole.deleteMany({
+          where: { roleId: { in: del } },
+        });
+      }
+      data.remark = data.remark ? data.remark : null;
+      await this.PrismaService.adminUser.update({ where: { id }, data });
+      return true;
+    });
   }
 }

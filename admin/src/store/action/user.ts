@@ -5,7 +5,7 @@ import type { TypeSystemUser } from "@/interface/system/user";
 /**
  * @name userLogin 用户登录
  */
-export function userLogin(payload: TypeSystemUser.AccountSecret) {
+export function userLogin(payload: TypeSystemUser.Login) {
   return {
     type: ENUM_STORE_ACTION.LOGIN.USER_LOGIN,
     payload,
@@ -24,7 +24,7 @@ export function getUserInfo() {
 /**
  * @name setUserInfo 存储用户信息
  */
-export function setUserInfo(payload: TypeSystemUser.Info) {
+export function setUserInfo(payload: TypeSystemUser.DTO) {
   return {
     type: ENUM_STORE_ACTION.LOGIN.SET_USER_INFO,
     payload,
