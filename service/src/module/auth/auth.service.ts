@@ -4,7 +4,6 @@ import {
   HttpException,
   UnauthorizedException,
   PreconditionFailedException,
-  ForbiddenException,
 } from '@nestjs/common';
 import { AdminUserDTO } from '@/dto/admin-user.dto';
 import { PrismaService } from '@/common/prisma/prisma.service';
