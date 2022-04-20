@@ -5,6 +5,7 @@ import type { TypeCommon } from "@/interface/common";
 import type { TypeSystemUser } from "@/interface/system/user";
 import type { TypeSystemRole } from "@/interface/system/role";
 import type { TypeSystemPermission } from "@/interface/system/permission";
+import type { TypeSystemDepartment } from "@/interface/system/department";
 
 /**
  * @name getUserList 用户管理-获取用户列表
@@ -221,4 +222,17 @@ export function getPermissionTree() {
   return request<TypeSystemPermission.DTO[]>("system/permission/findAll", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
   });
+}
+
+/**
+ * @name getDepartmentList 部门管理-获取部门列表
+ */
+export function getDepartmentList(params: TypeSystemDepartment.QueryList) {
+  return request<TypeCommon.ServiceReturn<TypeSystemDepartment.DTO[]>>(
+    "system/department",
+    {
+      method: ENUM_HTTP.REQUEST_MODE.GET,
+      params,
+    },
+  );
 }

@@ -1,4 +1,4 @@
-import { useAsyncFn } from 'react-use';
+import { useRequest } from 'ahooks';
 import Search from '@/components/Search';
 import { timestampToTime } from '@/utils';
 import { permissionToTree } from '@/utils';
@@ -13,10 +13,10 @@ import { getRoleList, removeRole, getPermissionTree } from '@/api/system';
 
 import { ENUM_COMMON } from '@/enum/common';
 import { DB_PRIMARY_KEY } from '@/config/db';
+import { CONFIG_ANTD_COMP } from '@/config/format';
 import { CONSTANT_COMMON } from '@/constant/common';
 
 import type { TypeSystemRole } from '@/interface/system/role';
-import { CONFIG_ANTD_COMP } from '@/config/format';
 
 
 /**
@@ -27,10 +27,10 @@ const Role = () => {
   const [id, setId] = useState<number>();
   const [window, setWindow] = useState(false);
 
-  const [data, fetch] = useAsyncFn(getRoleList);
+  const { data, loading, run } = useRequest(getRoleList, { manual: true });
   const [search] = Form.useForm<TypeSystemRole.QueryList>();
 
-  const pagination = usePageTurning(data.value?.count);
+  const pagination = usePageTurning(data?.count);
   const { pageSize, currentPage } = pagination;
 
   const { value: permissionTree } = useGetDetails(async () => {
@@ -39,9 +39,9 @@ const Role = () => {
 
   const initialize = useCallback(async () => {
     const values = await search?.validateFields();
-    return fetch({ ...values, pageSize, currentPage });
+    return run({ ...values, pageSize, currentPage });
     // eslint-disable-next-line
-  }, [window, search, pageSize, currentPage, fetch]);
+  }, [window, search, pageSize, currentPage, run]);
 
   const openEditModal = useCallback(() => {
     window && setId(undefined);
@@ -108,10 +108,10 @@ const Role = () => {
       </Search>
       <Table
         columns={columns}
-        loading={data.loading}
+        loading={loading}
         pagination={pagination}
         rowKey={DB_PRIMARY_KEY}
-        dataSource={data.value?.list} />
+        dataSource={data?.list} />
       <EditRole
         id={id}
         visible={window}

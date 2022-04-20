@@ -1,4 +1,4 @@
-import { useAsyncFn } from 'react-use';
+import { useRequest } from 'ahooks';
 import Search from '@/components/Search';
 import { usePageTurning } from '@/hooks';
 import { BtnEditDel } from '@/layout/Table';
@@ -36,18 +36,18 @@ const Permission = () => {
   const [id, setId] = useState<number>();
   const [window, setWindow] = useState(false);
 
-  const [data, fetch] = useAsyncFn(getPermissionList);
+  const { data, loading, run } = useRequest(getPermissionList, { manual: true });
   const [search] = Form.useForm<TypeSystemPermission.QueryList>();
 
-  const pagination = usePageTurning(data.value?.count);
+  const pagination = usePageTurning(data?.count);
   const { pageSize, currentPage } = pagination;
 
   const initialize = useCallback(async () => {
     const param = await search.validateFields();
     param.pageSize = pageSize;
     param.currentPage = currentPage;
-    fetch(param);
-  }, [fetch, search, pageSize, currentPage]);
+    run(param);
+  }, [run, search, pageSize, currentPage]);
 
   const onClose = useCallback((init?: boolean) => {
     init || initialize();
@@ -103,10 +103,10 @@ const Permission = () => {
       </Search>
       <Table
         columns={columns}
-        loading={data.loading}
+        loading={loading}
         rowKey={DB_PRIMARY_KEY}
         pagination={pagination}
-        dataSource={data.value?.list} />
+        dataSource={data?.list} />
       <EditPermission id={id} visible={window} onClose={onClose} />
     </Card>
   );

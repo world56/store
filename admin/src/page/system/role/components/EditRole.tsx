@@ -13,7 +13,7 @@ import { CONFIG_ANTD_COMP } from '@/config/format';
 import type { TypeCommon } from '@/interface/common';
 import type { RuleObject } from 'rc-field-form/lib/interface';
 import type { TypeSystemRole } from '@/interface/system/role';
-import { TypeSystemPermission } from '@/interface/system/permission';
+import type { TypeSystemPermission } from '@/interface/system/permission';
 
 interface TypeEditRoleProps extends Partial<TypeCommon.DatabaseMainParameter> {
   /** @param visible 是否开启编辑弹窗 */

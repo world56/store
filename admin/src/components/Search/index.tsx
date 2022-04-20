@@ -53,10 +53,10 @@ export interface SearchFormProps {
 const { Option } = Select;
 
 /**
- * @name SearchForm 搜索
+ * @name Search 搜索
  * @description 快速创建一个搜索组件（Form）
  */
-const SearchForm: React.FC<SearchFormProps> = ({
+const Search: React.FC<SearchFormProps> = ({
   form,
   size,
   columns,
@@ -165,4 +165,4 @@ const SearchForm: React.FC<SearchFormProps> = ({
   );
 };
 
-export default SearchForm;
+export default Search;

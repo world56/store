@@ -24,6 +24,12 @@ export default [
         component: lazy(() => import("@/page/system/role")),
       },
       {
+        name: "department",
+        title: "部门列表",
+        path: "/system/department",
+        component: lazy(() => import("@/page/system/department")),
+      },
+      {
         name: "permission",
         title: "权限列表",
         path: "/system/permission",

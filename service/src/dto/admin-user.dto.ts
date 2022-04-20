@@ -11,6 +11,7 @@ import { CommonDTO } from './common.dto';
 export class AdminUserDTO extends PickType(CommonDTO, [
   'id',
   'status',
+  'remark',
 ] as const) {
   /**
    * @param account 登陆账号
@@ -85,16 +86,6 @@ export class AdminUserDTO extends PickType(CommonDTO, [
   @IsOptional()
   @IsEnum(ENUM_SYSTEM.SUPER_ADMIN)
   isSuper?: number;
-
-  /**
-   * @param remark 用户备注
-   */
-  @ApiProperty({
-    description: '用户备注',
-  })
-  @IsString()
-  @IsOptional()
-  remark?: string;
 
   /**
    * @param createTime 创建时间

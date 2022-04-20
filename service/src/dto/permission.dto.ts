@@ -1,6 +1,6 @@
 import {
-  IsEnum,
   IsInt,
+  IsEnum,
   IsString,
   MaxLength,
   IsOptional,
@@ -16,6 +16,7 @@ import { PickType, ApiProperty } from '@nestjs/swagger';
 export class PermissionDTO extends PickType(CommonDTO, [
   'id',
   'status',
+  'remark'
 ] as const) {
   /**
    * @param name 权限名
@@ -55,10 +56,4 @@ export class PermissionDTO extends PickType(CommonDTO, [
   @IsEnum(ENUM_SYSTEM.PERMISSION_TYPE)
   type: number;
 
-  /**
-   * @param 备注
-   */
-  @IsString()
-  @IsOptional()
-  remark?: string;
 }

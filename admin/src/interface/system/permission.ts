@@ -1,6 +1,5 @@
 import type { TypeCommon } from "../common";
 
-import { ENUM_COMMON } from "@/enum/common";
 import { ENUM_SYSTEM } from "@/enum/system";
 
 /**
@@ -16,13 +15,10 @@ export namespace TypeSystemPermission {
    * @param status 激活状态
    * @param remark 备注
    */
-  export interface DTO extends TypeCommon.DatabaseMainParameter {
-    name: string;
+  export interface DTO extends TypeCommon.DTO {
     code: string;
     parentId: number;
     type: ENUM_SYSTEM.PERMISSION_TYPE;
-    status: ENUM_COMMON.STATUS;
-    remark?: string;
   }
 
   /**
@@ -38,7 +34,6 @@ export namespace TypeSystemPermission {
    */
   export interface QueryList
     extends TypeCommon.PageTurning,
-      TypeCommon.DatabaseMainParameter,
       Pick<DTO, "name" | "status"> {}
 
   /**

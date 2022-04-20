@@ -1,5 +1,7 @@
-import { ENUM_HTTP } from "@/enum/http";
 import React from "react";
+
+import { ENUM_HTTP } from "@/enum/http";
+import { ENUM_COMMON } from "@/enum/common";
 
 /**
  * @name TypeCommon 公共接口
@@ -28,6 +30,19 @@ export namespace TypeCommon {
    */
   export interface QueryDefaulsParam {
     time?: number[];
+  }
+
+  /**
+   * @name DTO 公共DTO常用字段
+   * @param id 主键
+   * @param name 名称
+   * @param status 状态
+   * @param remark 备注
+   */
+  export interface DTO extends DatabaseMainParameter {
+    status: ENUM_COMMON.STATUS;
+    remark?: string;
+    name: string;
   }
 
   /**

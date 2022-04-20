@@ -33,15 +33,15 @@ export namespace TypeSystemUser {
    * @param isSuper 是否超管
    * @param role    权限角色
    * @param email   电子邮件
+   * @param Record  状态
+   * @param remark  备注
    */
   export interface DTO
     extends Register,
-      TypeCommon.DatabaseMainParameter,
+      TypeCommon.DTO,
       Record<"token" | "isSuper", string> {
-    status: ENUM_COMMON.STATUS;
     email?: string;
     role?: TypeSystemRole.DTO[] | string[];
-    remark?: string;
   }
 
   /**

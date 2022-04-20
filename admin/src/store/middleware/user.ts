@@ -13,16 +13,20 @@ import type { TypeSystemUser } from "@/interface/system/user";
 import type { TypeStoreUserModule } from "@/interface/store";
 
 function* taskInUserLogin(data: TypeStoreUserModule.ActionUserLogin) {
-  const key: string = yield getPubilcKey();
-  data.payload.password = encryption(key, data.payload.password);
-  const token: string = yield call(login, data.payload);
-  Cookies.set(TOKEN_KEY, token);
-  History.push("/");
+  try {
+    const key: string = yield getPubilcKey();
+    data.payload.password = encryption(key, data.payload.password);
+    const token: string = yield call(login, data.payload);
+    Cookies.set(TOKEN_KEY, token);
+    History.push("/");
+  } catch {}
 }
 
 function* taskInGetUserInfo() {
-  const user: TypeSystemUser.DTO = yield getUserInfo();
-  yield put(UserAction.setUserInfo(user));
+  try {
+    const user: TypeSystemUser.DTO = yield getUserInfo();
+    yield put(UserAction.setUserInfo(user));
+  } catch {}
 }
 
 export default function* SagaUser() {

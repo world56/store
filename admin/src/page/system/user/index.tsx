@@ -1,5 +1,5 @@
+import { useRequest } from 'ahooks';
 import { Btn } from '@/layout/Table';
-import { useAsyncFn } from 'react-use';
 import Search from '@/components/Search';
 import { usePageTurning } from '@/hooks';
 import { timestampToTime } from '@/utils';
@@ -41,16 +41,16 @@ const User = () => {
 
   const [editParam, setEditParam] = useState<Omit<TypeEditUserPorps, 'onClose'>>({ visible: false });
 
-  const [data, fetch] = useAsyncFn(getUserList);
-  const pagination = usePageTurning(data.value?.count);
+  const { data, loading, run } = useRequest(getUserList, { manual: true });
+  const pagination = usePageTurning(data?.count);
   const { pageSize, currentPage } = pagination;
 
   const initializa = useCallback(async () => {
     const values = await search.validateFields();
     values.pageSize = pageSize;
     values.currentPage = currentPage;
-    fetch(values);
-  }, [fetch, search, pageSize, currentPage]);
+    run(values);
+  }, [run, search, pageSize, currentPage]);
 
   const onChangeEdit = useCallback((row?: TypeSystemUser.DTO) => {
     setEditParam(s => ({ visible: !s.visible, id: row?.id }));
@@ -139,10 +139,10 @@ const User = () => {
       </Search>
       <Table
         columns={columns}
-        loading={data.loading}
+        loading={loading}
         rowKey={DB_PRIMARY_KEY}
         pagination={pagination}
-        dataSource={data.value?.list} />
+        dataSource={data?.list} />
       <EditUser {...editParam} onClose={onChangeEdit} />
     </Card>
   );

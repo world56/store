@@ -24,7 +24,7 @@ model AdminUser {
   password   String   @db.VarChar(100) // 密码
   name       String   @db.Char(5) // 名称
   phone      String   @db.Char(11) // 联系电话
-  email      String?   @db.VarChar(100) // 电子邮箱地址
+  email      String?  @db.VarChar(100) // 电子邮箱地址
   status     Int      @default(1) @db.Int() // 状态
   isSuper    Int      @default(0) @map("is_super") @db.Int() // 是否为超管 
   remark     String?  @db.VarChar(255) // 备注
@@ -87,4 +87,20 @@ model RelAdminUserRole {
   @@index([roleId])
   @@index([adminUserId])
   @@map("rel_admin_user_role")
+}
+
+// 部门
+model Department {
+  id       Int     @id @default(autoincrement())
+  name     String  @unique @db.VarChar(15)
+  status   Int     @default(1) @db.Int() // 状态
+  remark   String? @db.VarChar(255) // 备注
+  parentId Int?    @map("parent_id") // 所属部门
+
+  @@index([id])
+  @@index([name])
+  @@index([status])
+  @@index([parentId])
+
+  @@map("department")
 }

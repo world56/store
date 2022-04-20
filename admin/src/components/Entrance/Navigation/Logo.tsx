@@ -11,7 +11,7 @@ const Logo: React.FC<LogoProps> = ({
   <div className={`${styles.icon} ${collapsed ? styles.iconClose : ''}`}>
     <img src={logo} alt="#" />
     <ul>
-      <li>购物街管理系统</li>
+      <li>Lover</li>
       <li>Buy Management System</li>
     </ul>
   </div>

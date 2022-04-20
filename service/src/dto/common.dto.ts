@@ -37,6 +37,16 @@ export class CommonDTO extends PartialType(PrimaryKeyDTO) {
   status?: number;
 
   /**
+   * @param remark 备注
+   */
+  @ApiProperty({
+    description: '备注',
+  })
+  @IsOptional()
+  @IsString()
+  remark?: string;
+
+  /**
    * @param currentPage 当前页码
    */
   @ApiProperty({
