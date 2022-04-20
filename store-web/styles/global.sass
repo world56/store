@@ -1,0 +1,20 @@
+$defaultColor: rgba(248, 220, 68,1)
+
+.max-content
+  margin: auto
+  max-width: 1250px
+
+.headerContainer
+  border-bottom: 1px solid rgba(235, 235, 235, 1)
+
+@mixin themeColors($alpha:1)
+  color: rgb(37, 28, 7)
+  background-color: rgba(248, 220, 68,$alpha)
+  transition: 0.5s
+
+  &:hover
+    box-shadow: 1px 1px 10px rgba(248, 220, 68,0.7)
+  @content
+
+:export
+  $defaultColor: $defaultColor

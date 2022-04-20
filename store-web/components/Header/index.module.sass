@@ -1,0 +1,65 @@
+@import "styles/global.sass"
+$ICON-LOGO-SIZE: 1.5rem
+
+.header
+  @extend .headerContainer
+
+.content
+  height: 5rem
+  display: flex
+  align-items: center
+  user-select: none
+  margin: auto
+  max-width: 1250px
+  justify-content: space-between
+
+  .logo
+    display: flex
+    align-items: center
+    color: rgba(0, 0, 0, 0.85)
+
+    img
+      width: 50px
+      height: 50px
+
+    h2
+      margin: 0
+      margin-left: 10px
+      display: inline-block
+      vertical-align: middle
+
+      span
+        font-weight: 200
+        margin-left: 8px
+        color: rgb(144, 144, 144)
+
+  .search
+    width: 30rem
+    height: 2.8rem
+    position: relative
+
+    input
+      width: 100%
+      height: 100%
+      border-radius: 5px
+      outline: none
+      border: none
+      padding: 1rem 2rem 1rem 2.6rem
+      background: rgb(245, 245, 245)
+
+    & > img
+      top: 0.7rem
+      right: 0.7rem
+      position: absolute
+      width: $ICON-LOGO-SIZE
+      height: $ICON-LOGO-SIZE
+      cursor: pointer
+
+    & img:nth-child(2)
+      left: 0.7rem
+      cursor: auto
+
+  .func
+    & > span
+      cursor: pointer
+      margin-left: 0.6rem !important

@@ -1,0 +1,59 @@
+@import 'styles/global.sass'
+$menuVertivalWidth: 10rem
+$iconHeight: 2.2em
+
+.menu
+  $iconHeight: 2.2em
+  user-select: none
+  transition: 1s
+
+
+.icon
+  height: $iconHeight
+  cursor: pointer
+  display: flex
+  align-items: center
+  border-radius: 0.2rem
+
+  img
+    width: 1.5rem
+    height: 1.5rem
+    display: inline-block
+    margin: 0 0.2rem 0 0.7rem
+
+// 纵向
+.vertical
+  width: $menuVertivalWidth
+  height: $iconHeight
+  border-radius: 0.2rem
+
+  & > div:nth-child(1)
+    @include themeColors()
+    border-radius: 0.2rem
+    overflow: hidden
+    height: $iconHeight
+    transition: 1s
+
+  &:hover
+    width: $menuVertivalWidth + 1
+    position: relative
+
+    & > div:nth-child(1)
+      position: absolute
+      top: 0
+      width: 100%
+      cursor: default
+      overflow: visible
+      height: auto
+      border-radius: 0.2rem
+      padding: 0.5rem 0
+
+      & > div:nth-child(1)
+        cursor: default
+
+// 横向
+.horizontal
+  width: 100%
+  & > div:nth-child(1)
+    display: flex
+    flex-direction: row
