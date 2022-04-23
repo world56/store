@@ -6,11 +6,11 @@ import { encryption } from "@/utils/crypto";
 import { login, getUserInfo, getPubilcKey } from "@/api/auth";
 import { put, call, throttle, takeLatest } from "redux-saga/effects";
 
-import * as CONFIG_REQUEST from "@/config/request";
 import { ENUM_STORE_ACTION } from "@/enum/store";
+import * as CONFIG_REQUEST from "@/config/request";
 
 import type { TypeSystemUser } from "@/interface/system/user";
-import type { TypeStoreUserModule } from "@/interface/store";
+import type { TypeStoreUserModule } from "@/interface/redux/user";
 
 function* taskInUserLogin(data: TypeStoreUserModule.ActionUserLogin) {
   try {

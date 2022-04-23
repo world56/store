@@ -30,17 +30,19 @@ export class RoleService {
         id: { in: roleIds.length ? roleIds : permissionId ? [] : undefined },
       },
     };
-    const count = await this.PrismaService.role.count(params);
-    const list = await this.PrismaService.role.findMany({
-      ...params,
-      skip,
-      take,
-    });
+    const [count, list] = await Promise.all([
+      this.PrismaService.role.count(params),
+      this.PrismaService.role.findMany({
+        ...params,
+        skip,
+        take,
+      }),
+    ]);
     return { list, count };
   }
 
   async getAll() {
-    return this.PrismaService.role.findMany({
+    return await this.PrismaService.role.findMany({
       where: { status: ENUM_COMMON.STATUS.ACTIVATE },
     });
   }
@@ -59,10 +61,12 @@ export class RoleService {
 
   async getDetails(query: PrimaryKeyDTO) {
     const { id } = query;
-    const data = await this.PrismaService.role.findUnique({ where: { id } });
-    const ids = await this.PrismaService.relRolePermission.findMany({
-      where: { roleId: id },
-    });
+    const [data, ids] = await Promise.all([
+      this.PrismaService.role.findUnique({ where: { id } }),
+      this.PrismaService.relRolePermission.findMany({
+        where: { roleId: id },
+      }),
+    ]);
     return { ...data, permissionId: ids.map((v) => v.permissionId) };
   }
 
@@ -111,6 +115,12 @@ export class RoleService {
   }
 
   async remove({ id }: PrimaryKeyDTO) {
+    const adminUser = await this.PrismaService.relAdminUserRole.findFirst({
+      where: { roleId: id },
+    });
+    if (adminUser) {
+      throw new PreconditionFailedException('与用户在关联，无法删除');
+    }
     await this.PrismaService.$transaction([
       this.PrismaService.role.delete({ where: { id } }),
       this.PrismaService.relRolePermission.deleteMany({

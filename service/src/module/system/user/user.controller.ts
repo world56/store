@@ -19,6 +19,11 @@ export class UserController {
   getUserList(@Query() query: AdminUserQuery) {
     return this.UserService.getList(query);
   }
+  
+  @Get('allAdminUser')
+  getAllUser(){
+    return this.UserService.getAllAdminUserList();
+  }
 
   @Get('details')
   getuserInfo(@Query() query: PrimaryKeyDTO) {

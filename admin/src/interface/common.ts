@@ -1,12 +1,23 @@
 import React from "react";
 
-import { ENUM_HTTP } from "@/enum/http";
 import { ENUM_COMMON } from "@/enum/common";
+
+import type { Reducer } from "redux";
 
 /**
  * @name TypeCommon 公共接口
  */
 export namespace TypeCommon {
+  /**
+   * @name GenericObject 通用对象
+   */
+  export type GenericObject<T = React.Key> = Record<string, T>;
+
+  /**
+   * @name DefaultKey 统一约束定义的枚举键值对
+   */
+  export type DefaultKey<T = React.Key> = Record<"key" | "value", T>;
+
   /**
    * @name DatabaseMainParameter 数据库主要参数
    * @param id 主键
@@ -16,53 +27,24 @@ export namespace TypeCommon {
   }
 
   /**
-   * @name GenericObject 通用对象
-   */
-  export type GenericObject<T = React.Key> = Record<React.Key, T>;
-
-  /**
-   * @name DefaultKey 统一约束定义的枚举键值对
-   */
-  export type DefaultKey<T = React.Key> = Record<"key" | "value", T>;
-
-  /**
-   * @name QueryDefaulsParam 搜索组件公共参数
-   */
-  export interface QueryDefaulsParam {
-    time?: number[];
-  }
-
-  /**
    * @name DTO 公共DTO常用字段
    * @param id 主键
    * @param name 名称
    * @param status 状态
    * @param remark 备注
+   * @param parentId 父id
    */
   export interface DTO extends DatabaseMainParameter {
     status: ENUM_COMMON.STATUS;
     remark?: string;
     name: string;
+    parentId: number;
   }
 
   /**
-   * @name PromiseReturns Promise reject
+   * @name PromiseReturns Promise
    */
   export type PromiseReturns<T> = T extends Promise<infer R> ? R : never;
-
-  /**
-   * @name Gateway 网关
-   * @param {number} code 请求状态CODE
-   * @param {string} message 返回的消息
-   * @param {boolean | void} 接口状态
-   * @param {unknown | void} content as T 返回的业务数据
-   */
-  export interface Gateway<T> {
-    content: T;
-    readonly message?: string;
-    readonly success: boolean;
-    readonly code: ENUM_HTTP.HTTP_CODE;
-  }
 
   /**
    * @name ServiceReturn 返回的标准List
@@ -90,4 +72,20 @@ export namespace TypeCommon {
     extends Record<"key" | "value", React.Key> {
     children: StandardTreeField[];
   }
+
+  /**
+   * @name StoreAction 状态机Actions
+   */
+  export type StoreAction<A extends string, P = void> = {
+    type: A;
+    payload: P;
+  };
+
+  /**
+   * @name StoreReducers 状态机容器
+   */
+  export type StoreReducers<S, E extends string, P = S> = Reducer<
+    Partial<S>,
+    { payload?: P; type: `${E}` }
+  >;
 }

@@ -18,4 +18,15 @@ export namespace ENUM_STORE_ACTION {
   export enum SYSTEM {
     SET_NAV_STATUS = "SET_NAV_STATUS",
   }
+
+  /**
+   * @name DICTIONARIES 词典
+   */
+  export enum DICTIONARIES {
+    QUERY = "QUERY",
+    SET = "SET",
+    ROLE = "ROLE",
+    ADMIN_USER = "ADMIN_USER",
+    DEPARTMENT = "DEPARTMENT",
+  }
 }

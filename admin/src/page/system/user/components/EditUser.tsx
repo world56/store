@@ -1,10 +1,10 @@
 import { memo } from 'react';
 import Modal from '@/layout/Modal';
-import { useGetDetails } from '@/hooks';
 import { Switch } from '@/components/Formatting';
+import { useGetDetails, useStore } from '@/hooks';
 import { Form, Input, Select, message } from 'antd';
 import { FormMajorKey, FormEditUserInfo } from '@/components/Form';
-import { addAdminUser, updateAdminUser, getAdminUserInfo, getRoleSelectList } from '@/api/system';
+import { addAdminUser, updateAdminUser, getAdminUserInfo } from '@/api/system';
 
 import { ENUM_COMMON } from '@/enum/common';
 
@@ -19,11 +19,11 @@ const { Option } = Select;
 export interface TypeEditUserPorps extends Partial<TypeCommon.DatabaseMainParameter> {
   /** @param visible 是否开启编辑弹窗 */
   visible: boolean;
-  /** @param onClose 开启、关闭弹窗回调方法 */
+  /** @name onClose 开启、关闭弹窗回调方法 */
   onClose(): void;
 };
 
-const rules = [{ required: true, message: '选项不得为空' }];
+// const rules = [{ required: true, message: '选项不得为空' }];
 const formStyle = { labelCol: { span: 4 }, wrapperCol: { span: 20 } };
 
 /**
@@ -36,7 +36,7 @@ const EditUser: React.FC<TypeEditUserPorps> = ({
 }) => {
   const [form] = Form.useForm<TypeSystemUser.DTO>();
 
-  const { value: roleList } = useGetDetails(getRoleSelectList, [visible]);
+  const { dictionary: { DEPARTMENT, ROLE } } = useStore();
 
   const { loading } = useGetDetails(async () => {
     const data = await getAdminUserInfo({ id: id! });
@@ -74,12 +74,21 @@ const EditUser: React.FC<TypeEditUserPorps> = ({
 
         <FormEditUserInfo id={id} />
 
-        <Form.Item name='roles' label='所属角色' rules={rules}>
+        <Form.Item name='roles' label='所属角色'>
           <Select
             allowClear
             mode="multiple"
             placeholder="请选择用户角色（多选）">
-            {roleList?.map(v => <Option key={v.id} value={v.id!}>{v.name}</Option>)}
+            {ROLE?.list?.map(v => <Option key={v.key} value={v.key}>{v.value}</Option>)}
+          </Select>
+        </Form.Item>
+
+        <Form.Item name='deps' label='所属部门'>
+          <Select
+            allowClear
+            mode="multiple"
+            placeholder="请选择用户所属部门（多选）">
+            {DEPARTMENT?.list?.map(v => <Option key={v.key} value={v.key}>{v.value}</Option>)}
           </Select>
         </Form.Item>
 

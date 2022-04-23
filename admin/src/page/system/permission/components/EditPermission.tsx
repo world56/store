@@ -8,9 +8,9 @@ import {
 import { memo } from 'react';
 import Modal from '@/layout/Modal';
 import { useGetDetails } from '@/hooks';
+import { listToTree } from '../../../../utils';
 import { FormMajorKey } from '@/components/Form';
 import { Switch } from '@/components/Formatting';
-import { permissionToTree } from '../../../../utils';
 import { Form, Input, Radio, message, TreeSelect } from 'antd';
 
 import { ENUM_SYSTEM } from '@/enum/system';
@@ -56,7 +56,7 @@ const EditPermission: React.FC<TypeEditPermissionProps> = ({
 
   const { value: treeData, loading: treeLoad } = useGetDetails(async () => {
     const res = await getPermissionTree();
-    return permissionToTree(res, 0, id);
+    return listToTree(res, 0, id);
   }, [visible, id]);
 
   async function onSumbit() {
@@ -123,7 +123,7 @@ const EditPermission: React.FC<TypeEditPermissionProps> = ({
           name='type'
           initialValue={ENUM_SYSTEM.PERMISSION_TYPE.PAGE}>
           <Radio.Group>
-            {CONSTANT_SYSTEM.LIST_PERMISSION_TYPE.map(v => <Radio key={v.key} value={v.key}>{v.value}</Radio>)}
+            {CONSTANT_SYSTEM.LIST_PERMISSION.map(v => <Radio key={v.key} value={v.key}>{v.value}</Radio>)}
           </Radio.Group>
         </Form.Item>
 

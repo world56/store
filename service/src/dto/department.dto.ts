@@ -1,13 +1,13 @@
-import { ApiProperty, PickType } from '@nestjs/swagger';
-import { IsString, MaxLength } from 'class-validator';
 import { CommonDTO } from './common.dto';
+import { ApiProperty, PickType } from '@nestjs/swagger';
+import { IsString, MaxLength, IsInt, IsOptional } from 'class-validator';
 
 /**
- * @name Department
+ * @name DepartmentDTO 部门DTO
  */
 export class DepartmentDTO extends PickType(CommonDTO, [
   'id',
-  'status',
+  'parentId',
   'remark',
 ] as const) {
   /**
@@ -19,4 +19,11 @@ export class DepartmentDTO extends PickType(CommonDTO, [
   @MaxLength(15)
   @IsString()
   name: string;
+
+  @ApiProperty({
+    description: '部门用户',
+  })
+  @IsOptional()
+  @IsInt({ each: true })
+  users: number[];
 }

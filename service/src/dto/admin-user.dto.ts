@@ -55,7 +55,7 @@ export class AdminUserDTO extends PickType(CommonDTO, [
   phone: string;
 
   /**
-   * @name email 电子邮箱
+   * @param email 电子邮箱
    */
   @ApiProperty({
     description: '电子邮箱地址',
@@ -65,7 +65,7 @@ export class AdminUserDTO extends PickType(CommonDTO, [
   email?: string;
 
   /**
-   * @name roles 选择的角色
+   * @param roles 关联的角色
    */
   @ApiProperty({
     description: '选择的角色',
@@ -73,6 +73,17 @@ export class AdminUserDTO extends PickType(CommonDTO, [
   @IsOptional()
   @IsInt({ each: true })
   roles: number[];
+
+
+  /**
+   * @param deps 关联的部门id
+   */
+   @ApiProperty({
+    description: '选择的角色',
+  })
+  @IsOptional()
+  @IsInt({ each: true })
+  deps: number[];
 
   /**
    * @param isSuper 是否为超级管理员

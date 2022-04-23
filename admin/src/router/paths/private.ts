@@ -12,6 +12,12 @@ export default [
     component: Middleware,
     routes: [
       {
+        name: "department",
+        title: "部门列表",
+        path: "/system/department",
+        component: lazy(() => import("@/page/system/department")),
+      },
+      {
         name: "user",
         title: "用户列表",
         path: "/system/user",
@@ -24,17 +30,25 @@ export default [
         component: lazy(() => import("@/page/system/role")),
       },
       {
-        name: "department",
-        title: "部门列表",
-        path: "/system/department",
-        component: lazy(() => import("@/page/system/department")),
-      },
-      {
         name: "permission",
         title: "权限列表",
         path: "/system/permission",
         component: lazy(() => import("@/page/system/permission")),
-      }
+      },
+    ],
+  },
+  {
+    name: "warehouse",
+    path: "/warehouse",
+    title: "货仓管理",
+    component: Middleware,
+    routes: [
+      {
+        name: "identification",
+        title: "仓储标示",
+        path: "/warehouse/identification",
+        component: lazy(() => import("@/page/warehouse/identification")),
+      },
     ],
   },
 ] as TypeRoute.RouteListType;

@@ -1,13 +1,13 @@
 import { useRequest } from 'ahooks';
 import { Btn } from '@/layout/Table';
 import Search from '@/components/Search';
-import { usePageTurning } from '@/hooks';
 import { timestampToTime } from '@/utils';
 import EditUser from './components/EditUser';
 import StatusColor from '@/layout/StatusColor';
 import { UsergroupAddOutlined } from '@ant-design/icons';
-import { useState, useCallback, useEffect } from 'react';
+import { useActions, usePageTurning, useStore } from '@/hooks';
 import { Card, Form, Table, Button, Modal, message } from 'antd';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { ExclamationCircleOutlined, SmileOutlined } from '@ant-design/icons';
 import { getUserList, freezeAdminUser, resetAdminUserPwd } from '@/api/system';
 
@@ -15,29 +15,25 @@ import { ENUM_COMMON } from '@/enum/common';
 import { DB_PRIMARY_KEY } from '@/config/db';
 import { CONSTANT_COMMON } from '@/constant/common';
 
-import type { TypeCommon } from '@/interface/common';
 import type { TypeSystemUser } from '@/interface/system/user';
 import type { TypeEditUserPorps } from './components/EditUser';
+import { ENUM_STORE_ACTION } from '@/enum/store';
 
-const query = [
-  { key: 'name', name: '用户名称', type: ENUM_COMMON.COMPONENT_TYPE.INPUT },
-  { key: 'account', name: '登陆账号', type: ENUM_COMMON.COMPONENT_TYPE.INPUT },
-  { key: 'phone', name: '联系电话', type: ENUM_COMMON.COMPONENT_TYPE.INPUT },
-  { key: 'time', name: '注册时间', type: ENUM_COMMON.COMPONENT_TYPE.TIME_SCOPE },
-  {
-    key: 'status',
-    name: '用户状态',
-    list: CONSTANT_COMMON.LIST_STATUS,
-    type: ENUM_COMMON.COMPONENT_TYPE.SELECT
-  },
-];
+interface TypeQueryUserList extends TypeSystemUser.QueryList {
+  time?: number[];
+};
 
 /**
  * @name User 用户管理
  */
 const User = () => {
 
-  const [search] = Form.useForm<TypeSystemUser.QueryList & TypeCommon.QueryDefaulsParam>();
+  const store = useStore();
+  const actions = useActions();
+
+  const { DEPARTMENT } = store.dictionary;
+
+  const [search] = Form.useForm<TypeQueryUserList>();
 
   const [editParam, setEditParam] = useState<Omit<TypeEditUserPorps, 'onClose'>>({ visible: false });
 
@@ -93,9 +89,24 @@ const User = () => {
     });
   };
 
-  useEffect(() => {
-    initializa();
-  }, [initializa]);
+  const query = useMemo(() => [
+    { key: 'name', name: '用户名称', type: ENUM_COMMON.COMPONENT_TYPE.INPUT },
+    { key: 'account', name: '登陆账号', type: ENUM_COMMON.COMPONENT_TYPE.INPUT },
+    { key: 'phone', name: '联系电话', type: ENUM_COMMON.COMPONENT_TYPE.INPUT },
+    {
+      key: 'departmentId',
+      name: '所属部门',
+      type: ENUM_COMMON.COMPONENT_TYPE.SELECT,
+      list: DEPARTMENT?.list
+    },
+    {
+      key: 'status',
+      name: '用户状态',
+      list: CONSTANT_COMMON.LIST_STATUS,
+      type: ENUM_COMMON.COMPONENT_TYPE.SELECT
+    },
+    { key: 'time', name: '注册时间', type: ENUM_COMMON.COMPONENT_TYPE.TIME_SCOPE },
+  ], [DEPARTMENT])
 
   const columns = [
     { title: '用户名称', key: 'name', dataIndex: 'name' },
@@ -129,6 +140,15 @@ const User = () => {
       }
     }
   ];
+
+  useEffect(() => {
+    actions.getDictionaries(ENUM_STORE_ACTION.DICTIONARIES.ROLE);
+    actions.getDictionaries(ENUM_STORE_ACTION.DICTIONARIES.DEPARTMENT);
+  }, [actions]);
+
+  useEffect(() => {
+    initializa();
+  }, [initializa]);
 
   return (
     <Card title='用户管理'>

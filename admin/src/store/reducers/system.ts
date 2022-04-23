@@ -2,16 +2,16 @@ import { isVoid } from "@/utils";
 import { ENUM_STORE_ACTION } from "@/enum/store";
 import { SYSTEM_NAV_STATUS_KEY } from "@/config/system";
 
-import type { TypeStoreSystemModule } from "@/interface/store";
+import type { TypeStoreSystemModule } from "@/interface/redux/system";
 
-const SYSTEM_DEFAULT = {
+const DEFAULT_SYSTEM = {
   [SYSTEM_NAV_STATUS_KEY]: JSON.parse(
     localStorage.getItem(SYSTEM_NAV_STATUS_KEY) || "false",
   ),
 };
 
 const systemHandle: TypeStoreSystemModule.Reducers = (
-  state = SYSTEM_DEFAULT,
+  state = DEFAULT_SYSTEM,
   action,
 ) => {
   switch (action.type) {

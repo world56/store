@@ -4,4 +4,4 @@ export const REQUEST_TIMEOUT = 1000 * 30;
 
 export const REQUEST_PREFIX = 'http://127.0.0.1:3030/';
 
-export const ICON_PATH = '//at.alicdn.com/t/font_2832355_524fepozfj8.js';
+export const ICON_PATH = '//at.alicdn.com/t/font_2832355_r4wbmlgw7w8.js';

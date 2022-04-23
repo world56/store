@@ -3,11 +3,14 @@ import Cookie from "js-cookie";
 import { TOKEN_KEY } from "@/config/user";
 import { ENUM_STORE_ACTION } from "@/enum/store";
 
-import type { TypeStoreUserModule } from "@/interface/store";
+import type { TypeStoreUserModule } from "@/interface/redux/user";
 
-const USER_DEFAULT = {};
+const DEFAULT_USER = {};
 
-const userHandle: TypeStoreUserModule.Reducers = (state = USER_DEFAULT, action) => {
+const userHandle: TypeStoreUserModule.Reducers = (
+  state = DEFAULT_USER,
+  action,
+) => {
   switch (action.type) {
     case ENUM_STORE_ACTION.LOGIN.SET_USER_INFO:
       const { payload } = action;

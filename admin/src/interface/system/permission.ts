@@ -17,7 +17,6 @@ export namespace TypeSystemPermission {
    */
   export interface DTO extends TypeCommon.DTO {
     code: string;
-    parentId: number;
     type: ENUM_SYSTEM.PERMISSION_TYPE;
   }
 

@@ -8,6 +8,10 @@ import type { TypeSystemPermission } from "@/interface/system/permission";
 import type { TypeSystemDepartment } from "@/interface/system/department";
 
 /**
+ * -------------------------用户管理-------------------------------------
+ */
+
+/**
  * @name getUserList 用户管理-获取用户列表
  */
 export function getUserList(params: TypeSystemUser.QueryList) {
@@ -18,6 +22,15 @@ export function getUserList(params: TypeSystemUser.QueryList) {
       params,
     },
   );
+}
+
+/**
+ * @name getAllAdminUserList 用户管理-获取用户列表
+ */
+export function getAllAdminUserList() {
+  return request<TypeSystemUser.DTO[]>("system/user/allAdminUser", {
+    method: ENUM_HTTP.REQUEST_MODE.GET,
+  });
 }
 
 /**
@@ -79,6 +92,10 @@ export function freezeAdminUser(data: TypeSystemUser.FreezeStatusChange) {
     data,
   });
 }
+
+/**
+ * -------------------------角色管理-------------------------------------
+ */
 
 /**
  * @name getRoleList 角色管理-获取角色列表
@@ -153,6 +170,10 @@ export function checkRoleField(params: Record<string, string | number | void>) {
 }
 
 /**
+ * -------------------------权限管理-------------------------------------
+ */
+
+/**
  * @name getRoleList 权限管理-获取权限列表
  */
 export function getPermissionList(params: TypeSystemPermission.QueryList) {
@@ -225,14 +246,76 @@ export function getPermissionTree() {
 }
 
 /**
+ * -------------------------部门管理-------------------------------------
+ */
+
+/**
  * @name getDepartmentList 部门管理-获取部门列表
  */
 export function getDepartmentList(params: TypeSystemDepartment.QueryList) {
   return request<TypeCommon.ServiceReturn<TypeSystemDepartment.DTO[]>>(
-    "system/department",
+    "system/department/list",
     {
       method: ENUM_HTTP.REQUEST_MODE.GET,
       params,
     },
   );
+}
+
+/**
+ * @name getAllDepartmentList 部门管理-获取全部部门列表
+ */
+export function getAllDepartmentList() {
+  return request<TypeSystemDepartment.DTO[]>(
+    "system/department/allDepartment",
+    {
+      method: ENUM_HTTP.REQUEST_MODE.GET,
+    },
+  );
+}
+
+/**
+ * @name insertDepartment 部门管理-新增部门
+ */
+export function insertDepartment(data: TypeSystemDepartment.DTO) {
+  return request<TypeCommon.ServiceReturn<TypeSystemDepartment.DTO[]>>(
+    "system/department/insert",
+    {
+      method: ENUM_HTTP.REQUEST_MODE.POST,
+      data,
+    },
+  );
+}
+
+/**
+ * @name updateDepartment 部门管理-编辑部门
+ */
+export function updateDepartment(data: TypeSystemDepartment.DTO) {
+  return request<TypeCommon.ServiceReturn<TypeSystemDepartment.DTO[]>>(
+    "system/department/update",
+    {
+      method: ENUM_HTTP.REQUEST_MODE.POST,
+      data,
+    },
+  );
+}
+
+/**
+ * @name getDepartmentDetails 部门管理-获取部门详情
+ */
+export function getDepartmentDetails(data: TypeCommon.DatabaseMainParameter) {
+  return request<TypeSystemDepartment.DTO>("system/department/details", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
+}
+
+/**
+ * @name removeDepartment 部门管理-删除部门
+ */
+export function removeDepartment(data: TypeCommon.DatabaseMainParameter) {
+  return request("system/department/remove", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
 }

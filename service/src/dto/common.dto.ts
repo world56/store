@@ -37,6 +37,16 @@ export class CommonDTO extends PartialType(PrimaryKeyDTO) {
   status?: number;
 
   /**
+   * @param parentId 所属模块
+   */
+  @ApiProperty({
+    description: '所属模块',
+  })
+  @IsOptional()
+  @IsInt()
+  parentId?: number;
+
+  /**
    * @param remark 备注
    */
   @ApiProperty({

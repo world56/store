@@ -26,7 +26,6 @@ const Register = () => {
 
   async function onSumbit() {
     const values = await form.validateFields();
-    console.log('@-values', values);
     const key = await getPubilcKey();
     values.password = encryption(key, values.password);
     await register(values);

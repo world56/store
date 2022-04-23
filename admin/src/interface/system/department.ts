@@ -7,9 +7,7 @@ export namespace TypeSystemDepartment {
   /**
    * @name DTO 部门基本信息
    */
-  export interface DTO extends TypeCommon.DTO {
-    parentId?: number;
-  }
+  export interface DTO extends TypeCommon.DTO {}
 
   /**
    * @name QueryList 查询部门列表

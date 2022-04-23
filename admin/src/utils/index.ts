@@ -21,10 +21,10 @@ export function timestampToTime(timestamp?: number): string {
 }
 
 /**
- * @name permissionToTree 生成权限树
+ * @name listToTree 生成树
  * @param list service data
  */
- export function permissionToTree(
+export function listToTree(
   list: TypeSystemPermission.DTO[] = [],
   parentId = 0,
   id?: number,
@@ -32,10 +32,26 @@ export function timestampToTime(timestamp?: number): string {
   let parentObj: TypeCommon.GenericObject<TypeSystemPermission.InfoTree> = {};
   list.forEach((o) => (parentObj[o.id] = o));
   return list
-    .filter((v) => (parentId ? v.parentId === parentId : !parentObj[v.parentId]))
+    .filter((v) =>
+      parentId ? v.parentId === parentId : !parentObj[v.parentId],
+    )
     .map((o) => ({
       ...parentObj[o.id],
       disabled: o.id === id,
-      children: permissionToTree(list, o.id, id),
+      children: listToTree(list, o.id, id),
     }));
+}
+
+/**
+ * @name dataToDictionaries 转成字典结构
+ */
+export function dataToDictionaries<
+  T extends Pick<TypeCommon.DTO, "id" | "parentId" | "name">,
+>(data: T[] = []) {
+  const obj: TypeCommon.GenericObject = {};
+  const list = data.map((v) => {
+    obj[v.id] = v.name;
+    return { key: v.id, value: v.name, parentId: v.parentId };
+  });
+  return { obj, list };
 }

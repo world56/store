@@ -16,7 +16,8 @@ import { PickType, ApiProperty } from '@nestjs/swagger';
 export class PermissionDTO extends PickType(CommonDTO, [
   'id',
   'status',
-  'remark'
+  'parentId',
+  'remark',
 ] as const) {
   /**
    * @param name 权限名
@@ -39,21 +40,10 @@ export class PermissionDTO extends PickType(CommonDTO, [
   code: string;
 
   /**
-   * @param parentId 所属模块
-   */
-  @ApiProperty({
-    description: '所属模块',
-  })
-  @IsOptional()
-  @IsInt()
-  parentId?: number;
-
-  /**
    * @param type 权限类型
    */
   @Type(() => Number)
   @IsInt()
   @IsEnum(ENUM_SYSTEM.PERMISSION_TYPE)
   type: number;
-
 }

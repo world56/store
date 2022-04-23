@@ -91,8 +91,8 @@ const EditRole: React.FC<TypeEditRoleProps> = ({
           <Switch />
         </Form.Item>
 
-        <Form.Item label='简介' name='remark'>
-          <Input.TextArea placeholder='请输入角色简介' allowClear />
+        <Form.Item label='备注' name='remark'>
+          <Input.TextArea placeholder='请输入角色备注' allowClear />
         </Form.Item>
 
         <Form.Item label='权限分配' name='permissionId'>

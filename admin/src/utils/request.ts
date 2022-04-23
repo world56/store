@@ -11,9 +11,22 @@ import { CONSTANT_HTTP } from "@/constant/http";
 
 import type { Response } from "express";
 import type { ResponseError } from "umi-request";
-import type { TypeCommon } from "@/interface/common";
 
-type Res = Response<TypeCommon.Gateway<unknown>>;
+/**
+ * @name Gateway 网关
+ * @param {number} code 请求状态CODE
+ * @param {string} message 返回的消息
+ * @param {boolean | void} 接口状态
+ * @param {unknown | void} content as T 返回的业务数据
+ */
+export interface Gateway<T> {
+  content: T;
+  readonly message?: string;
+  readonly success: boolean;
+  readonly code: ENUM_HTTP.HTTP_CODE;
+}
+
+type Res = Response<Gateway<unknown>>;
 
 async function errorHandler(res: ResponseError): Promise<Res> {
   return Promise.reject(res.response);

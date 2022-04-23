@@ -41,7 +41,8 @@ export namespace TypeSystemUser {
       TypeCommon.DTO,
       Record<"token" | "isSuper", string> {
     email?: string;
-    role?: TypeSystemRole.DTO[] | string[];
+    role?: number[];
+    deps?: number[];
   }
 
   /**
@@ -49,7 +50,9 @@ export namespace TypeSystemUser {
    */
   export interface QueryList
     extends TypeCommon.PageTurning,
-      Omit<DTO, "token" | "isSuper"> {}
+      Omit<DTO, "token" | "isSuper"> {
+    departmentId: number;
+  }
 
   /**
    * @name FreezeStatusChange 用户账号状态改变

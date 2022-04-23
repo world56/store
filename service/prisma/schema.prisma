@@ -93,14 +93,22 @@ model RelAdminUserRole {
 model Department {
   id       Int     @id @default(autoincrement())
   name     String  @unique @db.VarChar(15)
-  status   Int     @default(1) @db.Int() // 状态
   remark   String? @db.VarChar(255) // 备注
   parentId Int?    @map("parent_id") // 所属部门
 
   @@index([id])
   @@index([name])
-  @@index([status])
   @@index([parentId])
-
   @@map("department")
+}
+
+model RelDepartmentOnAdminUser {
+  id           Int @id() @default(autoincrement())
+  departmentId Int @map("department_id") @db.Int()
+  adminUserId  Int @map("admin_user_id") @db.Int()
+
+  @@unique([departmentId,adminUserId])
+  @@index([adminUserId])
+  @@index([departmentId])
+  @@map("rel_department_admin_user")
 }
