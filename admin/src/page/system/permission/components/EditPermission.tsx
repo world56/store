@@ -1,16 +1,16 @@
 import {
   insertPermission,
   updatePermission,
-  getPermissionTree,
+  getPermissionList,
   getPermissionDetails,
   checkPermissionField,
 } from '@/api/system';
 import { memo } from 'react';
 import Modal from '@/layout/Modal';
-import { useGetDetails } from '@/hooks';
-import { listToTree } from '../../../../utils';
-import { FormMajorKey } from '@/components/Form';
+import { listToTree } from '@/utils';
+import { FormHideKey } from '@/components/Form';
 import { Switch } from '@/components/Formatting';
+import { useGetDetails, useStore } from '@/hooks';
 import { Form, Input, Radio, message, TreeSelect } from 'antd';
 
 import { ENUM_SYSTEM } from '@/enum/system';
@@ -18,18 +18,15 @@ import { ENUM_COMMON } from '@/enum/common';
 import { DB_PRIMARY_KEY } from '@/config/db';
 import { CONSTANT_REG } from '@/constant/reg';
 import { CONFIG_ANTD_COMP } from '@/config/format';
-import { CONSTANT_SYSTEM } from '@/constant/system';
 
 import type { TypeCommon } from '@/interface/common';
 import type { TypeSystemPermission } from '@/interface/system/permission';
 
-/** 
- * @param id 查询ID
- * @param visible 控制开启、关闭弹窗
- * @param onClose 关闭窗口回调
- */
+
 export interface TypeEditPermissionProps extends Partial<TypeCommon.DatabaseMainParameter> {
+  /** @param visible 控制开启、关闭弹窗 */
   visible: boolean;
+  /** @name onClose 关闭窗口回调 */
   onClose(): void;
 };
 
@@ -47,6 +44,8 @@ const EditPermission: React.FC<TypeEditPermissionProps> = ({
   visible,
 }) => {
 
+  const { dictionaries: { PERMISSION_TYPE } } = useStore();
+
   const [form] = Form.useForm<TypeSystemPermission.DTO>();
 
   const { loading } = useGetDetails(async () => {
@@ -55,7 +54,7 @@ const EditPermission: React.FC<TypeEditPermissionProps> = ({
   }, [id, form]);
 
   const { value: treeData, loading: treeLoad } = useGetDetails(async () => {
-    const res = await getPermissionTree();
+    const res = await getPermissionList({ status: ENUM_COMMON.STATUS.ACTIVATE });
     return listToTree(res, 0, id);
   }, [visible, id]);
 
@@ -86,7 +85,7 @@ const EditPermission: React.FC<TypeEditPermissionProps> = ({
       title={id ? '编辑权限' : '新增权限'}>
       <Form form={form} {...formStyle}>
 
-        <FormMajorKey />
+        <FormHideKey />
 
         <Form.Item
           name='name'
@@ -123,7 +122,7 @@ const EditPermission: React.FC<TypeEditPermissionProps> = ({
           name='type'
           initialValue={ENUM_SYSTEM.PERMISSION_TYPE.PAGE}>
           <Radio.Group>
-            {CONSTANT_SYSTEM.LIST_PERMISSION.map(v => <Radio key={v.key} value={v.key}>{v.value}</Radio>)}
+            {PERMISSION_TYPE?.LIST.map(v => <Radio key={v.key} value={v.key}>{v.value}</Radio>)}
           </Radio.Group>
         </Form.Item>
 

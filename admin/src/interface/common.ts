@@ -2,8 +2,6 @@ import React from "react";
 
 import { ENUM_COMMON } from "@/enum/common";
 
-import type { Reducer } from "redux";
-
 /**
  * @name TypeCommon 公共接口
  */
@@ -11,7 +9,7 @@ export namespace TypeCommon {
   /**
    * @name GenericObject 通用对象
    */
-  export type GenericObject<T = React.Key> = Record<string, T>;
+  export type GenericObject<T = React.Key> = Record<React.Key, T>;
 
   /**
    * @name DefaultKey 统一约束定义的枚举键值对
@@ -72,20 +70,4 @@ export namespace TypeCommon {
     extends Record<"key" | "value", React.Key> {
     children: StandardTreeField[];
   }
-
-  /**
-   * @name StoreAction 状态机Actions
-   */
-  export type StoreAction<A extends string, P = void> = {
-    type: A;
-    payload: P;
-  };
-
-  /**
-   * @name StoreReducers 状态机容器
-   */
-  export type StoreReducers<S, E extends string, P = S> = Reducer<
-    Partial<S>,
-    { payload?: P; type: `${E}` }
-  >;
 }

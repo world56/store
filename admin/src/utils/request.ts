@@ -40,7 +40,7 @@ const request = extend({
 
 request.interceptors.request.use(
   (url, options) => {
-    const headers = { Authorization: Cookies.get(TOKEN_KEY) as string };
+    const headers = { Authorization: Cookies.get(TOKEN_KEY)! };
     return { url, options: { ...options, headers } };
   },
   { global: true },

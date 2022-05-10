@@ -2,9 +2,9 @@ import Btn from '../Btn';
 import { Popconfirm } from 'antd';
 
 interface TypeBtnEditDelProps<T = unknown> {
-  /** @param onEdit 编辑按钮 值为void 不显示该按钮 */
+  /** @name onEdit 编辑按钮 值为void 不显示该按钮 */
   onEdit?(val: T): void;
-  /** @param onRemove 删除按钮 值为void 不显示该按钮 */
+  /** @name onRemove 删除按钮 值为void 不显示该按钮 */
   onRemove?(val: T): void;
   /** @param value 传递给onEdit、onRemove方法的参数 */
   value: T;
@@ -21,7 +21,7 @@ const BtnEditDel: React.FC<TypeBtnEditDelProps> = ({
 }) => (
   <>
     {onEdit ? <Btn onClick={() => onEdit(value)}>编辑</Btn> : null}
-    {onRemove ? <Popconfirm title='确定删除该角色？删除后无法恢复！' onConfirm={() => onRemove(value)}>
+    {onRemove ? <Popconfirm title='确定删除？删除后无法恢复！' onConfirm={() => onRemove(value)}>
       <Btn type='danger'>删除</Btn>
     </Popconfirm> : null}
   </>

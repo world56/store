@@ -58,3 +58,13 @@ export function superAdminStatus() {
     method: ENUM_HTTP.REQUEST_MODE.GET,
   });
 }
+
+/**
+ * @name updateUserPwd 修改用户密码
+ */
+export function updateUserPwd(data:TypeSystemUser.EditUserPassword) {
+  return request<boolean>("auth/updatePwd", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data
+  });
+}

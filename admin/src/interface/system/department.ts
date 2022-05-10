@@ -13,4 +13,9 @@ export namespace TypeSystemDepartment {
    * @name QueryList 查询部门列表
    */
   export interface QueryList extends Partial<DTO>, TypeCommon.PageTurning {}
+
+  /**
+   * @name CheckFields 校验字段
+   */
+  export interface CheckFields extends Pick<DTO, "id" | "name"> {}
 }

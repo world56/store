@@ -1,4 +1,4 @@
-import { CONSTANT_COMMON } from "@/constant/common";
+import { CONSTANT_SEARCH } from "./constant";
 
 import type { TypeCommon } from "@/interface/common";
 import type { Columns, ColumnsList, CascaderList } from ".";
@@ -34,7 +34,7 @@ export function filterSelectArray(
 export function filterPlaceholder(value: Columns) {
   return value.placeholder
     ? value.placeholder
-    : `${CONSTANT_COMMON.COMPONENT_PLACEHOLDER[value.type]}${value.name}`;
+    : `${CONSTANT_SEARCH.COMPONENT_PLACEHOLDER[value.type]}${value.name}`;
 }
 
 /**

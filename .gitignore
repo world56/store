@@ -13,6 +13,7 @@ admin/dist/
 
 service/node_modules/
 service/dist/
+service/resource/
 
 store-web/node_modules/
 store-web/.next/

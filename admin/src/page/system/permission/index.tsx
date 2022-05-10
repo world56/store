@@ -1,6 +1,7 @@
 import { useRequest } from 'ahooks';
+import { useStore } from '@/hooks';
+import { listToTree } from '@/utils';
 import Search from '@/components/Search';
-import { usePageTurning } from '@/hooks';
 import { BtnEditDel } from '@/layout/Table';
 import StatusColor from '@/layout/StatusColor';
 import { KeyOutlined } from '@ant-design/icons';
@@ -12,19 +13,18 @@ import { getPermissionList, removePermission } from '@/api/system';
 import { ENUM_SYSTEM } from '@/enum/system';
 import { ENUM_COMMON } from '@/enum/common';
 import { DB_PRIMARY_KEY } from '@/config/db';
-import { CONSTANT_SYSTEM } from '@/constant/system';
 import { CONSTANT_COMMON } from '@/constant/common';
 
 import type { TypeSystemPermission } from '@/interface/system/permission';
 
 const query = [
-  { key: 'code', name: '权限Key', type: ENUM_COMMON.COMPONENT_TYPE.INPUT },
-  { key: 'name', name: '权限名称', type: ENUM_COMMON.COMPONENT_TYPE.INPUT },
+  { key: 'code', name: '权限Key', type: Search.ENUM.COMP_TYPE.INPUT },
+  { key: 'name', name: '权限名称', type: Search.ENUM.COMP_TYPE.INPUT },
   {
     key: 'status',
     name: '权限状态',
-    list: CONSTANT_COMMON.LIST_STATUS,
-    type: ENUM_COMMON.COMPONENT_TYPE.SELECT
+    list: CONSTANT_COMMON.STATUS.LIST,
+    type: Search.ENUM.COMP_TYPE.SELECT
   },
 ];
 
@@ -36,18 +36,14 @@ const Permission = () => {
   const [id, setId] = useState<number>();
   const [window, setWindow] = useState(false);
 
-  const { data, loading, run } = useRequest(getPermissionList, { manual: true });
-  const [search] = Form.useForm<TypeSystemPermission.QueryList>();
+  const { dictionaries: { PERMISSION_TYPE } } = useStore();
 
-  const pagination = usePageTurning(data?.count);
-  const { pageSize, currentPage } = pagination;
-
-  const initialize = useCallback(async () => {
+  const { data, loading, run: initialize } = useRequest(async () => {
     const param = await search.validateFields();
-    param.pageSize = pageSize;
-    param.currentPage = currentPage;
-    run(param);
-  }, [run, search, pageSize, currentPage]);
+    const list = await getPermissionList(param);
+    return listToTree(list);
+  }, { manual: true });
+  const [search] = Form.useForm<TypeSystemPermission.QueryList>();
 
   const onClose = useCallback((init?: boolean) => {
     init || initialize();
@@ -67,13 +63,14 @@ const Permission = () => {
   };
 
   const columns = [
+    { title: 'id', key: 'id', dataIndex: 'id' },
     { title: '权限名称', key: 'name', dataIndex: 'name' },
     { title: '权限Key', key: 'code', dataIndex: 'code' },
     {
       title: '类型',
       key: 'type',
       dataIndex: 'type',
-      render: (key: ENUM_SYSTEM.PERMISSION_TYPE) => CONSTANT_SYSTEM.K_V_PERMISSION[key]
+      render: (key: ENUM_SYSTEM.PERMISSION_TYPE) => PERMISSION_TYPE?.OBJ[key]
     },
     {
       title: '当前状态',
@@ -85,8 +82,10 @@ const Permission = () => {
     {
       title: '操作',
       key: DB_PRIMARY_KEY,
-      dataIndex: DB_PRIMARY_KEY,
-      render: (_id: string) => <BtnEditDel value={_id} onEdit={edit} onRemove={remove} />
+      render: (row: TypeSystemPermission.DTO) => {
+        const showEdit = row.fStatus ? edit : undefined;
+        return <BtnEditDel value={row.id} onEdit={showEdit} onRemove={remove} />
+      }
     },
   ];
 
@@ -104,9 +103,9 @@ const Permission = () => {
       <Table
         columns={columns}
         loading={loading}
+        pagination={false}
         rowKey={DB_PRIMARY_KEY}
-        pagination={pagination}
-        dataSource={data?.list} />
+        dataSource={data} />
       <EditPermission id={id} visible={window} onClose={onClose} />
     </Card>
   );

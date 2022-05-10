@@ -1,20 +1,32 @@
+import combineReducers from "@/store/reducers";
+
+import type { Reducer } from "redux";
 import type { TypeCommon } from "../common";
-import type { TypeStoreUserModule } from "./user";
-import type { TypeStoreSystemModule } from "./system";
-import type { TypeStoreDictionary } from "./dictionary";
 
 /**
  * @name TypeReduxStatus redux状态机
  */
 export namespace TypeReduxStatus {
-  export interface Store {
-    user: TypeStoreUserModule.Store;
-    system: TypeStoreSystemModule.Store;
-    dictionary: TypeStoreDictionary.Store;
-  }
+  export type Store = ReturnType<typeof combineReducers>;
 
   export interface Dictionaries {
-    obj: TypeCommon.GenericObject;
-    list: TypeCommon.DefaultKey[] & { parentId?: number };
+    readonly OBJ: Readonly<TypeCommon.GenericObject>;
+    readonly LIST: Readonly<TypeCommon.DefaultKey[] & { parentId?: number }>;
   }
+
+  /**
+   * @name Action 状态机Actions
+   */
+  export type Action<A extends string, P = void> = {
+    type: A;
+    payload: P;
+  };
+
+  /**
+   * @name Reducers 状态机容器
+   */
+  export type Reducers<S, E extends string, P = S> = Reducer<
+    Partial<S>,
+    { payload?: P; type: `${E}` }
+  >;
 }

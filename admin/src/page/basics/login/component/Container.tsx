@@ -2,7 +2,6 @@ import styles from '../index.styl';
 import Icon from '@/resource/icon.png';
 import GayHubIcon from '@/resource/gayHub.png';
 
-
 /**
  * @name Container 登录页容器
  */

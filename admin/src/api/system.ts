@@ -176,14 +176,13 @@ export function checkRoleField(params: Record<string, string | number | void>) {
 /**
  * @name getRoleList 权限管理-获取权限列表
  */
-export function getPermissionList(params: TypeSystemPermission.QueryList) {
-  return request<TypeCommon.ServiceReturn<TypeSystemPermission.DTO>>(
-    "system/permission/list",
-    {
-      method: ENUM_HTTP.REQUEST_MODE.GET,
-      params,
-    },
-  );
+export function getPermissionList(
+  params: Partial<TypeSystemPermission.QueryList>,
+) {
+  return request<TypeSystemPermission.DTO[]>("system/permission/list", {
+    method: ENUM_HTTP.REQUEST_MODE.GET,
+    params,
+  });
 }
 
 /**
@@ -237,15 +236,6 @@ export function getPermissionDetails(params: TypeCommon.DatabaseMainParameter) {
 }
 
 /**
- * @name getPermissionTree 权限管理-获取权限树
- */
-export function getPermissionTree() {
-  return request<TypeSystemPermission.DTO[]>("system/permission/findAll", {
-    method: ENUM_HTTP.REQUEST_MODE.GET,
-  });
-}
-
-/**
  * -------------------------部门管理-------------------------------------
  */
 
@@ -272,6 +262,16 @@ export function getAllDepartmentList() {
       method: ENUM_HTTP.REQUEST_MODE.GET,
     },
   );
+}
+
+/**
+ * @name checkDepartmentField 权限管理-检查字段是否重复
+ */
+export function checkDepartmentField(params: TypeSystemDepartment.CheckFields) {
+  return request("system/department/check", {
+    method: ENUM_HTTP.REQUEST_MODE.GET,
+    params,
+  });
 }
 
 /**

@@ -2,7 +2,9 @@ import dayjs from "dayjs";
 import { CONFIG_TIME_FORMAT } from "@/config/format";
 
 import type { TypeCommon } from "@/interface/common";
-import type { TypeSystemPermission } from "@/interface/system/permission";
+
+interface TypeDefaultConversionFields
+  extends Pick<TypeCommon.DTO, "id" | "name" | "parentId"> {}
 
 /**
  * @name isVoid 判断值是否为void
@@ -24,12 +26,10 @@ export function timestampToTime(timestamp?: number): string {
  * @name listToTree 生成树
  * @param list service data
  */
-export function listToTree(
-  list: TypeSystemPermission.DTO[] = [],
-  parentId = 0,
-  id?: number,
-): TypeSystemPermission.DTO[] {
-  let parentObj: TypeCommon.GenericObject<TypeSystemPermission.InfoTree> = {};
+export function listToTree<
+  T extends TypeDefaultConversionFields = TypeDefaultConversionFields,
+>(list: T[] = [], parentId = 0, id?: number): T[] {
+  let parentObj: TypeCommon.GenericObject<T> = {};
   list.forEach((o) => (parentObj[o.id] = o));
   return list
     .filter((v) =>
@@ -46,12 +46,12 @@ export function listToTree(
  * @name dataToDictionaries 转成字典结构
  */
 export function dataToDictionaries<
-  T extends Pick<TypeCommon.DTO, "id" | "parentId" | "name">,
+  T extends TypeDefaultConversionFields = TypeDefaultConversionFields,
 >(data: T[] = []) {
-  const obj: TypeCommon.GenericObject = {};
-  const list = data.map((v) => {
-    obj[v.id] = v.name;
+  const OBJ: TypeCommon.GenericObject = {};
+  const LIST = data.map((v) => {
+    OBJ[v.id] = v.name;
     return { key: v.id, value: v.name, parentId: v.parentId };
   });
-  return { obj, list };
+  return { OBJ, LIST };
 }

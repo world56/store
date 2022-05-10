@@ -9,7 +9,6 @@ import { getDepartmentList, removeDepartment } from '@/api/system';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { type TypeSystemDepartment } from '@/interface/system/department';
 
-import { ENUM_COMMON } from '@/enum/common';
 import { DB_PRIMARY_KEY } from '@/config/db';
 
 
@@ -34,7 +33,7 @@ const Department = () => {
   }, [search, run, pageSize, currentPage]);
 
   function editDep(id?: number) {
-    setId(id)
+    setId(id);
     setVisible(b => !b);
   };
 
@@ -51,7 +50,7 @@ const Department = () => {
   }
 
   const query = useMemo(() => (
-    [{ key: 'name', name: '部门名称', type: ENUM_COMMON.COMPONENT_TYPE.INPUT }]
+    [{ key: 'name', name: '部门名称', type: Search.ENUM.COMP_TYPE.INPUT }]
   ), []);
 
   const columns = [

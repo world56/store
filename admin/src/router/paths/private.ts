@@ -44,10 +44,10 @@ export default [
     component: Middleware,
     routes: [
       {
-        name: "identification",
-        title: "仓储标示",
-        path: "/warehouse/identification",
-        component: lazy(() => import("@/page/warehouse/identification")),
+        name: "arrangement",
+        title: "货仓位置编排",
+        path: "/warehouse/arrangement",
+        component: lazy(() => import("@/page/warehouse/arrangement")),
       },
     ],
   },

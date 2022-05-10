@@ -1,2 +1,1 @@
-export { default as FormMajorKey } from "./FormMajorKey";
-export { default as FormEditUserInfo } from "./FormEditUserInfo";
+export { default as FormHideKey } from "./FormHideKey";

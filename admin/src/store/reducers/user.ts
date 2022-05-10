@@ -3,9 +3,10 @@ import Cookie from "js-cookie";
 import { TOKEN_KEY } from "@/config/user";
 import { ENUM_STORE_ACTION } from "@/enum/store";
 
+import type { TypeSystemUser } from "@/interface/system/user";
 import type { TypeStoreUserModule } from "@/interface/redux/user";
 
-const DEFAULT_USER = {};
+export const DEFAULT_USER: Partial<TypeSystemUser.DTO> = {};
 
 const userHandle: TypeStoreUserModule.Reducers = (
   state = DEFAULT_USER,

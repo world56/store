@@ -5,15 +5,14 @@ import EditRole from './components/EditRole';
 import StatusColor from '@/layout/StatusColor';
 import { UserAddOutlined } from '@ant-design/icons';
 import { timestampToTime, listToTree } from '@/utils';
-import { usePageTurning, useGetDetails } from '@/hooks';
 import { Form, Card, Table, Button, message } from 'antd';
+import { usePageTurning, useGetDetails, useStore } from '@/hooks';
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { getRoleList, removeRole, getPermissionTree } from '@/api/system';
+import { getRoleList, removeRole, getPermissionList } from '@/api/system';
 
 import { ENUM_COMMON } from '@/enum/common';
 import { DB_PRIMARY_KEY } from '@/config/db';
 import { CONFIG_ANTD_COMP } from '@/config/format';
-import { CONSTANT_COMMON } from '@/constant/common';
 
 import type { TypeSystemRole } from '@/interface/system/role';
 
@@ -25,6 +24,7 @@ const Role = () => {
 
   const [id, setId] = useState<number>();
   const [window, setWindow] = useState(false);
+  const { dictionaries: { STATUS } } = useStore()
 
   const { data, loading, run } = useRequest(getRoleList, { manual: true });
   const [search] = Form.useForm<TypeSystemRole.QueryList>();
@@ -33,7 +33,8 @@ const Role = () => {
   const { pageSize, currentPage } = pagination;
 
   const { value: permissionTree } = useGetDetails(async () => {
-    return listToTree(await getPermissionTree());
+    const list = await getPermissionList({ status: ENUM_COMMON.STATUS.ACTIVATE });
+    return listToTree(list);
   }, [true]);
 
   const initialize = useCallback(async () => {
@@ -60,22 +61,22 @@ const Role = () => {
 
   const query = useMemo(() => (
     [
-      { key: 'name', name: '角色名称', type: ENUM_COMMON.COMPONENT_TYPE.INPUT },
+      { key: 'name', name: '角色名称', type: Search.ENUM.COMP_TYPE.INPUT },
       {
         key: 'permissionId',
         name: '权限关联',
         list: permissionTree as [],
-        type: ENUM_COMMON.COMPONENT_TYPE.TREE_SELECT,
+        type: Search.ENUM.COMP_TYPE.TREE_SELECT,
         props: { fieldNames: CONFIG_ANTD_COMP.CASCADER_FIELD_PERMISSION }
       },
       {
         key: 'status',
         name: '角色状态',
-        list: CONSTANT_COMMON.LIST_STATUS,
-        type: ENUM_COMMON.COMPONENT_TYPE.SELECT
+        list: STATUS?.LIST,
+        type: Search.ENUM.COMP_TYPE.SELECT
       }
     ]
-  ), [permissionTree]);
+  ), [STATUS, permissionTree]);
 
   const columns = [
     { title: '角色名称', key: 'name', dataIndex: 'name' },

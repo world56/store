@@ -2,8 +2,8 @@ import { useRequest } from 'ahooks';
 import { Btn } from '@/layout/Table';
 import Search from '@/components/Search';
 import { timestampToTime } from '@/utils';
-import EditUser from './components/EditUser';
 import StatusColor from '@/layout/StatusColor';
+import EditUserInfo from '@/components/EditUserInfo';
 import { UsergroupAddOutlined } from '@ant-design/icons';
 import { useActions, usePageTurning, useStore } from '@/hooks';
 import { Card, Form, Table, Button, Modal, message } from 'antd';
@@ -13,11 +13,10 @@ import { getUserList, freezeAdminUser, resetAdminUserPwd } from '@/api/system';
 
 import { ENUM_COMMON } from '@/enum/common';
 import { DB_PRIMARY_KEY } from '@/config/db';
-import { CONSTANT_COMMON } from '@/constant/common';
+import { ENUM_STORE_ACTION } from '@/enum/store';
 
 import type { TypeSystemUser } from '@/interface/system/user';
-import type { TypeEditUserPorps } from './components/EditUser';
-import { ENUM_STORE_ACTION } from '@/enum/store';
+import { ENUM_SYSTEM } from '@/enum/system';
 
 interface TypeQueryUserList extends TypeSystemUser.QueryList {
   time?: number[];
@@ -28,14 +27,12 @@ interface TypeQueryUserList extends TypeSystemUser.QueryList {
  */
 const User = () => {
 
-  const store = useStore();
   const actions = useActions();
-
-  const { DEPARTMENT } = store.dictionary;
+  const { dictionaries: { DEPARTMENT, STATUS } } = useStore();
 
   const [search] = Form.useForm<TypeQueryUserList>();
 
-  const [editParam, setEditParam] = useState<Omit<TypeEditUserPorps, 'onClose'>>({ visible: false });
+  const [editParam, setEditParam] = useState({ visible: false });
 
   const { data, loading, run } = useRequest(getUserList, { manual: true });
   const pagination = usePageTurning(data?.count);
@@ -90,23 +87,23 @@ const User = () => {
   };
 
   const query = useMemo(() => [
-    { key: 'name', name: '用户名称', type: ENUM_COMMON.COMPONENT_TYPE.INPUT },
-    { key: 'account', name: '登陆账号', type: ENUM_COMMON.COMPONENT_TYPE.INPUT },
-    { key: 'phone', name: '联系电话', type: ENUM_COMMON.COMPONENT_TYPE.INPUT },
+    { key: 'name', name: '用户名称', type: Search.ENUM.COMP_TYPE.INPUT },
+    { key: 'account', name: '登陆账号', type: Search.ENUM.COMP_TYPE.INPUT },
+    { key: 'phone', name: '联系电话', type: Search.ENUM.COMP_TYPE.INPUT },
     {
       key: 'departmentId',
       name: '所属部门',
-      type: ENUM_COMMON.COMPONENT_TYPE.SELECT,
-      list: DEPARTMENT?.list
+      type: Search.ENUM.COMP_TYPE.SELECT,
+      list: DEPARTMENT?.LIST
     },
     {
       key: 'status',
       name: '用户状态',
-      list: CONSTANT_COMMON.LIST_STATUS,
-      type: ENUM_COMMON.COMPONENT_TYPE.SELECT
+      list: STATUS?.LIST,
+      type: Search.ENUM.COMP_TYPE.SELECT
     },
-    { key: 'time', name: '注册时间', type: ENUM_COMMON.COMPONENT_TYPE.TIME_SCOPE },
-  ], [DEPARTMENT])
+    { key: 'time', name: '注册时间', type: Search.ENUM.COMP_TYPE.TIME_SCOPE },
+  ], [DEPARTMENT, STATUS]);
 
   const columns = [
     { title: '用户名称', key: 'name', dataIndex: 'name' },
@@ -163,7 +160,10 @@ const User = () => {
         rowKey={DB_PRIMARY_KEY}
         pagination={pagination}
         dataSource={data?.list} />
-      <EditUser {...editParam} onClose={onChangeEdit} />
+      <EditUserInfo
+        {...editParam}
+        onClose={onChangeEdit}
+        type={ENUM_SYSTEM.EDIT_USER.ADMIN} />
     </Card>
   );
 };

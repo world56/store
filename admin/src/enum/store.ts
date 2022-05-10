@@ -3,7 +3,7 @@
  */
 export namespace ENUM_STORE_ACTION {
   /**
-   * @name LOGIN 登录类型
+   * @name LOGIN 登录
    */
   export enum LOGIN {
     SET_USER_INFO = "SET_USER_INFO",
@@ -13,14 +13,14 @@ export namespace ENUM_STORE_ACTION {
   }
 
   /**
-   * @name SYSTEM 系统类型
+   * @name SYSTEM 系统
    */
   export enum SYSTEM {
     SET_NAV_STATUS = "SET_NAV_STATUS",
   }
 
   /**
-   * @name DICTIONARIES 词典
+   * @name DICTIONARIES 获取词典 
    */
   export enum DICTIONARIES {
     QUERY = "QUERY",

@@ -19,7 +19,7 @@ const StatusColor: React.FC<StatusColorProps> = ({
   return (
     <span className={isSucess}>
       <Badge status={isSucess} />
-      {CONSTANT_COMMON.KEY_VALUE_STATUS[status]}
+      {CONSTANT_COMMON.STATUS.OBJ[status]}
     </span>
   );
 };

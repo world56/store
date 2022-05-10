@@ -4,7 +4,7 @@ import { SYSTEM_NAV_STATUS_KEY } from "@/config/system";
 
 import type { TypeStoreSystemModule } from "@/interface/redux/system";
 
-const DEFAULT_SYSTEM = {
+export const DEFAULT_SYSTEM = {
   [SYSTEM_NAV_STATUS_KEY]: JSON.parse(
     localStorage.getItem(SYSTEM_NAV_STATUS_KEY) || "false",
   ),

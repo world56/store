@@ -1,7 +1,4 @@
-import { ENUM_COMMON } from "@/enum/common";
-
 import type { TypeCommon } from "../common";
-import type { TypeSystemRole } from "./role";
 
 /**
  * @name TypeSystemUser 系统管理-用户
@@ -29,6 +26,7 @@ export namespace TypeSystemUser {
   /**
    * @name DTO 用户模块-基本信息
    * @param id     用户ID
+   * @param avatar  头像
    * @param token   用户token
    * @param isSuper 是否超管
    * @param role    权限角色
@@ -43,6 +41,7 @@ export namespace TypeSystemUser {
     email?: string;
     role?: number[];
     deps?: number[];
+    avatar?:string;
   }
 
   /**
@@ -58,4 +57,13 @@ export namespace TypeSystemUser {
    * @name FreezeStatusChange 用户账号状态改变
    */
   export interface FreezeStatusChange extends Pick<DTO, "id" | "status"> {}
+
+  /**
+   * @name EditUserPassword 修改用户密码
+   * @param password 旧密码
+   * @param newPassword 新密码
+   */
+  export interface EditUserPassword extends Pick<DTO, "id" | "password"> {
+    newPassword: string;
+  }
 }

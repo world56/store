@@ -1,8 +1,4 @@
-import {
-  getRoleSelectList,
-  getAllAdminUserList,
-  getAllDepartmentList,
-} from "@/api/system";
+import * as API_SYSTEM from "@/api/system";
 import { dataToDictionaries } from "@/utils";
 import * as DictionariesAction from "../action/dictionary";
 import { call, put, select, takeEvery } from "redux-saga/effects";
@@ -13,23 +9,30 @@ import type { TypeReduxStatus } from "@/interface/redux";
 import type { TypeStoreDictionary } from "@/interface/redux/dictionary";
 
 const REQUEST_API = {
-  [ENUM_STORE_ACTION.DICTIONARIES.ROLE]: getRoleSelectList,
-  [ENUM_STORE_ACTION.DICTIONARIES.ADMIN_USER]: getAllAdminUserList,
-  [ENUM_STORE_ACTION.DICTIONARIES.DEPARTMENT]: getAllDepartmentList,
+  [ENUM_STORE_ACTION.DICTIONARIES.ROLE]: API_SYSTEM.getRoleSelectList,
+  [ENUM_STORE_ACTION.DICTIONARIES.ADMIN_USER]: API_SYSTEM.getAllAdminUserList,
+  [ENUM_STORE_ACTION.DICTIONARIES.DEPARTMENT]: API_SYSTEM.getAllDepartmentList,
 };
 
 function* filterDictionaries(param: TypeStoreDictionary.ActionGetDic) {
+
   try {
-    const state: TypeStoreDictionary.Store = yield select((s) => s.dictionary);
-    if (!state[param.payload]?.list?.length) {
-      const data: TypeReduxStatus.Dictionaries = dataToDictionaries(
-        yield call(REQUEST_API[param.payload]),
+    if (REQUEST_API.propertyIsEnumerable(param.payload)) {
+      const state: ReturnType<TypeStoreDictionary.Reducers> = yield select(
+        (s) => s.dictionary,
       );
-      yield put(
-        DictionariesAction.setDictionaries({ data, type: param.payload }),
-      );
+      if (!state?.[param.payload]?.LIST?.length) {
+        const data: TypeReduxStatus.Dictionaries = dataToDictionaries(
+          yield call(REQUEST_API[param.payload]),
+        );
+        yield put(
+          DictionariesAction.setDictionaries({ data, type: param.payload }),
+        );
+      }
     }
-  } catch {}
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 export default function* SagaDictionaries() {

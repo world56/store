@@ -2,7 +2,7 @@ import { memo } from 'react';
 import Modal from '@/layout/Modal';
 import { useGetDetails } from '@/hooks';
 import { Form, Input, message } from 'antd';
-import { FormMajorKey } from '@/components/Form';
+import { FormHideKey } from '@/components/Form';
 import { Switch, Tree } from '@/components/Formatting';
 import { insertRole, updateRole, checkRoleField, getRoleDetails } from '@/api/system';
 
@@ -74,7 +74,7 @@ const EditRole: React.FC<TypeEditRoleProps> = ({
       onCancel={onCancel}>
       <Form form={form} {...formStyle}>
 
-        <FormMajorKey />
+        <FormHideKey />
 
         <Form.Item
           name='name'

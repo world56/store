@@ -1,10 +1,11 @@
 import { memo } from 'react';
 import Modal from '@/layout/Modal';
-import { FormMajorKey } from "@/components/Form";
+import { FormHideKey } from "@/components/Form";
 import { Form, Input, message, Select } from "antd";
 import { useActions, useGetDetails, useStore } from "@/hooks";
-import { getDepartmentDetails, insertDepartment, updateDepartment } from "@/api/system";
+import { checkDepartmentField, getDepartmentDetails, insertDepartment, updateDepartment } from "@/api/system";
 
+import { DB_PRIMARY_KEY } from '@/config/db';
 import { ENUM_STORE_ACTION } from '@/enum/store';
 
 import type { TypeCommon } from "@/interface/common";
@@ -17,7 +18,6 @@ interface TypeEditDepProps extends Partial<TypeCommon.DatabaseMainParameter> {
 };
 
 const { Option } = Select;
-// const rules = [{ required: true, message: '选项不得为空' }];
 const formStyle = { labelCol: { span: 4 }, wrapperCol: { span: 20 } };
 
 /**
@@ -25,8 +25,8 @@ const formStyle = { labelCol: { span: 4 }, wrapperCol: { span: 20 } };
  */
 const EditDep: React.FC<TypeEditDepProps> = ({ id, visible, onClose }) => {
 
-  const store = useStore();
   const actions = useActions();
+  const { dictionaries } = useStore();
   const [form] = Form.useForm<TypeSystemDepartment.DTO>();
 
   const { loading } = useGetDetails(async () => {
@@ -35,7 +35,7 @@ const EditDep: React.FC<TypeEditDepProps> = ({ id, visible, onClose }) => {
   }, [id, form]);
 
   useGetDetails(async () => {
-   return actions.getDictionaries(ENUM_STORE_ACTION.DICTIONARIES.ADMIN_USER);
+    return actions.getDictionaries(ENUM_STORE_ACTION.DICTIONARIES.ADMIN_USER);
   }, [visible]);
 
   async function onSumbit() {
@@ -51,6 +51,11 @@ const EditDep: React.FC<TypeEditDepProps> = ({ id, visible, onClose }) => {
     onClose();
   };
 
+  async function checkField(field: 'name', value: string) {
+    const bol = await checkDepartmentField({ [DB_PRIMARY_KEY]: id!, [field]: value });
+    return bol ? Promise.reject('该字符已被占用，请更换后重试') : bol;
+  };
+
   const title = id ? '编辑部门' : '新增部门';
 
   return (
@@ -62,12 +67,15 @@ const EditDep: React.FC<TypeEditDepProps> = ({ id, visible, onClose }) => {
       onCancel={onCancel}>
       <Form form={form} {...formStyle}>
 
-        <FormMajorKey />
+        <FormHideKey />
 
         <Form.Item
           name='name'
           label='部门名称'
-          rules={[{ required: true, message: '部门名称不得为空' }]}>
+          rules={[
+            { required: true, message: '部门名称不得为空' },
+            { validator: async (r, v: string) => checkField('name', v) }
+          ]}>
           <Input placeholder='请输入部门名称' allowClear />
         </Form.Item>
 
@@ -76,7 +84,7 @@ const EditDep: React.FC<TypeEditDepProps> = ({ id, visible, onClose }) => {
             allowClear
             mode="multiple"
             placeholder="请选择部门用户（多选）">
-            {store.dictionary.ADMIN_USER?.list?.map(v => <Option key={v.key} value={v.key}>{v.value}</Option>)}
+            {dictionaries.ADMIN_USER?.LIST?.map(v => <Option key={v.key} value={v.key}>{v.value}</Option>)}
           </Select>
         </Form.Item>
 

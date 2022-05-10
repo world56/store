@@ -3,14 +3,16 @@
  */
 export namespace ENUM_WAREHOUSE {
   /**
-   * @name IDENTIFICATION_TYPE 货架位置标识
-   * @param REGION 区域
-   * @param GOODS_SHELVES 货架
-   * @param ARRANGEMENT 货层
+   * @name STATUS 仓位状态
+   * @param ABNORMAL 异常
+   * @param NORMAL 正常
+   * @param FULL_LOAD 满载
+   * @param STOCKTAKING 正在盘点
    */
-  export enum IDENTIFICATION_TYPE {
-    REGION = "REGION",
-    GOODS_SHELVES = "GOODS_SHELVES",
-    ARRANGEMENT = "ARRANGEMENT",
+  export enum STATUS {
+    ABNORMAL,
+    NORMAL,
+    FULL_LOAD,
+    STOCKTAKING,
   }
 }

@@ -11,7 +11,7 @@ import type { Rule } from 'rc-field-form/lib/interface';
 import type { SizeType } from 'antd/lib/config-provider/SizeContext';
 
 import * as CONF from './config';
-import { ENUM_COMMON } from '@/enum/common';
+import { ENUM_SEARCH } from './enum';
 
 type DefaultKeyTypeProps = TypeCommon.DefaultKey;
 
@@ -32,8 +32,8 @@ export interface Columns {
   rules?: Rule[];
   placeholder?: string;
   noStyle?: (f: FormInstance) => void;
-  type: keyof typeof ENUM_COMMON.COMPONENT_TYPE;
-  bindValue?: `${ENUM_COMMON.COMPONENT_TO_VALUE}`;
+  type: keyof typeof ENUM_SEARCH.COMP_TYPE;
+  bindValue?: `${ENUM_SEARCH.COMPONENT_VALUE_TYPE}`;
   list?: ReadonlyArray<CascaderList> | ConfCascaderList;
   /**
    * @param props 各类组件props
@@ -50,13 +50,17 @@ export interface SearchFormProps {
   columns: Columns[];
 };
 
-const { Option } = Select;
+
+export interface TypeSearchProps extends React.FC<SearchFormProps> {
+  ENUM: typeof ENUM_SEARCH;
+}
+
 
 /**
  * @name Search 搜索
  * @description 快速创建一个搜索组件（Form）
  */
-const Search: React.FC<SearchFormProps> = ({
+const Search: TypeSearchProps = ({
   form,
   size,
   columns,
@@ -73,11 +77,11 @@ const Search: React.FC<SearchFormProps> = ({
       list,
       props = {},
       placeholder,
-      bindValue = ENUM_COMMON.COMPONENT_TO_VALUE.KEY,
+      bindValue = ENUM_SEARCH.COMPONENT_VALUE_TYPE.KEY,
     } = value;
     const traverse = Array.isArray(list) ? list : [];
     switch (type) {
-      case ENUM_COMMON.COMPONENT_TYPE.INPUT:
+      case ENUM_SEARCH.COMP_TYPE.INPUT:
         return (
           <Input
             allowClear
@@ -86,8 +90,8 @@ const Search: React.FC<SearchFormProps> = ({
             placeholder={placeholder}
             {...props} />
         );
-      case ENUM_COMMON.COMPONENT_TYPE.SELECT:
-        const affirmVal = bindValue === ENUM_COMMON.COMPONENT_TO_VALUE.KEY;
+      case ENUM_SEARCH.COMP_TYPE.SELECT:
+        const affirmVal = bindValue === ENUM_SEARCH.COMPONENT_VALUE_TYPE.KEY;
         return (
           <Select
             allowClear
@@ -96,10 +100,12 @@ const Search: React.FC<SearchFormProps> = ({
             placeholder={placeholder}
             filterOption={searchSelect}
             optionFilterProp="children" {...props}>
-            {traverse.map(({ key, value: val }) => <Option key={key} value={affirmVal ? key : val}>{val}</Option>)}
+            {traverse.map(({ key, value: val }) => (
+              <Select.Option key={key} value={affirmVal ? key : val}>{val}</Select.Option>
+            ))}
           </Select>
         );
-      case ENUM_COMMON.COMPONENT_TYPE.CASCADER:
+      case ENUM_SEARCH.COMP_TYPE.CASCADER:
         return (
           <Cascader
             options={traverse}
@@ -108,11 +114,11 @@ const Search: React.FC<SearchFormProps> = ({
             fieldNames={CONF.CASCADER_FIELD}
             {...props} />
         );
-      case ENUM_COMMON.COMPONENT_TYPE.TIME_SCOPE:
+      case ENUM_SEARCH.COMP_TYPE.TIME_SCOPE:
         return (
           <DatePicker className={styles.component} {...props} />
         );
-      case ENUM_COMMON.COMPONENT_TYPE.TREE_SELECT:
+      case ENUM_SEARCH.COMP_TYPE.TREE_SELECT:
         return (
           <TreeSelect
             allowClear
@@ -164,5 +170,7 @@ const Search: React.FC<SearchFormProps> = ({
     </Form>
   );
 };
+
+Search.ENUM = ENUM_SEARCH;
 
 export default Search;
