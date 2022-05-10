@@ -43,4 +43,8 @@ export class UtilsService {
     const map = this.getArrayRepeatKeys([...l, ...r]);
     return [l.filter((v) => map[v] === 1), r.filter((v) => map[v] === 1)];
   }
+
+  isVoid(val: unknown) {
+    return val === '' || val === undefined || val === null;
+  }
 }

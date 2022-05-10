@@ -25,7 +25,7 @@ export class PermissionDTO extends PickType(CommonDTO, [
   @ApiProperty({
     description: '权限名称',
   })
-  @MaxLength(20)
+  @MaxLength(32)
   @IsString()
   name: string;
 
@@ -35,7 +35,7 @@ export class PermissionDTO extends PickType(CommonDTO, [
   @ApiProperty({
     description: '权限英文名称',
   })
-  @MaxLength(20)
+  @MaxLength(32)
   @IsString()
   code: string;
 

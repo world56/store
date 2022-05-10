@@ -19,11 +19,6 @@ export class PermissionController {
     return this.PermissionService.getPermissionList(query);
   }
 
-  @Get('findAll')
-  findAll() {
-    return this.PermissionService.findAll();
-  }
-
   @Get('details')
   getDetails(@Query() query: PrimaryKeyDTO) {
     return this.PermissionService.getDetails(query);

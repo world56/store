@@ -1,4 +1,4 @@
-import { Injectable, PreconditionFailedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { AdminUserDTO } from '@/dto/admin-user.dto';
 import { PrismaService } from '@/common/prisma/prisma.service';
 import { AdminUserQuery } from './dto/admin-user-query.dto';
@@ -20,7 +20,8 @@ export class UserService {
   ) {}
 
   async getList(query: AdminUserQuery) {
-    const { name, account, phone, status, skip, take, departmentId } = query;
+    const { name, account, phone, status, skip, take, departmentId, time } =
+      query;
     let userIds: number[] = [];
     if (departmentId) {
       const list = await this.PrismaService.relDepartmentOnAdminUser.findMany({
@@ -36,6 +37,9 @@ export class UserService {
         account: { contains: account },
         isSuper: ENUM_SYSTEM.SUPER_ADMIN.NOT_SUPER,
         id: { in: userIds.length ? userIds : undefined },
+        createTime: time
+          ? { gte: new Date(time[0]), lt: new Date(time[1]) }
+          : undefined,
       },
     };
     const [count, list] = await Promise.all([
@@ -73,16 +77,15 @@ export class UserService {
     };
   }
 
-  async check(query: UserCheckFilesDto, tips?: boolean) {
-    const { id, account, name, phone, email } = query;
-    const list = await this.PrismaService.adminUser.findMany({
-      where: { OR: [{ account }, { name }, { phone }, { email }] },
-    });
-    const isRepeat = this.UtilsService.isRepeat(list, id);
-    if (tips && isRepeat) {
-      throw new PreconditionFailedException('该字段重复，无法保存');
-    }
-    return isRepeat;
+  async checkFields(
+    { id, account, name, phone, email }: UserCheckFilesDto,
+    tips?: boolean,
+  ) {
+    return await this.PrismaService.checkFieldsRepeat(
+      'adminUser',
+      { id, account, name, phone, email },
+      tips,
+    );
   }
 
   async resetPassword(body: PrimaryKeyDTO) {
@@ -109,14 +112,16 @@ export class UserService {
       const password = this.EncryptionService.decrypt(data.password);
       data.password = this.EncryptionService.md5(password);
       const { id: adminUserId } = await prisma.adminUser.create({ data });
-      await Promise.all([
-        prisma.relAdminUserRole.createMany({
+      if (roles?.length) {
+        await prisma.relAdminUserRole.createMany({
           data: roles.map((roleId) => ({ roleId, adminUserId })),
-        }),
-        prisma.relDepartmentOnAdminUser.createMany({
+        });
+      }
+      if (deps?.length) {
+        await prisma.relDepartmentOnAdminUser.createMany({
           data: deps.map((departmentId) => ({ departmentId, adminUserId })),
-        }),
-      ]);
+        });
+      }
       return true;
     });
   }
@@ -133,44 +138,49 @@ export class UserService {
           where: { adminUserId: id },
         }),
       ]);
-      const [roleInsert, roleDel] = this.UtilsService.filterArrayRepeatKeys(
-        roles,
-        relRoles.map((v) => v.roleId),
-      );
-      const [depInsert, depDel] = this.UtilsService.filterArrayRepeatKeys(
-        deps,
-        relDeps.map((v) => v.departmentId),
-      );
-      if (roleInsert.length) {
-        handle.push(
-          prisma.relAdminUserRole.createMany({
-            data: roleInsert.map((roleId) => ({ roleId, adminUserId: id })),
-          }),
+
+      if (roles?.length) {
+        const [roleInsert, roleDel] = this.UtilsService.filterArrayRepeatKeys(
+          roles,
+          relRoles.map((v) => v.roleId),
         );
+        if (roleInsert.length) {
+          handle.push(
+            prisma.relAdminUserRole.createMany({
+              data: roleInsert.map((roleId) => ({ roleId, adminUserId: id })),
+            }),
+          );
+        }
+        if (roleDel.length) {
+          handle.push(
+            prisma.relAdminUserRole.deleteMany({
+              where: { roleId: { in: roleDel }, adminUserId: id },
+            }),
+          );
+        }
       }
-      if (roleDel.length) {
-        handle.push(
-          prisma.relAdminUserRole.deleteMany({
-            where: { roleId: { in: roleDel }, adminUserId: id },
-          }),
+      if (deps?.length) {
+        const [depInsert, depDel] = this.UtilsService.filterArrayRepeatKeys(
+          deps,
+          relDeps.map((v) => v.departmentId),
         );
-      }
-      if (depInsert.length) {
-        handle.push(
-          prisma.relDepartmentOnAdminUser.createMany({
-            data: depInsert.map((departmentId) => ({
-              adminUserId: id,
-              departmentId,
-            })),
-          }),
-        );
-      }
-      if (depDel.length) {
-        handle.push(
-          prisma.relDepartmentOnAdminUser.deleteMany({
-            where: { departmentId: { in: depDel }, adminUserId: id },
-          }),
-        );
+        if (depInsert.length) {
+          handle.push(
+            prisma.relDepartmentOnAdminUser.createMany({
+              data: depInsert.map((departmentId) => ({
+                adminUserId: id,
+                departmentId,
+              })),
+            }),
+          );
+        }
+        if (depDel.length) {
+          handle.push(
+            prisma.relDepartmentOnAdminUser.deleteMany({
+              where: { departmentId: { in: depDel }, adminUserId: id },
+            }),
+          );
+        }
       }
       handle.length && (await Promise.all(handle));
       data.remark = data.remark ? data.remark : null;

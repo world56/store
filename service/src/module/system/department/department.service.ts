@@ -15,17 +15,27 @@ export class DepartmentService {
   async getList(query: DepartmentQueryListDTO) {
     const { skip, take, name } = query;
     const where = { name: { contains: name } };
-    const count = await this.PrismaService.department.count({ where });
-    const list = await this.PrismaService.department.findMany({
-      where,
-      skip,
-      take,
-    });
+    const [count, list] = await Promise.all([
+      this.PrismaService.department.count({ where }),
+      this.PrismaService.department.findMany({
+        where,
+        skip,
+        take,
+      }),
+    ]);
     return { list, count };
   }
 
   async getAll() {
     return await this.PrismaService.department.findMany();
+  }
+
+  async checkFields({ id, name }: DepartmentDTO, tips?: boolean) {
+    return await this.PrismaService.checkFieldsRepeat(
+      'department',
+      { id, name },
+      tips,
+    );
   }
 
   async getDetails({ id }: PrimaryKeyDTO) {
@@ -40,6 +50,7 @@ export class DepartmentService {
 
   async intert(info: DepartmentDTO) {
     const { users, ...data } = info;
+    await this.checkFields(info, true);
     await this.PrismaService.$transaction(async (prisma) => {
       const { id: departmentId } = await prisma.department.create({ data });
       if (users?.length) {
@@ -52,6 +63,7 @@ export class DepartmentService {
   }
 
   async update(info: DepartmentDTO) {
+    await this.checkFields(info, true);
     await this.PrismaService.$transaction(async (prisma) => {
       const { id: departmentId, users, ...data } = info;
       const ids = await prisma.relDepartmentOnAdminUser.findMany({

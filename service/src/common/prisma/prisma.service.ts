@@ -1,6 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 import { PrimaryKeyDTO } from '@/dto/common.dto';
-import { INestApplication, Injectable, OnModuleInit } from '@nestjs/common';
+import {
+  INestApplication,
+  Injectable,
+  OnModuleInit,
+  PreconditionFailedException,
+} from '@nestjs/common';
 
 // import type { Prisma } from 'prisma/prisma-client';
 
@@ -18,6 +23,23 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     this.$on('beforeExit', async () => {
       await app.close();
     });
+  }
+
+  async checkFieldsRepeat<T extends Partial<PrimaryKeyDTO>>(
+    relName: string,
+    DTO: T,
+    tips?: boolean,
+  ) {
+    const OR = Object.entries(DTO).map(([k, v]) => ({ [k]: v }));
+    const list = await this[relName].findMany({ where: { OR } });
+    const [target] = list;
+    const isRepeat = !Boolean(
+      !target || (list.length === 1 && target?.id === DTO.id),
+    );
+    if (tips && isRepeat) {
+      throw new PreconditionFailedException('字段值存在重复，无法保存');
+    }
+    return isRepeat;
   }
 
   // private createMiddleware() {
@@ -52,5 +74,4 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
   //   }
   //   return params;
   // }
-
 }

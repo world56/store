@@ -47,6 +47,15 @@ export class CommonDTO extends PartialType(PrimaryKeyDTO) {
   parentId?: number;
 
   /**
+   * @param name 名称
+   */
+  @ApiProperty({
+    description: '名称',
+  })
+  @IsString()
+  name: string;
+
+  /**
    * @param remark 备注
    */
   @ApiProperty({
@@ -77,4 +86,14 @@ export class CommonDTO extends PartialType(PrimaryKeyDTO) {
   @Type(() => Number)
   @IsInt()
   pageSize: number;
+
+  /**
+   * @param time 时间范围
+   */
+  @ApiProperty({
+    description: '时间范围',
+  })
+  @Type(() => Number)
+  @IsInt({ each: true })
+  time?: number[];
 }

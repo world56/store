@@ -17,6 +17,11 @@ export class DepartmentController {
     return this.DepartmentService.getList(query);
   }
 
+  @Get('check')
+  checkRepeat(@Query() query: DepartmentDTO) {
+    return this.DepartmentService.checkFields(query);
+  }
+
   @Get('allDepartment')
   getAllDepartment() {
     return this.DepartmentService.getAll();

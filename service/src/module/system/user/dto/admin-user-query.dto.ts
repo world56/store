@@ -14,8 +14,11 @@ import { IsInt, IsOptional } from 'class-validator';
  * @name AdminUserQuery 获取后台系统用户列表
  */
 export class AdminUserQuery extends IntersectionType(
-  PickType(CommonDTO, ['currentPage', 'pageSize'] as const),
   PartialType(OmitType(AdminUserDTO, ['id', 'remark', 'password'] as const)),
+  IntersectionType(
+    PickType(CommonDTO, ['currentPage', 'pageSize'] as const),
+    PartialType(PickType(CommonDTO, ['time'] as const)),
+  ),
 ) {
   /**
    * @param departmentId 所属部门ID

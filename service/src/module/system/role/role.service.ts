@@ -47,16 +47,8 @@ export class RoleService {
     });
   }
 
-  async checkField(data: RuleCheckFieldsDTO, tips?: boolean) {
-    const { name, id } = data;
-    const list = await this.PrismaService.role.findMany({
-      where: { OR: [{ name }, { id }] },
-    });
-    const isRepeat = this.UtilsServer.isRepeat(list, id);
-    if (tips && isRepeat) {
-      throw new PreconditionFailedException('字段值存在重复，无法保存');
-    }
-    return isRepeat;
+  async checkField({ name, id }: RuleCheckFieldsDTO, tips?: boolean) {
+    return this.PrismaService.checkFieldsRepeat('role', { name, id }, tips);
   }
 
   async getDetails(query: PrimaryKeyDTO) {

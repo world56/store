@@ -32,7 +32,7 @@ export class UserController {
 
   @Get('checkFields')
   checkFields(@Query() query: UserCheckFilesDto) {
-    return this.UserService.check(query);
+    return this.UserService.checkFields(query);
   }
 
   @Post('freeze')

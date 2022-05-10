@@ -17,9 +17,25 @@ generator js {
   previewFeatures = ["referentialIntegrity", "interactiveTransactions"]
 }
 
+// 静态资源管理
+model Files {
+  id         Int       @id() @default(autoincrement())
+  url        String    @db.Char(100) // 文件地址
+  name       String    @db.Char(100) // 文件名称
+  type       String    @db.Char(10) // 文件类型
+  userId     Int       @map("user_id") @db.Int() // 上传人id 
+  createTime DateTime? @default(now()) @map("create_time")
+
+  @@index([name])
+  @@index([type])
+  @@index([userId])
+  @@map("files")
+}
+
 // 管理系统用户
 model AdminUser {
   id         Int      @id @default(autoincrement())
+  avatar     String?  @db.VarChar(100)
   account    String   @unique @db.VarChar(50) // 账号
   password   String   @db.VarChar(100) // 密码
   name       String   @db.Char(5) // 名称
@@ -35,6 +51,7 @@ model AdminUser {
   @@index([phone])
   @@index([status])
   @@index([isSuper])
+  @@index([password])
   @@map("admin_user")
 }
 
@@ -56,7 +73,7 @@ model Permission {
   id       Int     @id @default(autoincrement()) // 权限英文名称
   code     String  @unique @db.VarChar(20) // 权限英文名称
   name     String  @unique() @db.VarChar(20) // 权限名称
-  parentId Int?    @map("parrent_id") // 所属模块
+  parentId Int?    @map("parent_id") // 所属模块
   status   Int     @default(1) @db.Int() // 状态
   type     Int     @db.Int() // 类型 页面:1 按钮:2 内容:3
   remark   String? @db.VarChar(255) // 备注
@@ -69,10 +86,10 @@ model Permission {
 }
 
 model RelRolePermission {
+  id           Int @id @default(autoincrement())
   roleId       Int @map("role_id") @db.Int()
   permissionId Int @map("permission_id") @db.Int()
 
-  @@id([roleId, permissionId])
   @@index([roleId])
   @@index([permissionId])
   @@map("rel_role_permission")
@@ -107,8 +124,21 @@ model RelDepartmentOnAdminUser {
   departmentId Int @map("department_id") @db.Int()
   adminUserId  Int @map("admin_user_id") @db.Int()
 
-  @@unique([departmentId,adminUserId])
+  @@unique([departmentId, adminUserId])
   @@index([adminUserId])
   @@index([departmentId])
   @@map("rel_department_admin_user")
+}
+
+// 仓位编排
+model WarehouseArrangement {
+  id       Int     @id() @default(autoincrement())
+  name     String  @unique @db.VarChar(32)
+  status   Int?    @default(1) @db.Int()
+  personId Int     @map("person_id") @db.Int()
+  remark   String? @db.VarChar(255) // 备注
+
+  @@index([name])
+  @@index([personId])
+  @@map("warehouse_arrangement")
 }
