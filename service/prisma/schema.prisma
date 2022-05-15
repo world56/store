@@ -20,9 +20,9 @@ generator js {
 // 静态资源管理
 model Files {
   id         Int       @id() @default(autoincrement())
-  url        String    @db.Char(100) // 文件地址
+  path       String    @db.Char(100) // 文件地址
   name       String    @db.Char(100) // 文件名称
-  type       String    @db.Char(10) // 文件类型
+  type       String    @db.Char(20) // 文件类型
   userId     Int       @map("user_id") @db.Int() // 上传人id 
   createTime DateTime? @default(now()) @map("create_time")
 
@@ -30,6 +30,14 @@ model Files {
   @@index([type])
   @@index([userId])
   @@map("files")
+}
+
+model RelFilesOnProduct {
+  id        Int @id() @default(autoincrement())
+  productId Int @map("product_id") @db.Int()
+  fileId    Int @map("file_id") @db.Int()
+
+  @@map("rel_product_on_files")
 }
 
 // 管理系统用户
@@ -45,6 +53,8 @@ model AdminUser {
   isSuper    Int      @default(0) @map("is_super") @db.Int() // 是否为超管 
   remark     String?  @db.VarChar(255) // 备注
   createTime DateTime @default(now()) @map("create_time") @db.Timestamp(6) // 创建时间
+
+  warehousePosition WarehousePosition?
 
   @@index([account])
   @@index([name])
@@ -130,15 +140,48 @@ model RelDepartmentOnAdminUser {
   @@map("rel_department_admin_user")
 }
 
-// 仓位编排
-model WarehouseArrangement {
+// 仓位位置
+model WarehousePosition {
   id       Int     @id() @default(autoincrement())
   name     String  @unique @db.VarChar(32)
   status   Int?    @default(1) @db.Int()
-  personId Int     @map("person_id") @db.Int()
+  personId Int     @unique @map("person_id") @db.Int()
   remark   String? @db.VarChar(255) // 备注
+
+  contacts AdminUser                       @relation(fields: [personId], references: [id])
+  products RelProductOnWarehousePosition[]
 
   @@index([name])
   @@index([personId])
-  @@map("warehouse_arrangement")
+  @@map("warehouse_position")
+}
+
+// 产品出入库管理 产品
+model ProductWarehousing {
+  id            Int       @id() @default(autoincrement())
+  name          String    @db.VarChar(255)
+  count         BigInt    @db.BigInt()
+  remark        String?   @db.VarChar(255) // 备注
+  alertQuantity Int       @map("alert_quantity") @db.Int()
+  positionId    Int       @map("position_id") @db.Int()
+  createTime    DateTime? @default(now())
+  updateTime    DateTime? @updatedAt()
+
+  products RelProductOnWarehousePosition[]
+
+  @@map("product_warehousing")
+}
+
+model RelProductOnWarehousePosition {
+  id         Int @id() @default(autoincrement())
+  positionId Int @map("position_id") @db.Int()
+  productId  Int @map("product_id") @db.Int()
+
+  positions WarehousePosition  @relation(fields: [positionId], references: [id])
+  products  ProductWarehousing @relation(fields: [productId], references: [id])
+
+  @@unique([positionId, productId])
+  @@index([positionId])
+  @@index([productId])
+  @@map("rel_product_on_warehouse_position")
 }

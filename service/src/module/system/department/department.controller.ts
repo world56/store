@@ -22,7 +22,7 @@ export class DepartmentController {
     return this.DepartmentService.checkFields(query);
   }
 
-  @Get('allDepartment')
+  @Get('all')
   getAllDepartment() {
     return this.DepartmentService.getAll();
   }

@@ -1,11 +1,12 @@
 import { User } from '@/decorator/user';
 import { FileService } from './file.service';
+import { AdminUserDTO } from '@/dto/admin-user.dto';
+import { RemoveFilesDTO } from './dto/remove-files.dto';
 import { UploadFileGuard } from '@/guard/upload-file.guard';
-import { Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { GetUploadFiles } from '@/decorator/get-upload-file.decorator';
 
 import { type Multipart } from '@fastify/multipart';
-import { AdminUserDTO } from '@/dto/admin-user.dto';
 
 @Controller('file')
 export class FileController {
@@ -15,5 +16,10 @@ export class FileController {
   @UseGuards(new UploadFileGuard())
   upload(@GetUploadFiles() file: Multipart, @User() user: AdminUserDTO) {
     return this.FileService.upload(file, user);
+  }
+
+  @Post('remove')
+  remove(@Body() body: RemoveFilesDTO) {
+    return this.FileService.remove(body);
   }
 }

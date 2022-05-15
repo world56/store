@@ -1,9 +1,10 @@
+import Cookies from 'js-cookie';
 import { Component } from 'react';
-import { uploadHeaders } from '.';
 import styles from './index.styl';
 import { UserOutlined } from '@ant-design/icons';
 import { Upload, Avatar, Tooltip, message, Spin } from 'antd';
 
+import { TOKEN_KEY } from "@/config/user";
 import { API_URL_UPLOAD } from '@/api/common';
 import { STATIC_RESOURCE } from '@/config/request';
 
@@ -25,11 +26,13 @@ class UploadAvatar extends Component<TypeUploadsProps, TypeUploadsState> {
 
   state = { load: false };
 
-  private readonly headers = uploadHeaders();
+  private readonly headers = {
+    Authorization: Cookies.get(TOKEN_KEY)!
+  };
 
   private format: ReadonlyArray<string> = ['image/jpg', 'image/jpeg', 'image/png'];
 
-  beforeUpload: UploadProps['beforeUpload'] = (file) => {
+  private beforeUpload: UploadProps['beforeUpload'] = (file) => {
     if (!this.format.includes(file.type)) {
       message.warning('仅支持图片格式（jpg、jpeg、png）');
       return false;
@@ -44,7 +47,7 @@ class UploadAvatar extends Component<TypeUploadsProps, TypeUploadsState> {
 
   protected onChange: UploadProps['onChange'] = (e) => {
     if (e.file.status === 'done' && e.file?.response?.content) {
-      this.props.onChange?.(`${STATIC_RESOURCE}/${e.file?.response?.content}`);
+      this.props.onChange?.(`${STATIC_RESOURCE}/${e.file?.response?.content.path}`);
       this.setState({ load: false });
     } else if (e.file.status === 'error') {
       message.error('上传失败');

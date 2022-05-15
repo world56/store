@@ -13,11 +13,31 @@ export namespace ENUM_COMMON {
   }
 
   /**
-   * @name UPLOAD 上传文件类型
-   * @param PICTURE 图片
+   * @name FILE_TYPE 文件类型
+   * @param IMAGE 图片
+   * @param VIDEO 视频
+   * @param AUDIO 音频
+   * @param DOCUMENT 文本
+   * @param COMPRESSED 压缩文件
+   * @param OTHER 其他类型
    */
-  export enum UPLOAD {
-    PICTURE,
+  export enum FILE_TYPE {
+    IMAGE = "IMAGE",
+    VIDEO = "VIDEO",
+    AUDIO = "AUDIO",
+    DOCUMENT = "DOCUMENT",
+    COMPRESSED = "COMPRESSED",
+    OTHER = "OTHER",
+  }
+
+  /**
+   * @name UPLOAD_STATUS 文件上传状态
+   */
+  export enum UPLOAD_STATUS {
+    ERROR = "ERROR",
+    SUCCESS = "SUCCESS",
+    LOADING = "LOADING",
+    DELETE = "DELETE",
   }
 
   /**

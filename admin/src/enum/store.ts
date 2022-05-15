@@ -20,7 +20,11 @@ export namespace ENUM_STORE_ACTION {
   }
 
   /**
-   * @name DICTIONARIES 获取词典 
+   * @name DICTIONARIES 获取词典
+   * @param ROLE 角色
+   * @param DEPARTMENT 部门
+   * @param ADMIN_USER 管理系统用户
+   * @param WAREHOUSE_POSITION 仓库仓位
    */
   export enum DICTIONARIES {
     QUERY = "QUERY",
@@ -28,5 +32,6 @@ export namespace ENUM_STORE_ACTION {
     ROLE = "ROLE",
     ADMIN_USER = "ADMIN_USER",
     DEPARTMENT = "DEPARTMENT",
+    WAREHOUSE_POSITION = "WAREHOUSE_POSITION",
   }
 }

@@ -1,19 +1,19 @@
+import {
+  insertWarehousePosition,
+  updatetWarehousePosition,
+  getWarehousePositionDetails,
+} from "@/api/warehouse";
 import Modal from "@/layout/Modal";
 import { FormHideKey } from "@/components/Form";
 import { useGetDetails, useStore } from "@/hooks";
 import { Form, Input, message, Select } from "antd";
-import {
-  insertWarehouseArrangement,
-  updatetWarehouseArrangement,
-  getWarehouseArrangementDetails,
-} from "@/api/warehouse";
 
 import { ENUM_WAREHOUSE } from "@/enum/warehouse";
 
 import type { TypeCommon } from "@/interface/common";
-import type { TypeWarehouseArrangement } from "@/interface/warehouse/arrangement";
+import type { TypeWarehousePosition } from "@/interface/warehouse/position";
 
-interface TypeEditArrangementProps extends Partial<TypeCommon.DatabaseMainParameter> {
+interface TypeEditPositionProps extends Partial<TypeCommon.DatabaseMainParameter> {
   visible: boolean;
   onClose(): void;
 };
@@ -23,22 +23,22 @@ const rules = [{ required: true }];
 const formStyle = { labelCol: { span: 4 }, wrapperCol: { span: 20 } };
 
 /**
- * @name EditArrangement 编辑仓位
+ * @name EditPosition 编辑仓位
  */
-const EditArrangement: React.FC<TypeEditArrangementProps> = ({ id, visible, onClose }) => {
+const EditPosition: React.FC<TypeEditPositionProps> = ({ id, visible, onClose }) => {
 
-  const [form] = Form.useForm<TypeWarehouseArrangement.DTO>();
+  const [form] = Form.useForm<TypeWarehousePosition.DTO>();
   const { dictionaries: { ADMIN_USER, WAREHOURE_STATUS } } = useStore();
 
   const { loading } = useGetDetails(async () => {
-    const data = await getWarehouseArrangementDetails({ id: id! });
+    const data = await getWarehousePositionDetails({ id: id! });
     form.setFieldsValue(data);
   }, [id, form]);
 
   async function onSumbit() {
     const values = await form.validateFields();
-    if (id) await updatetWarehouseArrangement(values);
-    else await insertWarehouseArrangement(values);
+    if (id) await updatetWarehousePosition(values);
+    else await insertWarehousePosition(values);
     message.success('操作成功');
     onCancel();
   };
@@ -97,4 +97,4 @@ const EditArrangement: React.FC<TypeEditArrangementProps> = ({ id, visible, onCl
   );
 };
 
-export default EditArrangement;
+export default EditPosition;

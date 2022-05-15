@@ -25,15 +25,6 @@ export function getUserList(params: TypeSystemUser.QueryList) {
 }
 
 /**
- * @name getAllAdminUserList 用户管理-获取用户列表
- */
-export function getAllAdminUserList() {
-  return request<TypeSystemUser.DTO[]>("system/user/allAdminUser", {
-    method: ENUM_HTTP.REQUEST_MODE.GET,
-  });
-}
-
-/**
  * @name resetAdminUserPwd 用户管理-重置用户密码
  */
 export function resetAdminUserPwd(data: TypeCommon.DatabaseMainParameter) {
@@ -110,14 +101,6 @@ export function getRoleList(params: TypeSystemRole.QueryList) {
   );
 }
 
-/**
- * @name getRoleSelectList 角色管理-获取全部角色列表
- */
-export function getRoleSelectList() {
-  return request<TypeSystemRole.DTO[]>("system/role/allRole", {
-    method: ENUM_HTTP.REQUEST_MODE.GET,
-  });
-}
 
 /**
  * @name getRoleList 角色管理-获取角色详情
@@ -248,18 +231,6 @@ export function getDepartmentList(params: TypeSystemDepartment.QueryList) {
     {
       method: ENUM_HTTP.REQUEST_MODE.GET,
       params,
-    },
-  );
-}
-
-/**
- * @name getAllDepartmentList 部门管理-获取全部部门列表
- */
-export function getAllDepartmentList() {
-  return request<TypeSystemDepartment.DTO[]>(
-    "system/department/allDepartment",
-    {
-      method: ENUM_HTTP.REQUEST_MODE.GET,
     },
   );
 }

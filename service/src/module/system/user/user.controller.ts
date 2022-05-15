@@ -20,7 +20,7 @@ export class UserController {
     return this.UserService.getList(query);
   }
   
-  @Get('allAdminUser')
+  @Get('all')
   getAllUser(){
     return this.UserService.getAllAdminUserList();
   }

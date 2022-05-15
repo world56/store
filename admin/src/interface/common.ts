@@ -1,6 +1,6 @@
-import React from "react";
-
 import { ENUM_COMMON } from "@/enum/common";
+
+import type React from "react";
 
 /**
  * @name TypeCommon 公共接口
@@ -69,5 +69,22 @@ export namespace TypeCommon {
   export interface StandardTreeField
     extends Record<"key" | "value", React.Key> {
     children: StandardTreeField[];
+  }
+
+  /**
+   * @name NetDisk 服务器静态资源
+   * @param name 名称
+   * @param path 路径
+   * @param type 类型
+   * @param userId 上传人ID
+   * @param status 文件状态 （客户端使用）
+   */
+  export interface NetDisk {
+    id: number;
+    name: string;
+    path: string;
+    type: string;
+    userId?: string;
+    status?: ENUM_COMMON.UPLOAD_STATUS;
   }
 }

@@ -1,9 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 import { PrimaryKeyDTO } from '@/dto/common.dto';
 import {
-  INestApplication,
   Injectable,
   OnModuleInit,
+  INestApplication,
   PreconditionFailedException,
 } from '@nestjs/common';
 

@@ -3,33 +3,33 @@ import Search from "@/components/Search";
 import { BtnEditDel } from '@/layout/Table';
 import { InboxOutlined } from '@ant-design/icons';
 import StatusColors from './components/StatusColors';
+import EditPosition from "./components/EditPosition";
 import { Button, Card, Form, message, Table } from "antd";
-import EditArrangement from "./components/EditArrangement";
 import { useActions, usePageTurning, useStore } from "@/hooks";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { getWarehouseArrangementList, removeWarehouseArrangement } from "@/api/warehouse";
+import { getWarehousePositionList, removeWarehousePosition } from "@/api/warehouse";
 
 import { DB_PRIMARY_KEY } from '@/config/db';
 import { ENUM_STORE_ACTION } from "@/enum/store";
 
-import type { TypeWarehouseArrangement } from "@/interface/warehouse/arrangement";
+import type { TypeWarehousePosition } from "@/interface/warehouse/position";
 
 /**
- * @name Arrangement 库房仓位编排
+ * @name Position 库房仓位编排
  */
-const Arrangement = () => {
+const Position = () => {
 
   const actions = useActions();
   const { dictionaries: { WAREHOURE_STATUS } } = useStore();
 
-  const [search] = Form.useForm<TypeWarehouseArrangement.QueryList>();
+  const [search] = Form.useForm<TypeWarehousePosition.Query>();
 
   const [id, setId] = useState<number>();
   const [visible, setVisible] = useState(false);
 
   const {
     data, run, loading
-  } = useRequest(getWarehouseArrangementList, { manual: true });
+  } = useRequest(getWarehousePositionList, { manual: true });
 
   const pagination = usePageTurning(data?.count);
   const { pageSize, currentPage } = pagination;
@@ -53,7 +53,7 @@ const Arrangement = () => {
   };
 
   async function onRemove(id: number) {
-    await removeWarehouseArrangement({ id });
+    await removeWarehousePosition({ id });
     message.success('操作成功');
     initializa();
   };
@@ -70,9 +70,19 @@ const Arrangement = () => {
 
   const columns = [
     { key: 'name', dataIndex: 'name', title: '仓位名称' },
-    { key: 'name', dataIndex: 'name', title: '负责人' },
     {
-      width: 200,
+      key: 'id',
+      dataIndex: 'contacts',
+      title: '负责人',
+      render: (row: TypeWarehousePosition.DTO['contacts']) => row.name
+    },
+    {
+      key: 'id',
+      dataIndex: 'contacts',
+      title: '联系电话',
+      render: (row: TypeWarehousePosition.DTO['contacts']) => row.phone
+    },
+    {
       key: 'status',
       dataIndex: 'status',
       title: '状态',
@@ -96,7 +106,7 @@ const Arrangement = () => {
   }, [actions]);
 
   return (
-    <Card title='库房仓位编排'>
+    <Card title='仓位管理'>
       <Search form={search} columns={query} onSearch={initializa}>
         <Button onClick={() => setVisible(true)}>
           <InboxOutlined /> 新增仓位
@@ -108,7 +118,7 @@ const Arrangement = () => {
         rowKey={DB_PRIMARY_KEY}
         dataSource={data?.list}
         pagination={pagination} />
-      <EditArrangement
+      <EditPosition
         id={id}
         visible={visible}
         onClose={onClose} />
@@ -116,4 +126,4 @@ const Arrangement = () => {
   );
 };
 
-export default Arrangement;
+export default Position;

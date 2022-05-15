@@ -1,4 +1,4 @@
-import * as API_SYSTEM from "@/api/system";
+import * as API_ENUM from "@/api/enum";
 import { dataToDictionaries } from "@/utils";
 import * as DictionariesAction from "../action/dictionary";
 import { call, put, select, takeEvery } from "redux-saga/effects";
@@ -9,13 +9,14 @@ import type { TypeReduxStatus } from "@/interface/redux";
 import type { TypeStoreDictionary } from "@/interface/redux/dictionary";
 
 const REQUEST_API = {
-  [ENUM_STORE_ACTION.DICTIONARIES.ROLE]: API_SYSTEM.getRoleSelectList,
-  [ENUM_STORE_ACTION.DICTIONARIES.ADMIN_USER]: API_SYSTEM.getAllAdminUserList,
-  [ENUM_STORE_ACTION.DICTIONARIES.DEPARTMENT]: API_SYSTEM.getAllDepartmentList,
+  [ENUM_STORE_ACTION.DICTIONARIES.ROLE]: API_ENUM.getRoleSelectList,
+  [ENUM_STORE_ACTION.DICTIONARIES.ADMIN_USER]: API_ENUM.getAllAdminUserList,
+  [ENUM_STORE_ACTION.DICTIONARIES.DEPARTMENT]: API_ENUM.getAllDepartmentList,
+  [ENUM_STORE_ACTION.DICTIONARIES.WAREHOUSE_POSITION]:
+    API_ENUM.getWarehouseAllList,
 };
 
 function* filterDictionaries(param: TypeStoreDictionary.ActionGetDic) {
-
   try {
     if (REQUEST_API.propertyIsEnumerable(param.payload)) {
       const state: ReturnType<TypeStoreDictionary.Reducers> = yield select(

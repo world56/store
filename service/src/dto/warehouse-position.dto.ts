@@ -1,13 +1,13 @@
 import { CommonDTO } from './common.dto';
 import { Type } from 'class-transformer';
+import { ENUM_WAREHOUSE } from '@/enum/warehouse';
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
-import { ENUM_WAREHOUSE } from '@/enum/warehouse';
 
 /**
- * @name WarehouseArrangement 货仓（仓位）
+ * @name WarehousePositionDTO 货仓（仓位）
  */
-export class WarehouseArrangementDTO extends PickType(CommonDTO, [
+export class WarehousePositionDTO extends PickType(CommonDTO, [
   'id',
   'remark',
 ] as const) {

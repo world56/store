@@ -18,7 +18,7 @@ export class RoleController {
     return this.RoleService.getRoleList(query);
   }
 
-  @Get('allRole')
+  @Get('all')
   getAllRole() {
     return this.RoleService.getAll();
   }

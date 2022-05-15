@@ -1,11 +1,6 @@
-import {
-  PickType,
-  ApiProperty,
-  PartialType,
-  IntersectionType,
-} from '@nestjs/swagger';
+import { CommonDTO } from './common.dto';
 import { IsNumber, IsString } from 'class-validator';
-import { CommonDTO, PrimaryKeyDTO } from './common.dto';
+import { PickType, ApiProperty } from '@nestjs/swagger';
 
 /**
  * @name FileDTO 静态资源
@@ -14,12 +9,18 @@ export class FileDTO extends PickType(CommonDTO, ['name']) {
   /**
    * @param userId 上传文件的用户名称
    */
+  @ApiProperty({
+    description: '上传文件的用户名',
+  })
   @IsNumber()
   userId: number;
 
   /**
    * @param type 文件类型
    */
+  @ApiProperty({
+    description: '文件类型 服务器自动获取',
+  })
   @IsString()
   type: string;
 
@@ -30,5 +31,5 @@ export class FileDTO extends PickType(CommonDTO, ['name']) {
     description: '服务器文件路径',
   })
   @IsString()
-  url: string;
+  path: string;
 }

@@ -14,6 +14,31 @@ import { ENUM_SYSTEM } from '@/enum/system';
 
 import type { MenuInfo } from 'rc-menu/lib/interface';
 
+const MENU_LIST = [
+  {
+    key: '1',
+    label: <>
+      <SettingOutlined />
+      <span>个人信息</span>
+    </>
+  },
+  {
+    key: '2',
+    label: <>
+      <LockOutlined />
+      <span>修改密码</span>
+    </>,
+  },
+  {
+    key: '0',
+    danger: true,
+    label: <>
+      <LoginOutlined />
+      <span>退出登录</span>
+    </>
+  }
+];
+
 /**
  * @name UserHandler 用户头像控制模块
  */
@@ -41,26 +66,11 @@ const UserHandler = () => {
     }
   }
 
-  const menu = (
-    <Menu onClick={onClick} className={styles.userSelect}>
-      <Menu.Item key='1'>
-        <SettingOutlined />
-        <span>个人信息</span>
-      </Menu.Item>
-      <Menu.Item key='2'>
-        <LockOutlined />
-        <span>修改密码</span>
-      </Menu.Item>
-      <Menu.Item key='0' danger>
-        <LoginOutlined />
-        <span>退出登录</span>
-      </Menu.Item>
-    </Menu>
-  );
-
   return (
     <div className={styles.user}>
-      <Dropdown overlay={menu}>
+      <Dropdown overlay={
+        <Menu onClick={onClick} className={styles.userSelect} items={MENU_LIST} />
+      }>
         <div>
           <img className={styles.icon} src={user.avatar || UserIcon} alt="#" />
           <span>{user.name}</span>

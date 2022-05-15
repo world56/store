@@ -2,20 +2,18 @@ import request from "@/utils/request";
 import { ENUM_HTTP } from "@/enum/http";
 
 import type { TypeCommon } from "@/interface/common";
-import type { TypeWarehouseArrangement } from "@/interface/warehouse/arrangement";
+import type { TypeWarehousePosition } from "@/interface/warehouse/position";
 
 /**
  * --------------------- 仓位编排 ----------------------
  */
 
 /**
- * @name getWarehouseArrangementList 获取仓库编排列表
+ * @name getWarehousePositionList 获取仓库编排列表
  */
-export function getWarehouseArrangementList(
-  params: TypeWarehouseArrangement.QueryList,
-) {
-  return request<TypeCommon.ServiceReturn<TypeWarehouseArrangement.DTO[]>>(
-    "warehouse/arrangement/list",
+export function getWarehousePositionList(params: TypeWarehousePosition.Query) {
+  return request<TypeCommon.ServiceReturn<TypeWarehousePosition.DTO[]>>(
+    "warehouse/position/list",
     {
       method: ENUM_HTTP.REQUEST_MODE.GET,
       params,
@@ -24,49 +22,44 @@ export function getWarehouseArrangementList(
 }
 
 /**
- * @name getWarehouseArrangementDetails 获取仓库编排列表
+ * @name getWarehousePositionDetails 获取仓库编排列表
  */
-export function getWarehouseArrangementDetails(
+export function getWarehousePositionDetails(
   params: TypeCommon.DatabaseMainParameter,
 ) {
-  return request<TypeWarehouseArrangement.DTO>(
-    "warehouse/arrangement/details",
-    {
-      method: ENUM_HTTP.REQUEST_MODE.GET,
-      params,
-    },
-  );
+  return request<TypeWarehousePosition.DTO>("warehouse/position/details", {
+    method: ENUM_HTTP.REQUEST_MODE.GET,
+    params,
+  });
 }
 
 /**
- * @name insertWarehouseArrangement 新增仓位
+ * @name insertWarehousePosition 新增仓位
  */
-export function insertWarehouseArrangement(data: TypeWarehouseArrangement.DTO) {
-  return request<boolean>("warehouse/arrangement/insert", {
+export function insertWarehousePosition(data: TypeWarehousePosition.DTO) {
+  return request<boolean>("warehouse/position/insert", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,
   });
 }
 
 /**
- * @name updatetWarehouseArrangement 编辑仓位
+ * @name updatetWarehousePosition 编辑仓位
  */
-export function updatetWarehouseArrangement(
-  data: TypeWarehouseArrangement.DTO,
-) {
-  return request<boolean>("warehouse/arrangement/update", {
+export function updatetWarehousePosition(data: TypeWarehousePosition.DTO) {
+  return request<boolean>("warehouse/position/update", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,
   });
 }
 
 /**
- * @name removeWarehouseArrangement 删除仓位
+ * @name removeWarehousePosition 删除仓位
  */
-export function removeWarehouseArrangement(
+export function removeWarehousePosition(
   data: TypeCommon.DatabaseMainParameter,
 ) {
-  return request<boolean>("warehouse/arrangement/remove", {
+  return request<boolean>("warehouse/position/remove", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,
   });

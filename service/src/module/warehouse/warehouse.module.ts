@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { ArrangementModule } from './arrangement/arrangement.module';
+import { PositionModule } from './position/position.module';
 
 @Module({
-  imports: [ArrangementModule]
+  imports: [PositionModule]
 })
 export class WarehouseModule {}
