@@ -38,6 +38,20 @@ export default [
     ],
   },
   {
+    name: "purchase",
+    path: "/purchase",
+    title: "采购管理",
+    component: Middleware,
+    routes: [
+      {
+        name: "supplier",
+        path: "/purchase/supplier",
+        title: "供应商列表",
+        component: lazy(() => import("@/page/purchase/supplier")),
+      },
+    ],
+  },
+  {
     name: "warehouse",
     path: "/warehouse",
     title: "货仓管理",
@@ -51,7 +65,7 @@ export default [
       },
       {
         name: "product",
-        title: "产品出入库",
+        title: "产品盘点",
         path: "/warehouse/product",
         component: lazy(() => import("@/page/warehouse/product")),
       },

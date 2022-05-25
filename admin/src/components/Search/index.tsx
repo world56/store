@@ -1,4 +1,4 @@
-import styles from './index.styl';
+import styles from './index.module.sass';
 import { useMemo, useCallback } from 'react';
 import { initColumns, searchSelect } from './utils';
 import { DatePicker } from '@/components/Formatting';
@@ -48,6 +48,7 @@ export interface SearchFormProps {
   spanSize?: number;
   form: FormInstance;
   columns: Columns[];
+  children?: React.ReactNode;
 };
 
 

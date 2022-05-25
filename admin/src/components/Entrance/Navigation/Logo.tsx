@@ -1,5 +1,5 @@
-import styles from './index.styl';
 import logo from '@/resource/icon.png';
+import styles from './index.module.sass';
 
 interface LogoProps {
   collapsed?: boolean;

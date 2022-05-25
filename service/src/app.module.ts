@@ -6,6 +6,8 @@ import { SystemModule } from './module/system/system.module';
 import { JwtAuthModule } from './common/jwtAuth/jwtAuth.module';
 import { WarehouseModule } from './module/warehouse/warehouse.module';
 import { ConfigModule } from '@nestjs/config';
+import { CategoryModule } from './common/category/category.module';
+import { PurchaseModule } from './module/purchase/purchase.module';
 
 @Module({
   imports: [
@@ -15,6 +17,8 @@ import { ConfigModule } from '@nestjs/config';
     JwtAuthModule,
     WarehouseModule,
     ConfigModule.forRoot(),
+    CategoryModule,
+    PurchaseModule,
   ],
   providers: [
     {

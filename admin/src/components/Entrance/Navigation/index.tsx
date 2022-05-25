@@ -1,8 +1,8 @@
 import Logo from './Logo';
 import { useMemo } from 'react';
 import Icon from '@/layout/Icon';
-import styles from './index.styl';
 import { Layout, Menu } from 'antd';
+import styles from './index.module.sass';
 import Router from '@/router/paths/private';
 import { getPathUrl, initMenu } from '../utils';
 import { useLocation, useHistory } from 'react-router-dom';

@@ -1,5 +1,6 @@
+import { ICON } from './config';
 import { isVoid } from '@/utils';
-import styles from './index.styl';
+import styles from './index.module.sass';
 import { Tooltip, Popconfirm } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import { EyeOutlined, DeleteOutlined } from '@ant-design/icons';
@@ -29,7 +30,9 @@ const List: React.FC<TypeCloudListProps> = ({ list, onRemove }) => {
         const isDone = isVoid(v.status) || v.status === ENUM_COMMON.UPLOAD_STATUS.SUCCESS;
         return <li key={v.id || i}>
           <div>
-            {isDone ? <img src={`${STATIC_RESOURCE}/${v.path}`} alt="#" /> : <LoadingOutlined />}
+            {isDone ?
+              <img src={ICON[v.type] ? ICON[v.type] : `${STATIC_RESOURCE}/${v.path}`} alt="#" /> :
+              <LoadingOutlined />}
           </div>
           <div>
             <p>{isDone ? v.name : '正在上传文件...'}</p>

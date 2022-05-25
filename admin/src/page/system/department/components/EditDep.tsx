@@ -1,12 +1,12 @@
 import { memo } from 'react';
-import Modal from '@/layout/Modal';
+import { Modal } from "@/layout/PopUp";
 import { FormHideKey } from "@/components/Form";
 import { Form, Input, message, Select } from "antd";
 import { useActions, useGetDetails, useStore } from "@/hooks";
 import { checkDepartmentField, getDepartmentDetails, insertDepartment, updateDepartment } from "@/api/system";
 
+import { ENUM_STORE } from '@/enum/store';
 import { DB_PRIMARY_KEY } from '@/config/db';
-import { ENUM_STORE_ACTION } from '@/enum/store';
 
 import type { TypeCommon } from "@/interface/common";
 import type { TypeSystemDepartment } from "@/interface/system/department";
@@ -26,7 +26,8 @@ const formStyle = { labelCol: { span: 4 }, wrapperCol: { span: 20 } };
 const EditDep: React.FC<TypeEditDepProps> = ({ id, visible, onClose }) => {
 
   const actions = useActions();
-  const { dictionaries } = useStore();
+
+  const { category } = useStore();
   const [form] = Form.useForm<TypeSystemDepartment.DTO>();
 
   const { loading } = useGetDetails(async () => {
@@ -35,7 +36,7 @@ const EditDep: React.FC<TypeEditDepProps> = ({ id, visible, onClose }) => {
   }, [id, form]);
 
   useGetDetails(async () => {
-    return actions.getDictionaries(ENUM_STORE_ACTION.DICTIONARIES.ADMIN_USER);
+    return actions.getCategory([ENUM_STORE.CATEGORY.ADMIN_USER]);
   }, [visible]);
 
   async function onSumbit() {
@@ -84,7 +85,7 @@ const EditDep: React.FC<TypeEditDepProps> = ({ id, visible, onClose }) => {
             allowClear
             mode="multiple"
             placeholder="请选择部门用户（多选）">
-            {dictionaries.ADMIN_USER?.LIST?.map(v => <Option key={v.key} value={v.key}>{v.value}</Option>)}
+            {category.ADMIN_USER?.LIST?.map(v => <Option key={v.key} value={v.key}>{v.value}</Option>)}
           </Select>
         </Form.Item>
 

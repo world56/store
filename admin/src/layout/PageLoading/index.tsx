@@ -1,5 +1,5 @@
 import { Spin } from 'antd';
-import styles from './index.styl';
+import styles from './index.module.sass';
 
 const { loadingView, sping } = styles;
 

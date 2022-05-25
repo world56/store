@@ -3,7 +3,7 @@ import { CONFIG_TIME_FORMAT } from "@/config/format";
 
 import type { TypeCommon } from "@/interface/common";
 
-interface TypeDefaultConversionFields
+export interface TypeDefaultConversionFields
   extends Pick<TypeCommon.DTO, "id" | "name" | "parentId"> {}
 
 /**
@@ -43,15 +43,32 @@ export function listToTree<
 }
 
 /**
- * @name dataToDictionaries 转成字典结构
+ * @name toDictionaries 转成字典结构
  */
-export function dataToDictionaries<
+export function toDictionaries<
   T extends TypeDefaultConversionFields = TypeDefaultConversionFields,
 >(data: T[] = []) {
   const OBJ: TypeCommon.GenericObject = {};
   const LIST = data.map((v) => {
     OBJ[v.id] = v.name;
-    return { key: v.id, value: v.name, parentId: v.parentId };
+    return { key: v.id, value: v.name, ...v };
   });
   return { OBJ, LIST };
+}
+
+/**
+ *
+ * @name createRandNum 生成随机数
+ * @param length 随机数个数
+ */
+export function createRandNum(length: number = 10) {
+  const nums = [];
+  let temp;
+  while (nums.length < length) {
+    temp = Math.floor(Math.random() * length);
+    if (nums.indexOf(temp) === -1) {
+      nums[nums.length] = temp;
+    }
+  }
+  return nums;
 }

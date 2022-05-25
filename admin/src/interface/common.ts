@@ -1,6 +1,8 @@
-import { ENUM_COMMON } from "@/enum/common";
-
 import type React from "react";
+import type store from "@/store";
+
+import { ENUM_COMMON } from "@/enum/common";
+import { ENUM_STORE } from "@/enum/store";
 
 /**
  * @name TypeCommon 公共接口
@@ -45,6 +47,28 @@ export namespace TypeCommon {
   export type PromiseReturns<T> = T extends Promise<infer R> ? R : never;
 
   /**
+   * @name Dictionaries 字典
+   */
+  export interface Dictionaries {
+    readonly OBJ: GenericObject;
+    readonly LIST: Array<
+      DefaultKey & Partial<Pick<DTO, "parentId" | "remark">>
+    >;
+  }
+
+  /**
+   * @name Store Redux 状态机
+   */
+  export type Store = ReturnType<typeof store.getState>;
+
+  /**
+   * @name Category 类目
+   */
+  export interface Category extends Pick<DTO, "id" | "name" | "remark"> {
+    type: ENUM_STORE.CATEGORY;
+  }
+
+  /**
    * @name ServiceReturn 返回的标准List
    * @param count 总数
    */
@@ -83,8 +107,8 @@ export namespace TypeCommon {
     id: number;
     name: string;
     path: string;
-    type: string;
     userId?: string;
+    type: ENUM_COMMON.FILE_TYPE;
     status?: ENUM_COMMON.UPLOAD_STATUS;
   }
 }

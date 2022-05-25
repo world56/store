@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import Modal from '@/layout/Modal';
+import { Modal } from "@/layout/PopUp";
 import { useGetDetails } from '@/hooks';
 import { Form, Input, message } from 'antd';
 import { FormHideKey } from '@/components/Form';

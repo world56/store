@@ -7,7 +7,7 @@ import { IntersectionType, PartialType, PickType } from '@nestjs/swagger';
  */
 export class WarehousePositionQueryListDTO extends IntersectionType(
   PickType(CommonDTO, ['currentPage', 'pageSize'] as const),
-  PartialType(PickType(WarehousePositionDTO, ['name', 'status'])),
+  PartialType(PickType(WarehousePositionDTO, ['name', 'status', 'personId'])),
 ) {
   take: number;
   skip: number;

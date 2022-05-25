@@ -1,8 +1,8 @@
+import { Type } from 'class-transformer';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsEnum, IsInt, IsString, IsOptional, Min } from 'class-validator';
 
 import { ENUM_COMMON } from '@/enum/common';
-import { Type } from 'class-transformer';
 
 /**
  * @name PrimaryKeyDTO 主键 Int
@@ -15,9 +15,10 @@ export class PrimaryKeyDTO {
     description: 'PRIMARY KEY (number)',
   })
   @Type(() => Number)
-  @IsInt()
+  @IsInt({ message: '主键ID仅支持INT' })
   id: number;
 }
+
 
 /**
  * @name CommonDTO 公共
@@ -106,4 +107,5 @@ export class CommonDTO extends PartialType(PrimaryKeyDTO) {
   @Type(() => Number)
   @IsInt({ each: true })
   ids: number[];
+
 }

@@ -17,7 +17,9 @@ generator js {
   previewFeatures = ["referentialIntegrity", "interactiveTransactions"]
 }
 
-// 静态资源管理
+// ***********************公共****************************
+
+// 静态资源
 model Files {
   id         Int       @id() @default(autoincrement())
   path       String    @db.Char(100) // 文件地址
@@ -26,19 +28,29 @@ model Files {
   userId     Int       @map("user_id") @db.Int() // 上传人id 
   createTime DateTime? @default(now()) @map("create_time")
 
+  supplier PurchaseSupplier[]
+
   @@index([name])
   @@index([type])
   @@index([userId])
   @@map("files")
 }
 
-model RelFilesOnProduct {
-  id        Int @id() @default(autoincrement())
-  productId Int @map("product_id") @db.Int()
-  fileId    Int @map("file_id") @db.Int()
+// 类目管理（字典）
+model Categorys {
+  id     Int     @id() @default(autoincrement())
+  name   String  @db.VarChar(20)
+  type   String  @db.VarChar(30)
+  remark String? @db.VarChar(255) // 备注
 
-  @@map("rel_product_on_files")
+  supplier PurchaseSupplier[] // 供应商
+
+  @@index([name])
+  @@index([type])
+  @@map("category")
 }
+
+// ***********************系统模块****************************
 
 // 管理系统用户
 model AdminUser {
@@ -54,7 +66,7 @@ model AdminUser {
   remark     String?  @db.VarChar(255) // 备注
   createTime DateTime @default(now()) @map("create_time") @db.Timestamp(6) // 创建时间
 
-  warehousePosition WarehousePosition?
+  warehousePosition WarehousePosition[]
 
   @@index([account])
   @@index([name])
@@ -63,6 +75,17 @@ model AdminUser {
   @@index([isSuper])
   @@index([password])
   @@map("admin_user")
+}
+
+model RelAdminUserRole {
+  id          Int @id @default(autoincrement())
+  roleId      Int @map("role_id") @db.Int()
+  adminUserId Int @map("admin_user_id") @db.Int()
+
+  @@unique([roleId, adminUserId])
+  @@index([roleId])
+  @@index([adminUserId])
+  @@map("rel_admin_user_role")
 }
 
 // 角色
@@ -105,17 +128,6 @@ model RelRolePermission {
   @@map("rel_role_permission")
 }
 
-model RelAdminUserRole {
-  id          Int @id @default(autoincrement())
-  roleId      Int @map("role_id") @db.Int()
-  adminUserId Int @map("admin_user_id") @db.Int()
-
-  @@unique([roleId, adminUserId])
-  @@index([roleId])
-  @@index([adminUserId])
-  @@map("rel_admin_user_role")
-}
-
 // 部门
 model Department {
   id       Int     @id @default(autoincrement())
@@ -140,15 +152,50 @@ model RelDepartmentOnAdminUser {
   @@map("rel_department_admin_user")
 }
 
+// ***********************采购****************************
+
+// 供应商
+model PurchaseSupplier {
+  id     Int     @id() @default(autoincrement())
+  name   String  @unique @db.VarChar(32)
+  remark String? @db.VarChar(255) // 备注
+  status Int     @default(1) @db.Int() // 状态
+
+  files    Files[]
+  type     Categorys[]
+  contacts PurchaseSupplierContacts[]
+
+  @@index([name])
+  @@map("purchase_supplier")
+}
+
+// 供应商联系方式
+model PurchaseSupplierContacts {
+  id      Int     @id() @default(autoincrement())
+  name    String  @db.VarChar(32)
+  phone   String  @db.Char(11) // 联系电话
+  address String  @db.VarChar(255)
+  remark  String? @db.VarChar(255) // 备注
+
+  supplierId Int              @map("supplier_id") @db.Int()
+  supplier   PurchaseSupplier @relation(fields: [supplierId], references: [id])
+
+  @@index([supplierId])
+  @@map("purchase_supplier_contacts")
+}
+
+// ***********************货仓****************************
+
 // 仓位位置
 model WarehousePosition {
-  id       Int     @id() @default(autoincrement())
-  name     String  @unique @db.VarChar(32)
-  status   Int?    @default(1) @db.Int()
-  personId Int     @unique @map("person_id") @db.Int()
-  remark   String? @db.VarChar(255) // 备注
+  id     Int     @id() @default(autoincrement())
+  name   String  @unique @db.VarChar(32)
+  status Int?    @default(1) @db.Int()
+  remark String? @db.VarChar(255) // 备注
 
-  contacts AdminUser                       @relation(fields: [personId], references: [id])
+  personId Int @map("person_id") @db.Int()
+
+  person   AdminUser                       @relation(fields: [personId], references: [id])
   products RelProductOnWarehousePosition[]
 
   @@index([name])
@@ -156,8 +203,8 @@ model WarehousePosition {
   @@map("warehouse_position")
 }
 
-// 产品出入库管理 产品
-model ProductWarehousing {
+// 产品盘点
+model WarehouseProduct {
   id            Int       @id() @default(autoincrement())
   name          String    @db.VarChar(255)
   count         BigInt    @db.BigInt()
@@ -177,8 +224,8 @@ model RelProductOnWarehousePosition {
   positionId Int @map("position_id") @db.Int()
   productId  Int @map("product_id") @db.Int()
 
-  positions WarehousePosition  @relation(fields: [positionId], references: [id])
-  products  ProductWarehousing @relation(fields: [productId], references: [id])
+  positions WarehousePosition @relation(fields: [positionId], references: [id])
+  products  WarehouseProduct  @relation(fields: [productId], references: [id])
 
   @@unique([positionId, productId])
   @@index([positionId])

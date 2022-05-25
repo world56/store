@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { TypeCommon } from '@/interface/common';
 import { PrimaryKeyDTO } from '@/dto/common.dto';
+import { TypeCommon } from '@/interface/common';
 
 @Injectable()
 export class UtilsService {
@@ -16,10 +16,20 @@ export class UtilsService {
   }
 
   /**
-   * @name getSingleIds 数组 非重复ids
+   * @name getSingleIds 数组 获取非重复ids
    */
   getSingleIds(ids: Array<number | string>) {
     return ids.filter((v) => ids.indexOf(v) === ids.lastIndexOf(v));
+  }
+
+  private readonly voids = ['', undefined, null, NaN];
+
+  notVoid = (val: any) => {
+    return !this.voids.includes(val);
+  };
+
+  isVoid(val: any) {
+    return this.voids.includes(val);
   }
 
   /**
@@ -38,13 +48,39 @@ export class UtilsService {
    * @name filterArrayRepeatKeys 数组 过滤l、r相互重复的key
    * @param l client data
    * @param r db data
+   * @param toId 是否返回Array<{ id:number; }>;
    */
-  filterArrayRepeatKeys<T extends TypeCommon.ArrayKeys>(l: T, r: T) {
-    const map = this.getArrayRepeatKeys([...l, ...r]);
-    return [l.filter((v) => map[v] === 1), r.filter((v) => map[v] === 1)];
+  filterArrayRepeatKeys(l: number[], r: number[]): Array<number[]>;
+  filterArrayRepeatKeys(
+    l: number[],
+    r: number[],
+    toId: boolean,
+  ): Array<{ id: number }[]>;
+  filterArrayRepeatKeys(l: number[], r: number[], toId?: boolean) {
+    const map = this.getArrayRepeatKeys([...l, ...r].filter(this.notVoid));
+    const insert = l.filter((v) => map[v] === 1);
+    const del = r.filter((v) => map[v] === 1);
+    return toId
+      ? [insert.map((id) => ({ id })), del.map((id) => ({ id }))]
+      : [insert, del];
   }
 
-  isVoid(val: unknown) {
-    return val === '' || val === undefined || val === null;
+  /**
+   * @name filterGrouping 条件过滤分离数组
+   */
+  filterGrouping<T extends { id?: number }>(
+    list: Array<T>,
+    callback: (val: T) => boolean |string |number,
+  ) {
+    const trues: T[] = [];
+    const falses: T[] = [];
+    list.forEach((v) => {
+      if (callback(v)) {
+        trues.push(v);
+      } else {
+        falses.push(v);
+      }
+    });
+    return [trues, falses];
   }
 }

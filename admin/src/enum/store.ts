@@ -1,37 +1,32 @@
 /**
- * @name ENUM_STORE_ACTION 枚举-redux action
+ * @name ENUM_STORE redux action
  */
-export namespace ENUM_STORE_ACTION {
+export namespace ENUM_STORE {
   /**
-   * @name LOGIN 登录
+   * @name ACTION_CATEGORY 获取category action
    */
-  export enum LOGIN {
-    SET_USER_INFO = "SET_USER_INFO",
-    DEL_USER_INFO = "DEL_USER_INFO",
-    GET_USER_INFO = "GET_USER_INFO",
-    USER_LOGIN = "USER_LOGIN",
+  export enum ACTION_CATEGORY {
+    QUERY = "QUERY",
+    SET = "SET",
   }
 
   /**
-   * @name SYSTEM 系统
-   */
-  export enum SYSTEM {
-    SET_NAV_STATUS = "SET_NAV_STATUS",
-  }
-
-  /**
-   * @name DICTIONARIES 获取词典
+   * @name CATEGORY 词典
    * @param ROLE 角色
    * @param DEPARTMENT 部门
    * @param ADMIN_USER 管理系统用户
-   * @param WAREHOUSE_POSITION 仓库仓位
+   * @param PURCHASE_PRODUCT_TYPE 供应商类型
+   * @param WAREHOUSE_POSITION 仓库仓位位置
+   * @param WAREHOUSE_UNIT 库房计量单位
+   * @param WAREHOUSE_PRODUCT_TYPE 仓库产品类型
    */
-  export enum DICTIONARIES {
-    QUERY = "QUERY",
-    SET = "SET",
+  export enum CATEGORY {
     ROLE = "ROLE",
     ADMIN_USER = "ADMIN_USER",
     DEPARTMENT = "DEPARTMENT",
+    PURCHASE_PRODUCT_TYPE = "PURCHASE_PRODUCT_TYPE",
+    WAREHOUSE_UNIT = "WAREHOUSE_UNIT",
     WAREHOUSE_POSITION = "WAREHOUSE_POSITION",
+    WAREHOUSE_PRODUCT_TYPE = "WAREHOUSE_PRODUCT_TYPE",
   }
 }

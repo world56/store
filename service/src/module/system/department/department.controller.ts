@@ -1,10 +1,10 @@
 import { ApiTags } from '@nestjs/swagger';
-import { QueryListPipe } from '@/pipe/query-list.pipe';
-import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
-import { DepartmentQueryListDTO } from './dto/department-query-list.dto';
-import { DepartmentDTO } from '@/dto/department.dto';
-import { DepartmentService } from './department.service';
 import { PrimaryKeyDTO } from '@/dto/common.dto';
+import { DepartmentDTO } from '@/dto/department.dto';
+import { QueryListPipe } from '@/pipe/query-list.pipe';
+import { DepartmentService } from './department.service';
+import { DepartmentQueryListDTO } from './dto/department-query-list.dto';
+import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
 
 @ApiTags('部门管理')
 @Controller('system/department')

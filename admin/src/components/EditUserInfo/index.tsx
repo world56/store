@@ -1,7 +1,7 @@
 import Uploads from '../Uploads';
 import { useEffect } from 'react';
-import Modal from '@/layout/Modal';
 import { FormHideKey } from '../Form';
+import { Modal } from "@/layout/PopUp";
 import { encryption } from '@/utils/crypto';
 import { CONSTANT_REG } from '@/constant/reg';
 import { Switch } from '@/components/Formatting';
@@ -11,10 +11,10 @@ import { Form, Input, Select, message } from 'antd';
 import { useActions, useGetDetails, useStore } from '@/hooks';
 import { addAdminUser, updateAdminUser, getAdminUserInfo } from '@/api/system';
 
+import { ENUM_STORE } from '@/enum/store';
 import { ENUM_COMMON } from '@/enum/common';
 import { ENUM_SYSTEM } from '@/enum/system';
 import { DB_PRIMARY_KEY } from '@/config/db';
-import { ENUM_STORE_ACTION } from '@/enum/store';
 
 import type { TypeCommon } from '@/interface/common';
 import type { TypeSystemUser } from '@/interface/system/user';
@@ -49,7 +49,8 @@ const EditUserInfo: React.FC<TypeEditUserInfoProps> = ({ id, type, visible, onCl
   const [form] = Form.useForm<TypeSystemUser.DTO>();
 
   const actions = useActions();
-  const { user, dictionaries: { DEPARTMENT, ROLE } } = useStore();
+  const { user, category: { DEPARTMENT, ROLE } } = useStore();
+
 
   const { loading } = useGetDetails(async () => {
     const data = await getAdminUserInfo({ id: id! });
@@ -67,7 +68,7 @@ const EditUserInfo: React.FC<TypeEditUserInfoProps> = ({ id, type, visible, onCl
       await request(values);
     }
     message.success('操作成功');
-    onClose();
+    onCancel();
   };
 
   function onCancel() {
@@ -83,8 +84,10 @@ const EditUserInfo: React.FC<TypeEditUserInfoProps> = ({ id, type, visible, onCl
 
   useEffect(() => {
     if (visible && !isSuperAdmin) {
-      actions.getDictionaries(ENUM_STORE_ACTION.DICTIONARIES.ROLE);
-      actions.getDictionaries(ENUM_STORE_ACTION.DICTIONARIES.DEPARTMENT);
+      actions.getCategory([
+        ENUM_STORE.CATEGORY.ROLE,
+        ENUM_STORE.CATEGORY.DEPARTMENT
+      ]);
     }
   }, [visible, isSuperAdmin, actions]);
 
@@ -100,9 +103,9 @@ const EditUserInfo: React.FC<TypeEditUserInfoProps> = ({ id, type, visible, onCl
 
         <FormHideKey />
 
-        <Form.Item name='avatar' noStyle>
+        {isSuperAdmin ? null : <Form.Item name='avatar' noStyle>
           <Uploads.Avatar />
-        </Form.Item>
+        </Form.Item>}
 
         {isSuperAdmin ? <Form.Item name='isSuper' noStyle initialValue={ENUM_SYSTEM.SUPER_ADMIN.SUPER}>
           <Input className='none' />
@@ -162,6 +165,7 @@ const EditUserInfo: React.FC<TypeEditUserInfoProps> = ({ id, type, visible, onCl
             <Select
               allowClear
               mode="multiple"
+              disabled={isPersonal}
               placeholder="请选择用户角色（多选）">
               {ROLE?.LIST?.map(v => <Option key={v.key} value={v.key}>{v.value}</Option>)}
             </Select>
@@ -171,6 +175,7 @@ const EditUserInfo: React.FC<TypeEditUserInfoProps> = ({ id, type, visible, onCl
             <Select
               allowClear
               mode="multiple"
+              disabled={isPersonal}
               placeholder="请选择用户所属部门（多选）">
               {DEPARTMENT?.LIST?.map(v => <Option key={v.key} value={v.key}>{v.value}</Option>)}
             </Select>

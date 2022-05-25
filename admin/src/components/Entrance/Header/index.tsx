@@ -1,7 +1,7 @@
 import { Layout } from 'antd';
-import styles from './index.styl';
 import { useActions } from '@/hooks';
 import UserHandler from './UserHandler';
+import styles from './index.module.sass';
 import { MenuFoldOutlined } from '@ant-design/icons';
 
 interface HeaderProps {
@@ -20,7 +20,7 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <Layout.Header className={styles.layout}>
       <MenuFoldOutlined
-        onClick={actions.setNavCollapsed}
+        onClick={() => actions.setNavCollapsed()}
         className={collapsed ? styles.close : ''}
         title={`点击${collapsed ? '展开' : '收起'}导航栏`} />
       <UserHandler />

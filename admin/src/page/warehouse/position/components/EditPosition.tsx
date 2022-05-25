@@ -1,9 +1,9 @@
 import {
   insertWarehousePosition,
-  updatetWarehousePosition,
+  updateWarehousePosition,
   getWarehousePositionDetails,
 } from "@/api/warehouse";
-import Modal from "@/layout/Modal";
+import { Modal } from "@/layout/PopUp";
 import { FormHideKey } from "@/components/Form";
 import { useGetDetails, useStore } from "@/hooks";
 import { Form, Input, message, Select } from "antd";
@@ -28,7 +28,7 @@ const formStyle = { labelCol: { span: 4 }, wrapperCol: { span: 20 } };
 const EditPosition: React.FC<TypeEditPositionProps> = ({ id, visible, onClose }) => {
 
   const [form] = Form.useForm<TypeWarehousePosition.DTO>();
-  const { dictionaries: { ADMIN_USER, WAREHOURE_STATUS } } = useStore();
+  const { category: { ADMIN_USER, WAREHOURE_STATUS } } = useStore();
 
   const { loading } = useGetDetails(async () => {
     const data = await getWarehousePositionDetails({ id: id! });
@@ -37,7 +37,7 @@ const EditPosition: React.FC<TypeEditPositionProps> = ({ id, visible, onClose })
 
   async function onSumbit() {
     const values = await form.validateFields();
-    if (id) await updatetWarehousePosition(values);
+    if (id) await updateWarehousePosition(values);
     else await insertWarehousePosition(values);
     message.success('操作成功');
     onCancel();

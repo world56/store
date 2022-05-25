@@ -44,9 +44,9 @@ export function insertWarehousePosition(data: TypeWarehousePosition.DTO) {
 }
 
 /**
- * @name updatetWarehousePosition 编辑仓位
+ * @name updateWarehousePosition 编辑仓位
  */
-export function updatetWarehousePosition(data: TypeWarehousePosition.DTO) {
+export function updateWarehousePosition(data: TypeWarehousePosition.DTO) {
   return request<boolean>("warehouse/position/update", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,

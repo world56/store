@@ -1,0 +1,21 @@
+@mixin formItemFunc($list)
+  @each $var in $list
+    :global(.ant-form-item):nth-child(#{$var})
+      :global(.ant-form-item-label)
+        label
+          position: relative
+          width: 100%
+
+          :nth-child(2)
+            right: 0
+            position: absolute
+  @content
+
+.drawerTabs
+  :global(.ant-drawer-body)
+    padding: 0 0 20px 0
+  :global(.ant-tabs-content-holder)
+    padding: 0 20px
+  :global(.ant-tabs-nav-wrap)
+    display: flex
+    justify-content: center

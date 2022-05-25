@@ -1,8 +1,8 @@
-import { useRequest } from 'ahooks';
 import { useStore } from '@/hooks';
+import { useRequest } from 'ahooks';
 import { listToTree } from '@/utils';
 import Search from '@/components/Search';
-import { BtnEditDel } from '@/layout/Table';
+import { BtnEditDel } from '@/layout/Button';
 import StatusColor from '@/layout/StatusColor';
 import { KeyOutlined } from '@ant-design/icons';
 import { useEffect, useState, useCallback } from 'react';
@@ -36,7 +36,7 @@ const Permission = () => {
   const [id, setId] = useState<number>();
   const [window, setWindow] = useState(false);
 
-  const { dictionaries: { PERMISSION_TYPE } } = useStore();
+  const { category: { PERMISSION_TYPE } } = useStore();
 
   const { data, loading, run: initialize } = useRequest(async () => {
     const param = await search.validateFields();

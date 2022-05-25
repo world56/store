@@ -2,7 +2,7 @@ import { useRequest } from 'ahooks';
 import { usePageTurning } from '@/hooks';
 import Search from '@/components/Search';
 import EditDep from './components/EditDep';
-import { BtnEditDel } from '@/layout/Table';
+import { BtnEditDel } from '@/layout/Button';
 import { TeamOutlined } from '@ant-design/icons';
 import { Card, Form, Table, Button, message } from 'antd';
 import { getDepartmentList, removeDepartment } from '@/api/system';

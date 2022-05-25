@@ -29,4 +29,16 @@ export namespace ENUM_COMMON {
     COMPRESSED = 'COMPRESSED',
     OTHER = 'OTHER',
   }
+
+  /**
+   * @name CATEGORY_TYPE 类型类目
+   * @param WAREHOUSE_UNIT 仓库计量单位
+   * @param PURCHASE_PRODUCT_TYPE 供应商产品类目
+   * @param WAREHOUSE_PRODUCT_TYPE 仓库产品类型
+   */
+  export enum CATEGORY_TYPE {
+    WAREHOUSE_UNIT = 'WAREHOUSE_UNIT',
+    PURCHASE_PRODUCT_TYPE = 'PURCHASE_PRODUCT_TYPE',
+    WAREHOUSE_PRODUCT_TYPE = 'WAREHOUSE_PRODUCT_TYPE',
+  }
 }

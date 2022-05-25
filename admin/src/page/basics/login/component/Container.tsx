@@ -1,11 +1,11 @@
-import styles from '../index.styl';
 import Icon from '@/resource/icon.png';
+import styles from '../index.module.sass';
 import GayHubIcon from '@/resource/gayHub.png';
 
 /**
  * @name Container 登录页容器
  */
-const Container: React.FC = ({ children }) => (
+const Container: React.FC<{ children?: React.ReactNode; }> = ({ children }) => (
   <>
     <header className={styles.header}>
       <div>

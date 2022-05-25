@@ -7,7 +7,9 @@ import {
   PreconditionFailedException,
 } from '@nestjs/common';
 
-// import type { Prisma } from 'prisma/prisma-client';
+interface TypeCheckFieldsRepeatDTO extends Partial<PrimaryKeyDTO> {
+  WHERE?: object;
+}
 
 /**
  * @description MySql
@@ -25,13 +27,14 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     });
   }
 
-  async checkFieldsRepeat<T extends Partial<PrimaryKeyDTO>>(
+  async checkFieldsRepeat<T extends TypeCheckFieldsRepeatDTO>(
     relName: string,
     DTO: T,
     tips?: boolean,
   ) {
-    const OR = Object.entries(DTO).map(([k, v]) => ({ [k]: v }));
-    const list = await this[relName].findMany({ where: { OR } });
+    const { WHERE, ...find } = DTO;
+    const OR = Object.entries(find).map(([k, v]) => ({ [k]: v }));
+    const list = await this[relName].findMany({ where: { ...WHERE, OR } });
     const [target] = list;
     const isRepeat = !Boolean(
       !target || (list.length === 1 && target?.id === DTO.id),
@@ -39,6 +42,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     if (tips && isRepeat) {
       throw new PreconditionFailedException('字段值存在重复，无法保存');
     }
+
     return isRepeat;
   }
 

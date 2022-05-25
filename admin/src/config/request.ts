@@ -6,4 +6,4 @@ export const REQUEST_PREFIX = "http://127.0.0.1:3030/";
 
 export const STATIC_RESOURCE = `${REQUEST_PREFIX}resource`;
 
-export const ICON_PATH = "//at.alicdn.com/t/font_2832355_sn9i65u3g6e.js";
+export const ICON_PATH = "//at.alicdn.com/t/font_2832355_pmnijz0o6tc.js";

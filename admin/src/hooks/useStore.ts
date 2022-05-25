@@ -1,7 +1,7 @@
 import { useSelector, shallowEqual } from "react-redux";
 
-import type { TypeReduxStatus } from "@/interface/redux";
+import type { TypeCommon } from "@/interface/common";
 
 export default function useStore() {
-  return useSelector((store: TypeReduxStatus.Store) => store, shallowEqual);
+  return useSelector((state: TypeCommon.Store) => state, shallowEqual);
 }

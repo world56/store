@@ -11,12 +11,12 @@ export namespace TypeWarehousePosition {
    * @name DTO 仓位编排DTO
    * @param status 仓位状态
    * @param personId 负责人ID
-   * @param contacts 责任人
+   * @param person 责任人
    */
   export interface DTO extends Pick<TypeCommon.DTO, "id" | "name" | "remark"> {
     status: ENUM_WAREHOUSE.STATUS;
     personId: number;
-    contacts: Pick<TypeSystemUser.DTO, "name" | "phone">;
+    person: Pick<TypeSystemUser.DTO, "name" | "phone">;
   }
 
   /**

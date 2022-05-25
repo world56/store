@@ -1,20 +1,21 @@
 import { useEffect } from 'react';
-import styles from './index.styl';
+import styles from '../index.module.sass';
 import Uploads from '@/components/Uploads';
 import { useActions, useStore } from '@/hooks';
+import Categorys from '@/components/Categorys';
 import { Drawer, Form, Input, InputNumber, Select, Button } from "antd";
 
-import { ENUM_STORE_ACTION } from '@/enum/store';
+import { ENUM_STORE } from '@/enum/store';
 
+import type { TypeCommon } from '@/interface/common';
 import type { TypeWarehouseProduct } from "@/interface/warehouse/product";
-import { TypeCommon } from '@/interface/common';
-
-const { Option } = Select;
-const rules = [{ required: true }];
 
 export interface TypeEditWarehouseProductProps extends Partial<TypeCommon.DatabaseMainParameter> {
   visible: boolean;
 };
+
+const { Option } = Select;
+const rules = [{ required: true }];
 
 /**
  * @name EditWarehouseProduct 编辑仓库产品（新增、编辑）
@@ -22,7 +23,7 @@ export interface TypeEditWarehouseProductProps extends Partial<TypeCommon.Databa
 const EditWarehouseProduct: React.FC<TypeEditWarehouseProductProps> = ({ id, visible }) => {
 
   const actions = useActions();
-  const { dictionaries: { WAREHOUSE_POSITION } } = useStore();
+  const { category } = useStore();
 
   const [form] = Form.useForm<TypeWarehouseProduct.DTO>();
 
@@ -32,17 +33,44 @@ const EditWarehouseProduct: React.FC<TypeEditWarehouseProductProps> = ({ id, vis
   };
 
   useEffect(() => {
-    actions.getDictionaries(ENUM_STORE_ACTION.DICTIONARIES.WAREHOUSE_POSITION);
+    actions.getCategory([
+      ENUM_STORE.CATEGORY.WAREHOUSE_UNIT,
+      ENUM_STORE.CATEGORY.WAREHOUSE_POSITION,
+      ENUM_STORE.CATEGORY.WAREHOUSE_PRODUCT_TYPE,
+    ]);
   }, [actions, form]);
 
   return (
-    <Drawer title='编辑仓库产品状态' visible className={styles.edit} footer={[
-      <Button key='1' onClick={onSumbit}>提交</Button>
-    ]}>
+    <Drawer
+      visible={visible}
+      title='编辑仓库产品状态'
+      className={styles.edit}
+      footer={[
+        <Button key='1' onClick={onSumbit}>取消</Button>,
+        <Button key='2' type='primary' onClick={onSumbit}>提交</Button>,
+      ]}>
       <Form form={form} layout='vertical'>
 
         <Form.Item label='产品名称' name='name' rules={rules}>
           <Input placeholder='请输入产品名称' allowClear />
+        </Form.Item>
+
+        <Form.Item
+          label={<>
+            <span>计量单位</span>
+            <Categorys type={ENUM_STORE.CATEGORY.WAREHOUSE_UNIT} />
+          </>}
+          name='unit'
+          rules={rules}>
+          <Categorys.Select type={ENUM_STORE.CATEGORY.WAREHOUSE_UNIT} />
+        </Form.Item>
+
+        <Form.Item
+          label={<>
+            <span>产品类型</span>
+            <Categorys type={ENUM_STORE.CATEGORY.WAREHOUSE_PRODUCT_TYPE} />
+          </>} name='type' rules={rules}>
+          <Categorys.Select type={ENUM_STORE.CATEGORY.WAREHOUSE_PRODUCT_TYPE} />
         </Form.Item>
 
         <Form.Item label='存放仓位' name='positionId' rules={rules}>
@@ -50,23 +78,23 @@ const EditWarehouseProduct: React.FC<TypeEditWarehouseProductProps> = ({ id, vis
             allowClear
             mode="multiple"
             placeholder='请选择存放仓位'>
-            {WAREHOUSE_POSITION?.LIST.map(v => <Option key={v.key} value={v.key}>{v.value}</Option>)}
+            {category.WAREHOUSE_POSITION?.LIST.map(v => <Option key={v.key} value={v.key}>{v.value}</Option>)}
           </Select>
         </Form.Item>
 
-        <Form.Item label='产品数量（个）' name='count' rules={rules}>
+        <Form.Item label='产品数量' name='count' rules={rules}>
           <InputNumber placeholder='请输入产品数量' min={0} />
         </Form.Item>
 
-        <Form.Item label='阈值存量（个）' name='alertQuantity'>
-          <InputNumber placeholder='请输入阈值存量（为0则不监控库存剩余存量）' min={0} />
+        <Form.Item label='阈值存量' name='alertQuantity' tooltip='达到最低阈值将进行提示'>
+          <InputNumber placeholder='请输入阈值存量（为空则不监控库存剩余存量）' min={0} />
         </Form.Item>
 
-        <Form.Item label='备注' name='remark'>
-          <Input.TextArea allowClear placeholder='清输入备注（选填）' />
+        <Form.Item label='注意事项' name='remark'>
+          <Input.TextArea rows={4} placeholder='清输入注意事项（选填）' allowClear />
         </Form.Item>
 
-        <Form.Item label='附件' name='files'>
+        <Form.Item label='其他附件' name='files'>
           <Uploads />
         </Form.Item>
 

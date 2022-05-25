@@ -1,6 +1,6 @@
 import { useRequest } from 'ahooks';
 import Search from '@/components/Search';
-import { BtnEditDel } from '@/layout/Table';
+import { BtnEditDel } from '@/layout/Button';
 import EditRole from './components/EditRole';
 import StatusColor from '@/layout/StatusColor';
 import { UserAddOutlined } from '@ant-design/icons';
@@ -24,7 +24,7 @@ const Role = () => {
 
   const [id, setId] = useState<number>();
   const [window, setWindow] = useState(false);
-  const { dictionaries: { STATUS } } = useStore()
+  const { category: { STATUS } } = useStore()
 
   const { data, loading, run } = useRequest(getRoleList, { manual: true });
   const [search] = Form.useForm<TypeSystemRole.QueryList>();

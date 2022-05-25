@@ -1,9 +1,9 @@
 import React from 'react';
 import List from './List';
 import { isVoid } from '@/utils';
-import styles from './index.styl';
 import UploadAvatar from './Avatar';
 import { notification } from 'antd';
+import styles from './index.module.sass';
 import ICON_FOLDER from '@/resource/folder.png';
 import { WarningOutlined } from '@ant-design/icons';
 import { removeFiles, uploadFile } from '@/api/common';
@@ -77,6 +77,7 @@ class Uploads extends React.Component<TypeUploadsProps, TypeUploadsState> {
           val.id = data.id;
           val.path = data.path
           val.type = data.type
+          val.userId = data.userId;
           val.status = ENUM_COMMON.UPLOAD_STATUS.SUCCESS;
           break
         }
@@ -114,7 +115,7 @@ class Uploads extends React.Component<TypeUploadsProps, TypeUploadsState> {
     const adds = files.map(f => {
       const { name } = f;
       const id = ++this.index;
-      return { id, name, path: '', type: '', status: ENUM_COMMON.UPLOAD_STATUS.LOADING };
+      return { id, name, path: '', type: ENUM_COMMON.FILE_TYPE.IMAGE, status: ENUM_COMMON.UPLOAD_STATUS.LOADING };
     });
     this.setState({ list: [...this.state.list, ...adds] }, () => {
       files.forEach((v, i) => this.uploadFile(v, adds[i].id))

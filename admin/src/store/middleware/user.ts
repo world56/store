@@ -1,18 +1,23 @@
 import Cookies from "js-cookie";
 import { History } from "@/router";
-import { UserAction } from "../action";
+import { ActionsUser } from "../user";
 import { TOKEN_KEY } from "@/config/user";
+import ActionsMiddleware from "./actions";
 import { encryption } from "@/utils/crypto";
 import { login, getUserInfo, getPubilcKey } from "@/api/auth";
 import { put, call, throttle, takeLatest } from "redux-saga/effects";
 
-import { ENUM_STORE_ACTION } from "@/enum/store";
 import * as CONFIG_REQUEST from "@/config/request";
 
+import type { PayloadAction } from "@reduxjs/toolkit/dist";
 import type { TypeSystemUser } from "@/interface/system/user";
-import type { TypeStoreUserModule } from "@/interface/redux/user";
 
-function* taskInUserLogin(data: TypeStoreUserModule.ActionUserLogin) {
+type TypeActionsTaskInUserLogin = PayloadAction<
+  TypeSystemUser.Login,
+  typeof ActionsMiddleware.userLogin.type
+>;
+
+function* taskInUserLogin(data: TypeActionsTaskInUserLogin) {
   try {
     const key: string = yield getPubilcKey();
     data.payload.password = encryption(key, data.payload.password);
@@ -25,15 +30,15 @@ function* taskInUserLogin(data: TypeStoreUserModule.ActionUserLogin) {
 function* taskInGetUserInfo() {
   try {
     const user: TypeSystemUser.DTO = yield getUserInfo();
-    yield put(UserAction.setUserInfo(user));
+    yield put(ActionsUser.setUserInfo(user));
   } catch {}
 }
 
 export default function* SagaUser() {
-  yield takeLatest(ENUM_STORE_ACTION.LOGIN.USER_LOGIN, taskInUserLogin);
+  yield takeLatest(ActionsMiddleware.userLogin.type, taskInUserLogin);
   yield throttle(
     CONFIG_REQUEST.SAGA_DEBOUNCE,
-    ENUM_STORE_ACTION.LOGIN.GET_USER_INFO,
+    ActionsMiddleware.getUserInfo.type,
     taskInGetUserInfo,
   );
 }

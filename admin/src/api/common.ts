@@ -1,9 +1,9 @@
-// import request from "@/utils/request";
 import request from "@/utils/request";
 import { ENUM_HTTP } from "@/enum/http";
 
 import { REQUEST_PREFIX } from "@/config/request";
-import { TypeCommon } from "@/interface/common";
+
+import type { TypeCommon } from "@/interface/common";
 
 /**
  * @name API_URL_UPLOAD 上传文件

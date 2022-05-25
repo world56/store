@@ -1,16 +1,21 @@
+import userReducer from "./user";
+import systemReducer from "./system";
+import sagaRuning from "./middleware";
+import categoryReducer from "./category";
+import createSagaMiddleware from "redux-saga";
+import { configureStore, MiddlewareArray } from "@reduxjs/toolkit";
 
-import reducer from './reducers';
-import sagaRuning from './middleware';
-import createSagaMiddleware from 'redux-saga';
-import { createStore, applyMiddleware, compose } from 'redux';
-
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({}) : compose;
-    
 const sagaMiddleware = createSagaMiddleware();
 
-const enhancer = composeEnhancers(applyMiddleware(sagaMiddleware));
-const store = createStore(reducer, enhancer);
+const store = configureStore({
+  reducer: {
+    user: userReducer,
+    system: systemReducer,
+    category: categoryReducer,
+  },
+  middleware: new MiddlewareArray().concat(sagaMiddleware),
+});
+
 sagaMiddleware.run(sagaRuning);
 
 export default store;

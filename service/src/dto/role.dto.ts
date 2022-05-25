@@ -1,6 +1,12 @@
 import { CommonDTO } from './common.dto';
 import { ApiProperty, PickType } from '@nestjs/swagger';
-import { IsInt, IsOptional, IsString, MaxLength } from 'class-validator';
+import {
+  IsInt,
+  IsOptional,
+  IsString,
+  MaxLength,
+  ValidateIf,
+} from 'class-validator';
 
 /**
  * @name RoleDTO 角色DTO
@@ -12,15 +18,16 @@ export class RoleDto extends PickType(CommonDTO, ['id', 'status'] as const) {
   @ApiProperty({
     description: '角色名称',
   })
-  @MaxLength(10)
+  @MaxLength(20)
   @IsString()
   name: string;
 
   @ApiProperty({
     description: '权限点',
   })
+  @IsOptional()
   @IsInt({ each: true })
-  permissionId: number[];
+  permissionId?: number[];
 
   /**
    * @param remark 角色备注

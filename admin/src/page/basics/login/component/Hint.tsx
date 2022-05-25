@@ -1,4 +1,4 @@
-import styles from '../index.styl';
+import styles from '../index.module.sass';
 import { AlertOutlined } from '@ant-design/icons';
 
 /**

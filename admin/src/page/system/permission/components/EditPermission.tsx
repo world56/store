@@ -6,8 +6,8 @@ import {
   checkPermissionField,
 } from '@/api/system';
 import { memo } from 'react';
-import Modal from '@/layout/Modal';
 import { listToTree } from '@/utils';
+import { Modal } from "@/layout/PopUp";
 import { FormHideKey } from '@/components/Form';
 import { Switch } from '@/components/Formatting';
 import { useGetDetails, useStore } from '@/hooks';
@@ -44,7 +44,7 @@ const EditPermission: React.FC<TypeEditPermissionProps> = ({
   visible,
 }) => {
 
-  const { dictionaries: { PERMISSION_TYPE } } = useStore();
+  const { category: { PERMISSION_TYPE } } = useStore();
 
   const [form] = Form.useForm<TypeSystemPermission.DTO>();
 

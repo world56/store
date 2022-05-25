@@ -1,6 +1,6 @@
 import { useRequest } from "ahooks";
 import Search from "@/components/Search";
-import { BtnEditDel } from '@/layout/Table';
+import { BtnEditDel } from '@/layout/Button';
 import { InboxOutlined } from '@ant-design/icons';
 import StatusColors from './components/StatusColors';
 import EditPosition from "./components/EditPosition";
@@ -9,8 +9,8 @@ import { useActions, usePageTurning, useStore } from "@/hooks";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { getWarehousePositionList, removeWarehousePosition } from "@/api/warehouse";
 
+import { ENUM_STORE } from "@/enum/store";
 import { DB_PRIMARY_KEY } from '@/config/db';
-import { ENUM_STORE_ACTION } from "@/enum/store";
 
 import type { TypeWarehousePosition } from "@/interface/warehouse/position";
 
@@ -20,16 +20,14 @@ import type { TypeWarehousePosition } from "@/interface/warehouse/position";
 const Position = () => {
 
   const actions = useActions();
-  const { dictionaries: { WAREHOURE_STATUS } } = useStore();
+  const { category } = useStore();
 
   const [search] = Form.useForm<TypeWarehousePosition.Query>();
 
   const [id, setId] = useState<number>();
   const [visible, setVisible] = useState(false);
 
-  const {
-    data, run, loading
-  } = useRequest(getWarehousePositionList, { manual: true });
+  const { data, run, loading } = useRequest(getWarehousePositionList, { manual: true });
 
   const pagination = usePageTurning(data?.count);
   const { pageSize, currentPage } = pagination;
@@ -63,30 +61,36 @@ const Position = () => {
     {
       key: 'status',
       name: "仓位状态",
-      list: WAREHOURE_STATUS?.LIST,
+      list: category.WAREHOURE_STATUS?.LIST,
       type: Search.ENUM.COMP_TYPE.SELECT,
-    }
-  ], [WAREHOURE_STATUS]);
+    },
+    {
+      key: 'personId',
+      name: "负责人",
+      list: category.ADMIN_USER?.LIST,
+      type: Search.ENUM.COMP_TYPE.SELECT,
+    },
+  ], [category]);
 
   const columns = [
     { key: 'name', dataIndex: 'name', title: '仓位名称' },
     {
       key: 'id',
-      dataIndex: 'contacts',
+      dataIndex: 'person',
       title: '负责人',
-      render: (row: TypeWarehousePosition.DTO['contacts']) => row.name
+      render: (row: TypeWarehousePosition.DTO['person']) => row?.name
     },
     {
       key: 'id',
-      dataIndex: 'contacts',
+      dataIndex: 'person',
       title: '联系电话',
-      render: (row: TypeWarehousePosition.DTO['contacts']) => row.phone
+      render: (row: TypeWarehousePosition.DTO['person']) => row?.phone
     },
     {
       key: 'status',
       dataIndex: 'status',
       title: '状态',
-      render: (status: number) => <StatusColors enums={WAREHOURE_STATUS} status={status} />
+      render: (status: number) => <StatusColors enums={category.WAREHOURE_STATUS} status={status} />
     },
     { key: 'remark', dataIndex: 'remark', title: '备注' },
     {
@@ -102,7 +106,7 @@ const Position = () => {
   }, [initializa]);
 
   useEffect(() => {
-    actions.getDictionaries(ENUM_STORE_ACTION.DICTIONARIES.ADMIN_USER);
+    actions.getCategory([ENUM_STORE.CATEGORY.ADMIN_USER]);
   }, [actions]);
 
   return (

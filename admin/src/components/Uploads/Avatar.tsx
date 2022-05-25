@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import { Component } from 'react';
-import styles from './index.styl';
+import styles from './index.module.sass';
 import { UserOutlined } from '@ant-design/icons';
 import { Upload, Avatar, Tooltip, message, Spin } from 'antd';
 

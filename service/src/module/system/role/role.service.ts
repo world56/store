@@ -67,9 +67,11 @@ export class RoleService {
     const { permissionId, ...data } = info;
     return await this.PrismaService.$transaction(async (prisma) => {
       const { id: roleId } = await prisma.role.create({ data });
-      await prisma.relRolePermission.createMany({
-        data: permissionId.map((permissionId) => ({ permissionId, roleId })),
-      });
+      if (permissionId?.length) {
+        await prisma.relRolePermission.createMany({
+          data: permissionId.map((permissionId) => ({ permissionId, roleId })),
+        });
+      }
       return true;
     });
   }

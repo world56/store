@@ -2,7 +2,7 @@ import { Badge } from 'antd';
 import { ENUM_WAREHOUSE } from '@/enum/warehouse';
 
 import type { BadgeProps } from 'antd/lib/badge';
-import type { TypeReduxStatus } from '@/interface/redux';
+import type { TypeCommon } from '@/interface/common';
 
 const COLORS = {
   [ENUM_WAREHOUSE.STATUS.ABNORMAL]: 'error',
@@ -13,7 +13,7 @@ const COLORS = {
 
 interface TypeStatusColorsProps {
   status: ENUM_WAREHOUSE.STATUS;
-  enums?: TypeReduxStatus.Dictionaries;
+  enums?: TypeCommon.Dictionaries;
 };
 
 /**

@@ -6,19 +6,19 @@ import { WarehousePositionQueryListDTO } from './dto/warehouse-position-list-que
 
 @Injectable()
 export class PositionService {
-  constructor(private readonly PrismaService: PrismaService) {}
+  public constructor(private readonly PrismaService: PrismaService) {}
 
   async getList(query: WarehousePositionQueryListDTO) {
-    const { name, status, skip, take } = query;
-    const findParam = {
-      skip,
-      take,
-      where: { status, name: { contains: name } },
-      include: { contacts: { select: { name: true, phone: true } } },
-    };
+    const { name, status, skip, take, personId } = query;
+    const where = { where: { personId, status, name: { contains: name } } };
     const [count, list] = await Promise.all([
-      this.PrismaService.warehousePosition.count(),
-      this.PrismaService.warehousePosition.findMany(findParam),
+      this.PrismaService.warehousePosition.count(where),
+      this.PrismaService.warehousePosition.findMany({
+        skip,
+        take,
+        ...where,
+        include: { person: { select: { name: true, phone: true } } },
+      }),
     ]);
     return { count, list };
   }

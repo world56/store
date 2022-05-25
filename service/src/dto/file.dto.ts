@@ -5,7 +5,7 @@ import { PickType, ApiProperty } from '@nestjs/swagger';
 /**
  * @name FileDTO 静态资源
  */
-export class FileDTO extends PickType(CommonDTO, ['name']) {
+export class FileDTO extends PickType(CommonDTO, ['name', 'id']) {
   /**
    * @param userId 上传文件的用户名称
    */

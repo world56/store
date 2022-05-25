@@ -1,10 +1,72 @@
 import request from "@/utils/request";
+
 import { ENUM_HTTP } from "@/enum/http";
 
+import type { TypeCommon } from "@/interface/common";
 import type { TypeSystemRole } from "@/interface/system/role";
 import type { TypeSystemUser } from "@/interface/system/user";
 import type { TypeSystemDepartment } from "@/interface/system/department";
 import type { TypeWarehousePosition } from "@/interface/warehouse/position";
+
+/**
+ * --------------------- 类目类型管理 ----------------------
+ */
+
+/**
+ * @name getCategoryList 类目列表
+ */
+export function getCategoryList(params: { type: string[] }) {
+  return request<TypeCommon.Category[]>("category/list", {
+    method: ENUM_HTTP.REQUEST_MODE.GET,
+    params,
+  });
+}
+
+/**
+ * @name insertCategory 新增类目
+ */
+export function insertCategory(data: TypeCommon.Category) {
+  return request<boolean>("category/insert", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
+}
+
+/**
+ * @name updateCategory 编辑类目信息
+ */
+export function updateCategory(data: TypeCommon.Category) {
+  return request<TypeCommon.Category[]>("category/update", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
+}
+
+/**
+ * @name getCategoryDetails 获取类目详情
+ */
+export function getCategoryDetails(data: TypeCommon.DatabaseMainParameter) {
+  return request<TypeCommon.Category>("category/details", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
+}
+
+/**
+ * @name checkCategoryFields 检测类目字段重复
+ */
+export function checkCategoryFields(
+  params: Partial<Pick<TypeCommon.Category, "id" | "name" | "type">>,
+) {
+  return request<TypeCommon.Category>("category/check", {
+    method: ENUM_HTTP.REQUEST_MODE.GET,
+    params,
+  });
+}
+
+/**
+ * --------------------- ENUM-API ----------------------
+ */
 
 /**
  * @name getAllAdminUserList 用户列表

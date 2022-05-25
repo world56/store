@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import { useState } from 'react';
-import styles from './index.styl';
+import styles from './index.module.sass';
 import { TOKEN_KEY } from '@/config/user';
 import UserIcon from '@/resource/icon.jpg';
 import { useHistory } from 'react-router-dom';

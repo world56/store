@@ -1,5 +1,5 @@
 import { useRequest } from 'ahooks';
-import { Btn } from '@/layout/Table';
+import { Btn } from '@/layout/Button';
 import Search from '@/components/Search';
 import { timestampToTime } from '@/utils';
 import StatusColor from '@/layout/StatusColor';
@@ -11,9 +11,9 @@ import { useState, useCallback, useEffect, useMemo } from 'react';
 import { ExclamationCircleOutlined, SmileOutlined } from '@ant-design/icons';
 import { getUserList, freezeAdminUser, resetAdminUserPwd } from '@/api/system';
 
+import { ENUM_STORE } from '@/enum/store';
 import { ENUM_COMMON } from '@/enum/common';
 import { DB_PRIMARY_KEY } from '@/config/db';
-import { ENUM_STORE_ACTION } from '@/enum/store';
 
 import type { TypeSystemUser } from '@/interface/system/user';
 import { ENUM_SYSTEM } from '@/enum/system';
@@ -28,7 +28,7 @@ interface TypeQueryUserList extends TypeSystemUser.QueryList {
 const User = () => {
 
   const actions = useActions();
-  const { dictionaries: { DEPARTMENT, STATUS } } = useStore();
+  const { category: { DEPARTMENT, STATUS } } = useStore();
 
   const [search] = Form.useForm<TypeQueryUserList>();
 
@@ -139,8 +139,10 @@ const User = () => {
   ];
 
   useEffect(() => {
-    actions.getDictionaries(ENUM_STORE_ACTION.DICTIONARIES.ROLE);
-    actions.getDictionaries(ENUM_STORE_ACTION.DICTIONARIES.DEPARTMENT);
+    actions.getCategory([
+      ENUM_STORE.CATEGORY.ROLE,
+      ENUM_STORE.CATEGORY.DEPARTMENT
+    ]);
   }, [actions]);
 
   useEffect(() => {
