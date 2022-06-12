@@ -13,8 +13,8 @@ import { PurchaseSupplierDTO } from '@/dto/purchase-supplier.dto';
  * @name SupplierQueryListDTO 查询供应商列表
  */
 export class SupplierQueryListDTO extends IntersectionType(
-  PickType(CommonDTO, ['currentPage', 'pageSize']),
-  PartialType(PickType(PurchaseSupplierDTO, ['name'])),
+  PickType(CommonDTO, ['status', 'currentPage', 'pageSize'] as const),
+  PartialType(PickType(PurchaseSupplierDTO, ['name'] as const)),
 ) {
   /**
    * @param category 供应商主销类型
@@ -38,14 +38,24 @@ export class SupplierQueryListDTO extends IntersectionType(
   contactsName?: string;
 
   /**
-   * @param phone 供应商主销类型
+   * @param phone 联系人电话
    */
   @ApiProperty({
-    description: '供应商联系电话',
+    description: '联系人电话',
   })
   @IsOptional()
   @IsString()
   phone?: string;
+
+  /**
+   * @param companyPhone 联系人电话
+   */
+  @ApiProperty({
+    description: '公司电话',
+  })
+  @IsOptional()
+  @IsString()
+  companyPhone?: string;
 
   take: number;
   skip: number;

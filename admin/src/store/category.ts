@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { ENUM_STORE } from "@/enum/store";
 import { CONSTANT_SYSTEM } from "@/constant/system";
 import { CONSTANT_COMMON } from "@/constant/common";
+import { CONSTANT_PURCHASE } from "@/constant/purchase";
 import { CONSTANT_WAREHOURE } from "@/constant/warehouse";
 
 import type { TypeCommon } from "@/interface/common";
@@ -19,6 +20,7 @@ export interface TypeCategoryState
 export const DEFAULT_DICTIONARY = {
   ...CONSTANT_COMMON,
   ...CONSTANT_SYSTEM,
+  ...CONSTANT_PURCHASE,
   ...CONSTANT_WAREHOURE,
 };
 

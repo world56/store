@@ -26,7 +26,7 @@ export function removeFiles(data: { ids: number[] }) {
 export function uploadFile(file: File) {
   const data = new FormData();
   data.append("file", file);
-  return request<TypeCommon.NetDisk>("file/uploads", {
+  return request<TypeCommon.File>("file/uploads", {
     data,
     method: ENUM_HTTP.REQUEST_MODE.POST,
     headers: { "Content-Type": ENUM_HTTP.CONTENT_TYPE.MULTIPART },

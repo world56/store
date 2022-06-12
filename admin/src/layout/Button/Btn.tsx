@@ -1,3 +1,4 @@
+import React from 'react';
 import { Popconfirm } from 'antd';
 import styles from './index.module.sass';
 
@@ -28,12 +29,17 @@ const Btn: React.FC<TypeBtnProps> = ({
   type = 'default',
 }) => {
 
+  function onConfirm(e?: React.MouseEvent<HTMLElement>) {
+    e?.stopPropagation();
+    onClick?.();
+  };
+
   const btn = (
     <button
       type='button'
       className={styles.btn}
-      onClick={() => onClick?.()}
-      style={{ color: BUTTON_COLOR[type] }}>
+      style={{ color: BUTTON_COLOR[type] }}
+      onClick={confirmTips ? undefined : onConfirm}>
       {children}
     </button>
   );
@@ -41,7 +47,7 @@ const Btn: React.FC<TypeBtnProps> = ({
   return confirmTips ?
     <Popconfirm
       title={confirmTips === true ? '确认删除？' : confirmTips}
-      onConfirm={() => onClick?.()}>{btn}</Popconfirm>
+      onConfirm={onConfirm}>{btn}</Popconfirm>
     : btn;
 };
 

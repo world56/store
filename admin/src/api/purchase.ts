@@ -1,7 +1,10 @@
 import request from "@/utils/request";
+
 import { ENUM_HTTP } from "@/enum/http";
 
 import type { TypeCommon } from "@/interface/common";
+import type { TypeSpec } from "@/interface/purchase/spec";
+import type { TypePurchaseProduct } from "@/interface/purchase/product";
 import type { TypePurchaseSupplier } from "@/interface/purchase/supplier";
 
 /**
@@ -46,11 +49,31 @@ export function checkPurchaseSupplierFields(
 }
 
 /**
+ * @name changePurchaseSupplierStatus 改变供应商状态
+ */
+export function changePurchaseSupplierStatus(
+  data: TypePurchaseSupplier.EditStatus,
+) {
+  return request("purchase/supplier/status", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
+}
+
+/**
+ * @name addPurchaseSupplierFile 新增附件（详情页）
+ */
+export function addPurchaseSupplierFile(data: TypePurchaseSupplier.AddFile) {
+  return request("purchase/supplier/addFile", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
+}
+
+/**
  * @name insertPurchaseSupplier 新增供应商
  */
-export function insertPurchaseSupplier(
-  data: TypePurchaseSupplier.EditSupplierDTO,
-) {
+export function insertPurchaseSupplier(data: TypePurchaseSupplier.EditDTO) {
   return request("purchase/supplier/insert", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,
@@ -60,11 +83,194 @@ export function insertPurchaseSupplier(
 /**
  * @name updatePurchaseSupplier 编辑供应商
  */
-export function updatePurchaseSupplier(
-  data: TypePurchaseSupplier.EditSupplierDTO,
-) {
+export function updatePurchaseSupplier(data: TypePurchaseSupplier.EditDTO) {
   return request("purchase/supplier/update", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,
   });
+}
+
+/**
+ * @name getPurchaseSupplierLogs 供应商日志
+ */
+export function getPurchaseSupplierLogs(params: TypePurchaseSupplier.QueryLog) {
+  return request<TypePurchaseSupplier.LogDTO[]>("purchase/supplier/logs", {
+    method: ENUM_HTTP.REQUEST_MODE.GET,
+    params,
+  });
+}
+
+/**
+ * @name insertPurchaseSupplierLog 新增供应商日志
+ */
+export function insertPurchaseSupplierLog(data: TypePurchaseSupplier.LogDTO) {
+  return request<TypePurchaseSupplier.LogDTO>("purchase/supplier/addLog", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
+}
+
+/**
+ * --------------------- 产品规格 ----------------------
+ */
+
+/**
+ * @name getSpecTemplateList 获取产品规格模板列表
+ */
+export function getSpecTemplateList(params: TypeSpec.Query) {
+  return request<TypeCommon.ServiceReturn<TypeSpec.DTO>>(
+    "purchase/spec/category/list",
+    {
+      method: ENUM_HTTP.REQUEST_MODE.GET,
+      params,
+    },
+  );
+}
+
+/**
+ * @name getSpecTemplateDetails 获取产品规格模板详情
+ */
+export function getSpecTemplateDetails(data: TypeCommon.DatabaseMainParameter) {
+  return request<TypeSpec.DTO>("purchase/spec/category/details", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
+}
+
+/**
+ * @name insertSpecTemplate 新增产品规格模板
+ */
+export function insertSpecTemplate(data: TypeSpec.EditDTO) {
+  return request<TypeSpec.DTO>("purchase/spec/category/insert", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
+}
+
+/**
+ * @name updateSpecTemplate 更新产品规格模板
+ */
+export function updateSpecTemplate(data: TypeSpec.EditDTO) {
+  return request<TypeSpec.DTO>("purchase/spec/category/update", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
+}
+
+/**
+ * @name checkSpecTemplateFields 产品规格模板名称是否重复
+ */
+export function checkSpecTemplateFields(params: TypeSpec.CheckFields) {
+  return request<boolean>("purchase/spec/category/check", {
+    method: ENUM_HTTP.REQUEST_MODE.GET,
+    params,
+  });
+}
+
+/**
+ * @name changeSpecTemplateStatus 改变产品规格状态
+ */
+export function changeSpecTemplateStatus(data: TypeSpec.ChangeStatus) {
+  return request<TypeSpec.ChangeStatus>("purchase/spec/category/status", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
+}
+
+/**
+ * @name getSpecParameterList 获取产品规格参数列表
+ */
+export function getSpecParameterList(params: TypeSpec.Query) {
+  return request<TypeCommon.ServiceReturn<TypeSpec.SpecParameterDTO>>(
+    "purchase/spec/parameter/list",
+    {
+      method: ENUM_HTTP.REQUEST_MODE.GET,
+      params,
+    },
+  );
+}
+
+/**
+ * @name checkSpecParameterFields 批量添加规格参数
+ */
+export function checkSpecParameterFields(
+  data: Pick<TypeSpec.SpecParameterDTO, "id" | "name">,
+) {
+  return request<boolean>("purchase/spec/parameter/check", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
+}
+
+/**
+ * @name getSpecParameterDetails 获取产品规格详情
+ */
+export function getSpecParameterDetails(params: {
+  ids: TypeCommon.DatabaseMainParameter["id"][];
+}) {
+  return request<TypeSpec.SpecParameterDTO[]>(
+    "purchase/spec/parameter/details",
+    {
+      method: ENUM_HTTP.REQUEST_MODE.GET,
+      params,
+    },
+  );
+}
+
+/**
+ * @name insertsSpecParameter 批量添加规格参数
+ */
+export function insertsSpecParameter(data: TypeSpec.EditSpecParameter) {
+  return request<TypeSpec.EditSpecParameter>(
+    "purchase/spec/parameter/inserts",
+    {
+      method: ENUM_HTTP.REQUEST_MODE.POST,
+      data,
+    },
+  );
+}
+
+/**
+ * @name updatesSpecParameter 批量添加规格参数
+ */
+export function updatesSpecParameter(data: TypeSpec.EditSpecParameter) {
+  return request<TypeSpec.EditSpecParameter>(
+    "purchase/spec/parameter/updates",
+    {
+      method: ENUM_HTTP.REQUEST_MODE.POST,
+      data,
+    },
+  );
+}
+
+/**
+ * @name updatesSpecParameterRelation 规格参数关联规格类目
+ */
+export function updatesSpecParameterRelation(
+  data: TypeSpec.ParameterRelationCategory,
+) {
+  return request<TypeSpec.EditSpecParameter>(
+    "purchase/spec/parameter/relation",
+    {
+      method: ENUM_HTTP.REQUEST_MODE.POST,
+      data,
+    },
+  );
+}
+
+/**
+ * --------------------- 供应产品 ----------------------
+ */
+
+/**
+ * @name getPurchaseProductList 获取供应产品列表
+ */
+export function getPurchaseProductList(data: TypePurchaseProduct.Query) {
+  return request<TypeCommon.ServiceReturn<TypePurchaseProduct.DTO>>(
+    "purchase/product/list",
+    {
+      method: ENUM_HTTP.REQUEST_MODE.GET,
+      data,
+    },
+  );
 }

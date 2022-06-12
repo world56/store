@@ -7,4 +7,4 @@ import { PurchaseSupplierDTO } from '@/dto/purchase-supplier.dto';
 export class SupplierCheckFieldsDTO extends PickType(PurchaseSupplierDTO, [
   'id',
   'name',
-]) {}
+] as const) {}

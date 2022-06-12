@@ -22,12 +22,12 @@ export namespace ENUM_COMMON {
    * @param OTHER 其他类型
    */
   export enum FILE_TYPE {
-    IMAGE = 'IMAGE',
-    VIDEO = 'VIDEO',
-    AUDIO = 'AUDIO',
-    DOCUMENT = 'DOCUMENT',
-    COMPRESSED = 'COMPRESSED',
-    OTHER = 'OTHER',
+    OTHER,
+    IMAGE,
+    VIDEO,
+    AUDIO,
+    DOCUMENT,
+    COMPRESSED,
   }
 
   /**
@@ -35,10 +35,12 @@ export namespace ENUM_COMMON {
    * @param WAREHOUSE_UNIT 仓库计量单位
    * @param PURCHASE_PRODUCT_TYPE 供应商产品类目
    * @param WAREHOUSE_PRODUCT_TYPE 仓库产品类型
+   * @param PRODUCT_BRAND 产品品牌
    */
   export enum CATEGORY_TYPE {
     WAREHOUSE_UNIT = 'WAREHOUSE_UNIT',
     PURCHASE_PRODUCT_TYPE = 'PURCHASE_PRODUCT_TYPE',
     WAREHOUSE_PRODUCT_TYPE = 'WAREHOUSE_PRODUCT_TYPE',
+    PRODUCT_BRAND = "PRODUCT_BRAND",
   }
 }

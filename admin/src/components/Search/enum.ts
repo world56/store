@@ -8,18 +8,18 @@ export namespace ENUM_SEARCH {
    * @param TIME_SCOPE 时间选择
    */
   export enum COMP_TYPE {
-    INPUT = "INPUT",
-    SELECT = "SELECT",
-    CASCADER = "CASCADER",
-    TIME_SCOPE = "TIME_SCOPE",
-    TREE_SELECT = "TREE_SELECT",
+    INPUT,
+    SELECT,
+    CASCADER,
+    TIME_SCOPE,
+    TREE_SELECT,
   }
 
   /**
    * @name COMPONENT_VALUE_TYPE 组件键值对
    */
   export enum COMPONENT_VALUE_TYPE {
-    KEY = "KEY",
-    VALUE = "VALUE",
+    KEY,
+    VALUE,
   }
 }

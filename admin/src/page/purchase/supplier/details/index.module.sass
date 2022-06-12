@@ -1,0 +1,49 @@
+.tabs
+
+  :global(.ant-tabs-nav)
+    margin-bottom: 10px
+
+  :global(.ant-tabs-nav-wrap)
+    background: #fff
+    padding: 4px 10px 8px 25px
+
+  :global(.ant-card)
+    margin-bottom: 10px
+
+  :global(.ant-descriptions)
+    margin-bottom: 10px
+
+  :global(.ant-card-body)
+    & > :global(.ant-descriptions):nth-last-child(1)
+      margin-bottom: 0
+
+  :global(.ant-tabs-tabpane)
+    &:nth-child(1)
+      :global(.ant-descriptions-item-label)
+        width: 150px
+        text-align: center
+        font-weight: bold
+
+      & > :global(.ant-card):nth-last-child(1)
+        :global(.ant-card-body)
+          padding-top: 16px
+
+      & > :global(.ant-card):nth-child(2)
+        :global(.ant-descriptions-view)
+          :global(.ant-descriptions-row)
+            & > :global(.ant-descriptions-item-content):nth-child(2)
+              width: 280px
+            & > :global(.ant-descriptions-item-content):nth-child(4)
+              width: 250px
+    &:nth-child(1)
+
+
+  .extendInfo
+    text-align: left
+
+  .logsQuery
+    margin-bottom: 10px
+    :global(.ant-select)
+      width: 155px
+    :global(.ant-btn)
+      margin-left: 10px

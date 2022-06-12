@@ -1,8 +1,8 @@
+import { toTime } from '@/utils';
 import { useRequest } from 'ahooks';
-import { Btn } from '@/layout/Button';
 import Search from '@/components/Search';
-import { timestampToTime } from '@/utils';
 import StatusColor from '@/layout/StatusColor';
+import { Btn, StatusChange } from '@/layout/Button';
 import EditUserInfo from '@/components/EditUserInfo';
 import { UsergroupAddOutlined } from '@ant-design/icons';
 import { useActions, usePageTurning, useStore } from '@/hooks';
@@ -13,10 +13,10 @@ import { getUserList, freezeAdminUser, resetAdminUserPwd } from '@/api/system';
 
 import { ENUM_STORE } from '@/enum/store';
 import { ENUM_COMMON } from '@/enum/common';
+import { ENUM_SYSTEM } from '@/enum/system';
 import { DB_PRIMARY_KEY } from '@/config/db';
 
 import type { TypeSystemUser } from '@/interface/system/user';
-import { ENUM_SYSTEM } from '@/enum/system';
 
 interface TypeQueryUserList extends TypeSystemUser.QueryList {
   time?: number[];
@@ -87,22 +87,22 @@ const User = () => {
   };
 
   const query = useMemo(() => [
-    { key: 'name', name: '用户名称', type: Search.ENUM.COMP_TYPE.INPUT },
-    { key: 'account', name: '登陆账号', type: Search.ENUM.COMP_TYPE.INPUT },
-    { key: 'phone', name: '联系电话', type: Search.ENUM.COMP_TYPE.INPUT },
+    { name: 'name', label: '用户名称', type: Search.ENUM.COMP_TYPE.INPUT },
+    { name: 'account', label: '登陆账号', type: Search.ENUM.COMP_TYPE.INPUT },
+    { name: 'phone', label: '联系电话', type: Search.ENUM.COMP_TYPE.INPUT },
     {
-      key: 'departmentId',
-      name: '所属部门',
+      name: 'departmentId',
+      label: '所属部门',
       type: Search.ENUM.COMP_TYPE.SELECT,
       list: DEPARTMENT?.LIST
     },
     {
-      key: 'status',
-      name: '用户状态',
+      name: 'status',
+      label: '用户状态',
       list: STATUS?.LIST,
       type: Search.ENUM.COMP_TYPE.SELECT
     },
-    { key: 'time', name: '注册时间', type: Search.ENUM.COMP_TYPE.TIME_SCOPE },
+    { name: 'time', label: '注册时间', type: Search.ENUM.COMP_TYPE.TIME_SCOPE },
   ], [DEPARTMENT, STATUS]);
 
   const columns = [
@@ -118,23 +118,17 @@ const User = () => {
       key: 'createTime',
       dataIndex: 'createTime',
       width: 180,
-      render: timestampToTime
+      render: toTime
     },
     {
       title: '操作', key: DB_PRIMARY_KEY,
-      render: (row: TypeSystemUser.DTO) => {
-        const color = row.status === ENUM_COMMON.STATUS.ACTIVATE ? 'danger' : 'success';
-        return (
-          <>
-            <Btn onClick={() => onChangeEdit(row)}>编辑</Btn>
-            <Btn onClick={() => resetPwd(row)}>重置密码</Btn>
-            <Btn
-              type={color} onClick={() => onChangeFreeze(row)}>
-              {row.status === ENUM_COMMON.STATUS.ACTIVATE ? '冻结' : '激活'}
-            </Btn>
-          </>
-        );
-      }
+      render: (row: TypeSystemUser.DTO) => (
+        <>
+          <Btn onClick={() => onChangeEdit(row)}>编辑</Btn>
+          <Btn onClick={() => resetPwd(row)}>重置密码</Btn>
+          <StatusChange status={row.status} onClick={() => onChangeFreeze(row)} />
+        </>
+      )
     }
   ];
 

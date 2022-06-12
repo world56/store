@@ -68,11 +68,11 @@ const Categorys: TypeCategorys = ({ type }) => {
           itemLayout="horizontal"
           dataSource={list}
           renderItem={item => (
-            <List.Item actions={[<BtnEditDel value={item.key} onEdit={onEdit} />]}>
+            <List.Item actions={[<BtnEditDel value={item.id} onEdit={onEdit} />]}>
               <List.Item.Meta
-                title={item.value}
+                title={item.name}
                 description={item.remark}
-                avatar={<Avatar>{item.value}</Avatar>}
+                avatar={<Avatar>{item.name}</Avatar>}
               />
             </List.Item>
           )}

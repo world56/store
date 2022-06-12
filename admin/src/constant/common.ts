@@ -13,8 +13,30 @@ export namespace CONSTANT_COMMON {
       [ENUM_COMMON.STATUS.FREEZE]: "冻结",
     },
     LIST: [
-      { key: ENUM_COMMON.STATUS.ACTIVATE, value: "激活" },
-      { key: ENUM_COMMON.STATUS.FREEZE, value: "冻结" },
+      { id: ENUM_COMMON.STATUS.ACTIVATE, name: "激活" },
+      { id: ENUM_COMMON.STATUS.FREEZE, name: "冻结" },
+    ],
+  };
+
+  /**
+   * @name FILE_TYPE 文件类型
+   */
+  export const FILE_TYPE = {
+    OBJ: {
+      [ENUM_COMMON.FILE_TYPE.IMAGE]: "图片",
+      [ENUM_COMMON.FILE_TYPE.VIDEO]: "视频",
+      [ENUM_COMMON.FILE_TYPE.AUDIO]: "音频",
+      [ENUM_COMMON.FILE_TYPE.DOCUMENT]: "文档",
+      [ENUM_COMMON.FILE_TYPE.COMPRESSED]: "压缩文件",
+      [ENUM_COMMON.FILE_TYPE.OTHER]: "其他",
+    },
+    LIST: [
+      { id: ENUM_COMMON.FILE_TYPE.IMAGE, name: "图片" },
+      { id: ENUM_COMMON.FILE_TYPE.VIDEO, name: "视频" },
+      { id: ENUM_COMMON.FILE_TYPE.AUDIO, name: "音频" },
+      { id: ENUM_COMMON.FILE_TYPE.DOCUMENT, name: "文档" },
+      { id: ENUM_COMMON.FILE_TYPE.COMPRESSED, name: "压缩文件" },
+      { id: ENUM_COMMON.FILE_TYPE.OTHER, name: "其他" },
     ],
   };
 }

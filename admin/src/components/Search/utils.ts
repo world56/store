@@ -1,32 +1,6 @@
 import { CONSTANT_SEARCH } from "./constant";
 
-import type { TypeCommon } from "@/interface/common";
-import type { Columns, ColumnsList, CascaderList } from ".";
-
-/**
- * @name filterSelectArray 生成选择项
- */
-export function filterSelectArray(
-  list: ColumnsList = [],
-  obj: Partial<TypeCommon.GenericObject> = {},
-) {
-  if (list !== undefined && !Array.isArray(list)) {
-    const { key, value, data } = list;
-    const newList = data.map((v) => {
-      const toRecursion = Array.isArray(v.children) && v.children.length;
-      obj[v[key]] = v[value];
-      return {
-        key: v[key] || "unknown",
-        value: v[value] || "unknown",
-        children: toRecursion
-          ? filterSelectArray({ key, value, data: v.children || [] }, obj).list
-          : [],
-      };
-    }) as CascaderList[];
-    return { list: newList, obj };
-  }
-  return { list, obj };
-}
+import type { Columns } from ".";
 
 /**
  * @name getPlaceholder 获取提示语
@@ -34,7 +8,7 @@ export function filterSelectArray(
 export function filterPlaceholder(value: Columns) {
   return value.placeholder
     ? value.placeholder
-    : `${CONSTANT_SEARCH.COMPONENT_PLACEHOLDER[value.type]}${value.name}`;
+    : `${CONSTANT_SEARCH.COMPONENT_PLACEHOLDER[value.type]}${value.label}`;
 }
 
 /**
@@ -48,7 +22,6 @@ export function initColumns(columns: Columns[] = []): Columns[] {
     for (let i = 0; i < length; i += 1) {
       const value = { ...columns[i] };
       const placeholder = filterPlaceholder(value);
-      value.list = filterSelectArray(value.list as ColumnsList).list;
       value.placeholder = placeholder;
       newColumns.push(value);
     }

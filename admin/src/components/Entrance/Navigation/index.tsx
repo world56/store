@@ -16,7 +16,7 @@ interface NavigationProps {
 }
 
 function filterMenu(list: TypeRoute.RouteParamType[]): MenuProps['items'] {
-  return list.map(v => {
+  return list.filter(v => !v.hidden).map(v => {
     const { name: key } = v;
     const label = <><Icon type={`icon-${key}`} /><span>{v.title}</span></>;
     return v.routes?.length ? { key, label, children: filterMenu(v.routes) } : { key, label }

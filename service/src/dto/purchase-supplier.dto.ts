@@ -7,6 +7,7 @@ import {
   IsString,
   IsOptional,
   ValidateNested,
+  MaxLength,
 } from 'class-validator';
 import { FileDTO } from './file.dto';
 
@@ -18,15 +19,6 @@ export class PurchaseSupplierContactsDTO extends PickType(CommonDTO, [
   'name',
   'remark',
 ]) {
-  /**
-   * @param address 联系地址
-   */
-  @ApiProperty({
-    description: '联系地址',
-  })
-  @IsString()
-  address: string;
-
   /**
    * @param phone 联系电话
    */
@@ -47,12 +39,27 @@ export class PurchaseSupplierDTO extends PickType(CommonDTO, [
   'remark',
 ]) {
   /**
-   * @param type 供应商类型
+   * @param phone 公司电话
+   */
+  @ApiProperty({ description: '公司电话' })
+  @MaxLength(11, { message: '中国大陆地区座机、移动电话号码限长11位' })
+  @IsString()
+  phone: string;
+
+  /**
+   * @param address 公司电话
+   */
+  @ApiProperty({ description: '公司地址' })
+  @IsString()
+  address: string;
+
+  /**
+   * @param category 供应商类型
    */
   @ApiProperty({ description: '供应商类型' })
   @Type(() => Number)
   @IsInt({ each: true })
-  type: number[];
+  category: number[];
 
   /**
    * @param contacts 联系方式
@@ -68,8 +75,8 @@ export class PurchaseSupplierDTO extends PickType(CommonDTO, [
    */
   @ApiProperty({ description: '附件' })
   @ValidateNested({ each: true })
-  @IsOptional()
   @Type(() => FileDTO)
   @IsArray()
-  files: FileDTO[];
+  @IsOptional()
+  files?: FileDTO[];
 }

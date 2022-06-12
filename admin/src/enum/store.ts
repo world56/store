@@ -19,6 +19,9 @@ export namespace ENUM_STORE {
    * @param WAREHOUSE_POSITION 仓库仓位位置
    * @param WAREHOUSE_UNIT 库房计量单位
    * @param WAREHOUSE_PRODUCT_TYPE 仓库产品类型
+   * @param PRODUCT_BRAND 产品品牌
+   * @param PURCHASE_SUPPLIER 供应商
+   * @param SPEC 产品规格
    */
   export enum CATEGORY {
     ROLE = "ROLE",
@@ -28,5 +31,8 @@ export namespace ENUM_STORE {
     WAREHOUSE_UNIT = "WAREHOUSE_UNIT",
     WAREHOUSE_POSITION = "WAREHOUSE_POSITION",
     WAREHOUSE_PRODUCT_TYPE = "WAREHOUSE_PRODUCT_TYPE",
+    PRODUCT_BRAND = "PRODUCT_BRAND",
+    PURCHASE_SUPPLIER = "PURCHASE_SUPPLIER",
+    SPEC = "SPEC",
   }
 }

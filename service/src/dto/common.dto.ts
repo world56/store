@@ -31,8 +31,8 @@ export class CommonDTO extends PartialType(PrimaryKeyDTO) {
   @ApiProperty({
     description: '状态',
   })
-  @Type(() => Number)
   @IsOptional()
+  @Type(() => Number)
   @IsEnum(ENUM_COMMON.STATUS)
   @IsInt()
   status?: number;

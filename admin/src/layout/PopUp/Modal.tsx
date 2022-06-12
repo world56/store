@@ -12,8 +12,8 @@ interface TypeModal extends ModalProps {
  * @description antd Modal组件 添加了loading属性
  */
 const Modal: React.FC<TypeModal> = ({
-  loading,
   children,
+  loading = false,
   ...modalProps
 }) => (
   <AntdModal confirmLoading={loading} {...modalProps}>

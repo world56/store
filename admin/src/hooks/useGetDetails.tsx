@@ -32,5 +32,8 @@ export default function useGetDetails<T extends TypePromiseFn<any>>(fn: T, dep: 
     initializa();
   }, [initializa]);
 
-  return state;
+  return {
+    ...state,
+    run: initializa
+  };
 };

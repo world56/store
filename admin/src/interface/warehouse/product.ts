@@ -19,7 +19,7 @@ export namespace TypeWarehouseProduct {
     alertQuantity: number;
     createTime: Date;
     updateTime: Date;
-    files?: TypeCommon.NetDisk[];
+    files?: TypeCommon.File[];
   }
 
   /**

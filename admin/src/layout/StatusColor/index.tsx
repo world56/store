@@ -5,7 +5,7 @@ import { CONSTANT_COMMON } from '@/constant/common';
 
 interface StatusColorProps {
   /** @param status 当前状态 0冻结 1激活 */
-  status: ENUM_COMMON.STATUS;
+  status?: ENUM_COMMON.STATUS;
 };
 
 /**
@@ -19,7 +19,7 @@ const StatusColor: React.FC<StatusColorProps> = ({
   return (
     <span className={isSucess}>
       <Badge status={isSucess} />
-      {CONSTANT_COMMON.STATUS.OBJ[status]}
+      {CONSTANT_COMMON.STATUS.OBJ[status!]}
     </span>
   );
 };

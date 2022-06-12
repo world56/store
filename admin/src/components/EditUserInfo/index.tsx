@@ -104,7 +104,7 @@ const EditUserInfo: React.FC<TypeEditUserInfoProps> = ({ id, type, visible, onCl
         <FormHideKey />
 
         {isSuperAdmin ? null : <Form.Item name='avatar' noStyle>
-          <Uploads.Avatar />
+          <Uploads.Single />
         </Form.Item>}
 
         {isSuperAdmin ? <Form.Item name='isSuper' noStyle initialValue={ENUM_SYSTEM.SUPER_ADMIN.SUPER}>
@@ -167,7 +167,7 @@ const EditUserInfo: React.FC<TypeEditUserInfoProps> = ({ id, type, visible, onCl
               mode="multiple"
               disabled={isPersonal}
               placeholder="请选择用户角色（多选）">
-              {ROLE?.LIST?.map(v => <Option key={v.key} value={v.key}>{v.value}</Option>)}
+              {ROLE?.LIST?.map(v => <Option key={v.id} value={v.id}>{v.name}</Option>)}
             </Select>
           </Form.Item>
 
@@ -177,7 +177,7 @@ const EditUserInfo: React.FC<TypeEditUserInfoProps> = ({ id, type, visible, onCl
               mode="multiple"
               disabled={isPersonal}
               placeholder="请选择用户所属部门（多选）">
-              {DEPARTMENT?.LIST?.map(v => <Option key={v.key} value={v.key}>{v.value}</Option>)}
+              {DEPARTMENT?.LIST?.map(v => <Option key={v.id} value={v.id}>{v.name}</Option>)}
             </Select>
           </Form.Item>
 

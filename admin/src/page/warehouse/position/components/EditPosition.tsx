@@ -70,7 +70,7 @@ const EditPosition: React.FC<TypeEditPositionProps> = ({ id, visible, onClose })
             optionFilterProp='children'
             placeholder='请选择仓位负责人'
           >
-            {ADMIN_USER?.LIST?.map(v => <Option key={v.key} value={v.key}>{v.value}</Option>)}
+            {ADMIN_USER?.LIST?.map(v => <Option key={v.id} value={v.id}>{v.name}</Option>)}
           </Select>
         </Form.Item>
 
@@ -84,7 +84,7 @@ const EditPosition: React.FC<TypeEditPositionProps> = ({ id, visible, onClose })
             optionFilterProp='children'
             placeholder='请选择仓位状态'
           >
-            {WAREHOURE_STATUS?.LIST?.map(v => <Option key={v.key} value={v.key}>{v.value}</Option>)}
+            {WAREHOURE_STATUS?.LIST?.map(v => <Option key={v.id} value={v.id}>{v.name}</Option>)}
           </Select>
         </Form.Item>
 

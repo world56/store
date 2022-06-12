@@ -1,6 +1,6 @@
 import * as API from "@/api/enum";
-import ActionsMiddleware from "./actions";
 import { toDictionaries } from "@/utils";
+import ActionsMiddleware from "./actions";
 import { ActiosnsCategory } from "../category";
 import { all, call, put, takeEvery } from "redux-saga/effects";
 
@@ -12,9 +12,11 @@ import type { TypeDefaultConversionFields } from "@/utils";
 
 const REQUEST = {
   [ENUM_STORE.CATEGORY.ROLE]: API.getRoleSelectList,
+  [ENUM_STORE.CATEGORY.SPEC]: API.getSpecAllParameter,
   [ENUM_STORE.CATEGORY.ADMIN_USER]: API.getAllAdminUserList,
   [ENUM_STORE.CATEGORY.DEPARTMENT]: API.getAllDepartmentList,
   [ENUM_STORE.CATEGORY.WAREHOUSE_POSITION]: API.getWarehouseAllList,
+  [ENUM_STORE.CATEGORY.PURCHASE_SUPPLIER]: API.getPurchaseSpplierList,
 };
 
 type TypeRequestAPI = keyof typeof REQUEST;

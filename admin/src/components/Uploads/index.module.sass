@@ -1,10 +1,31 @@
-.avatar
+.fileItem
+  width: 100%
+  background: rgb(247, 250, 253)
+  border-radius: 4px
+  padding: 8px
+  height: 68px
+  margin-bottom: 10px
+  display: flex
+  align-items: center
+  cursor: pointer
+  border: 1px solid rgba(#d9d9d9, 0.6)
+
+.uploadInput
+  position: absolute
+  opacity: 0
+  top: 0
+  right: 0
+  width: 100%
+  height: 100%
+  cursor: pointer
+
+.single
   display: flex
   justify-content: center
-  margin-bottom: 25px
 
   :global(.ant-avatar)
     cursor: pointer
+    margin-bottom: 25px
     border: 1px dashed #d9d9d9
 
 .layout
@@ -39,34 +60,28 @@
       color: rgb(189, 201, 216)
 
     input
-      width: 100%
-      height: 100%
+      @extend .uploadInput
       color: #fff
-      background: none
-      border: none
-      outline: none
-      opacity: 0
-      top: 0
-      left: 0
-      cursor: pointer
-      position: absolute
 
 .list
   width: 100%
   height: 200px
   margin-top: 10px
 
-  li
-    width: 100%
-    background: rgb(247, 250, 253)
-    border-radius: 4px
-    padding: 8px
-    margin-bottom: 10px
-    display: flex
-    cursor: pointer
-    align-items: center
-    position: relative
+  .onDel
+    @extend .fileItem
+    justify-content: center
     border: 1px solid rgba(#d9d9d9, 0.6)
+    span
+      margin-left: 5px
+      color: rgb(245, 108, 108)
+      span
+        font-size: 12px !important
+        color: rgba(72, 101, 131,.5) !important
+
+  .item
+    @extend .fileItem
+    position: relative
 
     p
       margin: 0

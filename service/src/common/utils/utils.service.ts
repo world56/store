@@ -45,21 +45,30 @@ export class UtilsService {
   }
 
   /**
-   * @name filterArrayRepeatKeys 数组 过滤l、r相互重复的key
-   * @param l client data
-   * @param r db data
+   * @name filterArrayRepeatKeys 数组 过滤l、r相互重复的key (主要分出新增、删除)
+   * @param dtoData client dto data
+   * @param serviceData db server data
    * @param toId 是否返回Array<{ id:number; }>;
    */
-  filterArrayRepeatKeys(l: number[], r: number[]): Array<number[]>;
   filterArrayRepeatKeys(
-    l: number[],
-    r: number[],
+    dtoData: number[],
+    serviceData: number[],
+  ): Array<number[]>;
+  filterArrayRepeatKeys(
+    dtoData: number[],
+    serviceData: number[],
     toId: boolean,
   ): Array<{ id: number }[]>;
-  filterArrayRepeatKeys(l: number[], r: number[], toId?: boolean) {
-    const map = this.getArrayRepeatKeys([...l, ...r].filter(this.notVoid));
-    const insert = l.filter((v) => map[v] === 1);
-    const del = r.filter((v) => map[v] === 1);
+  filterArrayRepeatKeys(
+    dtoData: number[],
+    serviceData: number[],
+    toId?: boolean,
+  ) {
+    const map = this.getArrayRepeatKeys(
+      [...dtoData, ...serviceData].filter(this.notVoid),
+    );
+    const insert = dtoData.filter((v) => map[v] === 1);
+    const del = serviceData.filter((v) => map[v] === 1);
     return toId
       ? [insert.map((id) => ({ id })), del.map((id) => ({ id }))]
       : [insert, del];
@@ -67,10 +76,11 @@ export class UtilsService {
 
   /**
    * @name filterGrouping 条件过滤分离数组
+   * @description [trues 有id（update）的对象] [falses 无id（insert）的对象]
    */
   filterGrouping<T extends { id?: number }>(
     list: Array<T>,
-    callback: (val: T) => boolean |string |number,
+    callback: (val: T) => boolean | string | number,
   ) {
     const trues: T[] = [];
     const falses: T[] = [];

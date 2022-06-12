@@ -1,4 +1,3 @@
-// import { useRequest } from "ahooks";
 import { Card, Form, Table } from "antd";
 import Search from '@/components/Search';
 import { DB_PRIMARY_KEY } from "@/config/db";
@@ -8,10 +7,7 @@ import EditWarehouseProduct from "./components/EditWarehouseProduct";
 import type { TypeWarehouseProduct } from "@/interface/warehouse/product";
 import type { TypeEditWarehouseProductProps } from './components/EditWarehouseProduct';
 
-const query = [
-  { key: 'name', name: '产品名称', type: Search.ENUM.COMP_TYPE.INPUT },
-];
-
+const query = [{ name: 'name', label: '产品名称', type: Search.ENUM.COMP_TYPE.INPUT }];
 
 /**
  * @name Product 产品盘点

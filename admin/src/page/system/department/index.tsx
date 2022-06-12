@@ -5,12 +5,13 @@ import EditDep from './components/EditDep';
 import { BtnEditDel } from '@/layout/Button';
 import { TeamOutlined } from '@ant-design/icons';
 import { Card, Form, Table, Button, message } from 'antd';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { getDepartmentList, removeDepartment } from '@/api/system';
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { type TypeSystemDepartment } from '@/interface/system/department';
 
 import { DB_PRIMARY_KEY } from '@/config/db';
 
+const query = [{ name: 'name', label: '部门名称', type: Search.ENUM.COMP_TYPE.INPUT }]
 
 /**
  * @name Department 部门管理 department
@@ -48,10 +49,6 @@ const Department = () => {
     message.success('操作成功');
     initializa();
   }
-
-  const query = useMemo(() => (
-    [{ key: 'name', name: '部门名称', type: Search.ENUM.COMP_TYPE.INPUT }]
-  ), []);
 
   const columns = [
     { title: '部门名称', key: 'name', dataIndex: 'name' },

@@ -2,16 +2,14 @@ import { memo } from 'react';
 import { Modal } from "@/layout/PopUp";
 import { useGetDetails } from '@/hooks';
 import { Form, Input, message } from 'antd';
-import { FormHideKey } from '@/components/Form';
 import { Switch, Tree } from '@/components/Formatting';
+import { FormHideKey, FormValueCheck } from '@/components/Form';
 import { insertRole, updateRole, checkRoleField, getRoleDetails } from '@/api/system';
 
 import { ENUM_COMMON } from '@/enum/common';
-import { DB_PRIMARY_KEY } from '@/config/db';
 import { CONFIG_ANTD_COMP } from '@/config/format';
 
 import type { TypeCommon } from '@/interface/common';
-import type { RuleObject } from 'rc-field-form/lib/interface';
 import type { TypeSystemRole } from '@/interface/system/role';
 import type { TypeSystemPermission } from '@/interface/system/permission';
 
@@ -57,11 +55,6 @@ const EditRole: React.FC<TypeEditRoleProps> = ({
     form.resetFields();
   };
 
-  async function validator(rule: RuleObject, name: string | void) {
-    const bol = await checkRoleField({ [DB_PRIMARY_KEY]: id, name });
-    return bol ? Promise.reject('该字符已被占用，请更换后重试') : bol;
-  };
-
   const title = id ? '编辑角色' : '新增角色';
 
   return (
@@ -76,12 +69,12 @@ const EditRole: React.FC<TypeEditRoleProps> = ({
 
         <FormHideKey />
 
-        <Form.Item
+        <FormValueCheck
+          id={id}
           name='name'
           label='角色名称'
-          rules={[{ required: true, message: '角色名称不得为空' }, { validator }]}>
-          <Input placeholder='请输入角色名称' allowClear />
-        </Form.Item>
+          checkFieldsFn={checkRoleField}
+        />
 
         <Form.Item
           name='status'

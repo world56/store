@@ -3,11 +3,11 @@ import { message } from "antd";
 import Cookies from "js-cookie";
 import { extend } from "umi-request";
 import { ActionsUser } from "@/store/user";
-import { REQUEST_TIMEOUT, REQUEST_PREFIX } from "@/config/request";
 
 import { ENUM_HTTP } from "@/enum/http";
 import { TOKEN_KEY } from "@/config/user";
 import { CONSTANT_HTTP } from "@/constant/http";
+import { REQUEST_TIMEOUT, REQUEST_PREFIX } from "@/config/request";
 
 import type { Response } from "express";
 import type { ResponseError } from "umi-request";

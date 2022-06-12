@@ -1,3 +1,4 @@
+// 表单操作功能
 @mixin formItemFunc($list)
   @each $var in $list
     :global(.ant-form-item):nth-child(#{$var})
@@ -9,6 +10,12 @@
           :nth-child(2)
             right: 0
             position: absolute
+  @content
+
+// 抽屉宽
+@mixin drawerWidth($width)
+  :global(.ant-drawer-content-wrapper)
+    width: #{$width}px !important
   @content
 
 .drawerTabs

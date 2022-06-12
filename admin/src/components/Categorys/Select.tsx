@@ -32,8 +32,8 @@ const CategorySelect: TypeCategorySelect = ({ type, ...props }) => {
       placeholder='请选择所属类目'
       filterOption={filterOption}
       getPopupContainer={triggerNode => triggerNode.parentNode}>
-      {category[type]?.LIST.map(v => <Option title={v.remark} key={v.key} value={v.key}>
-        {v.value}
+      {category[type]?.LIST.map(v => <Option title={v.remark} key={v.id} value={v.id}>
+        {v.name}
       </Option>)}
     </Select>
   );

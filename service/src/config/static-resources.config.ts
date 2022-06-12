@@ -3,7 +3,15 @@ import { resolve } from 'path';
 import { ENUM_COMMON } from '@/enum/common';
 
 // 视频
-export const VIDEO_SUFFIX = ['.MP4', '.RMVB', '.AVI', '.MKV', '.MPG', '.MPEG', '.3GP'];
+export const VIDEO_SUFFIX = [
+  '.MP4',
+  '.RMVB',
+  '.AVI',
+  '.MKV',
+  '.MPG',
+  '.MPEG',
+  '.3GP',
+];
 // 图片
 export const IMAGE_SUFFIX = [
   '.JPG',
@@ -57,7 +65,7 @@ export const TEXT_SUFFIX = [
   '.PPTX',
 ];
 
-function toObj(list: string[], type: `${ENUM_COMMON.FILE_TYPE}`) {
+function toObj(list: string[], type: ENUM_COMMON.FILE_TYPE) {
   const obj = {};
   list.forEach((v) => (obj[v] = type));
   return obj;

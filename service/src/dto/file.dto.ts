@@ -1,5 +1,6 @@
+import { Type } from 'class-transformer';
 import { CommonDTO } from './common.dto';
-import { IsNumber, IsString } from 'class-validator';
+import { IsInt, IsNumber, IsString } from 'class-validator';
 import { PickType, ApiProperty } from '@nestjs/swagger';
 
 /**
@@ -21,8 +22,9 @@ export class FileDTO extends PickType(CommonDTO, ['name', 'id']) {
   @ApiProperty({
     description: '文件类型 服务器自动获取',
   })
-  @IsString()
-  type: string;
+  @Type(() => Number)
+  @IsInt()
+  type: number;
 
   /**
    * @param url 服务器本机文件路径

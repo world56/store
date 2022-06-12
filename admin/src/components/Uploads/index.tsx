@@ -1,26 +1,27 @@
 import React from 'react';
 import List from './List';
+import Single from './Single';
 import { isVoid } from '@/utils';
-import UploadAvatar from './Avatar';
 import { notification } from 'antd';
 import styles from './index.module.sass';
 import ICON_FOLDER from '@/resource/folder.png';
 import { WarningOutlined } from '@ant-design/icons';
 import { removeFiles, uploadFile } from '@/api/common';
 
+import FilesTable from './Table';
+
 import { ENUM_COMMON } from '@/enum/common';
 
 import type { TypeCommon } from '@/interface/common';
 
 interface TypeUploadsProps {
-  /** @param max 限制最大上传数量 默认为1个 */
-  readonly max?: number;
-  value?: TypeCommon.NetDisk[];
-  onChange?(val: TypeCommon.NetDisk[]): void;
+  value?: TypeCommon.File[];
+  onChange?(val: TypeCommon.File[]): void;
+  onDelete?(id: number): void; // 获取删除的ID
 };
 
 interface TypeUploadsState {
-  list: TypeCommon.NetDisk[];
+  list: TypeCommon.File[];
 };
 
 /**
@@ -29,9 +30,14 @@ interface TypeUploadsState {
 class Uploads extends React.Component<TypeUploadsProps, TypeUploadsState> {
 
   /**
-   * @name Avatar 上传头像
+   * @name Single 上传单个文件
    */
-  static readonly Avatar = UploadAvatar;
+  static readonly Single = Single;
+
+  /**
+   * @name Table 文件列表Table
+   */
+  static readonly Table = FilesTable;
 
   private index = 0;
 
@@ -44,7 +50,7 @@ class Uploads extends React.Component<TypeUploadsProps, TypeUploadsState> {
     this.state = { list: [] };
   };
 
-  private uploadData = (list: TypeCommon.NetDisk[]) => {
+  private uploadData = (list: TypeCommon.File[]) => {
     const { value } = this.props;
     if (value) {
       this.props.onChange?.(this.state.list.filter(v => {
@@ -57,12 +63,8 @@ class Uploads extends React.Component<TypeUploadsProps, TypeUploadsState> {
 
   static getDerivedStateFromProps(nextProps: TypeUploadsProps, prevState: TypeUploadsState) {
     if (nextProps.value) {
-      const cache: TypeCommon.GenericObject<TypeCommon.NetDisk> = {};
-      [...prevState.list, ...nextProps.value].forEach((v) => {
-        if (v.status !== ENUM_COMMON.UPLOAD_STATUS.DELETE) {
-          cache[v.id] = v
-        }
-      })
+      const cache: TypeCommon.GenericObject<TypeCommon.File> = {};
+      [...prevState.list, ...nextProps.value].forEach((v) => (cache[v.id] = v))
       return { list: Object.values(cache) };
     }
     return { list: prevState.list };
@@ -127,11 +129,15 @@ class Uploads extends React.Component<TypeUploadsProps, TypeUploadsState> {
     this.startUploading(files);
   };
 
-  onRemove = async (val: TypeCommon.NetDisk, i: number) => {
+  onRemove = async (val: TypeCommon.File, i: number, type: ENUM_COMMON.UPLOAD_STATUS) => {
     const { list } = this.state;
-    list[i].status = ENUM_COMMON.UPLOAD_STATUS.DELETE
-    this.setState({ list }, () => this.uploadData(list));
-    typeof val.id === 'number' && removeFiles({ ids: [val.id] });
+    list[i].status = type;
+    this.setState({ list: [...list] }, () => this.uploadData(list));
+    if (this.props.onDelete) {
+      this.props.onDelete?.(val.id);
+    } else {
+      removeFiles({ ids: [val.id] });
+    }
   };
 
   render() {

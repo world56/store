@@ -3,6 +3,7 @@ import request from "@/utils/request";
 import { ENUM_HTTP } from "@/enum/http";
 
 import type { TypeCommon } from "@/interface/common";
+import type { TypeSpec } from "@/interface/purchase/spec";
 import type { TypeSystemRole } from "@/interface/system/role";
 import type { TypeSystemUser } from "@/interface/system/user";
 import type { TypeSystemDepartment } from "@/interface/system/department";
@@ -100,6 +101,33 @@ export function getAllDepartmentList() {
  */
 export function getWarehouseAllList() {
   return request<TypeWarehousePosition.DTO[]>("warehouse/position/all", {
+    method: ENUM_HTTP.REQUEST_MODE.GET,
+  });
+}
+
+/**
+ * @name getPurchaseSpplierList 供应商列表
+ */
+export function getPurchaseSpplierList() {
+  return request<TypeWarehousePosition.DTO[]>("purchase/supplier/all", {
+    method: ENUM_HTTP.REQUEST_MODE.GET,
+  });
+}
+
+/**
+ * @name getSpecAllTemplate 产品规格模板列表
+ */
+export function getSpecAllTemplate() {
+  return request<TypeSpec.DTO[]>("purchase/spec/category/all", {
+    method: ENUM_HTTP.REQUEST_MODE.GET,
+  });
+}
+
+/**
+ * @name getSpecAllParameter 产品规格参数列表
+ */
+export function getSpecAllParameter() {
+  return request<TypeSpec.SpecParameterDTO[]>("purchase/spec/parameter/all", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
   });
 }

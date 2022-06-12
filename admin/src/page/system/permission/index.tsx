@@ -18,11 +18,11 @@ import { CONSTANT_COMMON } from '@/constant/common';
 import type { TypeSystemPermission } from '@/interface/system/permission';
 
 const query = [
-  { key: 'code', name: '权限Key', type: Search.ENUM.COMP_TYPE.INPUT },
-  { key: 'name', name: '权限名称', type: Search.ENUM.COMP_TYPE.INPUT },
+  { name: 'code', label: '权限Key', type: Search.ENUM.COMP_TYPE.INPUT },
+  { name: 'name', label: '权限名称', type: Search.ENUM.COMP_TYPE.INPUT },
   {
-    key: 'status',
-    name: '权限状态',
+    name: 'status',
+    label: '权限状态',
     list: CONSTANT_COMMON.STATUS.LIST,
     type: Search.ENUM.COMP_TYPE.SELECT
   },

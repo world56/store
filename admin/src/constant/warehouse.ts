@@ -15,10 +15,10 @@ export namespace CONSTANT_WAREHOURE {
       [ENUM_WAREHOUSE.STATUS.STOCKTAKING]: "正在盘点",
     },
     LIST: [
-      { key: ENUM_WAREHOUSE.STATUS.NORMAL, value: "正常" },
-      { key: ENUM_WAREHOUSE.STATUS.FULL_LOAD, value: "满载" },
-      { key: ENUM_WAREHOUSE.STATUS.STOCKTAKING, value: "正在盘点" },
-      { key: ENUM_WAREHOUSE.STATUS.ABNORMAL, value: "异常" },
+      { id: ENUM_WAREHOUSE.STATUS.NORMAL, name: "正常" },
+      { id: ENUM_WAREHOUSE.STATUS.FULL_LOAD, name: "满载" },
+      { id: ENUM_WAREHOUSE.STATUS.STOCKTAKING, name: "正在盘点" },
+      { id: ENUM_WAREHOUSE.STATUS.ABNORMAL, name: "异常" },
     ],
   };
 }

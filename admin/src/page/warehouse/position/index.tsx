@@ -57,16 +57,16 @@ const Position = () => {
   };
 
   const query = useMemo(() => [
-    { key: 'name', name: '仓位名称', type: Search.ENUM.COMP_TYPE.INPUT },
+    { name: 'name', label: '仓位名称', type: Search.ENUM.COMP_TYPE.INPUT },
     {
-      key: 'status',
-      name: "仓位状态",
+      name: 'status',
+      label: "仓位状态",
       list: category.WAREHOURE_STATUS?.LIST,
       type: Search.ENUM.COMP_TYPE.SELECT,
     },
     {
-      key: 'personId',
-      name: "负责人",
+      name: 'personId',
+      label: "负责人",
       list: category.ADMIN_USER?.LIST,
       type: Search.ENUM.COMP_TYPE.SELECT,
     },

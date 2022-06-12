@@ -1,12 +1,11 @@
 import { memo } from 'react';
 import { Modal } from "@/layout/PopUp";
-import { FormHideKey } from "@/components/Form";
 import { Form, Input, message, Select } from "antd";
 import { useActions, useGetDetails, useStore } from "@/hooks";
+import { FormHideKey, FormValueCheck } from "@/components/Form";
 import { checkDepartmentField, getDepartmentDetails, insertDepartment, updateDepartment } from "@/api/system";
 
 import { ENUM_STORE } from '@/enum/store';
-import { DB_PRIMARY_KEY } from '@/config/db';
 
 import type { TypeCommon } from "@/interface/common";
 import type { TypeSystemDepartment } from "@/interface/system/department";
@@ -52,11 +51,6 @@ const EditDep: React.FC<TypeEditDepProps> = ({ id, visible, onClose }) => {
     onClose();
   };
 
-  async function checkField(field: 'name', value: string) {
-    const bol = await checkDepartmentField({ [DB_PRIMARY_KEY]: id!, [field]: value });
-    return bol ? Promise.reject('该字符已被占用，请更换后重试') : bol;
-  };
-
   const title = id ? '编辑部门' : '新增部门';
 
   return (
@@ -70,22 +64,19 @@ const EditDep: React.FC<TypeEditDepProps> = ({ id, visible, onClose }) => {
 
         <FormHideKey />
 
-        <Form.Item
+        <FormValueCheck
+          id={id}
           name='name'
           label='部门名称'
-          rules={[
-            { required: true, message: '部门名称不得为空' },
-            { validator: async (r, v: string) => checkField('name', v) }
-          ]}>
-          <Input placeholder='请输入部门名称' allowClear />
-        </Form.Item>
+          checkFieldsFn={checkDepartmentField}
+        />
 
         <Form.Item name='users' label='部门用户'>
           <Select
             allowClear
             mode="multiple"
             placeholder="请选择部门用户（多选）">
-            {category.ADMIN_USER?.LIST?.map(v => <Option key={v.key} value={v.key}>{v.value}</Option>)}
+            {category.ADMIN_USER?.LIST?.map(v => <Option key={v.id} value={v.id}>{v.name}</Option>)}
           </Select>
         </Form.Item>
 

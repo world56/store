@@ -78,7 +78,7 @@ const EditWarehouseProduct: React.FC<TypeEditWarehouseProductProps> = ({ id, vis
             allowClear
             mode="multiple"
             placeholder='请选择存放仓位'>
-            {category.WAREHOUSE_POSITION?.LIST.map(v => <Option key={v.key} value={v.key}>{v.value}</Option>)}
+            {category.WAREHOUSE_POSITION?.LIST.map(v => <Option key={v.id} value={v.id}>{v.name}</Option>)}
           </Select>
         </Form.Item>
 

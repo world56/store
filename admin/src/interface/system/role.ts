@@ -29,7 +29,6 @@ export namespace TypeSystemRole {
    * @param createTime 创建时间
    */
   export interface DTO extends TypeCommon.DTO {
-    createTime: number;
     permission: string[] | TypeSystemPermission.DTO[];
   }
 }

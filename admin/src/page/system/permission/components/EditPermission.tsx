@@ -8,14 +8,13 @@ import {
 import { memo } from 'react';
 import { listToTree } from '@/utils';
 import { Modal } from "@/layout/PopUp";
-import { FormHideKey } from '@/components/Form';
 import { Switch } from '@/components/Formatting';
 import { useGetDetails, useStore } from '@/hooks';
 import { Form, Input, Radio, message, TreeSelect } from 'antd';
+import { FormHideKey, FormValueCheck } from '@/components/Form';
 
 import { ENUM_SYSTEM } from '@/enum/system';
 import { ENUM_COMMON } from '@/enum/common';
-import { DB_PRIMARY_KEY } from '@/config/db';
 import { CONSTANT_REG } from '@/constant/reg';
 import { CONFIG_ANTD_COMP } from '@/config/format';
 
@@ -66,11 +65,6 @@ const EditPermission: React.FC<TypeEditPermissionProps> = ({
     onCancel();
   };
 
-  async function checkField(field: 'code' | 'name', value: string) {
-    const bol = await checkPermissionField({ [DB_PRIMARY_KEY]: id, [field]: value });
-    return bol ? Promise.reject('该字符已被占用，请更换后重试') : bol;
-  };
-
   function onCancel() {
     onClose();
     form.resetFields();
@@ -87,25 +81,20 @@ const EditPermission: React.FC<TypeEditPermissionProps> = ({
 
         <FormHideKey />
 
-        <Form.Item
+        <FormValueCheck
+          id={id}
           name='name'
           label='权限名称'
-          rules={[
-            { required: true, message: '不得为空' },
-            { validator: async (r, v: string) => checkField('name', v) }
-          ]}>
-          <Input placeholder='请输入权限中文名称' allowClear />
-        </Form.Item>
+          checkFieldsFn={checkPermissionField}
+        />
 
-        <Form.Item
+        <FormValueCheck
+          id={id}
           name='code'
-          label='权限 Key'
-          rules={[
-            { required: true, pattern: CONSTANT_REG.EN, message: '且仅支持英文输入' },
-            { validator: async (r, v: string) => checkField('code', v) }
-          ]}>
-          <Input placeholder='请输入权限Key（英文名）' allowClear />
-        </Form.Item>
+          label='权限Key（英文）'
+          pattern={CONSTANT_REG.EN}
+          checkFieldsFn={checkPermissionField}
+        />
 
         <Form.Item name='parentId' label='所属模块'>
           <TreeSelect
@@ -122,7 +111,7 @@ const EditPermission: React.FC<TypeEditPermissionProps> = ({
           name='type'
           initialValue={ENUM_SYSTEM.PERMISSION_TYPE.PAGE}>
           <Radio.Group>
-            {PERMISSION_TYPE?.LIST.map(v => <Radio key={v.key} value={v.key}>{v.value}</Radio>)}
+            {PERMISSION_TYPE?.LIST.map(v => <Radio key={v.id} value={v.id}>{v.name}</Radio>)}
           </Radio.Group>
         </Form.Item>
 

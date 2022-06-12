@@ -2,9 +2,9 @@ import { useRequest } from 'ahooks';
 import Search from '@/components/Search';
 import { BtnEditDel } from '@/layout/Button';
 import EditRole from './components/EditRole';
+import { toTime, listToTree } from '@/utils';
 import StatusColor from '@/layout/StatusColor';
 import { UserAddOutlined } from '@ant-design/icons';
-import { timestampToTime, listToTree } from '@/utils';
 import { Form, Card, Table, Button, message } from 'antd';
 import { usePageTurning, useGetDetails, useStore } from '@/hooks';
 import { useState, useEffect, useCallback, useMemo } from 'react';
@@ -61,17 +61,17 @@ const Role = () => {
 
   const query = useMemo(() => (
     [
-      { key: 'name', name: '角色名称', type: Search.ENUM.COMP_TYPE.INPUT },
+      { name: 'name', label: '角色名称', type: Search.ENUM.COMP_TYPE.INPUT },
       {
-        key: 'permissionId',
-        name: '权限关联',
+        name: 'permissionId',
+        label: '权限关联',
         list: permissionTree as [],
         type: Search.ENUM.COMP_TYPE.TREE_SELECT,
         props: { fieldNames: CONFIG_ANTD_COMP.CASCADER_FIELD_PERMISSION }
       },
       {
-        key: 'status',
-        name: '角色状态',
+        name: 'status',
+        label: '角色状态',
         list: STATUS?.LIST,
         type: Search.ENUM.COMP_TYPE.SELECT
       }
@@ -86,7 +86,7 @@ const Role = () => {
     },
     {
       title: '创建时间', key: 'createTime',
-      dataIndex: 'createTime', render: timestampToTime
+      dataIndex: 'createTime', render: toTime
     },
     { title: '描述', key: 'remark', dataIndex: 'remark' },
     {

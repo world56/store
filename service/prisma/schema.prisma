@@ -21,14 +21,15 @@ generator js {
 
 // 静态资源
 model Files {
-  id         Int       @id() @default(autoincrement())
-  path       String    @db.Char(100) // 文件地址
-  name       String    @db.Char(100) // 文件名称
-  type       String    @db.Char(20) // 文件类型
-  userId     Int       @map("user_id") @db.Int() // 上传人id 
-  createTime DateTime? @default(now()) @map("create_time")
-
-  supplier PurchaseSupplier[]
+  id         Int                       @id() @default(autoincrement())
+  path       String                    @db.Char(100) // 文件地址
+  name       String                    @db.Char(100) // 文件名称
+  type       Int                       @db.Int() // 文件类型
+  createTime DateTime?                 @default(now()) @map("create_time")
+  userId     Int                       @map("user_id") @db.Int() // 上传人id 
+  user       AdminUser                 @relation(fields: [userId], references: [id])
+  supplier   PurchaseSupplier[]
+  products   PurchaseSupplierProduct[] // 仓库、采购产品
 
   @@index([name])
   @@index([type])
@@ -38,12 +39,14 @@ model Files {
 
 // 类目管理（字典）
 model Categorys {
-  id     Int     @id() @default(autoincrement())
-  name   String  @db.VarChar(20)
-  type   String  @db.VarChar(30)
-  remark String? @db.VarChar(255) // 备注
-
-  supplier PurchaseSupplier[] // 供应商
+  id              Int                       @id() @default(autoincrement())
+  name            String                    @db.VarChar(20)
+  type            String                    @db.VarChar(30)
+  remark          String?                   @db.VarChar(255) // 备注
+  supplier        PurchaseSupplier[] // 供应商 供应产品类型
+  supplierProduct PurchaseSupplierProduct[] // 供应产品类型
+  brands          PurchaseSupplierProduct[] @relation(name: "rel_product_brand") // 供应产品库品牌
+  unitOfMeasure   PurchaseSupplierProduct[] @relation(name: "rel_product_unit") // 产品计量单位
 
   @@index([name])
   @@index([type])
@@ -66,7 +69,9 @@ model AdminUser {
   remark     String?  @db.VarChar(255) // 备注
   createTime DateTime @default(now()) @map("create_time") @db.Timestamp(6) // 创建时间
 
+  files             Files[]
   warehousePosition WarehousePosition[]
+  supplierLog       PurchaseSupplierLog[]
 
   @@index([account])
   @@index([name])
@@ -154,34 +159,102 @@ model RelDepartmentOnAdminUser {
 
 // ***********************采购****************************
 
+// 产品规格
+model ProductSpec {
+  id         Int                    @id() @default(autoincrement())
+  name       String                 @unique() @db.VarChar(20)
+  remark     String?                @db.VarChar(255) // 备注
+  status     Int                    @default(1) @db.Int() // 状态
+  createTime DateTime?              @default(now()) @map("create_time")
+  parameter  ProductSpecParameter[]
+
+  @@index([name])
+  @@map("product_spec")
+}
+
+model ProductSpecParameter {
+  id         Int           @id() @default(autoincrement())
+  name       String        @unique() @db.VarChar(20)
+  remark     String?       @db.VarChar(255) // 备注
+  createTime DateTime?     @default(now()) @map("create_time")
+  spec       ProductSpec[]
+
+  @@index([name])
+  @@map("product_spec_parameter")
+}
+
 // 供应商
 model PurchaseSupplier {
-  id     Int     @id() @default(autoincrement())
-  name   String  @unique @db.VarChar(32)
-  remark String? @db.VarChar(255) // 备注
-  status Int     @default(1) @db.Int() // 状态
+  id         Int      @id() @default(autoincrement())
+  name       String   @unique @db.VarChar(32)
+  remark     String?  @db.VarChar(255) // 备注
+  status     Int      @default(1) @db.Int() // 状态
+  phone      String   @db.Char(11)
+  address    String   @db.VarChar(80)
+  createTime DateTime @default(now()) @map("create_time")
 
   files    Files[]
-  type     Categorys[]
+  category Categorys[]
+  log      PurchaseSupplierLog[]
   contacts PurchaseSupplierContacts[]
 
   @@index([name])
   @@map("purchase_supplier")
 }
 
-// 供应商联系方式
 model PurchaseSupplierContacts {
-  id      Int     @id() @default(autoincrement())
-  name    String  @db.VarChar(32)
-  phone   String  @db.Char(11) // 联系电话
-  address String  @db.VarChar(255)
-  remark  String? @db.VarChar(255) // 备注
+  id     Int     @id() @default(autoincrement())
+  name   String  @db.VarChar(32)
+  phone  String  @db.Char(11) // 联系电话
+  remark String? @db.VarChar(255) // 备注
 
   supplierId Int              @map("supplier_id") @db.Int()
   supplier   PurchaseSupplier @relation(fields: [supplierId], references: [id])
 
+  @@index([name])
+  @@index([phone])
   @@index([supplierId])
   @@map("purchase_supplier_contacts")
+}
+
+model PurchaseSupplierLog {
+  id         Int       @id() @default(autoincrement())
+  type       Int       @default(5) @db.Int() // 类型 默认“其他”
+  content    String    @db.VarChar(200)
+  createTime DateTime? @default(now()) @map("create_time")
+
+  userId Int       @map("user_id") @db.Int()
+  user   AdminUser @relation(fields: [userId], references: [id])
+
+  supplierId Int              @map("supplier_id") @db.Int()
+  supplier   PurchaseSupplier @relation(fields: [supplierId], references: [id])
+
+  @@index([type])
+  @@index([supplierId])
+  @@map("purchase_supplier_status_log")
+}
+
+// 供应商产品库
+model PurchaseSupplierProduct {
+  id         Int       @id() @default(autoincrement())
+  name       String    @db.VarChar(100)
+  status     Int       @default(1) @db.Int() // 状态
+  remark     String?   @db.VarChar(255) // 备注
+  createTime DateTime? @default(now()) @map("create_time")
+
+  unitId Int       @map("unit_id") @db.Int() // 计量单位
+  unit   Categorys @relation(name: "rel_product_unit", fields: [unitId], references: [id])
+
+  brandId Int       @map("brand_id") @db.Int() // 品牌
+  brand   Categorys @relation(name: "rel_product_brand", fields: [brandId], references: [id])
+
+  pictures Files[] // 图片
+  category Categorys[] // 产品类型
+
+  @@index([name])
+  @@index([status])
+  @@index([brandId])
+  @@map("purchase_supplier_product")
 }
 
 // ***********************货仓****************************
@@ -211,8 +284,8 @@ model WarehouseProduct {
   remark        String?   @db.VarChar(255) // 备注
   alertQuantity Int       @map("alert_quantity") @db.Int()
   positionId    Int       @map("position_id") @db.Int()
-  createTime    DateTime? @default(now())
-  updateTime    DateTime? @updatedAt()
+  createTime    DateTime? @default(now()) @map("create_time")
+  updateTime    DateTime? @updatedAt() @map("update_time")
 
   products RelProductOnWarehousePosition[]
 
