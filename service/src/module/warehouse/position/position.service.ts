@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrimaryKeyDTO } from '@/dto/common.dto';
+import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { PrismaService } from '@/common/prisma/prisma.service';
 import { WarehousePositionDTO } from '@/dto/warehouse-position.dto';
 import { WarehousePositionQueryListDTO } from './dto/warehouse-position-list-query';

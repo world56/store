@@ -1,6 +1,6 @@
 import { JwtService } from '@nestjs/jwt';
-import { AdminUserDTO } from '@/dto/admin-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
+import { AdminUserDTO } from '@/dto/system/admin-user.dto';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 
 type TypeTokenParam = Omit<AdminUserDTO, 'roles' | 'deps'>;

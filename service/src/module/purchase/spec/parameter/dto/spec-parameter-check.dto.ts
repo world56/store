@@ -1,5 +1,5 @@
 import { PickType } from '@nestjs/swagger';
-import { ProductSpecParameterDTO } from '@/dto/product-spec.dto';
+import { ProductSpecParameterDTO } from '@/dto/purchase/spec.dto';
 
 /**
  * @name SpecParameterCheckFieldsDTO 检查产品规格名称是否重复

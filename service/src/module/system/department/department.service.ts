@@ -1,7 +1,7 @@
-import { PrismaService } from '@/common/prisma/prisma.service';
+import { PrimaryKeyDTO } from '@/dto/common/common.dto';
+import { DepartmentDTO } from '@/dto/system/department.dto';
 import { UtilsService } from '@/common/utils/utils.service';
-import { PrimaryKeyDTO } from '@/dto/common.dto';
-import { DepartmentDTO } from '@/dto/department.dto';
+import { PrismaService } from '@/common/prisma/prisma.service';
 import { Injectable, PreconditionFailedException } from '@nestjs/common';
 import { DepartmentQueryListDTO } from './dto/department-query-list.dto';
 

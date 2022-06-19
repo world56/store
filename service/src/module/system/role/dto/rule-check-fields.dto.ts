@@ -1,4 +1,4 @@
-import { RoleDto } from '@/dto/role.dto';
+import { RoleDto } from '@/dto/system/role.dto';
 import { PartialType, PickType } from '@nestjs/swagger';
 
 /**

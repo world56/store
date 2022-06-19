@@ -5,10 +5,12 @@ import {
 } from "@/api/purchase";
 import { Form, message } from "antd";
 import { Drawer } from "@/layout/PopUp";
-import { useGetDetails } from "@/hooks";
 import EditParameter from "./EditParameter";
 import { PopUpAddBtn } from "@/layout/Button";
 import styles from '../../../index.module.sass';
+import { useActions, useGetDetails } from "@/hooks";
+
+import { ENUM_STORE } from "@/enum/store";
 
 import type { TypeCommon } from "@/interface/common";
 import type { TypeSpec } from "@/interface/purchase/spec";
@@ -28,6 +30,8 @@ const EditSpecParameter: React.FC<TypeEditSpecParameterProps> = ({
   onClose
 }) => {
 
+  const actions = useActions();
+
   const [form] = Form.useForm<TypeSpec.EditSpecParameter>();
 
   const { loading } = useGetDetails(async () => {
@@ -41,6 +45,7 @@ const EditSpecParameter: React.FC<TypeEditSpecParameterProps> = ({
     const values = await form.validateFields();
     if (ids.length) await updatesSpecParameter(values);
     else await insertsSpecParameter(values);
+    actions.getCategory([ENUM_STORE.CATEGORY.SPEC]);
     message.success('操作成功');
     onClose();
   };

@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { PrimaryKeyDTO } from '@/dto/common.dto';
+import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
 
 import { ENUM_PURCHASE } from '@/enum/purchase';

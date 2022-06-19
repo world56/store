@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CategoryDTO } from '@/dto/category.dto';
-import { PrimaryKeyDTO } from '@/dto/common.dto';
+import { CategoryDTO } from '@/dto/common/category.dto';
+import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { CategoryListQueryDTO } from './dto/category-list-query.dto';
 import { CategoryCheckFieldDTO } from './dto/category-check-field.dto';

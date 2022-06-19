@@ -1,11 +1,11 @@
 import { User } from '@/decorator/user';
 import { ApiTags } from '@nestjs/swagger';
-import { PrimaryKeyDTO } from '@/dto/common.dto';
-import { AdminUserDTO } from '@/dto/admin-user.dto';
 import { SupplierService } from './supplier.service';
 import { QueryListPipe } from '@/pipe/query-list.pipe';
 import { SupplierLogDTO } from './dto/supplier-log.dto';
-import { PurchaseSupplierDTO } from '@/dto/purchase-supplier.dto';
+import { PrimaryKeyDTO } from '@/dto/common/common.dto';
+import { AdminUserDTO } from '@/dto/system/admin-user.dto';
+import { PurchaseSupplierDTO } from '@/dto/purchase/supplier.dto';
 import { SupplierAddFileDTO } from './dto/supplier-edit-file.dto';
 import { SupplierQueryListDTO } from './dto/supplier-query-list.dto';
 import { SupplierQueryLogsDTO } from './dto/supplier-query-logs.dto';

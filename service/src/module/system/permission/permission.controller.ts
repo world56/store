@@ -1,8 +1,8 @@
 import { ApiTags } from '@nestjs/swagger';
-import { PrimaryKeyDTO } from '@/dto/common.dto';
-import { PermissionDTO } from '@/dto/permission.dto';
 import { QueryListPipe } from '@/pipe/query-list.pipe';
+import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { PermissionService } from './permission.service';
+import { PermissionDTO } from '@/dto/system/permission.dto';
 import { PermissionCheckRepeat } from './dto/permission-check-repeat';
 import { PermissionQueryListDto } from './dto/permission-query-list.dto';
 import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';

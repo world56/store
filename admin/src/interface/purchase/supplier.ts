@@ -60,7 +60,7 @@ export namespace TypePurchaseSupplier {
   export interface LogDTO extends Pick<TypeCommon.DTO, "id" | "createTime"> {
     /** @param type 日志类型 */
     content: string;
-    type: ENUM_PURCHASE.LOG_TYPE;
+    type: ENUM_PURCHASE.SUPPLIER_LOG_TYPE;
     user: Pick<TypeSystemUser.DTO, "id" | "name" | "avatar">;
   }
 

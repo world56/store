@@ -1,8 +1,8 @@
 import { ApiTags } from '@nestjs/swagger';
-import { PrimaryKeyDTO } from '@/dto/common.dto';
-import { DepartmentDTO } from '@/dto/department.dto';
 import { QueryListPipe } from '@/pipe/query-list.pipe';
+import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { DepartmentService } from './department.service';
+import { DepartmentDTO } from '@/dto/system/department.dto';
 import { DepartmentQueryListDTO } from './dto/department-query-list.dto';
 import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
 

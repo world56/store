@@ -86,7 +86,6 @@ const SupplierList = () => {
     },
     { name: 'contactsName', label: '联系人姓名', type: Search.ENUM.COMP_TYPE.INPUT },
     { name: 'phone', label: '联系人电话', type: Search.ENUM.COMP_TYPE.INPUT },
-
   ], [PURCHASE_PRODUCT_TYPE, STATUS]);
 
   const columns = [

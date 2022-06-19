@@ -39,12 +39,16 @@ const AddLog: React.FC<TypeAddLogProps> = ({ id, initializa }) => {
   };
 
   const types = useMemo(() => (
-    SUPPLIER_LOG_TYPE?.LIST.filter(v => v.id !== ENUM_PURCHASE.LOG_TYPE.STATUS)
+    SUPPLIER_LOG_TYPE?.LIST.filter(v => v.id !== ENUM_PURCHASE.SUPPLIER_LOG_TYPE.STATUS)
   ), [SUPPLIER_LOG_TYPE]);
 
   return (
     <>
-      <Button onClick={() => setVisible(true)} icon={<FileDoneOutlined />}>添加日志</Button>
+      <Button
+        icon={<FileDoneOutlined />}
+        onClick={() => setVisible(true)}>
+        添加日志
+      </Button>
 
       <Modal
         onOk={onSumbit}

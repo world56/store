@@ -1,6 +1,5 @@
-import { PermissionDTO } from '@/dto/permission.dto';
 import { PartialType, PickType } from '@nestjs/swagger';
-
+import { PermissionDTO } from '@/dto/system/permission.dto';
 /**
  * @name PermissionCheckRepeat 查询是否存在重复
  */

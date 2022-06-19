@@ -2,7 +2,6 @@ import { useRequest } from "ahooks";
 import Search from "@/components/Search";
 import EditTemplate from "./EditTemplate";
 import { Button, Form, Table } from "antd";
-import ExtendDetails from "./ExtendDetails";
 import StatusColor from "@/layout/StatusColor";
 import Categorys from "@/components/Categorys";
 import { statusReversal, toTime } from "@/utils";
@@ -10,6 +9,7 @@ import { Btn, StatusChange } from "@/layout/Button";
 import { ScheduleOutlined } from '@ant-design/icons';
 import { usePageTurning, useActions, useStore } from "@/hooks";
 import { useCallback, useEffect, useState, useMemo } from "react";
+import ExtendDetails from "@/components/SpecTemplate/ExtendDetails";
 import { changeSpecTemplateStatus, getSpecTemplateList } from "@/api/purchase";
 
 import { ENUM_STORE } from '@/enum/store';

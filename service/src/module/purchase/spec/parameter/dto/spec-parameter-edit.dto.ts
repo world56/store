@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { ValidateNested, IsArray } from 'class-validator';
-import { ProductSpecParameterDTO } from '@/dto/product-spec.dto';
+import { ProductSpecParameterDTO } from '@/dto/purchase/spec.dto';
 
 /**
  * @name SpecParameterEditDTO 批量新增规格参数

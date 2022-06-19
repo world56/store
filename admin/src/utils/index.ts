@@ -100,7 +100,6 @@ export function statusReversal(status: ENUM_COMMON.STATUS | undefined) {
  * @name filterSelectTooltip 针对Select筛选嵌套Tooltip组件
  * @param val 用户输入的
  * @param props Select返回的
- * @returns {Booleal}
  */
 export const filterSelectTooltip: FilterFunc<TypeNestingComp> = (val, props) => {
   const show = props?.children?.props!?.children?.props?.children as

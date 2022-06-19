@@ -13,11 +13,11 @@ const Spec = () => {
     <Context.Provider value={{ category }}>
       <Card title='产品规格'>
         <Tabs defaultActiveKey="1" >
-          <Tabs.TabPane tab="规格模板" key="1">
-            <SpecTemplate />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="规格参数" key="2">
+          <Tabs.TabPane tab="规格参数" key="1">
             <SpecParameter />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="规格模板" key="2">
+            <SpecTemplate />
           </Tabs.TabPane>
         </Tabs>
       </Card>

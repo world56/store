@@ -1,10 +1,10 @@
-import { PrimaryKeyDTO } from '@/dto/common.dto';
+import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { SupplierLogDTO } from './dto/supplier-log.dto';
 import { UtilsService } from '@/common/utils/utils.service';
 import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from '@/common/prisma/prisma.service';
 import { SupplierAddFileDTO } from './dto/supplier-edit-file.dto';
-import { PurchaseSupplierDTO } from '@/dto/purchase-supplier.dto';
+import { PurchaseSupplierDTO } from '@/dto/purchase/supplier.dto';
 import { SupplierQueryLogsDTO } from './dto/supplier-query-logs.dto';
 import { SupplierQueryListDTO } from './dto/supplier-query-list.dto';
 import { SupplierCheckFieldsDTO } from './dto/supplier-check-fields.dto';

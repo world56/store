@@ -1,8 +1,8 @@
 import { Type } from 'class-transformer';
-import { FileDTO } from '@/dto/file.dto';
-import { ApiProperty, PickType } from '@nestjs/swagger';
-import { PurchaseSupplierDTO } from '@/dto/purchase-supplier.dto';
+import { FileDTO } from '@/dto/common/file.dto';
 import { ValidateNested } from 'class-validator';
+import { ApiProperty, PickType } from '@nestjs/swagger';
+import { PurchaseSupplierDTO } from '@/dto/purchase/supplier.dto';
 
 /**
  * @name SupplierAddFileDTO 编辑、上传文件

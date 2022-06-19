@@ -118,7 +118,7 @@ export function getPurchaseSpplierList() {
  * @name getSpecAllTemplate 产品规格模板列表
  */
 export function getSpecAllTemplate() {
-  return request<TypeSpec.DTO[]>("purchase/spec/category/all", {
+  return request<TypeSpec.DTO[]>("purchase/spec/template/all", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
   });
 }

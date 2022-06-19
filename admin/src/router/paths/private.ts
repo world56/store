@@ -44,8 +44,21 @@ export default [
     component: Middleware,
     routes: [
       {
+        name: "supplierOrder",
+        title: "采购订单列表",
+        path: "/purchase/supplierOrder",
+        component: lazy(() => import("@/page/purchase/order/list")),
+      },
+      {
+        name: "supplierOrderEdit",
+        title: "采购订单",
+        hidden: true,
+        path: "/purchase/supplierOrderEdit",
+        component: lazy(() => import("@/page/purchase/order/edit")),
+      },
+      {
         name: "spec",
-        title: "规格模板",
+        title: "产品规格",
         path: "/purchase/spec",
         component: lazy(() => import("@/page/purchase/spec")),
       },
@@ -53,7 +66,14 @@ export default [
         name: "supplierProduct",
         title: "供应产品库",
         path: "/purchase/supplierProduct",
-        component: lazy(() => import("@/page/purchase/product")),
+        component: lazy(() => import("@/page/purchase/product/list")),
+      },
+      {
+        name: "supplierProductDetails",
+        title: "产品详情",
+        hidden: true,
+        path: "/purchase/supplierProductDetails/:id",
+        component: lazy(() => import("@/page/purchase/product/details")),
       },
       {
         name: "supplierList",

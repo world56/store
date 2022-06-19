@@ -1,7 +1,7 @@
 import { IsString } from 'class-validator';
-import { AdminUserDTO } from '@/dto/admin-user.dto';
+import { PrimaryKeyDTO } from '@/dto/common/common.dto';
+import { AdminUserDTO } from '@/dto/system/admin-user.dto';
 import { ApiProperty, IntersectionType, PickType } from '@nestjs/swagger';
-import { PrimaryKeyDTO } from '@/dto/common.dto';
 
 /**
  * @name AdminUserUpdatePwdDTO 修改用户密码

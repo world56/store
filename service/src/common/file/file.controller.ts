@@ -1,7 +1,7 @@
 import { User } from '@/decorator/user';
 import { FileService } from './file.service';
-import { AdminUserDTO } from '@/dto/admin-user.dto';
 import { RemoveFilesDTO } from './dto/remove-files.dto';
+import { AdminUserDTO } from '@/dto/system/admin-user.dto';
 import { UploadFileGuard } from '@/guard/upload-file.guard';
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { GetUploadFiles } from '@/decorator/get-upload-file.decorator';

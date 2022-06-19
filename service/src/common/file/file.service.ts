@@ -2,18 +2,18 @@ import { promisify } from 'util';
 import { pipeline } from 'stream';
 import { createHash } from 'crypto';
 import { join, extname } from 'path';
-import { FileDTO } from '@/dto/file.dto';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AdminUserDTO } from '@/dto/admin-user.dto';
+import { FileDTO } from '@/dto/common/file.dto';
 import { stat, unlink, createWriteStream } from 'fs';
+import { RemoveFilesDTO } from './dto/remove-files.dto';
 import { PrismaService } from '../prisma/prisma.service';
+import { AdminUserDTO } from '@/dto/system/admin-user.dto';
 import StaticResourcesConfig from '@/config/static-resources.config';
 
 import { ENUM_COMMON } from '@/enum/common';
 
 import { type Multipart } from '@fastify/multipart';
-import { RemoveFilesDTO } from './dto/remove-files.dto';
 
 @Injectable()
 export class FileService {

@@ -1,5 +1,5 @@
-import { AdminUserDTO } from '@/dto/admin-user.dto';
 import { PartialType, PickType } from '@nestjs/swagger';
+import { AdminUserDTO } from '@/dto/system/admin-user.dto';
 
 /**
  * @name UserCheckFilesDto 字段查重

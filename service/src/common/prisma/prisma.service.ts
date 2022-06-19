@@ -1,11 +1,11 @@
-import { PrismaClient } from '@prisma/client';
-import { PrimaryKeyDTO } from '@/dto/common.dto';
 import {
   Injectable,
   OnModuleInit,
   INestApplication,
   PreconditionFailedException,
 } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
+import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 
 interface TypeCheckFieldsRepeatDTO extends Partial<PrimaryKeyDTO> {
   WHERE?: object;

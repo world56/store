@@ -6,9 +6,9 @@ import {
   IntersectionType,
 } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { CommonDTO } from '@/dto/common.dto';
-import { AdminUserDTO } from '@/dto/admin-user.dto';
 import { IsInt, IsOptional } from 'class-validator';
+import { CommonDTO } from '@/dto/common/common.dto';
+import { AdminUserDTO } from '@/dto/system/admin-user.dto';
 
 /**
  * @name AdminUserQuery 获取后台系统用户列表

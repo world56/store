@@ -3,6 +3,7 @@ import Logs from './components/Logs';
 import styles from './index.module.sass';
 import { useParams } from "react-router-dom";
 import BasicInfo from './components/BasicInfo';
+import SupplierProductList from "@/page/purchase/product/list";
 
 import type { TypeCommon } from '@/interface/common';
 
@@ -22,11 +23,16 @@ const SupplierDetails = () => {
         <BasicInfo id={id} />
       </TabPane>
 
-      <TabPane tab="供应产品" key="2" />
+      <TabPane tab="供应产品" key="2">
+        <SupplierProductList supplierId={id} />
+      </TabPane>
 
-      <TabPane tab="数据分析" key="3" />
+      <TabPane tab="付款账号" key="3">
+      </TabPane>
 
-      <TabPane tab="跟进日志" key="4">
+      {/* <TabPane tab="数据分析" key="4" /> */}
+
+      <TabPane tab="跟进日志" key="5">
         <Logs id={id} />
       </TabPane>
 

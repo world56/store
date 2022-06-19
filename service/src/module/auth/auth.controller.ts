@@ -1,6 +1,6 @@
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { AdminUserDTO } from '@/dto/admin-user.dto';
+import { AdminUserDTO } from '@/dto/system/admin-user.dto';
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { UserToken } from '@/decorator/user-token.decorator';
 import { AdminUserLoginDTO } from './dto/admin-user-login.dto';

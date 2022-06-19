@@ -2,11 +2,11 @@ import {
   OmitType,
   PickType,
   PartialType,
-  IntersectionType,
   ApiProperty,
+  IntersectionType,
 } from '@nestjs/swagger';
-import { AdminUserDTO } from '@/dto/admin-user.dto';
 import { IsOptional, IsString } from 'class-validator';
+import { AdminUserDTO } from '@/dto/system/admin-user.dto';
 
 /**
  * @name AdminUserUpdateDTO 编辑系统用户

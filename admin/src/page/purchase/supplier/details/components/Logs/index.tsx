@@ -26,7 +26,7 @@ export interface TypeLogsProps extends TypeCommon.DatabaseMainParameter { }
 const Logs: React.FC<TypeLogsProps> = ({ id }) => {
 
   const { category: { SUPPLIER_LOG_TYPE } } = useStore();
-  const [type, setType] = useState<ENUM_PURCHASE.LOG_TYPE>();
+  const [type, setType] = useState<ENUM_PURCHASE.SUPPLIER_LOG_TYPE>();
 
   const { data, loading, run } = useRequest(() => getPurchaseSupplierLogs({ id, type }), {
     debounceWait: 200,
@@ -38,8 +38,8 @@ const Logs: React.FC<TypeLogsProps> = ({ id }) => {
       title: '日志类型',
       width: 150,
       dataIndex: 'type',
-      render: (key: ENUM_PURCHASE.LOG_TYPE) => {
-        const isStatus = key === ENUM_PURCHASE.LOG_TYPE.STATUS;
+      render: (key: ENUM_PURCHASE.SUPPLIER_LOG_TYPE) => {
+        const isStatus = key === ENUM_PURCHASE.SUPPLIER_LOG_TYPE.STATUS;
         return <span className={isStatus ? 'error' : ''}>{SUPPLIER_LOG_TYPE?.OBJ[key]}</span>;
       }
     },

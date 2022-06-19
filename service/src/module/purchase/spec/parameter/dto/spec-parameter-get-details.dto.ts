@@ -1,5 +1,5 @@
 import { PickType } from '@nestjs/swagger';
-import { CommonDTO } from '@/dto/common.dto';
+import { CommonDTO } from '@/dto/common/common.dto';
 
 /**
  * @name SpecParameterGetDetailsDTO 查询规格列表

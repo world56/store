@@ -1,15 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { AdminUserDTO } from '@/dto/admin-user.dto';
-import { PrismaService } from '@/common/prisma/prisma.service';
-import { AdminUserQuery } from './dto/admin-user-query.dto';
-import { UserCheckFilesDto } from './dto/admin-user-check-fields.dto';
+import { PrimaryKeyDTO } from '@/dto/common/common.dto';
+import { AdminUserDTO } from '@/dto/system/admin-user.dto';
 import { UtilsService } from '@/common/utils/utils.service';
-import { ENUM_SYSTEM } from '@/enum/system';
-import { PrimaryKeyDTO } from '@/dto/common.dto';
-import { EncryptionService } from '@/common/encryption/encryption.service';
+import { AdminUserQuery } from './dto/admin-user-query.dto';
+import { PrismaService } from '@/common/prisma/prisma.service';
 import { AdminUserUpdateDTO } from './dto/admin-user-update.dto';
+import { UserCheckFilesDto } from './dto/admin-user-check-fields.dto';
+import { EncryptionService } from '@/common/encryption/encryption.service';
 import { AdminUserStatusChangeDto } from './dto/admin-user-status-change.dto';
+
 import { ENUM_COMMON } from '@/enum/common';
+import { ENUM_SYSTEM } from '@/enum/system';
+
 
 @Injectable()
 export class UserService {

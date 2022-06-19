@@ -1,5 +1,5 @@
 import { PartialType } from '@nestjs/swagger';
-import { CategoryDTO } from '@/dto/category.dto';
+import { CategoryDTO } from '@/dto/common/category.dto';
 
 /**
  * @name CategoryCheckFieldDTO 检查字段是否重复

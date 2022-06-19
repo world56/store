@@ -4,14 +4,14 @@ import {
   UnauthorizedException,
   PreconditionFailedException,
 } from '@nestjs/common';
-import { AdminUserDTO } from '@/dto/admin-user.dto';
+import { AdminUserDTO } from '@/dto/system/admin-user.dto';
 import { PrismaService } from '@/common/prisma/prisma.service';
 import { AdminUserLoginDTO } from './dto/admin-user-login.dto';
 import { JwtAuthService } from '@/common/jwtAuth/jwtAuth.service';
+import { AdminUserUpdatePwdDTO } from './dto/admin-user-update-pwd.dto';
 import { EncryptionService } from '@/common/encryption/encryption.service';
 
 import { ENUM_SYSTEM } from '@/enum/system';
-import { AdminUserUpdatePwdDTO } from './dto/admin-user-update-pwd.dto';
 
 @Injectable()
 export class AuthService {

@@ -16,12 +16,12 @@ import { ENUM_SEARCH } from './enum';
 export interface Columns {
   name: string;
   label: string;
-  value?: string;
   rules?: Rule[];
   placeholder?: string;
-  noStyle?: (f: FormInstance) => void;
+  initialValue?: React.Key;
   type: ENUM_SEARCH.COMP_TYPE;
   list?: TypeCommon.DefaultKey[];
+  hide?: (f: FormInstance) => void;
   /**
    * @param props 各类组件props
    * @description 暂不具体定义 参考antd官方文档对各类组件的定义
@@ -63,9 +63,7 @@ function toComType(value: Columns, callback: () => void, size: SizeType) {
           placeholder={placeholder}
           filterOption={searchSelect}
           optionFilterProp="children" {...props}>
-          {list?.map(v => (
-            <Select.Option key={v.id} value={v.id}>{v.name}</Select.Option>
-          ))}
+          {list?.map(v => <Select.Option key={v.id} value={v.id}>{v.name}</Select.Option>)}
         </Select>
       );
     case ENUM_SEARCH.COMP_TYPE.CASCADER:
@@ -88,8 +86,7 @@ function toComType(value: Columns, callback: () => void, size: SizeType) {
           treeData={list}
           treeDefaultExpandAll
           placeholder={placeholder}
-          {...props}
-        />
+          {...props} />
       );
     default:
       return <span>NULL</span>
@@ -122,12 +119,11 @@ const Search: TypeSearchProps = ({
         name={v.name}
         label={v.label}
         rules={v.rules}
-        initialValue={v.value}>
+        initialValue={v.initialValue}>
         {toComType(v, onSearch, size)}
       </Form.Item>
     </Col>;
-    if (v?.noStyle?.(form)) return null;
-    else return ele;
+    return v?.hide?.(form) ? null : ele;
   }), [form, spanSize, Columns, onSearch, size]);
 
   function onClear() {
@@ -147,7 +143,6 @@ const Search: TypeSearchProps = ({
     </Form>
   );
 };
-
 
 Search.ENUM = ENUM_SEARCH;
 

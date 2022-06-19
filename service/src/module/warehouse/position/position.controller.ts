@@ -1,6 +1,6 @@
 import { ApiTags } from '@nestjs/swagger';
-import { PrimaryKeyDTO } from '@/dto/common.dto';
 import { PositionService } from './position.service';
+import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { WarehousePositionDTO } from '@/dto/warehouse-position.dto';
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { WarehousePositionQueryListDTO } from './dto/warehouse-position-list-query';

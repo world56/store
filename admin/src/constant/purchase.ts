@@ -9,20 +9,75 @@ export namespace CONSTANT_PURCHASE {
    */
   export const SUPPLIER_LOG_TYPE = {
     OBJ: {
-      [ENUM_PURCHASE.LOG_TYPE.QUALITY]: "质量",
-      [ENUM_PURCHASE.LOG_TYPE.PRICE]: "价格",
-      [ENUM_PURCHASE.LOG_TYPE.PUNCTUALITY]: "准时性",
-      [ENUM_PURCHASE.LOG_TYPE.AFTER_SALES]: "售后服务",
-      [ENUM_PURCHASE.LOG_TYPE.STATUS]: "状态变更",
-      [ENUM_PURCHASE.LOG_TYPE.OTHER]: "其他",
+      [ENUM_PURCHASE.SUPPLIER_LOG_TYPE.QUALITY]: "质量",
+      [ENUM_PURCHASE.SUPPLIER_LOG_TYPE.PRICE]: "价格",
+      [ENUM_PURCHASE.SUPPLIER_LOG_TYPE.PUNCTUALITY]: "准时性",
+      [ENUM_PURCHASE.SUPPLIER_LOG_TYPE.AFTER_SALES]: "售后服务",
+      [ENUM_PURCHASE.SUPPLIER_LOG_TYPE.STATUS]: "状态变更",
+      [ENUM_PURCHASE.SUPPLIER_LOG_TYPE.OTHER]: "其他",
     },
     LIST: [
-      { id: ENUM_PURCHASE.LOG_TYPE.QUALITY, name: "质量" },
-      { id: ENUM_PURCHASE.LOG_TYPE.PRICE, name: "价格" },
-      { id: ENUM_PURCHASE.LOG_TYPE.PUNCTUALITY, name: "准时性" },
-      { id: ENUM_PURCHASE.LOG_TYPE.AFTER_SALES, name: "售后服务" },
-      { id: ENUM_PURCHASE.LOG_TYPE.STATUS, name: "状态变更" },
-      { id: ENUM_PURCHASE.LOG_TYPE.OTHER, name: "其他" },
+      { id: ENUM_PURCHASE.SUPPLIER_LOG_TYPE.QUALITY, name: "质量" },
+      { id: ENUM_PURCHASE.SUPPLIER_LOG_TYPE.PRICE, name: "价格" },
+      { id: ENUM_PURCHASE.SUPPLIER_LOG_TYPE.PUNCTUALITY, name: "准时性" },
+      { id: ENUM_PURCHASE.SUPPLIER_LOG_TYPE.AFTER_SALES, name: "售后服务" },
+      { id: ENUM_PURCHASE.SUPPLIER_LOG_TYPE.STATUS, name: "状态变更" },
+      { id: ENUM_PURCHASE.SUPPLIER_LOG_TYPE.OTHER, name: "其他" },
+    ],
+  };
+
+  /**
+   * @name SUPPLIER_SHIPPING_METHOD 供应商发货方式
+   */
+  export const SUPPLIER_SHIPPING_METHOD = {
+    OBJ: {
+      [ENUM_PURCHASE.SUPPLIER_SHIPPING_METHOD.LOGISTICS]: "物流",
+      [ENUM_PURCHASE.SUPPLIER_SHIPPING_METHOD.NOT_LOGISTICS]: "非物流",
+    },
+    LIST: [
+      { id: ENUM_PURCHASE.SUPPLIER_SHIPPING_METHOD.LOGISTICS, name: "物流" },
+      {
+        id: ENUM_PURCHASE.SUPPLIER_SHIPPING_METHOD.NOT_LOGISTICS,
+        name: "非物流",
+      },
+    ],
+  };
+
+  /**
+   * @name SUPPLIER_SETTLEMENT 供应商结算方式
+   */
+  export const SUPPLIER_SETTLEMENT = {
+    OBJ: {
+      [ENUM_PURCHASE.SUPPLIER_SETTLEMENT.CASH]: "现金结算",
+      [ENUM_PURCHASE.SUPPLIER_SETTLEMENT.CYCLE]: "周期结算",
+    },
+    LIST: [
+      { id: ENUM_PURCHASE.SUPPLIER_SETTLEMENT.CASH, name: "现金结算" },
+      { id: ENUM_PURCHASE.SUPPLIER_SETTLEMENT.CYCLE, name: "周期结算" },
+    ],
+  };
+
+  /**
+   * @name SUPPLIER_ORDER_STATUS 供应商订单采购状态
+   */
+  export const SUPPLIER_ORDER_STATUS = {
+    OBJ: {
+      [ENUM_PURCHASE.SUPPLIER_ORDER_STATUS.TO_BE_RECEIVED]: "待收货",
+      [ENUM_PURCHASE.SUPPLIER_ORDER_STATUS.TO_BE_WAREHOUSED]: "待入库",
+      [ENUM_PURCHASE.SUPPLIER_ORDER_STATUS.TO_BE_PAID]: "待付款",
+      [ENUM_PURCHASE.SUPPLIER_ORDER_STATUS.COMPLETE]: "完成",
+    },
+    LIST: [
+      {
+        id: ENUM_PURCHASE.SUPPLIER_ORDER_STATUS.TO_BE_RECEIVED,
+        name: "待收货",
+      },
+      {
+        id: ENUM_PURCHASE.SUPPLIER_ORDER_STATUS.TO_BE_WAREHOUSED,
+        name: "待入库",
+      },
+      { id: ENUM_PURCHASE.SUPPLIER_ORDER_STATUS.TO_BE_PAID, name: "待付款" },
+      { id: ENUM_PURCHASE.SUPPLIER_ORDER_STATUS.COMPLETE, name: "完成" },
     ],
   };
 }

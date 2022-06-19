@@ -26,7 +26,12 @@ const selectShow = { keepParent: false };
 /**
  * @name EditTemplate 编辑规格
  */
-const EditTemplate: React.FC<TypeEditSpecTemplateProps> = ({ id, spec, visible, onClose }) => {
+const EditTemplate: React.FC<TypeEditSpecTemplateProps> = ({
+  id,
+  spec,
+  visible,
+  onClose
+}) => {
 
   const [form] = Form.useForm<TypeSpec.EditDTO>();
 
@@ -64,7 +69,7 @@ const EditTemplate: React.FC<TypeEditSpecTemplateProps> = ({ id, spec, visible, 
           placeholder="请输入规格类目（例：鞋码）"
           checkFieldsFn={checkSpecTemplateFields} />
 
-        <Form.Item name='parameter' label='关联规格参数' rules={[{ required: true }]}>
+        <Form.Item name='parameter' label='关联规格参数'>
           <Select
             showSearch
             allowClear

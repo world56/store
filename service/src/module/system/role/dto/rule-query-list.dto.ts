@@ -4,10 +4,10 @@ import {
   PartialType,
   IntersectionType,
 } from '@nestjs/swagger';
-import { RoleDto } from '@/dto/role.dto';
-import { CommonDTO } from '@/dto/common.dto';
-import { IsInt, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
+import { RoleDto } from '@/dto/system/role.dto';
+import { CommonDTO } from '@/dto/common/common.dto';
+import { IsInt, IsOptional } from 'class-validator';
 
 /**
  * @name RuleQueryListDTO 查询角色列表

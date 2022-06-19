@@ -1,7 +1,7 @@
 import { IsInt } from 'class-validator';
 import { Optional } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { PrimaryKeyDTO } from '@/dto/common.dto';
+import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 
 /**
  * @name SpecParameterRelationCategoryDTO 关联类目

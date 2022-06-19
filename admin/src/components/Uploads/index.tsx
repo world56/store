@@ -1,13 +1,14 @@
 import React from 'react';
 import List from './List';
-import Single from './Single';
 import { isVoid } from '@/utils';
+import { SUFFIX } from './config';
 import { notification } from 'antd';
 import styles from './index.module.sass';
 import ICON_FOLDER from '@/resource/folder.png';
 import { WarningOutlined } from '@ant-design/icons';
 import { removeFiles, uploadFile } from '@/api/common';
 
+import Single from './Single';
 import FilesTable from './Table';
 
 import { ENUM_COMMON } from '@/enum/common';
@@ -16,6 +17,8 @@ import type { TypeCommon } from '@/interface/common';
 
 interface TypeUploadsProps {
   value?: TypeCommon.File[];
+  /** @name verifyFormat 自定义校验文件格式 */
+  verifyFormat?(suffix: string): boolean | void;
   onChange?(val: TypeCommon.File[]): void;
   onDelete?(id: number): void; // 获取删除的ID
 };
@@ -39,9 +42,14 @@ class Uploads extends React.Component<TypeUploadsProps, TypeUploadsState> {
    */
   static readonly Table = FilesTable;
 
-  private index = 0;
+  /**
+   * @name SUFFIX 常见文件格式、类型
+   */
+  static readonly SUFFIX = SUFFIX;
 
   static defaultProps = { value: [] };
+
+  private index = 0;
 
   private readonly fileSize = 1024 * 1024 * 30;
 
@@ -101,6 +109,7 @@ class Uploads extends React.Component<TypeUploadsProps, TypeUploadsState> {
    */
   private filterFiles = (files: FileList): File[] => {
     return Array.prototype.filter.call(files, (f: File) => {
+      const suffix = f.name.split('.')?.pop();
       if (f.size >= this.fileSize) {
         notification.warn({
           message: '警告',
@@ -108,6 +117,15 @@ class Uploads extends React.Component<TypeUploadsProps, TypeUploadsState> {
           description: <><strong>{f.name}</strong> 文件超过 <strong>最大限制30MB</strong> ，请检查后在尝试上传。</>,
         });
         return false;
+      }
+      // 自定义校验文件格式
+      if (this.props?.verifyFormat) {
+        if (suffix) {
+          return this.props?.verifyFormat(suffix);
+        } else {
+          notification.warn({ message: '警告', icon: <WarningOutlined />, description: '文件格式未知，请上传正确的文件' });
+          return false
+        }
       }
       return true;
     });
@@ -159,3 +177,5 @@ class Uploads extends React.Component<TypeUploadsProps, TypeUploadsState> {
 
 
 export default Uploads;
+
+'1,2'.split(',')

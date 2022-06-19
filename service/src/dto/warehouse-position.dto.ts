@@ -1,5 +1,5 @@
-import { CommonDTO } from './common.dto';
 import { Type } from 'class-transformer';
+import { CommonDTO } from './common/common.dto';
 import { ENUM_WAREHOUSE } from '@/enum/warehouse';
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { IsEnum, IsInt, IsOptional, IsString } from 'class-validator';

@@ -1,7 +1,7 @@
 import { ApiTags } from '@nestjs/swagger';
-import { CategoryDTO } from '@/dto/category.dto';
-import { PrimaryKeyDTO } from '@/dto/common.dto';
 import { CategoryService } from './category.service';
+import { CategoryDTO } from '@/dto/common/category.dto';
+import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { CategoryListQueryDTO } from './dto/category-list-query.dto';
 import { CategoryCheckFieldDTO } from './dto/category-check-field.dto';

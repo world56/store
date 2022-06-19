@@ -1,10 +1,11 @@
-import { RoleDto } from '@/dto/role.dto';
-import { PrimaryKeyDTO } from '@/dto/common.dto';
+import { RoleDto } from '@/dto/system/role.dto';
+import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { UtilsService } from '@/common/utils/utils.service';
 import { RuleQueryListDTO } from './dto/rule-query-list.dto';
 import { PrismaService } from '@/common/prisma/prisma.service';
 import { RuleCheckFieldsDTO } from './dto/rule-check-fields.dto';
 import { Injectable, PreconditionFailedException } from '@nestjs/common';
+
 import { ENUM_COMMON } from '@/enum/common';
 
 @Injectable()

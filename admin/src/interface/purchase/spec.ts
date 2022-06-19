@@ -6,13 +6,10 @@ import { TypeCommon } from "../common";
 export namespace TypeSpec {
   /**
    * @name Query 查询产品规格列表
-   * @param selectedSort 已选排序
    */
   export interface Query
-    extends Pick<DTO, "name" | "status">,
-      TypeCommon.PageTurning {
-    selectedSort: boolean;
-  }
+    extends Partial<Pick<DTO, "name" | "status">>,
+      TypeCommon.PageTurning {}
 
   /**
    * @name DTO 产品规格模板DTO

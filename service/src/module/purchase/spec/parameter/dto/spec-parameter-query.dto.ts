@@ -5,9 +5,9 @@ import {
   IntersectionType,
 } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { CommonDTO } from '@/dto/common.dto';
+import { CommonDTO } from '@/dto/common/common.dto';
 import { IsInt, IsOptional } from 'class-validator';
-import { ProductSpecParameterDTO } from '@/dto/product-spec.dto';
+import { ProductSpecParameterDTO } from '@/dto/purchase/spec.dto';
 
 /**
  * @name SpecParameterQueryDTO 产品规格参数
