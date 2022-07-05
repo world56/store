@@ -44,7 +44,7 @@ export class UtilsService {
   }
 
   /**
-   * @name filterArrayRepeatKeys 数组 过滤l、r相互重复的key (主要分出新增、删除)
+   * @name filterArrayRepeatKeys 数组 过滤l、r相互重复的key (insert、delete)
    * @param dtoData client dto data
    * @param serviceData db server data
    * @param toId 是否返回Array<{ id:number; }>;
@@ -74,7 +74,7 @@ export class UtilsService {
   }
 
   /**
-   * @name filterGrouping 条件过滤分离数组
+   * @name filterGrouping 条件过滤分离数组 （update、create）
    * @description [trues 有id（update）的对象] [falses 无id（insert）的对象]
    */
   filterGrouping<T extends { id?: number }>(

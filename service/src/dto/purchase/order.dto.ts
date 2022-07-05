@@ -1,4 +1,10 @@
 import {
+  PickType,
+  PartialType,
+  ApiProperty,
+  IntersectionType,
+} from '@nestjs/swagger';
+import {
   IsInt,
   IsDate,
   IsEnum,
@@ -8,10 +14,10 @@ import {
   IsOptional,
   ValidateNested,
 } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
+import { CommonDTO, PrimaryKeyStringDTO } from '../common/common.dto';
+
 import { ENUM_PURCHASE } from '@/enum/purchase';
-import { CommonDTO } from '../common/common.dto';
-import { ApiProperty, PickType } from '@nestjs/swagger';
 
 /**
  * @name PruchaseOrderProductDetailsDTO 采购订单
@@ -23,12 +29,21 @@ export class PruchaseOrderProductDetailsDTO extends PickType(CommonDTO, [
   /**
    * @param unitPrice 采购单价
    */
-  @Type(() => Number)
-  @IsInt()
+  @ApiProperty({ description: '采购单价' })
+  @Transform(({ value }) => Number(value))
+  @IsNumber()
   unitPrice: number;
 
   /**
-   * @param quantity 采购数量
+   * @param specId 规格ID *
+   */
+  @ApiProperty({ description: '规格ID' })
+  @Type(() => Number)
+  @IsInt()
+  specId: number;
+
+  /**
+   * @param quantity 采购数量 *
    */
   @ApiProperty({ description: '采购数量' })
   @Type(() => Number)
@@ -36,7 +51,7 @@ export class PruchaseOrderProductDetailsDTO extends PickType(CommonDTO, [
   quantity: number;
 
   /**
-   * @param productId 产品ID
+   * @param productId 产品ID *
    */
   @ApiProperty({ description: '供应产品ID' })
   @Type(() => Number)
@@ -48,6 +63,7 @@ export class PruchaseOrderProductDetailsDTO extends PickType(CommonDTO, [
    */
   @ApiProperty({ description: '采购订单ID' })
   @Type(() => Number)
+  @IsOptional()
   @IsInt()
   productOrderId: number;
 }
@@ -55,24 +71,23 @@ export class PruchaseOrderProductDetailsDTO extends PickType(CommonDTO, [
 /**
  * @name PurchaseOrderDTO 采购订单DTO
  */
-export class PurchaseOrderDTO extends PickType(CommonDTO, [
-  'id',
-  'name',
-  'status',
-  'remark',
-] as const) {
+export class PurchaseOrderDTO extends IntersectionType(
+  PartialType(PrimaryKeyStringDTO),
+  PickType(CommonDTO, ['status', 'remark'] as const),
+) {
   /**
    * @param estimatedDate 预期抵达时间
    */
   @ApiProperty({ description: '预计送达时间' })
   @IsOptional()
   @IsDate()
-  estimatedDate: Date;
+  estimatedDate?: Date;
 
   /**
    * @param settlement 结算方式
    */
   @ApiProperty({ description: '结算方式' })
+  @Type(() => Number)
   @IsEnum(ENUM_PURCHASE.SUPPLIER_SETTLEMENT)
   settlement: ENUM_PURCHASE.SUPPLIER_SETTLEMENT;
 
@@ -80,11 +95,12 @@ export class PurchaseOrderDTO extends PickType(CommonDTO, [
    * @param shippingMethod 发货方式
    */
   @ApiProperty({ description: '发货方式' })
+  @Type(() => Number)
   @IsEnum(ENUM_PURCHASE.SUPPLIER_SHIPPING_METHOD)
   shippingMethod: ENUM_PURCHASE.SUPPLIER_SHIPPING_METHOD;
 
   /**
-   * @param shippingNoteNumber 物流公司ID
+   * @param logisticsCompanyId 物流公司ID
    */
   @ApiProperty({ description: '物流公司ID' })
   @IsOptional()
@@ -97,7 +113,7 @@ export class PurchaseOrderDTO extends PickType(CommonDTO, [
   @ApiProperty({ description: '运输单号' })
   @IsOptional()
   @IsString()
-  shippingNoteNumber: number;
+  shippingNoteNumber?: string;
 
   /**
    * @param supplierId 供应商ID
@@ -112,8 +128,13 @@ export class PurchaseOrderDTO extends PickType(CommonDTO, [
    * @name  product 采购产品列表
    */
   @ApiProperty({ description: '采购产品列表' })
-  @ValidateNested({ each: true })
+  @ValidateNested()
   @Type(() => PruchaseOrderProductDetailsDTO)
   @IsArray()
-  product: PruchaseOrderProductDetailsDTO[];
+  products: PruchaseOrderProductDetailsDTO[];
+
+  /**
+   * @param creatorId 创建人ID
+   */
+  creatorId: number;
 }

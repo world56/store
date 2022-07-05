@@ -32,12 +32,12 @@ export namespace ENUM_PURCHASE {
 
   /**
    * @name SUPPLIER_SETTLEMENT 采购订单结算方式
-   * @param CASH 现金结算
-   * @param CYCLE 周期结算
+   * @param CASH_ON_DELIVERY 货到付款
+   * @param DELIVERY_AFTER_PAYMENT 先付款后发货
    */
   export enum SUPPLIER_SETTLEMENT {
-    CASH,
-    CYCLE,
+    CASH_ON_DELIVERY,
+    DELIVERY_AFTER_PAYMENT,
   }
 
   /**

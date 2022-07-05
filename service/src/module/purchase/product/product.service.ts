@@ -3,8 +3,11 @@ import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { UtilsService } from '@/common/utils/utils.service';
 import { PrismaService } from '@/common/prisma/prisma.service';
 import { SupplierProductDTO } from '@/dto/purchase/product.dto';
+import { SupplierProductQuery } from './dto/supplier-product-query.dto';
 import { SupplierProductQueryListDTO } from './dto/supplier-product-query-list.dto';
 import { SupplierProductCheckFieldsDTO } from './dto/supplier-product-check-fields.dto';
+
+import { ENUM_COMMON } from '@/enum/common';
 
 @Injectable()
 export class ProductService {
@@ -12,6 +15,26 @@ export class ProductService {
     private readonly UtilsService: UtilsService,
     private readonly PrismaService: PrismaService,
   ) {}
+
+  query(query: SupplierProductQuery) {
+    const { name, supplierId } = query;
+    return this.PrismaService.supplierProduct.findMany({
+      where: {
+        name: { contains: name },
+        status: ENUM_COMMON.STATUS.ACTIVATE,
+        supplier: { some: { id: supplierId } },
+      },
+      include: {
+        pictures: true,
+        brand: true,
+        unit: true,
+        spec: {
+          where: { deleted: false },
+          include: { specParameter: true },
+        },
+      },
+    });
+  }
 
   async getList(query: SupplierProductQueryListDTO) {
     const { name, branId, supplierId, categoryId, status, skip, take } = query;
@@ -34,18 +57,25 @@ export class ProductService {
     return { count, list };
   }
 
-  getDetails({ id }: PrimaryKeyDTO) {
-    return this.PrismaService.supplierProduct.findUnique({
+  async getDetails({ id }: PrimaryKeyDTO) {
+    const data = await this.PrismaService.supplierProduct.findUnique({
       where: { id },
       include: {
         unit: true,
-        spec: true,
         brand: true,
         category: true,
         supplier: true,
         pictures: true,
+        spec: {
+          where: { deleted: false },
+          include: { specParameter: true },
+        },
       },
     });
+    return {
+      ...data,
+      spec: data.spec.map((v) => v.specParameter),
+    };
   }
 
   checkFields({ id, name }: SupplierProductCheckFieldsDTO) {
@@ -60,10 +90,12 @@ export class ProductService {
     return this.PrismaService.supplierProduct.create({
       data: {
         ...data,
-        spec: { connect: spec.map((id) => ({ id })) },
         category: { connect: category.map((id) => ({ id })) },
-        pictures: { connect: pictures.map((v) => ({ id: v.id })) },
         supplier: { connect: supplier.map((id) => ({ id })) },
+        pictures: { connect: pictures.map((v) => ({ id: v.id })) },
+        spec: {
+          createMany: { data: spec.map((id) => ({ specParameterId: id })) },
+        },
       },
     });
   }
@@ -81,8 +113,7 @@ export class ProductService {
     });
     const [specInsert, specDel] = this.UtilsService.filterArrayRepeatKeys(
       spec,
-      target.spec.map((v) => v.id),
-      true,
+      target.spec.filter((v) => !v.deleted).map((v) => v.specParameterId),
     );
     const [categoryInsert, categoryDel] =
       this.UtilsService.filterArrayRepeatKeys(
@@ -102,15 +133,36 @@ export class ProductService {
         target.pictures.map((v) => v.id),
         true,
       );
-    return this.PrismaService.supplierProduct.update({
-      where: { id },
-      data: {
-        ...data,
-        spec: { connect: specInsert, disconnect: specDel },
-        category: { connect: categoryInsert, disconnect: categoryDel },
-        supplier: { connect: supplierInsert, disconnect: supplierDel },
-        pictures: { connect: picturesInsert, disconnect: picturesDel },
-      },
+    return this.PrismaService.$transaction(async (db) => {
+      return Promise.all([
+        Promise.all(
+          specInsert.map((specParameterId) =>
+            db.relPurchaseProductOnSpec.upsert({
+              where: {
+                specParameterId_supplierProductId: {
+                  specParameterId,
+                  supplierProductId: id,
+                },
+              },
+              create: { supplierProductId: id, specParameterId },
+              update: { deleted: false },
+            }),
+          ),
+        ),
+        db.relPurchaseProductOnSpec.updateMany({
+          where: { supplierProductId: id, specParameterId: { in: specDel } },
+          data: { deleted: true },
+        }),
+        db.supplierProduct.update({
+          where: { id },
+          data: {
+            ...data,
+            category: { connect: categoryInsert, disconnect: categoryDel },
+            supplier: { connect: supplierInsert, disconnect: supplierDel },
+            pictures: { connect: picturesInsert, disconnect: picturesDel },
+          },
+        }),
+      ]);
     });
   }
 }

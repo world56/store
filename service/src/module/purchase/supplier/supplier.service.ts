@@ -35,7 +35,7 @@ export class SupplierService {
     });
   }
 
-  getAll(){
+  getAll() {
     return this.PrismaService.purchaseSupplier.findMany();
   }
 

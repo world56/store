@@ -2,6 +2,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import { join } from 'path';
 import { AppModule } from './app.module';
 import { NestFactory } from '@nestjs/core';
 import multipart from '@fastify/multipart';
@@ -10,7 +11,10 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { HttpExceptionFilter } from './filter/http-exception.filter';
 import { fastifyRequestContextPlugin } from '@fastify/request-context';
 import { HttpSucessInterceptor } from '@/interceptor/http-sucess.interceptor';
-import { join } from 'path';
+
+(BigInt.prototype as any).toJSON = function () {
+  return this.toString();
+  };
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
