@@ -177,5 +177,3 @@ class Uploads extends React.Component<TypeUploadsProps, TypeUploadsState> {
 
 
 export default Uploads;
-
-'1,2'.split(',')

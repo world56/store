@@ -4,9 +4,9 @@ import { ENUM_HTTP } from "@/enum/http";
 
 import type { TypeCommon } from "@/interface/common";
 import type { TypeSpec } from "@/interface/purchase/spec";
+import type { TypePurchaseOrder } from "@/interface/purchase/order";
 import type { TypeSupplierProduct } from "@/interface/purchase/product";
 import type { TypePurchaseSupplier } from "@/interface/purchase/supplier";
-import { TypePurchaseOrder } from "@/interface/purchase/order";
 
 /**
  * --------------------- 供应商列表 ----------------------
@@ -277,6 +277,18 @@ export function getSupplierProductList(params: TypeSupplierProduct.Query) {
 }
 
 /**
+ * @name querySupplierProduct 查询指定供应产品
+ */
+export function querySupplierProduct(
+  params: Pick<TypeSupplierProduct.Query, "name" | "supplierId">,
+) {
+  return request<TypeSupplierProduct.DTO[]>("purchase/product/query", {
+    method: ENUM_HTTP.REQUEST_MODE.GET,
+    params,
+  });
+}
+
+/**
  * @name getSupplierProductDetails 获取供应产品详情
  */
 export function getSupplierProductDetails(
@@ -337,11 +349,45 @@ export function getPurchaseOrderList(params: TypePurchaseOrder.Query) {
   );
 }
 
+// /**
+//  * @name getPurchaseOrderLogs 获取采购订单日志
+//  */
+// export function getPurchaseOrderLogs(
+//   params: Pick<TypePurchaseOrder.DTO, "id">,
+// ) {
+//   return request<TypePurchaseOrder.Log[]>("purchase/order/logs", {
+//     method: ENUM_HTTP.REQUEST_MODE.GET,
+//     params,
+//   });
+// }
+
 /**
- * @name insertPurchaseOrderList 新增购订单
+ * @name getPirchaseOrderDetails 获取采购订单详情
  */
-export function insertPurchaseOrderList(data: TypePurchaseOrder.EditDTO) {
+export function getPirchaseOrderDetails(
+  data: Pick<TypePurchaseOrder.DTO, "id">,
+) {
+  return request<TypePurchaseOrder.DTO>("purchase/order/details", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
+}
+
+/**
+ * @name insertPurchaseOrder 新增采购订单
+ */
+export function insertPurchaseOrder(data: TypePurchaseOrder.EditDTO) {
   return request<boolean>("purchase/order/insert", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
+}
+
+/**
+ * @name updatePurchaseOrder 更新采购订单
+ */
+export function updatePurchaseOrder(data: TypePurchaseOrder.EditDTO) {
+  return request<boolean>("purchase/order/update", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,
   });

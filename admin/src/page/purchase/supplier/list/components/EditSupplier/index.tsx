@@ -10,6 +10,7 @@ import { Drawer } from '@/layout/PopUp';
 import { useRef, useState } from 'react';
 import { Form, Input, Tabs } from "antd";
 import Uploads from '@/components/Uploads';
+import { removeFiles } from '@/api/common';
 import styles from '../../index.module.sass';
 import { PopUpAddBtn } from '@/layout/Button';
 import Categorys from "@/components/Categorys";
@@ -20,7 +21,6 @@ import { ENUM_STORE } from "@/enum/store";
 
 import type { TypeCommon } from '@/interface/common';
 import type { TypePurchaseSupplier } from "@/interface/purchase/supplier";
-import { removeFiles } from '@/api/common';
 
 export interface TypeEditSupplierProps extends Partial<TypeCommon.DatabaseMainParameter> {
   visible: boolean;

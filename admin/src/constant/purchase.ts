@@ -48,12 +48,19 @@ export namespace CONSTANT_PURCHASE {
    */
   export const SUPPLIER_SETTLEMENT = {
     OBJ: {
-      [ENUM_PURCHASE.SUPPLIER_SETTLEMENT.CASH]: "现金结算",
-      [ENUM_PURCHASE.SUPPLIER_SETTLEMENT.CYCLE]: "周期结算",
+      [ENUM_PURCHASE.SUPPLIER_SETTLEMENT.CASH_ON_DELIVERY]: "货到付款",
+      [ENUM_PURCHASE.SUPPLIER_SETTLEMENT.DELIVERY_AFTER_PAYMENT]:
+        "先付款后发货",
     },
     LIST: [
-      { id: ENUM_PURCHASE.SUPPLIER_SETTLEMENT.CASH, name: "现金结算" },
-      { id: ENUM_PURCHASE.SUPPLIER_SETTLEMENT.CYCLE, name: "周期结算" },
+      {
+        id: ENUM_PURCHASE.SUPPLIER_SETTLEMENT.CASH_ON_DELIVERY,
+        name: "货到付款",
+      },
+      {
+        id: ENUM_PURCHASE.SUPPLIER_SETTLEMENT.DELIVERY_AFTER_PAYMENT,
+        name: "先付款后发货",
+      },
     ],
   };
 

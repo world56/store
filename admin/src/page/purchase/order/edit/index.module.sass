@@ -1,0 +1,49 @@
+@import '@/index.sass'
+
+.layout
+  :global(.ant-card)
+    margin-bottom: 12px
+  & > :global(.ant-card):nth-child(1)
+    :global(.ant-card-body)
+      padding: 24px 24px 0 24px
+  & > :global(.ant-card):nth-child(2)
+    border-bottom: none
+    :global(.ant-card-body)
+      padding: 1px 0 0 0
+  :global(.ant-table-summary)
+    td
+      border-bottom: none
+      text-align: center
+    & > tr td:nth-child(1)
+      text-align: left
+  .func
+    label
+      display: flex
+      justify-content: space-between
+
+  .table
+    @extend .formTable
+
+  .addProduct
+    display: flex
+    justify-content: right
+    margin-bottom: 12px
+    :global(.ant-btn)
+      margin-left: 10px
+
+  .statistics
+    display: flex
+    justify-content: space-between
+    background: #fff
+    height: 60px
+    line-height: 60px
+    padding-right: 27px
+
+    & > span:nth-child(1)
+      font-weight: bold
+
+    span
+      margin-left: 18px
+      color: rgba(0, 0, 0, 0.85)
+      span
+        font-weight: 500

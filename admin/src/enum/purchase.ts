@@ -32,19 +32,19 @@ export namespace ENUM_PURCHASE {
 
   /**
    * @name SUPPLIER_SETTLEMENT 采购订单结算方式
-   * @param CASH 现金结算
-   * @param CYCLE 周期结算
+   * @param CASH_ON_DELIVERY 货到付款
+   * @param DELIVERY_AFTER_PAYMENT 先付款后发货
    */
   export enum SUPPLIER_SETTLEMENT {
-    CASH,
-    CYCLE,
+    CASH_ON_DELIVERY,
+    DELIVERY_AFTER_PAYMENT,
   }
 
   /**
    * @name SUPPLIER_ORDER_STATUS 采购订单状态
    * @param TO_BE_RECEIVED 待收货
    * @param TO_BE_WAREHOUSED 待入库
-   * @param TO_BE_PAID 待付款 （走到这里，仓库的流程就算完成了）
+   * @param TO_BE_PAID 待付款 （跟付款方式有关系）
    * @param COMPLETE 完成
    */
   export enum SUPPLIER_ORDER_STATUS {

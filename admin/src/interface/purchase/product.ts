@@ -1,24 +1,10 @@
-import type { TypeSpec } from "./spec";
 import type { TypeCommon } from "../common";
+import { TypeSpec } from "./spec";
 
 /**
  * @name TypeSupplierProduct 采购管理-产品库
  */
 export namespace TypeSupplierProduct {
-  /**
-   * @name Query 查询产品库列表
-   * @param brandId 品牌ID
-   * @param categoryId 类目ID
-   * @param supplierId 供应商ID
-   */
-  export interface Query<T = TypeCommon.DatabaseMainParameter["id"]>
-    extends Pick<DTO, "name" | "status">,
-      TypeCommon.PageTurning {
-    supplierId: T;
-    brandId: T;
-    categoryId: T;
-  }
-
   /**
    * @name DTO 产品库DTO
    * @param brandId 品牌id
@@ -36,7 +22,33 @@ export namespace TypeSupplierProduct {
     brand: T;
     brandId: number;
     unit: T;
-    spec: TypeSpec.SpecParameterDTO[];
+    spec: RelSpecParameterDTO[];
+  }
+
+  /**
+   * @name RelSpecParameterDTO 规格关联DTO
+   */
+  export interface RelSpecParameterDTO<
+    T = TypeCommon.DatabaseMainParameter["id"],
+  > {
+    id: T;
+    specParameterId: T;
+    supplierProductId: T;
+    specParameter: TypeSpec.SpecParameterDTO;
+  }
+
+  /**
+   * @name Query 查询产品库列表
+   * @param brandId 品牌ID
+   * @param categoryId 类目ID
+   * @param supplierId 供应商ID
+   */
+  export interface Query<T = TypeCommon.DatabaseMainParameter["id"]>
+    extends Pick<DTO, "name" | "status">,
+      TypeCommon.PageTurning {
+    supplierId: T;
+    brandId: T;
+    categoryId: T;
   }
 
   /**

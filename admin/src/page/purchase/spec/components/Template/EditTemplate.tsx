@@ -7,9 +7,9 @@ import {
 import { useGetDetails } from '@/hooks';
 import { Drawer } from "@/layout/PopUp";
 import styles from '../../index.module.sass';
-import { filterSelectTooltip } from '@/utils';
 import { SpecServiceToFrom } from '../../utils';
 import { Form, Input, Select, Tooltip } from "antd";
+import { filterOptionTooltip } from '@/utils/filter';
 import { FormHideKey, FormValueCheck } from "@/components/Form";
 
 import type { TypeCommon } from "@/interface/common";
@@ -76,7 +76,7 @@ const EditTemplate: React.FC<TypeEditSpecTemplateProps> = ({
             mode='multiple'
             optionFilterProp="children"
             placeholder='请选择该模板关联的规格'
-            filterOption={filterSelectTooltip}>
+            filterOption={filterOptionTooltip}>
             {spec?.LIST?.map(v => <Option key={v.id} value={v.id} >
               <Tooltip title={v.remark} destroyTooltipOnHide={selectShow}>
                 <p>{v.name}</p>

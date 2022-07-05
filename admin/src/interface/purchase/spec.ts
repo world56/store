@@ -5,19 +5,27 @@ import { TypeCommon } from "../common";
  */
 export namespace TypeSpec {
   /**
-   * @name Query 查询产品规格列表
-   */
-  export interface Query
-    extends Partial<Pick<DTO, "name" | "status">>,
-      TypeCommon.PageTurning {}
-
-  /**
    * @name DTO 产品规格模板DTO
    */
   export interface DTO
     extends Pick<TypeCommon.DTO, "id" | "name" | "status" | "remark"> {
     parameter: SpecParameterDTO[];
   }
+
+  /**
+   * @name SpecParameterDTO 产品规格参数
+   */
+  export interface SpecParameterDTO
+    extends Pick<TypeCommon.DTO, "id" | "name" | "remark" | "createTime"> {
+    spec: DTO[];
+  }
+
+  /**
+   * @name Query 查询产品规格列表
+   */
+  export interface Query
+    extends Partial<Pick<DTO, "name" | "status">>,
+      TypeCommon.PageTurning {}
 
   /**
    * @name EditDTO 编辑产品规格模板
@@ -36,14 +44,6 @@ export namespace TypeSpec {
    * @name CheckFields 检查规格名称是否重复
    */
   export interface CheckFields extends Pick<DTO, "id" | "name"> {}
-
-  /**
-   * @name SpecParameterDTO 产品规格参数
-   */
-  export interface SpecParameterDTO
-    extends Pick<TypeCommon.DTO, "id" | "name" | "remark" | "createTime"> {
-    spec: DTO[];
-  }
 
   /**
    * @name EditSpecParameter 编辑产品规格（列表）

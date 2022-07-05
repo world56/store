@@ -5,8 +5,10 @@ import { ConfigProvider } from 'antd';
 import { Provider } from 'react-redux';
 import locale from 'antd/es/locale/zh_CN';
 
+const validateMessages = { required: "该字段不得为空" };
+
 const Root = (
-  <ConfigProvider locale={locale}>
+  <ConfigProvider form={{ validateMessages }} locale={locale}>
     <Provider store={store}>
       <Entrance />
     </Provider>

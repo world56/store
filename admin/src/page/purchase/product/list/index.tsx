@@ -57,7 +57,7 @@ const Product: React.FC<TypeSupplierProductPageProps> = ({ supplierId }) => {
   function onEdit(row?: TypeSupplierProduct.DTO) {
     const bol = !edit.visible;
     setEdit({ visible: bol, id: row?.id });
-    bol || initializa();
+    // bol || initializa();
   };
 
   function skipDetails(val: TypeSupplierProduct.DTO) {

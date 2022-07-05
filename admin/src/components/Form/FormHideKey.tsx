@@ -2,9 +2,11 @@ import { Form, Input } from 'antd';
 
 import { DB_PRIMARY_KEY } from '@/config/db';
 
+import type { NamePath } from 'rc-field-form/lib/interface';
+
 interface TypeFormHideKeyProps {
   /** @param name Form.Item name */
-  name?: string;
+  name?: NamePath;
   /** @param initialValue 初始化默认值 */
   initialValue?: unknown;
 }

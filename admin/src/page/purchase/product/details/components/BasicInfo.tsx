@@ -5,10 +5,10 @@ import StatusColor from '@/layout/StatusColor';
 import { getSupplierProductDetails } from '@/api/purchase';
 import { Carousel, Card, Image, Descriptions, Table } from 'antd';
 
+import { DB_PRIMARY_KEY } from '@/config/db';
 import { STATIC_RESOURCE } from '@/config/request';
 
 import type { TypeCommon } from '@/interface/common';
-import { DB_PRIMARY_KEY } from '@/config/db';
 
 const { Item } = Descriptions;
 

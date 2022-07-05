@@ -4,11 +4,12 @@ import styles from './index.module.sass';
 
 import type { TypeCategoryProps } from '.';
 import type { SelectProps } from 'antd/lib/select';
+import type { TypeCommon } from "@/interface/common";
 import type { DefaultOptionType } from 'rc-select/lib/Select';
 
-type TypeSelect = Partial<Pick<SelectProps, 'onChange' | 'value' | 'mode'>>;
+type TypeSelect = Partial<Pick<SelectProps, 'onChange' | 'value' | 'mode' | 'disabled'>>;
 
-type TypeCategorySelect = React.FC<Pick<TypeCategoryProps, 'type'> & TypeSelect>;
+type TypeCategorySelect = React.FC<Pick<TypeCategoryProps<keyof TypeCommon.Store['category']>, 'type'> & TypeSelect>;
 
 const { Option } = Select;
 

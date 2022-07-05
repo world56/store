@@ -4,12 +4,7 @@ import { ENUM_COMMON } from "@/enum/common";
 import { CONFIG_TIME_FORMAT } from "@/config/format";
 
 import type { TypeCommon } from "@/interface/common";
-import type { FilterFunc } from "rc-select/lib/Select";
 import type { FormListFieldData } from "antd/es/form/FormList";
-
-interface TypeNestingComp {
-  children?: { props?: TypeNestingComp };
-}
 
 export interface TypeDefaultConversionFields
   extends Pick<TypeCommon.DTO, "id" | "name" | "parentId"> {}
@@ -97,13 +92,10 @@ export function statusReversal(status: ENUM_COMMON.STATUS | undefined) {
 }
 
 /**
- * @name filterSelectTooltip 针对Select筛选嵌套Tooltip组件
- * @param val 用户输入的
- * @param props Select返回的
+ * @name convertCurrencyUnits 转换货币单位（分-元）
+ * @param money 分
+ * @returns 元
  */
-export const filterSelectTooltip: FilterFunc<TypeNestingComp> = (val, props) => {
-  const show = props?.children?.props!?.children?.props?.children as
-    | string
-    | void;
-  return show ? show.includes(val) : false;
-};
+export function convertCurrencyUnits(money: number = 0) {
+  return money / 100;
+}

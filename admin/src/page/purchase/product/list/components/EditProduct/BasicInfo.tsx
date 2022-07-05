@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import { filterSelectTooltip } from '@/utils';
 import { useActions, useStore } from '@/hooks';
 import Categorys from "@/components/Categorys";
 import { Switch } from '@/components/Formatting';
 import SelectSpec from '@/components/SpecTemplate';
 import { Form, Input, Select, Tooltip } from "antd";
+import { filterOptionTooltip } from '@/utils/filter';
 import { checkSupplierProductFields } from '@/api/purchase';
 import { FormHideKey, FormValueCheck } from "@/components/Form";
 
@@ -95,7 +95,7 @@ const BasicInfo: React.FC<TypeProductBasicInfo> = ({ id, supplierId, form }) => 
           mode='multiple'
           optionFilterProp="children"
           placeholder='请选择该模板关联的规格'
-          filterOption={filterSelectTooltip}>
+          filterOption={filterOptionTooltip}>
           {SPEC?.LIST?.map(v => <Option key={v.id} value={v.id} >
             <Tooltip title={v.remark} destroyTooltipOnHide={selectShow}>
               <p>{v.name}</p>

@@ -5,8 +5,9 @@ import { SyncOutlined } from '@ant-design/icons';
 interface TypeFooterButtonProps {
   onSumbit?(): void;
   onCancel?(): void;
+  onCancelText?: string;
   onRefresh?(): void;
-  align?: 'left' | 'right';
+  align?: 'left' | 'right' | 'center';
 };
 
 /**
@@ -17,13 +18,14 @@ const FooterButton: React.FC<TypeFooterButtonProps> = ({
   onSumbit,
   onCancel,
   onRefresh,
+  onCancelText,
   align = 'right',
 }) => (
   <div className={styles.footer} style={{ justifyContent: align }}>
     {children}
-    {onRefresh ? <Button onClick={onRefresh} icon={<SyncOutlined />}>刷新</Button> : null}
+    {onRefresh ? <Button onClick={onRefresh} icon={<SyncOutlined />}> 刷新 </Button> : null}
     {onSumbit ? <Button onClick={onSumbit} type='primary'>提交</Button> : null}
-    <Button onClick={onCancel}>{onSumbit ? '取消' : '关闭'}</Button>
+    <Button onClick={onCancel}>{onCancelText ??= onSumbit ? '取消' : '关闭'}</Button>
   </div>
 );
 

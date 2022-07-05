@@ -6,6 +6,8 @@ interface TypeBtnEditDelProps<T = unknown> {
   onEdit?(val: T): void;
   /** @name onRemove 删除按钮 值为void 不显示该按钮 */
   onRemove?(val: T): void;
+  /** @name onPreview 预览按钮 值为void 不显示该按钮 */
+  onPreview?(val: T): void;
   /** @param value 传递给onEdit、onRemove方法的参数 */
   value: T;
 };
@@ -17,9 +19,11 @@ interface TypeBtnEditDelProps<T = unknown> {
 const BtnEditDel: React.FC<TypeBtnEditDelProps> = ({
   value,
   onEdit,
-  onRemove
+  onRemove,
+  onPreview
 }) => (
   <>
+    {onPreview ? <Btn onClick={() => onPreview(value)}>详情</Btn> : null}
     {onEdit ? <Btn onClick={() => onEdit(value)}>编辑</Btn> : null}
     {onRemove ? <Popconfirm title='确定删除？删除后无法恢复！' onConfirm={() => onRemove(value)}>
       <Btn type='danger'>删除</Btn>

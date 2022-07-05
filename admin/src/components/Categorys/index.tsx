@@ -13,12 +13,18 @@ import { ENUM_STORE } from '@/enum/store';
 
 type TypeEditCategory = Pick<TypeEditUnitProps, 'visible' | 'id'>;
 
-export interface TypeCategoryProps {
-  type: ENUM_STORE.CATEGORY;
+export interface TypeCategoryProps<T = ENUM_STORE.CATEGORY> {
+  type: T;
 };
 
 export interface TypeCategorys extends React.FC<TypeCategoryProps> {
+  /**
+ * @name Select 类目tag（HTML）
+ */
   Tag: typeof Tag;
+  /**
+   * @name Select 类目选择
+   */
   Select: typeof CategorySelect;
 };
 
@@ -44,7 +50,7 @@ const Categorys: TypeCategorys = ({ type }) => {
   function onEdit(id?: number) {
     const visible = !edit.visible;
     setEdit({ id, visible });
-    !id && getWarehouseUnit();
+    id || getWarehouseUnit();
   };
 
   const list = category[type]?.LIST;

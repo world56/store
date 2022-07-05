@@ -31,7 +31,7 @@ const Drawers: React.FC<TypePopUpProps> = ({
     <Drawer
       {...props}
       onClose={onClose}
-      footer={<FooterButton onSumbit={onOk} onCancel={onClose} />}
+      footer={<FooterButton onSumbit={onSumbit ? onOk : undefined} onCancel={onClose} />}
       className={`${styles.drawer} ${className ? className : ''}`}>
       <Spin spinning={loading}>
         {children}

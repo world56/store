@@ -2,7 +2,7 @@ import { Layout } from 'antd';
 import Header from './Header';
 import { useStore } from '@/hooks';
 import Navigation from './Navigation';
-import { SYSTEM_NAV_STATUS_KEY } from '@/config/system';
+import styles from './index.module.sass';
 import { Middleware as RouteMiddleware } from '@/router';
 
 import type { TypeRoute } from '@/interface/route';
@@ -15,14 +15,13 @@ const MainEntrance: React.FC<TypeRoute.InitRoutePropsType> = ({
 }) => {
 
   const { system } = useStore();
-  const collapsed = system[SYSTEM_NAV_STATUS_KEY];
 
   return (
     <Layout>
-      <Navigation collapsed={collapsed} />
+      <Navigation collapsed={system.collapsed} />
       <Layout>
-        <Header collapsed={collapsed} />
-        <Layout.Content>
+        <Header collapsed={system.collapsed} />
+        <Layout.Content className={styles.content}>
           <RouteMiddleware routes={routes} />
         </Layout.Content>
       </Layout>
