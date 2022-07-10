@@ -28,8 +28,4 @@ export namespace TypeSystemPermission {
    */
   export interface QueryList extends Pick<DTO, "name" | "status"> {}
 
-  /**
-   * @name CheckFields 检查字段是否重复
-   */
-  export interface CheckFields extends Partial<Pick<DTO, "id" | "name">> {}
 }

@@ -5,9 +5,8 @@ import { ProductSpecDTO } from '@/dto/purchase/spec.dto';
 import { SpecStatusChangeDTO } from './dto/spec-status.dto';
 import { SpecQueryListDTO } from './dto/spec-query-list.dto';
 import { SpecTemplateService } from './spec-template.service';
-import { SpectCheckFieldsDTO } from './dto/spec-check-fields.dto';
 import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
-
+import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto';
 
 @ApiTags('产品规格类目')
 @Controller('purchase/spec/template')
@@ -28,7 +27,7 @@ export class SpecTemplateController {
   }
 
   @Get('check')
-  checkFields(@Query() query: SpectCheckFieldsDTO) {
+  checkFields(@Query() query: CheckFieldsIsRepeatDTO) {
     return this.SpecTemplateService.checkFields(query);
   }
 

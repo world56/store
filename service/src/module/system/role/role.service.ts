@@ -3,8 +3,8 @@ import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { UtilsService } from '@/common/utils/utils.service';
 import { RuleQueryListDTO } from './dto/rule-query-list.dto';
 import { PrismaService } from '@/common/prisma/prisma.service';
-import { RuleCheckFieldsDTO } from './dto/rule-check-fields.dto';
 import { Injectable, PreconditionFailedException } from '@nestjs/common';
+import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto';
 
 import { ENUM_COMMON } from '@/enum/common';
 
@@ -48,7 +48,7 @@ export class RoleService {
     });
   }
 
-  async checkField({ name, id }: RuleCheckFieldsDTO, tips?: boolean) {
+  async checkField({ name, id }: CheckFieldsIsRepeatDTO, tips?: boolean) {
     return this.PrismaService.checkFieldsRepeat('role', { name, id }, tips);
   }
 

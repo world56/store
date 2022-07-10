@@ -2,6 +2,7 @@ import Tag from './Tag';
 import CategorySelect from './Select';
 import styles from './index.module.sass';
 import { getCategoryName } from './utils';
+import SpecTemplate from './SpecTemplate';
 import { useCallback, useState } from 'react';
 import { useActions, useStore } from '@/hooks';
 import { Btn, BtnEditDel } from '@/layout/Button';
@@ -26,6 +27,10 @@ export interface TypeCategorys extends React.FC<TypeCategoryProps> {
    * @name Select 类目选择
    */
   Select: typeof CategorySelect;
+  /**
+   * @name SpecTemplate 产品规格
+   */
+  SpecTemplate: typeof SpecTemplate;
 };
 
 /**
@@ -93,5 +98,6 @@ const Categorys: TypeCategorys = ({ type }) => {
 
 Categorys.Tag = Tag;
 Categorys.Select = CategorySelect;
+Categorys.SpecTemplate = SpecTemplate;
 
 export default Categorys;

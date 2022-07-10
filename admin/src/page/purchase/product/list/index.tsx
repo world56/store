@@ -1,8 +1,9 @@
 import { useRequest } from "ahooks";
+import Status from "@/layout/Status";
 import { Btn } from "@/layout/Button";
 import Search from "@/components/Search";
+import { useNavigate } from "react-router-dom";
 import Categorys from "@/components/Categorys";
-import StatusColor from "@/layout/StatusColor";
 import { Button, Card, Form, Table } from "antd";
 import EditProduct from "./components/EditProduct";
 import { CodeSandboxOutlined } from '@ant-design/icons';
@@ -17,7 +18,6 @@ import { DB_PRIMARY_KEY } from "@/config/db";
 import type { TypeCommon } from '@/interface/common';
 import type { TypeEditProductProps } from './components/EditProduct';
 import type { TypeSupplierProduct } from "@/interface/purchase/product";
-import { useHistory } from "react-router-dom";
 
 type TypeEditProductParam = Omit<TypeEditProductProps, 'onClose'>;
 
@@ -33,7 +33,7 @@ const Product: React.FC<TypeSupplierProductPageProps> = ({ supplierId }) => {
   const actions = useActions();
   const { category } = useStore();
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [search] = Form.useForm<TypeSupplierProduct.Query>();
 
@@ -57,11 +57,11 @@ const Product: React.FC<TypeSupplierProductPageProps> = ({ supplierId }) => {
   function onEdit(row?: TypeSupplierProduct.DTO) {
     const bol = !edit.visible;
     setEdit({ visible: bol, id: row?.id });
-    // bol || initializa();
+    bol || initializa();
   };
 
   function skipDetails(val: TypeSupplierProduct.DTO) {
-    history.push(`/purchase/supplierProductDetails/${val.id}`);
+    navigate(`/purchase/supplierProductDetails/${val.id}`);
   };
 
   const query = useMemo(() => [
@@ -106,7 +106,7 @@ const Product: React.FC<TypeSupplierProductPageProps> = ({ supplierId }) => {
       key: 'status',
       dataIndex: 'status',
       title: '状态',
-      render: (status: ENUM_COMMON.STATUS) => <StatusColor status={status} />
+      render: (status: ENUM_COMMON.STATUS) => <Status status={status} />
     },
     {
       key: 'category',
@@ -151,8 +151,7 @@ const Product: React.FC<TypeSupplierProductPageProps> = ({ supplierId }) => {
         columns={columns}
         dataSource={data?.list}
         rowKey={DB_PRIMARY_KEY}
-        pagination={pagination}
-      />
+        pagination={pagination} />
       <EditProduct {...edit} supplierId={supplierId} onClose={onEdit} />
     </Card>
   );

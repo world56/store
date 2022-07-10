@@ -46,7 +46,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     return isRepeat;
   }
 
-  private softDeleteTable: ReadonlyArray<string> = ['SupplierProduct'];
+  // private softDeleteTable: ReadonlyArray<string> = ['SupplierProduct'];
 
   // private softDeleting: Prisma.Middleware = async (params, next) => {
   //   const { action, model } = params;

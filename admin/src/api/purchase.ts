@@ -41,7 +41,7 @@ export function getPurchaseSupplierDetails(
  * @name checkPurchaseSupplierFields 检测供应商名称是否重复
  */
 export function checkPurchaseSupplierFields(
-  params: Pick<TypePurchaseSupplier.DTO, "id" | "name">,
+  params: TypeCommon.FieldsIsRepeatDTO,
 ) {
   return request("purchase/supplier/check", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
@@ -161,7 +161,7 @@ export function updateSpecTemplate(data: TypeSpec.EditDTO) {
 /**
  * @name checkSpecTemplateFields 产品规格模板名称是否重复
  */
-export function checkSpecTemplateFields(params: TypeSpec.CheckFields) {
+export function checkSpecTemplateFields(params: TypeCommon.FieldsIsRepeatDTO) {
   return request<boolean>("purchase/spec/template/check", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
     params,
@@ -304,7 +304,7 @@ export function getSupplierProductDetails(
  * @name checkSupplierProductFields 见擦好供应产品名称是否重复
  */
 export function checkSupplierProductFields(
-  params: TypeSupplierProduct.CheckFields,
+  params: TypeCommon.FieldsIsRepeatDTO,
 ) {
   return request<boolean>("purchase/product/check", {
     method: ENUM_HTTP.REQUEST_MODE.GET,

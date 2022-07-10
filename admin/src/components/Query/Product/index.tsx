@@ -28,6 +28,9 @@ interface QueryProductComponentsProps extends React.FC<TypeQueryProductProps> {
   Batch: typeof ProductBatchAdd;
 };
 
+/**
+ * @name QueryProduct 查询、选择产品
+ */
 const QueryProduct: QueryProductComponentsProps = ({
   width,
   onReset,

@@ -1,15 +1,15 @@
 import { useRequest } from "ahooks";
+import Status from "@/layout/Status";
 import Search from "@/components/Search";
 import EditTemplate from "./EditTemplate";
 import { Button, Form, Table } from "antd";
-import StatusColor from "@/layout/StatusColor";
 import Categorys from "@/components/Categorys";
 import { statusReversal, toTime } from "@/utils";
 import { Btn, StatusChange } from "@/layout/Button";
+import { SpecParatter } from "@/components/Details";
 import { ScheduleOutlined } from '@ant-design/icons';
 import { usePageTurning, useActions, useStore } from "@/hooks";
 import { useCallback, useEffect, useState, useMemo } from "react";
-import ExtendDetails from "@/components/SpecTemplate/ExtendDetails";
 import { changeSpecTemplateStatus, getSpecTemplateList } from "@/api/purchase";
 
 import { ENUM_STORE } from '@/enum/store';
@@ -78,7 +78,7 @@ const SpecTemplate = () => {
       dataIndex: 'status',
       title: '状态',
       width: 100,
-      render: (key: ENUM_COMMON.STATUS) => <StatusColor status={key} />
+      render: (key: ENUM_COMMON.STATUS) => <Status status={key} />
     },
     {
       key: 'parameter',
@@ -119,7 +119,7 @@ const SpecTemplate = () => {
         pagination={pagination}
         rowKey={DB_PRIMARY_KEY}
         dataSource={data?.list}
-        expandable={{ expandedRowRender: row => <ExtendDetails data={row} /> }}
+        expandable={{ expandedRowRender: row => <SpecParatter data={row} /> }}
       />
       <EditTemplate {...edit} spec={SPEC} onClose={onEdit} />
     </>

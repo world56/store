@@ -5,7 +5,7 @@ import { UtilsService } from '@/common/utils/utils.service';
 import { SpecStatusChangeDTO } from './dto/spec-status.dto';
 import { SpecQueryListDTO } from './dto/spec-query-list.dto';
 import { PrismaService } from '@/common/prisma/prisma.service';
-import { SpectCheckFieldsDTO } from './dto/spec-check-fields.dto';
+import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto';
 
 @Injectable()
 export class SpecTemplateService {
@@ -46,7 +46,7 @@ export class SpecTemplateService {
     });
   }
 
-  async checkFields(query: SpectCheckFieldsDTO, tips?: boolean) {
+  async checkFields(query: CheckFieldsIsRepeatDTO, tips?: boolean) {
     const { id, name } = query;
     return this.PrismaService.checkFieldsRepeat(
       'productSpec',

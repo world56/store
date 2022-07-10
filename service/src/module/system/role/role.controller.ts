@@ -4,8 +4,8 @@ import { RoleDto } from '@/dto/system/role.dto';
 import { QueryListPipe } from '@/pipe/query-list.pipe';
 import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { RuleQueryListDTO } from './dto/rule-query-list.dto';
-import { RuleCheckFieldsDTO } from './dto/rule-check-fields.dto';
 import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
+import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto';
 
 @ApiTags('角色管理')
 @Controller('system/role')
@@ -24,7 +24,7 @@ export class RoleController {
   }
 
   @Get('checkFields')
-  checkField(@Query() query: RuleCheckFieldsDTO) {
+  checkField(@Query() query: CheckFieldsIsRepeatDTO) {
     return this.RoleService.checkField(query);
   }
 

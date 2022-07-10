@@ -5,8 +5,8 @@ import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { SupplierProductDTO } from '@/dto/purchase/product.dto';
 import { SupplierProductQuery } from './dto/supplier-product-query.dto';
 import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
+import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto';
 import { SupplierProductQueryListDTO } from './dto/supplier-product-query-list.dto';
-import { SupplierProductCheckFieldsDTO } from './dto/supplier-product-check-fields.dto';
 
 @ApiTags('供应产品')
 @Controller('purchase/product')
@@ -25,7 +25,7 @@ export class ProductController {
   }
 
   @Get('check')
-  checkFields(@Query() query: SupplierProductCheckFieldsDTO) {
+  checkFields(@Query() query: CheckFieldsIsRepeatDTO) {
     return this.ProductService.checkFields(query);
   }
 

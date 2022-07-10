@@ -1,8 +1,8 @@
 import { toTime } from '@/utils';
+import Status from '@/layout/Status';
 import { useGetDetails } from '@/hooks';
 import Uploads from '@/components/Uploads';
 import Categorys from '@/components/Categorys';
-import StatusColor from '@/layout/StatusColor';
 import { Card, Descriptions, message } from "antd";
 import { addPurchaseSupplierFile, getPurchaseSupplierDetails } from '@/api/purchase';
 
@@ -36,7 +36,7 @@ const BasicInfo: React.FC<TypeCommon.DatabaseMainParameter> = ({ id }) => {
             <Categorys.Tag list={value?.category!} />
           </Item>
           <Item label="合作状态">
-            <StatusColor status={value?.status} />
+            <Status status={value?.status} />
           </Item>
           <Item label="创建时间">{toTime(value?.createTime)}</Item>
           <Item label="备 注">{value?.remark}</Item>

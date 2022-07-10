@@ -9,9 +9,9 @@ import { PurchaseSupplierDTO } from '@/dto/purchase/supplier.dto';
 import { SupplierAddFileDTO } from './dto/supplier-edit-file.dto';
 import { SupplierQueryListDTO } from './dto/supplier-query-list.dto';
 import { SupplierQueryLogsDTO } from './dto/supplier-query-logs.dto';
-import { SupplierCheckFieldsDTO } from './dto/supplier-check-fields.dto';
 import { SupplierChangeStatusDTO } from './dto/supplier-change-status.dto';
 import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
+import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto';
 
 @ApiTags('供应商管理')
 @Controller('purchase/supplier')
@@ -58,7 +58,7 @@ export class SupplierController {
   }
 
   @Get('check')
-  checkFields(@Query() query: SupplierCheckFieldsDTO) {
+  checkFields(@Query() query: CheckFieldsIsRepeatDTO) {
     return this.SupplierService.check(query);
   }
 

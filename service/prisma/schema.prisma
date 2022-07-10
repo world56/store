@@ -363,39 +363,7 @@ model WarehousePosition {
   personId Int       @map("person_id") @db.Int()
   person   AdminUser @relation(fields: [personId], references: [id])
 
-  products RelProductOnWarehousePosition[]
-
   @@index([name])
   @@index([personId])
   @@map("warehouse_position")
-}
-
-// 产品盘点
-model WarehouseProduct {
-  id            Int       @id() @default(autoincrement())
-  name          String    @db.VarChar(255)
-  count         BigInt    @db.BigInt()
-  remark        String?   @db.VarChar(255) // 备注
-  alertQuantity Int       @map("alert_quantity") @db.Int()
-  positionId    Int       @map("position_id") @db.Int()
-  createTime    DateTime? @default(now()) @map("create_time")
-  updateTime    DateTime? @updatedAt() @map("update_time")
-
-  products RelProductOnWarehousePosition[]
-
-  @@map("product_warehousing")
-}
-
-model RelProductOnWarehousePosition {
-  id         Int @id() @default(autoincrement())
-  positionId Int @map("position_id") @db.Int()
-  productId  Int @map("product_id") @db.Int()
-
-  positions WarehousePosition @relation(fields: [positionId], references: [id])
-  products  WarehouseProduct  @relation(fields: [productId], references: [id])
-
-  @@unique([positionId, productId])
-  @@index([positionId])
-  @@index([productId])
-  @@map("rel_product_on_warehouse_position")
 }

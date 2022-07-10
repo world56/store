@@ -15,4 +15,14 @@ export namespace ENUM_WAREHOUSE {
     FULL_LOAD,
     STOCKTAKING,
   }
+
+  /**
+   * @name WAREHOUSING_TYPE 入库类型
+   * @param PURCHASE 采购入库
+   * @param 售后入库
+   */
+  export enum WAREHOUSING_TYPE {
+    PURCHASE,
+    AFTER_SALES,
+  }
 }

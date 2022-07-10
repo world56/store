@@ -3,9 +3,9 @@ import { UtilsService } from '@/common/utils/utils.service';
 import { PrismaService } from '@/common/prisma/prisma.service';
 import { SpecParameterEditDTO } from './dto/spec-parameter-edit.dto';
 import { SpecParameterQueryDTO } from './dto/spec-parameter-query.dto';
+import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto';
 import { SpecParameterGetDetailsDTO } from './dto/spec-parameter-get-details.dto';
 import { SpecParameterRelationCategoryDTO } from './dto/spec-parameter-relation-category.dto';
-import { SpecParameterCheckFieldsDTO } from './dto/spec-parameter-check.dto';
 
 @Injectable()
 export class SpecParameterService {
@@ -45,7 +45,7 @@ export class SpecParameterService {
     });
   }
 
-  checkFields(dto: SpecParameterCheckFieldsDTO, tips?: boolean) {
+  checkFields(dto: CheckFieldsIsRepeatDTO, tips?: boolean) {
     const { id, name } = dto;
     return this.PrismaService.checkFieldsRepeat(
       'productSpecParameter',

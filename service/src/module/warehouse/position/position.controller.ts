@@ -1,8 +1,9 @@
 import { ApiTags } from '@nestjs/swagger';
 import { PositionService } from './position.service';
 import { PrimaryKeyDTO } from '@/dto/common/common.dto';
-import { WarehousePositionDTO } from '@/dto/warehouse-position.dto';
+import { WarehousePositionDTO } from '@/dto/warehouse/position.dto';
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto';
 import { WarehousePositionQueryListDTO } from './dto/warehouse-position-list-query';
 
 @ApiTags('库房仓位编排')
@@ -16,8 +17,13 @@ export class PositionController {
   }
 
   @Get('all')
-  getAll(){
+  getAll() {
     return this.PositionService.getAll();
+  }
+
+  @Post('/check')
+  checkFields(@Body() body: CheckFieldsIsRepeatDTO) {
+    return this.PositionService.checkFields(body);
   }
 
   @Get('details')
@@ -40,5 +46,3 @@ export class PositionController {
     return this.PositionService.remove(body);
   }
 }
-
-

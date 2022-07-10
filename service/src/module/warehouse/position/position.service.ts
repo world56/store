@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { PrismaService } from '@/common/prisma/prisma.service';
-import { WarehousePositionDTO } from '@/dto/warehouse-position.dto';
+import { WarehousePositionDTO } from '@/dto/warehouse/position.dto';
+import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto';
 import { WarehousePositionQueryListDTO } from './dto/warehouse-position-list-query';
 
 @Injectable()
@@ -33,7 +34,7 @@ export class PositionService {
     });
   }
 
-  async checkFields({ id, name }: WarehousePositionDTO, tips?: boolean) {
+  async checkFields({ id, name }: CheckFieldsIsRepeatDTO, tips?: boolean) {
     return await this.PrismaService.checkFieldsRepeat(
       'warehousePosition',
       { id, name },
@@ -47,7 +48,6 @@ export class PositionService {
 
   async update(info: WarehousePositionDTO) {
     const { id, ...data } = info;
-    await this.checkFields(info, true);
     await this.PrismaService.warehousePosition.update({
       where: { id },
       data,

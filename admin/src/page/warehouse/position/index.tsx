@@ -1,9 +1,8 @@
 import { useRequest } from "ahooks";
+import Status from "@/layout/Status";
 import Search from "@/components/Search";
 import { BtnEditDel } from '@/layout/Button';
-import StatusColor from "@/layout/StatusColor";
 import { InboxOutlined } from '@ant-design/icons';
-import { STATUS_COLOR } from "./components/utils";
 import EditPosition from "./components/EditPosition";
 import { Button, Card, Form, message, Table } from "antd";
 import { useActions, usePageTurning, useStore } from "@/hooks";
@@ -91,7 +90,7 @@ const Position = () => {
       key: 'status',
       dataIndex: 'status',
       title: '状态',
-      render: (status: number) => <StatusColor matching={STATUS_COLOR} status={status} />
+      render: (status: number) => <Status status={status} matching={Status.type.WAREHOURE_STATUS} />
     },
     { key: 'remark', dataIndex: 'remark', title: '备注' },
     {

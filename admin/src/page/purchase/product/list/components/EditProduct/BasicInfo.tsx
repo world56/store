@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { useActions, useStore } from '@/hooks';
 import Categorys from "@/components/Categorys";
 import { Switch } from '@/components/Formatting';
-import SelectSpec from '@/components/SpecTemplate';
 import { Form, Input, Select, Tooltip } from "antd";
 import { filterOptionTooltip } from '@/utils/filter';
 import { checkSupplierProductFields } from '@/api/purchase';
@@ -87,7 +86,7 @@ const BasicInfo: React.FC<TypeProductBasicInfo> = ({ id, supplierId, form }) => 
         rules={[{ required: true, message: '请选产品规格' }]}
         label={<>
           <span>产品规格</span>
-          <SelectSpec onChange={onSelectSpec} />
+          <Categorys.SpecTemplate onChange={onSelectSpec} />
         </>}>
         <Select
           showSearch

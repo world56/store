@@ -11,9 +11,7 @@ export class CategoryDTO extends PickType(CommonDTO, ['id', 'name', 'remark']) {
   /**
    * @param type 类目类型
    */
-  @ApiProperty({
-    description: '类目类型： 0:仓库产品类型',
-  })
+  @ApiProperty({ description: '类目类型： 0:仓库产品类型' })
   @IsEnum(ENUM_COMMON.CATEGORY_TYPE)
   @IsString()
   type: ENUM_COMMON.CATEGORY_TYPE;

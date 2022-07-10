@@ -37,7 +37,7 @@ const BasicInfo = () => {
                 label='所属供应商'
                 name='supplierId'
                 tooltip='采购订单只能选择固定唯一的供应商'>
-                <SwitchSupplier form={form} category={category.PURCHASE_SUPPLIER} />
+                <SwitchSupplier disabled={id} form={form} category={category.PURCHASE_SUPPLIER} />
               </Form.Item>
             </Col>
 

@@ -1,9 +1,9 @@
 import { useRequest } from 'ahooks';
+import Status from '@/layout/Status';
 import Search from '@/components/Search';
 import { BtnEditDel } from '@/layout/Button';
 import EditRole from './components/EditRole';
 import { toTime, listToTree } from '@/utils';
-import StatusColor from '@/layout/StatusColor';
 import { UserAddOutlined } from '@ant-design/icons';
 import { Form, Card, Table, Button, message } from 'antd';
 import { usePageTurning, useGetDetails, useStore } from '@/hooks';
@@ -82,7 +82,7 @@ const Role = () => {
     { title: '角色名称', key: 'name', dataIndex: 'name' },
     {
       title: '状态', key: 'status', dataIndex: 'status',
-      render: (key: ENUM_COMMON.STATUS) => <StatusColor status={key} />
+      render: (key: ENUM_COMMON.STATUS) => <Status status={key} />
     },
     {
       title: '创建时间', key: 'createTime',

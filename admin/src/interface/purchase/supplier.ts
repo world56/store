@@ -9,6 +9,20 @@ import type { TypeSystemUser } from "../system/user";
  */
 export namespace TypePurchaseSupplier {
   /**
+   * @name DTO 供应商
+   * @param contacts 联系人
+   * @param type 供应类型
+   * @param createTime 创建时间
+   */
+  export interface DTO
+    extends Record<"phone" | "address", string>,
+      Pick<TypeCommon.DTO, "id" | "name" | "category" | "status" | "remark"> {
+    createTime: string;
+    contacts: Contacts[];
+    files: TypeCommon.File[];
+  }
+
+  /**
    * @name Query 查询
    * @param contactsName 联系名称
    * @param phone 联系人电话
@@ -29,20 +43,6 @@ export namespace TypePurchaseSupplier {
     extends Record<"phone", string>,
       Pick<TypeCommon.DTO, "name" | "remark">,
       TypeCommon.DatabaseMainParameter {}
-
-  /**
-   * @name DTO 供应商
-   * @param contacts 联系人
-   * @param type 供应类型
-   * @param createTime 创建时间
-   */
-  export interface DTO
-    extends Record<"phone" | "address", string>,
-      Pick<TypeCommon.DTO, "id" | "name" | "category" | "status" | "remark"> {
-    createTime: string;
-    contacts: Contacts[];
-    files: TypeCommon.File[];
-  }
 
   /**
    * @name EditDTO 编辑供应商

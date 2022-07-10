@@ -34,22 +34,20 @@ const FilesTable: React.FC<TypeFilesTableProps> = ({ list, onCreate }) => {
   };
 
   const column = [
-    { key: 'name', title: '文件名', dataIndex: 'name' },
+    {  title: '文件名', dataIndex: 'name' },
     {
-      key: 'type',
       width: 150,
       title: '文件类型',
       dataIndex: 'type',
       render: (type: ENUM_COMMON.FILE_TYPE) => FILE_TYPE?.OBJ[type]
     },
     {
-      key: 'user',
-      width: 150,
       title: '上传人',
+      width: 150,
       dataIndex: 'user',
       render: (val: TypeCommon.File['user']) => val?.name
     },
-    { key: 'createTime', title: '上传时间', dataIndex: 'createTime', render: toTime },
+    { title: '上传时间', dataIndex: 'createTime', render: toTime },
     {
       key: 'id',
       title: '操作',

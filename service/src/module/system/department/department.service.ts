@@ -4,6 +4,7 @@ import { UtilsService } from '@/common/utils/utils.service';
 import { PrismaService } from '@/common/prisma/prisma.service';
 import { Injectable, PreconditionFailedException } from '@nestjs/common';
 import { DepartmentQueryListDTO } from './dto/department-query-list.dto';
+import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto';
 
 @Injectable()
 export class DepartmentService {
@@ -30,7 +31,7 @@ export class DepartmentService {
     return await this.PrismaService.department.findMany();
   }
 
-  async checkFields({ id, name }: DepartmentDTO, tips?: boolean) {
+  async checkFields({ id, name }: CheckFieldsIsRepeatDTO, tips?: boolean) {
     return await this.PrismaService.checkFieldsRepeat(
       'department',
       { id, name },

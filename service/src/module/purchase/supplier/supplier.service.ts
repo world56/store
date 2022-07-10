@@ -7,8 +7,8 @@ import { SupplierAddFileDTO } from './dto/supplier-edit-file.dto';
 import { PurchaseSupplierDTO } from '@/dto/purchase/supplier.dto';
 import { SupplierQueryLogsDTO } from './dto/supplier-query-logs.dto';
 import { SupplierQueryListDTO } from './dto/supplier-query-list.dto';
-import { SupplierCheckFieldsDTO } from './dto/supplier-check-fields.dto';
 import { SupplierChangeStatusDTO } from './dto/supplier-change-status.dto';
+import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto';
 
 import { ENUM_PURCHASE } from '@/enum/purchase';
 
@@ -78,7 +78,7 @@ export class SupplierService {
     });
   }
 
-  async check({ id, name }: SupplierCheckFieldsDTO, throwError?: boolean) {
+  async check({ id, name }: CheckFieldsIsRepeatDTO, throwError?: boolean) {
     return await this.PrismaService.checkFieldsRepeat(
       'purchaseSupplier',
       { id, name },

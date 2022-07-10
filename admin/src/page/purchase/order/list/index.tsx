@@ -1,19 +1,18 @@
 import { useRequest } from "ahooks";
+import Status from "@/layout/Status";
 import { Btn } from "@/layout/Button";
 import Search from '@/components/Search';
-import { useHistory } from "react-router-dom";
-import StatusColor from "@/layout/StatusColor";
 import { Button, Card, Form, Table } from "antd";
 import { getPurchaseOrderList } from "@/api/purchase";
 import { OrderedListOutlined } from '@ant-design/icons';
 import { useCallback, useEffect, useMemo } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useActions, usePageTurning, useStore } from "@/hooks";
 import { toTime as render, convertCurrencyUnits } from '@/utils';
 
 import { ENUM_STORE } from "@/enum/store";
 import { DB_PRIMARY_KEY } from '@/config/db';
 import { ENUM_PURCHASE } from "@/enum/purchase";
-import { ORDER_SETTLEMENT_TYPE, ORDER_STATUS_COLOR } from "./utils";
 
 import type { TypePurchaseOrder } from "@/interface/purchase/order";
 
@@ -23,7 +22,7 @@ import type { TypePurchaseOrder } from "@/interface/purchase/order";
 const SupplierOrder = () => {
 
   const actions = useActions();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { category } = useStore();
 
   const [search] = Form.useForm<TypePurchaseOrder.Query>();
@@ -40,15 +39,10 @@ const SupplierOrder = () => {
   }, [run, search, pageSize, currentPage]);
 
   function onEdit(row?: TypePurchaseOrder.DTO) {
-    history.push(`/purchase/supplierOrderEdit/${row?.id || ''}`);
-  };
-
-  function onPreView(row: TypePurchaseOrder.DTO) {
-    history.push(`/purchase/supplierOrderDetails/${row.id}`);
-  };
-
-  function onSkipSupplier(row: TypePurchaseOrder.DTO['supplier']) {
-    history.push(`/purchase/supplierDetails/${row.id}`);
+    navigate({
+      pathname: '/purchase/supplierOrderEdit',
+      search: `?id=${row?.id}`,
+    });
   };
 
   const query = useMemo(() => [
@@ -69,7 +63,7 @@ const SupplierOrder = () => {
       dataIndex: 'supplier',
       title: '供应商',
       render: (row: TypePurchaseOrder.DTO['supplier']) => (
-        <Btn onClick={() => onSkipSupplier(row)}>{row?.name}</Btn>
+        <NavLink to={`/purchase/supplierDetails/${row.id}`}>{row?.name}</NavLink>
       )
     },
     { key: 'total', dataIndex: 'total', title: '采购量' },
@@ -80,7 +74,7 @@ const SupplierOrder = () => {
       width: 150,
       title: '结算方式',
       render: (type: ENUM_PURCHASE.SUPPLIER_SETTLEMENT) => (
-        <StatusColor status={type} matching={ORDER_SETTLEMENT_TYPE} />
+        <Status status={type} matching={Status.type.PURCHASE_ORDER_SETTLEMENT} />
       )
     },
     {
@@ -88,7 +82,7 @@ const SupplierOrder = () => {
       dataIndex: 'status',
       title: '订单状态',
       render: (status: ENUM_PURCHASE.SUPPLIER_ORDER_STATUS) => (
-        <StatusColor status={status} matching={ORDER_STATUS_COLOR} />
+        <Status status={status} matching={Status.type.PURCHASE_ORDER} />
       )
     },
     { key: 'createTime', dataIndex: 'createTime', title: '创建时间', width: 180, render },
@@ -98,8 +92,8 @@ const SupplierOrder = () => {
       title: '操作',
       width: 120,
       render: (row: TypePurchaseOrder.DTO) => [
-        <Btn key='2' onClick={() => onPreView(row)}>详情</Btn>,
-        <Btn key='3' onClick={() => onEdit(row)}>编辑</Btn>,
+        <NavLink key='1' to={`/purchase/supplierOrderDetails/${row.id}`}>详情</NavLink>,
+        <Btn key='2' onClick={() => onEdit(row)}>编辑</Btn>,
       ]
     }
   ];

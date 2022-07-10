@@ -5,6 +5,7 @@ import type { FormInstance } from "rc-field-form";
 import type { TypeCommon } from '@/interface/common';
 
 interface TypeSwitchSupplierProps {
+  disabled?: boolean;
   value?: number;
   form: FormInstance;
   onChange?(val?: number): void;
@@ -19,6 +20,7 @@ const { Option } = Select;
 const SwitchSupplier: React.FC<TypeSwitchSupplierProps> = ({
   form,
   value,
+  disabled,
   category,
   onChange,
 }) => {
@@ -44,6 +46,7 @@ const SwitchSupplier: React.FC<TypeSwitchSupplierProps> = ({
     <Select
       showSearch
       value={value}
+      disabled={disabled}
       onChange={onSelectChange}
       placeholder='请选择所属供应商'>
       {category?.LIST.map(v => <Option key={v.id} value={v.id}>{v.name}</Option>)}

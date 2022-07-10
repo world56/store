@@ -1,7 +1,8 @@
 import { useRequest } from 'ahooks';
+import Status from '@/layout/Status';
 import styles from '../index.module.sass';
+import { NavLink } from "react-router-dom";
 import Categorys from '@/components/Categorys';
-import StatusColor from '@/layout/StatusColor';
 import { getSupplierProductDetails } from '@/api/purchase';
 import { Carousel, Card, Image, Descriptions, Table } from 'antd';
 
@@ -9,17 +10,23 @@ import { DB_PRIMARY_KEY } from '@/config/db';
 import { STATIC_RESOURCE } from '@/config/request';
 
 import type { TypeCommon } from '@/interface/common';
+import { TypePurchaseSupplier } from '@/interface/purchase/supplier';
 
 const { Item } = Descriptions;
 
 const specColumns = [
-  { key: 'name', dataIndex: 'name', title: '参数名称' },
-  { key: 'remark', dataIndex: 'remark', title: '备注' },
+  { dataIndex: 'name', title: '参数名称' },
+  { dataIndex: 'remark', title: '备注' },
 ];
 
 const supplierColumns = [
-  { key: 'name', dataIndex: 'name', title: '供应商名称' },
-  { key: 'remark', dataIndex: 'remark', title: '备注' },
+  {
+    title: '供应商名称',
+    render: (row: TypePurchaseSupplier.DTO) => (
+      <NavLink to={`/purchase/supplierDetails/${row.id}`}>{row.name}</NavLink>
+    )
+  },
+  { dataIndex: 'remark', title: '备注' },
 ];
 
 interface TypeSupplierProductBasicInfoProps extends TypeCommon.DatabaseMainParameter { }
@@ -42,7 +49,7 @@ const BasicInfo: React.FC<TypeSupplierProductBasicInfoProps> = ({ id }) => {
             <Categorys.Tag list={data?.category!} />
           </Item>
           <Item label="当前状态">
-            <StatusColor status={data?.status} />
+            <Status status={data?.status} />
           </Item>
           <Item label="备 注">{data?.remark}</Item>
         </Descriptions>

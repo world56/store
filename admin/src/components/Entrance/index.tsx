@@ -3,16 +3,12 @@ import Header from './Header';
 import { useStore } from '@/hooks';
 import Navigation from './Navigation';
 import styles from './index.module.sass';
-import { Middleware as RouteMiddleware } from '@/router';
-
-import type { TypeRoute } from '@/interface/route';
+import { Outlet } from 'react-router-dom';
 
 /**
  * @name MainEntrance 系统主入口
  */
-const MainEntrance: React.FC<TypeRoute.InitRoutePropsType> = ({
-  routes
-}) => {
+const MainEntrance = () => {
 
   const { system } = useStore();
 
@@ -22,7 +18,7 @@ const MainEntrance: React.FC<TypeRoute.InitRoutePropsType> = ({
       <Layout>
         <Header collapsed={system.collapsed} />
         <Layout.Content className={styles.content}>
-          <RouteMiddleware routes={routes} />
+          <Outlet />
         </Layout.Content>
       </Layout>
     </Layout>

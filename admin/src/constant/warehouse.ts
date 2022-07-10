@@ -21,4 +21,18 @@ export namespace CONSTANT_WAREHOURE {
       { id: ENUM_WAREHOUSE.STATUS.ABNORMAL, name: "异常" },
     ],
   };
+
+  /**
+   * @name WAREHOUSING_TYPE 入库类型
+   */
+  export const WAREHOUSING_TYPE = {
+    OBJ: {
+      [ENUM_WAREHOUSE.WAREHOUSING_TYPE.PURCHASE]: "采购",
+      [ENUM_WAREHOUSE.WAREHOUSING_TYPE.AFTER_SALES]: "售后",
+    },
+    LIST:[
+      { id: ENUM_WAREHOUSE.WAREHOUSING_TYPE.PURCHASE, name: "采购" },
+      { id: ENUM_WAREHOUSE.WAREHOUSING_TYPE.AFTER_SALES, name: "售后" },
+    ]
+  };
 }

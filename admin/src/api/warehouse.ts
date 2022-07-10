@@ -34,6 +34,16 @@ export function getWarehousePositionDetails(
 }
 
 /**
+ * @name checkWarehousePositionName 仓库（仓位）名称是否重复
+ */
+export function checkWarehousePositionName(data: TypeCommon.FieldsIsRepeatDTO) {
+  return request<boolean>("warehouse/position/check", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
+}
+
+/**
  * @name insertWarehousePosition 新增仓位
  */
 export function insertWarehousePosition(data: TypeWarehousePosition.DTO) {

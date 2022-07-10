@@ -1,12 +1,13 @@
 import {
   insertWarehousePosition,
   updateWarehousePosition,
+  checkWarehousePositionName,
   getWarehousePositionDetails,
 } from "@/api/warehouse";
 import { Modal } from "@/layout/PopUp";
-import { FormHideKey } from "@/components/Form";
 import { useGetDetails, useStore } from "@/hooks";
 import { Form, Input, message, Select } from "antd";
+import { FormHideKey, FormValueCheck } from "@/components/Form";
 
 import { ENUM_WAREHOUSE } from "@/enum/warehouse";
 
@@ -59,9 +60,12 @@ const EditPosition: React.FC<TypeEditPositionProps> = ({ id, visible, onClose })
 
         <FormHideKey />
 
-        <Form.Item name='name' label='仓位名称' rules={rules}>
-          <Input placeholder="请输入仓位名称" />
-        </Form.Item>
+        <FormValueCheck
+          id={id}
+          name='name'
+          label="仓位名称"
+          placeholder="请输入仓位名称"
+          checkFieldsFn={checkWarehousePositionName} />
 
         <Form.Item name='personId' label='负责人' rules={rules}>
           <Select

@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useState } from "react";
 import { Input, Table } from "antd";
 import { useRequest } from "ahooks";
 import { Modal } from "@/layout/PopUp";
 import styles from './index.module.sass';
-import ExtendDetails from './ExtendDetails';
 import Categorys from "@/components/Categorys";
 import { Btn, FooterButton } from "@/layout/Button";
+import { SpecParatter } from '@/components/Details';
 import { getSpecTemplateList } from "@/api/purchase";
+import { useCallback, useEffect, useState } from "react";
 
 import { ENUM_COMMON } from "@/enum/common";
 import { DB_PRIMARY_KEY } from "@/config/db";
@@ -16,7 +16,7 @@ import type { TypeSpec } from "@/interface/purchase/spec";
 
 interface TypeSelectSpecProps {
   onChange(ids: TypeCommon.DatabaseMainParameter['id'][]): void;
-}
+};
 
 const columns = [
   { key: 'name', dataIndex: 'name', title: '模板名称' },
@@ -100,7 +100,7 @@ const SpecTemplate: React.FC<TypeSelectSpecProps> = ({ onChange }) => {
           dataSource={data?.list}
           rowKey={DB_PRIMARY_KEY}
           onRow={row => ({ onClick: () => onRowClick(row) })}
-          expandable={{ expandedRowRender: row => <ExtendDetails data={row} /> }}
+          expandable={{ expandedRowRender: row => <SpecParatter data={row} /> }}
           rowSelection={{ selectedRowKeys: select.map((v) => v.id), onChange: (e, l) => setSelect(l) }}
         />
       </Modal>

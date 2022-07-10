@@ -1,6 +1,13 @@
+import {
+  Min,
+  IsInt,
+  IsEnum,
+  IsDate,
+  IsString,
+  IsOptional,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsEnum, IsInt, IsString, IsOptional, Min } from 'class-validator';
 
 import { ENUM_COMMON } from '@/enum/common';
 
@@ -92,6 +99,13 @@ export class CommonDTO extends PartialType(PrimaryKeyDTO) {
   @IsOptional()
   @IsInt({ each: true })
   time?: number[];
+
+  /**
+   * @name updateTime 更新时间
+   */
+  @IsDate()
+  @IsOptional()
+  updateTime?: Date;
 
   /**
    * @param ids ID列表

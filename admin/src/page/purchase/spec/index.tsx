@@ -2,8 +2,8 @@ import Context from './context';
 import { Card, Tabs } from 'antd';
 import { useRequest } from 'ahooks';
 import { getSpecAllTemplate } from '@/api/enum';
-import SpecTemplate from './components/Template';
 import SpecParameter from './components/Parameter';
+import SpecTemplateList from './components/Template';
 
 const Spec = () => {
 
@@ -17,7 +17,7 @@ const Spec = () => {
             <SpecParameter />
           </Tabs.TabPane>
           <Tabs.TabPane tab="规格模板" key="2">
-            <SpecTemplate />
+            <SpecTemplateList />
           </Tabs.TabPane>
         </Tabs>
       </Card>

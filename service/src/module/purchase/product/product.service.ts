@@ -4,8 +4,8 @@ import { UtilsService } from '@/common/utils/utils.service';
 import { PrismaService } from '@/common/prisma/prisma.service';
 import { SupplierProductDTO } from '@/dto/purchase/product.dto';
 import { SupplierProductQuery } from './dto/supplier-product-query.dto';
+import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto';
 import { SupplierProductQueryListDTO } from './dto/supplier-product-query-list.dto';
-import { SupplierProductCheckFieldsDTO } from './dto/supplier-product-check-fields.dto';
 
 import { ENUM_COMMON } from '@/enum/common';
 
@@ -78,7 +78,7 @@ export class ProductService {
     };
   }
 
-  checkFields({ id, name }: SupplierProductCheckFieldsDTO) {
+  checkFields({ id, name }: CheckFieldsIsRepeatDTO) {
     return this.PrismaService.checkFieldsRepeat('supplierProduct', {
       id,
       name,

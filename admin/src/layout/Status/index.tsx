@@ -2,37 +2,27 @@ import Badge from './Badge';
 import { isVoid } from '@/utils';
 import styles from './index.module.sass';
 
-import { ENUM_COMMON } from '@/enum/common';
-import { CONSTANT_COMMON } from '@/constant/common';
+import { COLOR_TYPE } from './conf';
 
-interface StatusColorProps {
+interface TypeStatusProps extends React.FC<{
   className?: string;
   status?: number;
   matching?: Record<number, {
     color?: string;
     text: string;
   }>;
-};
-
-const DEFAULT_MATCHING = {
-  [ENUM_COMMON.STATUS.FREEZE]: {
-    color: ENUM_COMMON.STATUS_COLOR_TYPE.DANGER,
-    text: CONSTANT_COMMON.STATUS.OBJ[ENUM_COMMON.STATUS.FREEZE]
-  },
-  [ENUM_COMMON.STATUS.ACTIVATE]: {
-    color: ENUM_COMMON.STATUS_COLOR_TYPE.SUCCESS,
-    text: CONSTANT_COMMON.STATUS.OBJ[ENUM_COMMON.STATUS.ACTIVATE]
-  },
+}> {
+  type: typeof COLOR_TYPE;
 }
 
 /**
- * @name StatusColor 当前状态
+ * @name Status 当前状态
  * @description 冻结状态 显示红色、激活状态 显示绿色。
  */
-const StatusColor: React.FC<StatusColorProps> = ({
+const Status: TypeStatusProps = ({
   status,
   className,
-  matching = DEFAULT_MATCHING
+  matching = COLOR_TYPE.DEFAULT_MATCHING
 }) => {
   const conf = isVoid(status) ? undefined : matching[status!];
   return (
@@ -43,4 +33,6 @@ const StatusColor: React.FC<StatusColorProps> = ({
   );
 };
 
-export default StatusColor;
+Status.type = COLOR_TYPE;
+
+export default Status;

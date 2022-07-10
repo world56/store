@@ -91,7 +91,7 @@ const EditPermission: React.FC<TypeEditPermissionProps> = ({
         <FormValueCheck
           id={id}
           name='code'
-          label='权限Key（英文）'
+          label='权限Key'
           pattern={CONSTANT_REG.EN}
           checkFieldsFn={checkPermissionField}
         />

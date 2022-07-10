@@ -1,7 +1,7 @@
 import { useRequest } from "ahooks";
+import Status from "@/layout/Status";
 import Search from '@/components/Search';
-import { useHistory } from "react-router-dom";
-import StatusColor from "@/layout/StatusColor";
+import { useNavigate } from "react-router-dom";
 import Categorys from "@/components/Categorys";
 import { Button, Card, Form, Table } from "antd";
 import { AuditOutlined } from '@ant-design/icons';
@@ -33,7 +33,7 @@ const SupplierList = () => {
   const { category } = useStore();
   const { STATUS, PURCHASE_PRODUCT_TYPE } = category;
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [form] = Form.useForm<TypePurchaseSupplier.Query>();
 
@@ -66,7 +66,7 @@ const SupplierList = () => {
   };
 
   function onSkip(val: TypePurchaseSupplier.DTO) {
-    history.push(`/purchase/supplierDetails/${val.id}`);
+    navigate(`/purchase/supplierDetails/${val.id}`);
   };
 
   const query = useMemo(() => [
@@ -101,7 +101,7 @@ const SupplierList = () => {
       title: '当前状态',
       key: 'status',
       dataIndex: 'status',
-      render: (key: ENUM_COMMON.STATUS) => <StatusColor status={key} />
+      render: (key: ENUM_COMMON.STATUS) => <Status status={key} />
     },
     { key: 'remark', dataIndex: 'remark', title: '备注' },
     {

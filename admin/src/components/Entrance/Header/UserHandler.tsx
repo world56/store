@@ -3,7 +3,7 @@ import { useState } from 'react';
 import styles from './index.module.sass';
 import { TOKEN_KEY } from '@/config/user';
 import UserIcon from '@/resource/icon.jpg';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Menu, Dropdown, message } from 'antd';
 import { useStore, useActions } from '@/hooks';
 import EditUserInfo from '@/components/EditUserInfo';
@@ -46,7 +46,7 @@ const UserHandler = () => {
 
   const { user } = useStore();
   const actions = useActions();
-  const navigate = useHistory();
+  const navigate = useNavigate();
 
   const [editPwd, setEditPwd] = useState(false);
   const [editUserVis, setEditUserVis] = useState(false);
@@ -57,7 +57,7 @@ const UserHandler = () => {
         Cookies.remove(TOKEN_KEY);
         actions.delUserInfo();
         message.warn('退出成功');
-        return navigate.push('/user/login');
+        return navigate('/login');
       case '1':
         return setEditUserVis(true);
       case '2':

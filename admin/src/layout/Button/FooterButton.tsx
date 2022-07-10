@@ -2,7 +2,7 @@ import { Button } from "antd";
 import styles from './index.module.sass';
 import { SyncOutlined } from '@ant-design/icons';
 
-interface TypeFooterButtonProps {
+export interface TypeFooterButtonProps {
   onSumbit?(): void;
   onCancel?(): void;
   onCancelText?: string;

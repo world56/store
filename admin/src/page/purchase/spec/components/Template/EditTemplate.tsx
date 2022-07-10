@@ -68,7 +68,6 @@ const EditTemplate: React.FC<TypeEditSpecTemplateProps> = ({
           label="规格类目"
           placeholder="请输入规格类目（例：鞋码）"
           checkFieldsFn={checkSpecTemplateFields} />
-
         <Form.Item name='parameter' label='关联规格参数'>
           <Select
             showSearch

@@ -60,7 +60,6 @@ request.interceptors.response.use(
             data?.message ||
               CONSTANT_HTTP.HTTP_CODE_MESSAGE[ENUM_HTTP.HTTP_CODE.UNAUTHORIZED],
           );
-          setTimeout(() => window.location.reload(), 1800);
           return Promise.reject();
         default:
           message.error(data.message);

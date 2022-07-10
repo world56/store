@@ -9,7 +9,7 @@ export class UtilsService {
    * @param id 客户端传递过来的id
    * @returns true:重复 false:未重复
    */
-  isRepeat(list: Array<PrimaryKeyDTO> = [], id: number): boolean {
+  isRepeat(list: Array<PrimaryKeyDTO> = [], id: number) {
     const [target] = list;
     return !Boolean(!target || (list.length === 1 && target?.id === id));
   }

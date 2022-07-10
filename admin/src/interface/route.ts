@@ -1,24 +1,11 @@
-import type { ComponentType } from "react";
+import type { RouteObject } from "@remix-run/router";
+import React from "react";
 
-/**
- * @name RouteType 路由类型
- */
 export namespace TypeRoute {
-  export interface RouteParamType {
-    name: string;
-    path: string;
+  export interface Route extends Omit<RouteObject, "children" | "element"> {
     title?: string;
-    exact?: boolean;
-    hidden?: boolean;
-    routes?: RouteParamType[];
-    component: ComponentType<InitRoutePropsType>;
+    hide?: boolean | undefined;
+    children?: Route[];
+    element: React.LazyExoticComponent<React.ComponentType>;
   }
-
-  export type RouteListType = RouteParamType[];
-
-  export interface RouteMapType {
-    routes: RouteListType;
-  }
-
-  export type InitRoutePropsType = RouteMapType;
 }

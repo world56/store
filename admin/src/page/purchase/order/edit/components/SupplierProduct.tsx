@@ -1,12 +1,12 @@
 import { useRequest } from 'ahooks';
 import { Btn } from '@/layout/Button';
 import styles from '../index.module.sass';
-import { FormHideKey, ReadOnlytext } from '@/components/Form';
 import { QueryProduct } from '@/components/Query';
 import { filterOptionTooltip } from '@/utils/filter';
 import { querySupplierProduct } from '@/api/purchase';
 import { InputNumber } from '@/components/Formatting';
 import { filterDuplicatesProduct, rowKey } from '../utils';
+import { FormHideKey, ReadOnlytext } from '@/components/Form';
 import { Form, Table, Card, Select, Tooltip, Input, message } from "antd";
 
 import type { FormInstance } from 'antd/es';
@@ -46,7 +46,8 @@ const SupplierProduct: React.FC<TypeSupplierProductProps> = ({ form }) => {
   };
 
   function onPreview(field: FormListFieldData) {
-    console.log('@-onPreview', field);
+    const { productId } = products[field.name];
+    window.open(`/purchase/supplierProductDetails/${productId}`);
   };
 
   function onReset() {

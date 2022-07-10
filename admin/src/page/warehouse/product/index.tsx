@@ -1,7 +1,7 @@
 import { Card, Form, Table } from "antd";
 import Search from '@/components/Search';
 import { DB_PRIMARY_KEY } from "@/config/db";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import EditWarehouseProduct from "./components/EditWarehouseProduct";
 
 import type { TypeWarehouseProduct } from "@/interface/warehouse/product";
@@ -23,12 +23,12 @@ const Product = () => {
     console.log(values);
   }, [form]);
 
-  const columns = [
+  const columns = useMemo(() => [
     { key: 'name', dataIndex: 'name', title: '产品名称' },
     { key: 'positionId', dataIndex: 'positionId', title: '仓位位置' },
     { key: 'count', dataIndex: 'count', title: '库存存量' },
     { key: 'alertQuantity', dataIndex: 'alertQuantity', title: '警戒状态' },
-  ];
+  ], []);
 
   return (
     <Card title='产品盘点'>

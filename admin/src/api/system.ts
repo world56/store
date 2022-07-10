@@ -101,7 +101,6 @@ export function getRoleList(params: TypeSystemRole.QueryList) {
   );
 }
 
-
 /**
  * @name getRoleList 角色管理-获取角色详情
  */
@@ -201,7 +200,7 @@ export function removePermission(data: TypeCommon.DatabaseMainParameter) {
 /**
  * @name checkPermissionField 权限管理-检查字段是否重复
  */
-export function checkPermissionField(params: TypeSystemPermission.CheckFields) {
+export function checkPermissionField(params: TypeCommon.FieldsIsRepeatDTO) {
   return request("system/permission/check", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
     params,
@@ -238,7 +237,7 @@ export function getDepartmentList(params: TypeSystemDepartment.QueryList) {
 /**
  * @name checkDepartmentField 权限管理-检查字段是否重复
  */
-export function checkDepartmentField(params: TypeSystemDepartment.CheckFields) {
+export function checkDepartmentField(params: TypeCommon.FieldsIsRepeatDTO) {
   return request("system/department/check", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
     params,

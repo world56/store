@@ -50,6 +50,11 @@ export namespace TypeCommon {
   }
 
   /**
+   * @name FieldsIsRepeatDTO 校验字段是否重复
+   */
+  export interface FieldsIsRepeatDTO extends Pick<DTO, "id" | "name"> {}
+
+  /**
    * @name PromiseReturns Promise
    */
   export type PromiseReturns<T> = T extends Promise<infer R> ? R : never;

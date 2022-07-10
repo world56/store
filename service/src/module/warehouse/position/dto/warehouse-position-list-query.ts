@@ -1,5 +1,5 @@
 import { CommonDTO } from '@/dto/common/common.dto';
-import { WarehousePositionDTO } from '@/dto/warehouse-position.dto';
+import { WarehousePositionDTO } from '@/dto/warehouse/position.dto';
 import { IntersectionType, PartialType, PickType } from '@nestjs/swagger';
 
 /**

@@ -12,7 +12,7 @@ interface TypePreviewPictureProps {
 /**
  * @name PreviewPicture 预览图片
  */
-const PreviewPicture: React.FC<TypePreviewPictureProps> = ({ pictures }) => (
+const PreviewPicture: React.FC<TypePreviewPictureProps> = ({ pictures = [] }) => (
   <div className={styles.images}>
     <Image.PreviewGroup>
       {pictures.map(v => <Image key={v.id} src={`${STATIC_RESOURCE}/${v.path}`} />)}

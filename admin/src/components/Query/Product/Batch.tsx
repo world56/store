@@ -11,13 +11,13 @@ type TypeSelectKey = Record<number, TypeProductDTO | undefined>;
 interface TypeProductBatchAddProps extends Omit<TypeQueryProductProps, 'width' | 'onReset'> { };
 
 const columns = [
-  { title: '名称', key: 'name', dataIndex: 'name' },
-  { title: '品牌', width: 250, key: 'brand', dataIndex: ['brand', 'name'] },
-  { title: '规格', width: 120, key: 'unit', dataIndex: ['unit', 'name'] },
+  { title: '名称', dataIndex: 'name' },
+  { title: '品牌', width: 250, dataIndex: ['brand', 'name'] },
+  { title: '规格', width: 120, dataIndex: ['unit', 'name'] },
 ];
 
 /**
- * @name ProductBatchAdd 批量新增产品
+ * @name ProductBatchAdd 批量选择添加产品
  */
 const ProductBatchAdd: React.FC<TypeProductBatchAddProps> = ({
   list,

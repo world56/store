@@ -1,7 +1,7 @@
 import { toTime } from '@/utils';
 import { useRequest } from 'ahooks';
+import Status from '@/layout/Status';
 import Search from '@/components/Search';
-import StatusColor from '@/layout/StatusColor';
 import { Btn, StatusChange } from '@/layout/Button';
 import EditUserInfo from '@/components/EditUserInfo';
 import { UsergroupAddOutlined } from '@ant-design/icons';
@@ -23,9 +23,9 @@ interface TypeQueryUserList extends TypeSystemUser.QueryList {
 };
 
 /**
- * @name User 用户管理
+ * @name AdminUser 系统用户管理
  */
-const User = () => {
+const AdminUser = () => {
 
   const actions = useActions();
   const { category: { DEPARTMENT, STATUS } } = useStore();
@@ -111,7 +111,7 @@ const User = () => {
     { title: '联系电话', key: 'phone', dataIndex: 'phone' },
     {
       title: '当前状态', key: 'status', dataIndex: 'status',
-      render: (key: ENUM_COMMON.STATUS) => <StatusColor status={key} />
+      render: (key: ENUM_COMMON.STATUS) => <Status status={key} />
     },
     {
       title: '创建时间',
@@ -164,4 +164,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default AdminUser;

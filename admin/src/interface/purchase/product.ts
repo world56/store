@@ -52,11 +52,6 @@ export namespace TypeSupplierProduct {
   }
 
   /**
-   * @name CheckFields 检查产品名称是否重复
-   */
-  export interface CheckFields extends Pick<TypeCommon.DTO, "id" | "name"> {}
-
-  /**
    * @name EditDTO 编辑产品
    */
   export interface EditDTO

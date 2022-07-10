@@ -4,7 +4,7 @@ import { DB_PRIMARY_KEY } from '@/config/db';
 
 import type { TypeSpec } from "@/interface/purchase/spec";
 
-interface TypeExtendDetailsProps {
+interface TypeSpecParatterProps {
   data: TypeSpec.DTO;
 };
 
@@ -14,9 +14,9 @@ const columns = [
 ];
 
 /**
- * @name ExtendDetails 规格详情
+ * @name SpecParatter 规格详情
  */
-const ExtendDetails: React.FC<TypeExtendDetailsProps> = ({ data }) => (
+const SpecParatter: React.FC<TypeSpecParatterProps> = ({ data }) => (
   <Table
     size='small'
     columns={columns}
@@ -26,4 +26,4 @@ const ExtendDetails: React.FC<TypeExtendDetailsProps> = ({ data }) => (
   />
 );
 
-export default ExtendDetails;
+export default SpecParatter;

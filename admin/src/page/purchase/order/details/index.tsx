@@ -1,9 +1,11 @@
 import { Spin, Tabs } from 'antd';
 import { useGetDetails } from '@/hooks';
+import { GoBack } from '@/layout/Button';
 import styles from './index.module.sass';
+import Products from './components/Products';
 import BasicInfo from './components/BasicInfo';
-import { useRouteMatch } from 'react-router-dom';
 import { getPirchaseOrderDetails } from '@/api/purchase';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import type { TypePurchaseOrder } from '@/interface/purchase/order';
 
@@ -20,21 +22,32 @@ export interface TypePurchaseOrderDetailsDisplayProps {
  */
 const PurchaseOrderDetails = () => {
 
-  const { params: { id } } = useRouteMatch<TypePurchaseOrderRouteParam>();
+  const { id } = useParams<TypePurchaseOrderRouteParam>();
 
   const { value, loading } = useGetDetails(async () => {
-    return await getPirchaseOrderDetails({ id });
+    return await getPirchaseOrderDetails({ id: id! });
   }, [id]);
 
-  console.log(value);
+  const [query, setQuery] = useSearchParams({ activeKey: '1' },);
+
+  function onChange(activeKey: string) {
+    setQuery({ activeKey }, { replace: true });
+  };
 
   return (
     <Spin spinning={loading}>
-      <Tabs defaultActiveKey="1" className={styles.layout}>
+      <Tabs
+        onChange={onChange}
+        className={styles.layout}
+        defaultActiveKey={query.get('activeKey')!}>
         <TabPane tab="基本详情" key="1">
           <BasicInfo data={value} />
         </TabPane>
+        <TabPane tab="采购产品" key="2">
+          <Products data={value} />
+        </TabPane>
       </Tabs>
+      <GoBack />
     </Spin>
   );
 };

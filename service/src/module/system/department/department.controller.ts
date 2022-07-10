@@ -5,6 +5,7 @@ import { DepartmentService } from './department.service';
 import { DepartmentDTO } from '@/dto/system/department.dto';
 import { DepartmentQueryListDTO } from './dto/department-query-list.dto';
 import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
+import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto';
 
 @ApiTags('部门管理')
 @Controller('system/department')
@@ -18,7 +19,7 @@ export class DepartmentController {
   }
 
   @Get('check')
-  checkRepeat(@Query() query: DepartmentDTO) {
+  checkRepeat(@Query() query: CheckFieldsIsRepeatDTO) {
     return this.DepartmentService.checkFields(query);
   }
 

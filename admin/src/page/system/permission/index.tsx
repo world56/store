@@ -1,9 +1,9 @@
 import { useStore } from '@/hooks';
 import { useRequest } from 'ahooks';
 import { listToTree } from '@/utils';
+import Status from '@/layout/Status';
 import Search from '@/components/Search';
 import { BtnEditDel } from '@/layout/Button';
-import StatusColor from '@/layout/StatusColor';
 import { KeyOutlined } from '@ant-design/icons';
 import { useEffect, useState, useCallback } from 'react';
 import EditPermission from './components/EditPermission';
@@ -76,7 +76,7 @@ const Permission = () => {
       title: '当前状态',
       key: 'status',
       dataIndex: 'status',
-      render: (key: ENUM_COMMON.STATUS) => <StatusColor status={key} />
+      render: (key: ENUM_COMMON.STATUS) => <Status status={key} />
     },
     { title: '备注', key: 'remark', dataIndex: 'remark' },
     {

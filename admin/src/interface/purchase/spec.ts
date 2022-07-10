@@ -41,11 +41,6 @@ export namespace TypeSpec {
   export interface ChangeStatus extends Pick<DTO, "id" | "status"> {}
 
   /**
-   * @name CheckFields 检查规格名称是否重复
-   */
-  export interface CheckFields extends Pick<DTO, "id" | "name"> {}
-
-  /**
    * @name EditSpecParameter 编辑产品规格（列表）
    */
   export interface EditSpecParameter {

@@ -3,8 +3,8 @@ import { QueryListPipe } from '@/pipe/query-list.pipe';
 import { SpecParameterService } from './spec-parameter.service';
 import { SpecParameterEditDTO } from './dto/spec-parameter-edit.dto';
 import { SpecParameterQueryDTO } from './dto/spec-parameter-query.dto';
-import { SpecParameterCheckFieldsDTO } from './dto/spec-parameter-check.dto';
 import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
+import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto';
 import { SpecParameterGetDetailsDTO } from './dto/spec-parameter-get-details.dto';
 import { SpecParameterRelationCategoryDTO } from './dto/spec-parameter-relation-category.dto';
 
@@ -27,7 +27,7 @@ export class SpecParameterController {
   }
 
   @Post('check')
-  checkFields(@Body() body: SpecParameterCheckFieldsDTO) {
+  checkFields(@Body() body: CheckFieldsIsRepeatDTO) {
     return this.SpecParameterService.checkFields(body);
   }
 

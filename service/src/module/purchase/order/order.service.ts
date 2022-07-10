@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { ENUM_PURCHASE } from '@/enum/purchase';
 import { AdminUserDTO } from '@/dto/system/admin-user.dto';
 import { PurchaseOrderDTO } from '@/dto/purchase/order.dto';
 import { UtilsService } from '@/common/utils/utils.service';
@@ -69,7 +68,7 @@ export class OrderService {
     return this.PrismaService.purchaseOrder.findUnique({
       where: { id },
       include: {
-        supplier: true,
+        supplier: { include: { contacts: true } },
         creator: true,
         logisticsCompany: true,
         products: {
@@ -79,6 +78,7 @@ export class OrderService {
               include: {
                 unit: true,
                 brand: true,
+                pictures: true,
                 spec: {
                   where: { deleted: false },
                   include: { specParameter: true },
