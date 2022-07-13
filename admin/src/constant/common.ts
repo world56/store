@@ -5,29 +5,38 @@ import { ENUM_COMMON } from "@/enum/common";
  */
 export namespace CONSTANT_COMMON {
   /**
-   * @name COMPONENT_PLACEHOLDER UI组件对应的几种提示信息
+   * @param STATUS 状态
    */
-  export const COMPONENT_PLACEHOLDER = Object.freeze({
-    [ENUM_COMMON.COMPONENT_TYPE.INPUT]: "请输入",
-    [ENUM_COMMON.COMPONENT_TYPE.SELECT]: "请选择",
-    [ENUM_COMMON.COMPONENT_TYPE.CASCADER]: "请选择",
-    [ENUM_COMMON.COMPONENT_TYPE.TIME_SCOPE]: "请选择",
-    [ENUM_COMMON.COMPONENT_TYPE.TREE_SELECT]: "请选择",
-  } as const);
+  export const STATUS = {
+    OBJ: {
+      [ENUM_COMMON.STATUS.ACTIVATE]: "激活",
+      [ENUM_COMMON.STATUS.FREEZE]: "冻结",
+    },
+    LIST: [
+      { id: ENUM_COMMON.STATUS.ACTIVATE, name: "激活" },
+      { id: ENUM_COMMON.STATUS.FREEZE, name: "冻结" },
+    ],
+  };
 
   /**
-   * @name KEY_VALUE_STATUS 状态
+   * @name FILE_TYPE 文件类型
    */
-  export const KEY_VALUE_STATUS = Object.freeze({
-    [ENUM_COMMON.STATUS.ACTIVATE]: "激活",
-    [ENUM_COMMON.STATUS.FREEZE]: "冻结",
-  } as const);
-
-  /**
-   * @name LIST_STATUS 状态
-   */
-  export const LIST_STATUS = Object.freeze([
-    { key: ENUM_COMMON.STATUS.ACTIVATE, value: "激活" },
-    { key: ENUM_COMMON.STATUS.FREEZE, value: "冻结" },
-  ] as const);
+  export const FILE_TYPE = {
+    OBJ: {
+      [ENUM_COMMON.FILE_TYPE.IMAGE]: "图片",
+      [ENUM_COMMON.FILE_TYPE.VIDEO]: "视频",
+      [ENUM_COMMON.FILE_TYPE.AUDIO]: "音频",
+      [ENUM_COMMON.FILE_TYPE.DOCUMENT]: "文档",
+      [ENUM_COMMON.FILE_TYPE.COMPRESSED]: "压缩文件",
+      [ENUM_COMMON.FILE_TYPE.OTHER]: "其他",
+    },
+    LIST: [
+      { id: ENUM_COMMON.FILE_TYPE.IMAGE, name: "图片" },
+      { id: ENUM_COMMON.FILE_TYPE.VIDEO, name: "视频" },
+      { id: ENUM_COMMON.FILE_TYPE.AUDIO, name: "音频" },
+      { id: ENUM_COMMON.FILE_TYPE.DOCUMENT, name: "文档" },
+      { id: ENUM_COMMON.FILE_TYPE.COMPRESSED, name: "压缩文件" },
+      { id: ENUM_COMMON.FILE_TYPE.OTHER, name: "其他" },
+    ],
+  };
 }

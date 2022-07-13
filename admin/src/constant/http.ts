@@ -7,7 +7,7 @@ export namespace CONSTANT_HTTP {
   /**
    * @name HTTP_CODE_MESSAGE http状态码对应的几种提示消息
    */
-  export const HTTP_CODE_MESSAGE = Object.freeze(<const>{
+  export const HTTP_CODE_MESSAGE = Object.freeze({
     [ENUM_HTTP.HTTP_CODE.OK]: "服务器成功返回请求的数据",
     [ENUM_HTTP.HTTP_CODE.BAD_REQUEST]:
       "发出的请求有错误，服务器没有进行新建或修改数据的操作",
@@ -24,5 +24,5 @@ export namespace CONSTANT_HTTP {
     [ENUM_HTTP.HTTP_CODE.SERVICE_UNAVAILABLE]:
       "服务不可用，服务器暂时过载或维护",
     [ENUM_HTTP.HTTP_CODE.GATEWAY_TIMEOUT]: "网关超时",
-  });
+  } as const);
 }

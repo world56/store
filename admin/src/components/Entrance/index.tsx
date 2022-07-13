@@ -2,28 +2,23 @@ import { Layout } from 'antd';
 import Header from './Header';
 import { useStore } from '@/hooks';
 import Navigation from './Navigation';
-import { SYSTEM_NAV_STATUS_KEY } from '@/config/system';
-import { Middleware as RouteMiddleware } from '@/router';
-
-import type { TypeRoute } from '@/interface/route';
+import styles from './index.module.sass';
+import { Outlet } from 'react-router-dom';
 
 /**
  * @name MainEntrance 系统主入口
  */
-const MainEntrance: React.FC<TypeRoute.InitRoutePropsType> = ({
-  routes
-}) => {
+const MainEntrance = () => {
 
   const { system } = useStore();
-  const collapsed = system[SYSTEM_NAV_STATUS_KEY];
 
   return (
     <Layout>
-      <Navigation collapsed={collapsed} />
+      <Navigation collapsed={system.collapsed} />
       <Layout>
-        <Header collapsed={collapsed} />
-        <Layout.Content>
-          <RouteMiddleware routes={routes} />
+        <Header collapsed={system.collapsed} />
+        <Layout.Content className={styles.content}>
+          <Outlet />
         </Layout.Content>
       </Layout>
     </Layout>

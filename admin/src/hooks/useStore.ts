@@ -1,9 +1,7 @@
 import { useSelector, shallowEqual } from "react-redux";
 
-import type { TypeStoreStatus } from "@/interface/store";
-
-export interface UseStoreType extends TypeStoreStatus {}
+import type { TypeCommon } from "@/interface/common";
 
 export default function useStore() {
-  return useSelector((store: UseStoreType) => store, shallowEqual);
+  return useSelector((state: TypeCommon.Store) => state, shallowEqual);
 }

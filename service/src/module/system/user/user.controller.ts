@@ -1,8 +1,8 @@
 import { ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
-import { PrimaryKeyDTO } from '@/dto/common.dto';
-import { AdminUserDTO } from '@/dto/admin-user.dto';
 import { QueryListPipe } from '@/pipe/query-list.pipe';
+import { PrimaryKeyDTO } from '@/dto/common/common.dto';
+import { AdminUserDTO } from '@/dto/system/admin-user.dto';
 import { AdminUserQuery } from './dto/admin-user-query.dto';
 import { AdminUserUpdateDTO } from './dto/admin-user-update.dto';
 import { UserCheckFilesDto } from './dto/admin-user-check-fields.dto';
@@ -19,6 +19,11 @@ export class UserController {
   getUserList(@Query() query: AdminUserQuery) {
     return this.UserService.getList(query);
   }
+  
+  @Get('all')
+  getAllUser(){
+    return this.UserService.getAllAdminUserList();
+  }
 
   @Get('details')
   getuserInfo(@Query() query: PrimaryKeyDTO) {
@@ -27,7 +32,7 @@ export class UserController {
 
   @Get('checkFields')
   checkFields(@Query() query: UserCheckFilesDto) {
-    return this.UserService.check(query);
+    return this.UserService.checkFields(query);
   }
 
   @Post('freeze')

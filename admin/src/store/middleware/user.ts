@@ -1,35 +1,43 @@
 import Cookies from "js-cookie";
-import { History } from "@/router";
-import { UserAction } from "../action";
+import { ActionsUser } from "../user";
 import { TOKEN_KEY } from "@/config/user";
+import ActionsMiddleware from "./actions";
 import { encryption } from "@/utils/crypto";
 import { login, getUserInfo, getPubilcKey } from "@/api/auth";
 import { put, call, throttle, takeLatest } from "redux-saga/effects";
 
-import * as CONFIG_REQUEST from "@/config/request";
-import { ENUM_STORE_ACTION } from "@/enum/store";
+import { SAGA_DEBOUNCE } from "@/config/request";
 
+import type { PayloadAction } from "@reduxjs/toolkit/dist";
 import type { TypeSystemUser } from "@/interface/system/user";
-import type { TypeStoreUserModule } from "@/interface/store";
 
-function* taskInUserLogin(data: TypeStoreUserModule.ActionUserLogin) {
-  const key: string = yield getPubilcKey();
-  data.payload.password = encryption(key, data.payload.password);
-  const token: string = yield call(login, data.payload);
-  Cookies.set(TOKEN_KEY, token);
-  History.push("/");
+type TypeActionsTaskInUserLogin = PayloadAction<
+  TypeSystemUser.Login,
+  typeof ActionsMiddleware.userLogin.type
+>;
+
+function* taskInUserLogin(data: TypeActionsTaskInUserLogin) {
+  try {
+    const key: string = yield getPubilcKey();
+    data.payload.password = encryption(key, data.payload.password);
+    const token: string = yield call(login, data.payload);
+    Cookies.set(TOKEN_KEY, token);
+    yield put(ActionsMiddleware.getUserInfo());
+  } catch {}
 }
 
 function* taskInGetUserInfo() {
-  const user: TypeSystemUser.DTO = yield getUserInfo();
-  yield put(UserAction.setUserInfo(user));
+  try {
+    const user: TypeSystemUser.DTO = yield getUserInfo();
+    yield put(ActionsUser.setUserInfo(user));
+  } catch {}
 }
 
 export default function* SagaUser() {
-  yield takeLatest(ENUM_STORE_ACTION.LOGIN.USER_LOGIN, taskInUserLogin);
+  yield takeLatest(ActionsMiddleware.userLogin.type, taskInUserLogin);
   yield throttle(
-    CONFIG_REQUEST.SAGA_DEBOUNCE,
-    ENUM_STORE_ACTION.LOGIN.GET_USER_INFO,
+    SAGA_DEBOUNCE,
+    ActionsMiddleware.getUserInfo.type,
     taskInGetUserInfo,
   );
 }

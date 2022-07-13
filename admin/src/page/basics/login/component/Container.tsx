@@ -1,12 +1,11 @@
-import styles from '../index.styl';
 import Icon from '@/resource/icon.png';
-import GayHubIcon from '@/resource/gayHub.png';
-
+import styles from '../index.module.sass';
+import { GithubOutlined } from '@ant-design/icons';
 
 /**
  * @name Container 登录页容器
  */
-const Container: React.FC = ({ children }) => (
+const Container: React.FC<{ children?: React.ReactNode; }> = ({ children }) => (
   <>
     <header className={styles.header}>
       <div>
@@ -14,7 +13,7 @@ const Container: React.FC = ({ children }) => (
         <h2>购物街<span>Management System</span></h2>
       </div>
       <a href="https://github.com/world56/store">
-        <img className={styles.gayhub} src={GayHubIcon} alt='#' />
+        <GithubOutlined className={styles.gayhub}  />
       </a>
     </header>
     <div className={styles.login}>

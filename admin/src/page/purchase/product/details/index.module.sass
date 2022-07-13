@@ -1,0 +1,23 @@
+@import '@/index.sass'
+
+$imageHeight: 328.5px
+
+.layout
+  @extend .detailsTabs
+
+  .basic
+    :global(.ant-card-body)
+      display: flex
+      :global(.ant-descriptions)
+        width: 70%
+        margin-bottom: 0
+      :global(.ant-carousel)
+        width: 29%
+        margin-top: 1px
+        height: $imageHeight
+        margin-left: 16px
+        border: 1px solid $defaultBorderColor
+        :global(.ant-image)
+          width: 100%
+          :global(.ant-image-img)
+            height: $imageHeight

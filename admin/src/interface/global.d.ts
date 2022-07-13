@@ -67,7 +67,7 @@ declare module "*.svg" {
   export default src;
 }
 
-declare module "*.styl" {
+declare module "*.sass" {
   const classes: { readonly [key: string]: string };
   export default classes;
 }

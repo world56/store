@@ -23,4 +23,16 @@ export namespace ENUM_SYSTEM {
     BUTTON,
     CONTENT,
   }
+
+  /**
+   * @name EDIT_USER 编辑用户方式
+   * @param SUPER 注册超级管理员
+   * @param ADMIN 系统模块新增、编辑用户
+   * @param PERSONAL 个人编辑个人信息
+   */
+  export enum EDIT_USER {
+    SUPER,
+    ADMIN,
+    PERSONAL,
+  }
 }

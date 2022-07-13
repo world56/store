@@ -1,22 +1,20 @@
-import { useAsyncFn } from 'react-use';
+import { useRequest } from 'ahooks';
+import Status from '@/layout/Status';
 import Search from '@/components/Search';
-import { timestampToTime } from '@/utils';
-import { permissionToTree } from '@/utils';
-import { BtnEditDel } from '@/layout/Table';
+import { BtnEditDel } from '@/layout/Button';
 import EditRole from './components/EditRole';
-import StatusColor from '@/layout/StatusColor';
+import { toTime, listToTree } from '@/utils';
 import { UserAddOutlined } from '@ant-design/icons';
-import { usePageTurning, useGetDetails } from '@/hooks';
-import { useState, useEffect, useCallback } from 'react';
 import { Form, Card, Table, Button, message } from 'antd';
-import { getRoleList, removeRole, getPermissionTree } from '@/api/system';
+import { usePageTurning, useGetDetails, useStore } from '@/hooks';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { getRoleList, removeRole, getPermissionList } from '@/api/system';
 
 import { ENUM_COMMON } from '@/enum/common';
 import { DB_PRIMARY_KEY } from '@/config/db';
-import { CONSTANT_COMMON } from '@/constant/common';
+import { CONFIG_ANTD_COMP } from '@/config/format';
 
 import type { TypeSystemRole } from '@/interface/system/role';
-import { CONFIG_ANTD_COMP } from '@/config/format';
 
 
 /**
@@ -26,22 +24,24 @@ const Role = () => {
 
   const [id, setId] = useState<number>();
   const [window, setWindow] = useState(false);
+  const { category: { STATUS } } = useStore()
 
-  const [data, fetch] = useAsyncFn(getRoleList);
+  const { data, loading, run } = useRequest(getRoleList, { manual: true });
   const [search] = Form.useForm<TypeSystemRole.QueryList>();
 
-  const pagination = usePageTurning(data.value?.count);
+  const pagination = usePageTurning(data?.count);
   const { pageSize, currentPage } = pagination;
 
   const { value: permissionTree } = useGetDetails(async () => {
-    return permissionToTree(await getPermissionTree());
+    const list = await getPermissionList({ status: ENUM_COMMON.STATUS.ACTIVATE });
+    return listToTree(list);
   }, [true]);
 
   const initialize = useCallback(async () => {
     const values = await search?.validateFields();
-    return fetch({ ...values, pageSize, currentPage });
+    return run({ ...values, pageSize, currentPage });
     // eslint-disable-next-line
-  }, [window, search, pageSize, currentPage, fetch]);
+  }, [window, search, pageSize, currentPage, run]);
 
   const openEditModal = useCallback(() => {
     window && setId(undefined);
@@ -59,32 +59,34 @@ const Role = () => {
     openEditModal();
   }, [openEditModal]);
 
-  const query = [
-    { key: 'name', name: '角色名称', type: ENUM_COMMON.COMPONENT_TYPE.INPUT },
-    {
-      key: 'permissionId',
-      name: '权限关联',
-      list: permissionTree as [],
-      type: ENUM_COMMON.COMPONENT_TYPE.TREE_SELECT,
-      props: { fieldNames: CONFIG_ANTD_COMP.CASCADER_FIELD_PERMISSION }
-    },
-    {
-      key: 'status',
-      name: '角色状态',
-      list: CONSTANT_COMMON.LIST_STATUS,
-      type: ENUM_COMMON.COMPONENT_TYPE.SELECT
-    }
-  ];
+  const query = useMemo(() => (
+    [
+      { name: 'name', label: '角色名称', type: Search.ENUM.COMP_TYPE.INPUT },
+      {
+        name: 'permissionId',
+        label: '权限关联',
+        list: permissionTree as [],
+        type: Search.ENUM.COMP_TYPE.TREE_SELECT,
+        props: { fieldNames: CONFIG_ANTD_COMP.CASCADER_FIELD_PERMISSION }
+      },
+      {
+        name: 'status',
+        label: '角色状态',
+        list: STATUS?.LIST,
+        type: Search.ENUM.COMP_TYPE.SELECT
+      }
+    ]
+  ), [STATUS, permissionTree]);
 
   const columns = [
     { title: '角色名称', key: 'name', dataIndex: 'name' },
     {
       title: '状态', key: 'status', dataIndex: 'status',
-      render: (key: ENUM_COMMON.STATUS) => <StatusColor status={key} />
+      render: (key: ENUM_COMMON.STATUS) => <Status status={key} />
     },
     {
       title: '创建时间', key: 'createTime',
-      dataIndex: 'createTime', render: timestampToTime
+      dataIndex: 'createTime', render: toTime
     },
     { title: '描述', key: 'remark', dataIndex: 'remark' },
     {
@@ -108,10 +110,10 @@ const Role = () => {
       </Search>
       <Table
         columns={columns}
-        loading={data.loading}
+        loading={loading}
         pagination={pagination}
         rowKey={DB_PRIMARY_KEY}
-        dataSource={data.value?.list} />
+        dataSource={data?.list} />
       <EditRole
         id={id}
         visible={window}

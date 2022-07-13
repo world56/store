@@ -1,0 +1,52 @@
+.layout
+  padding: 0
+  height: 64px
+  user-select: none
+  background: #ffffff
+  z-index: 1
+  border-left: 1px solid rgba(0, 0, 0, 0.1)
+  box-shadow: 0px 12px 8px -12px rgba(0, 0, 0, 0.1)
+
+  .user
+    float: right
+    margin: 0 10px
+    cursor: pointer
+    padding: 0 10px
+    line-height: 64px
+
+    .icon
+      width: 45px
+      height: 45px
+      margin: 9.5px 0
+      border-radius: 50%
+      border: 1px solid #d9d9d9
+
+    span
+      margin-left: 6px
+
+    &:hover
+      background: rgba(0, 0, 0, 0.04)
+
+  :global(.anticon-menu-fold)
+    cursor: pointer
+    margin: 19px 15px
+    transition: 0.3s
+
+    &:hover
+      color: #1890ff
+
+    & > svg
+      width: 25px
+      height: 25px
+
+  .close
+    transform: rotate(180deg)
+
+.breadcrumb
+  width: 100%
+  padding: 1px 14px
+  background: #ffffff
+
+.userSelect
+  & > li > span > span:nth-child(2)
+    margin-left: 5px

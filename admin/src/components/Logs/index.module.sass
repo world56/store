@@ -1,0 +1,21 @@
+@import '@/index.sass'
+
+.logs
+  @include drawerWidth(600)
+  :global(.ant-drawer-body)
+    padding: 0 10px 10px 10px
+  :global(.ant-comment)
+    border-bottom: 1px solid $defaultBorderColor
+    :global(.ant-comment-content-author)
+      position: relative
+      .status
+        position: absolute
+        right: 0
+        top: 1px
+        font-size: 12px
+
+.addLog
+  :global(.ant-modal-body)
+    padding-bottom: 0
+  :global(.ant-form-item):nth-last-child(1)
+    margin-bottom: 0

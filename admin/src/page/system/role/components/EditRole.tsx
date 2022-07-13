@@ -1,19 +1,17 @@
 import { memo } from 'react';
-import Modal from '@/layout/Modal';
+import { Modal } from "@/layout/PopUp";
 import { useGetDetails } from '@/hooks';
 import { Form, Input, message } from 'antd';
-import { FormMajorKey } from '@/components/Form';
 import { Switch, Tree } from '@/components/Formatting';
+import { FormHideKey, FormValueCheck } from '@/components/Form';
 import { insertRole, updateRole, checkRoleField, getRoleDetails } from '@/api/system';
 
 import { ENUM_COMMON } from '@/enum/common';
-import { DB_PRIMARY_KEY } from '@/config/db';
 import { CONFIG_ANTD_COMP } from '@/config/format';
 
 import type { TypeCommon } from '@/interface/common';
-import type { RuleObject } from 'rc-field-form/lib/interface';
 import type { TypeSystemRole } from '@/interface/system/role';
-import { TypeSystemPermission } from '@/interface/system/permission';
+import type { TypeSystemPermission } from '@/interface/system/permission';
 
 interface TypeEditRoleProps extends Partial<TypeCommon.DatabaseMainParameter> {
   /** @param visible 是否开启编辑弹窗 */
@@ -57,11 +55,6 @@ const EditRole: React.FC<TypeEditRoleProps> = ({
     form.resetFields();
   };
 
-  async function validator(rule: RuleObject, name: string | void) {
-    const bol = await checkRoleField({ [DB_PRIMARY_KEY]: id, name });
-    return bol ? Promise.reject('该字符已被占用，请更换后重试') : bol;
-  };
-
   const title = id ? '编辑角色' : '新增角色';
 
   return (
@@ -74,14 +67,14 @@ const EditRole: React.FC<TypeEditRoleProps> = ({
       onCancel={onCancel}>
       <Form form={form} {...formStyle}>
 
-        <FormMajorKey />
+        <FormHideKey />
 
-        <Form.Item
+        <FormValueCheck
+          id={id}
           name='name'
           label='角色名称'
-          rules={[{ required: true, message: '角色名称不得为空' }, { validator }]}>
-          <Input placeholder='请输入角色名称' allowClear />
-        </Form.Item>
+          checkFieldsFn={checkRoleField}
+        />
 
         <Form.Item
           name='status'
@@ -91,8 +84,8 @@ const EditRole: React.FC<TypeEditRoleProps> = ({
           <Switch />
         </Form.Item>
 
-        <Form.Item label='简介' name='remark'>
-          <Input.TextArea placeholder='请输入角色简介' allowClear />
+        <Form.Item label='备注' name='remark'>
+          <Input.TextArea placeholder='请输入角色备注' allowClear />
         </Form.Item>
 
         <Form.Item label='权限分配' name='permissionId'>

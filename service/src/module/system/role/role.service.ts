@@ -1,10 +1,11 @@
-import { RoleDto } from '@/dto/role.dto';
-import { PrimaryKeyDTO } from '@/dto/common.dto';
+import { RoleDto } from '@/dto/system/role.dto';
+import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { UtilsService } from '@/common/utils/utils.service';
 import { RuleQueryListDTO } from './dto/rule-query-list.dto';
 import { PrismaService } from '@/common/prisma/prisma.service';
-import { RuleCheckFieldsDTO } from './dto/rule-check-fields.dto';
 import { Injectable, PreconditionFailedException } from '@nestjs/common';
+import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto';
+
 import { ENUM_COMMON } from '@/enum/common';
 
 @Injectable()
@@ -30,39 +31,35 @@ export class RoleService {
         id: { in: roleIds.length ? roleIds : permissionId ? [] : undefined },
       },
     };
-    const count = await this.PrismaService.role.count(params);
-    const list = await this.PrismaService.role.findMany({
-      ...params,
-      skip,
-      take,
-    });
+    const [count, list] = await Promise.all([
+      this.PrismaService.role.count(params),
+      this.PrismaService.role.findMany({
+        ...params,
+        skip,
+        take,
+      }),
+    ]);
     return { list, count };
   }
 
   async getAll() {
-    return this.PrismaService.role.findMany({
+    return await this.PrismaService.role.findMany({
       where: { status: ENUM_COMMON.STATUS.ACTIVATE },
     });
   }
 
-  async checkField(data: RuleCheckFieldsDTO, tips?: boolean) {
-    const { name, id } = data;
-    const list = await this.PrismaService.role.findMany({
-      where: { OR: [{ name }, { id }] },
-    });
-    const isRepeat = this.UtilsServer.isRepeat(list, id);
-    if (tips && isRepeat) {
-      throw new PreconditionFailedException('字段值存在重复，无法保存');
-    }
-    return isRepeat;
+  async checkField({ name, id }: CheckFieldsIsRepeatDTO, tips?: boolean) {
+    return this.PrismaService.checkFieldsRepeat('role', { name, id }, tips);
   }
 
   async getDetails(query: PrimaryKeyDTO) {
     const { id } = query;
-    const data = await this.PrismaService.role.findUnique({ where: { id } });
-    const ids = await this.PrismaService.relRolePermission.findMany({
-      where: { roleId: id },
-    });
+    const [data, ids] = await Promise.all([
+      this.PrismaService.role.findUnique({ where: { id } }),
+      this.PrismaService.relRolePermission.findMany({
+        where: { roleId: id },
+      }),
+    ]);
     return { ...data, permissionId: ids.map((v) => v.permissionId) };
   }
 
@@ -71,9 +68,11 @@ export class RoleService {
     const { permissionId, ...data } = info;
     return await this.PrismaService.$transaction(async (prisma) => {
       const { id: roleId } = await prisma.role.create({ data });
-      await prisma.relRolePermission.createMany({
-        data: permissionId.map((permissionId) => ({ permissionId, roleId })),
-      });
+      if (permissionId?.length) {
+        await prisma.relRolePermission.createMany({
+          data: permissionId.map((permissionId) => ({ permissionId, roleId })),
+        });
+      }
       return true;
     });
   }
@@ -111,6 +110,12 @@ export class RoleService {
   }
 
   async remove({ id }: PrimaryKeyDTO) {
+    const adminUser = await this.PrismaService.relAdminUserRole.findFirst({
+      where: { roleId: id },
+    });
+    if (adminUser) {
+      throw new PreconditionFailedException('与用户在关联，无法删除');
+    }
     await this.PrismaService.$transaction([
       this.PrismaService.role.delete({ where: { id } }),
       this.PrismaService.relRolePermission.deleteMany({

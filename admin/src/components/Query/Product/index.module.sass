@@ -1,0 +1,28 @@
+.func
+  display: flex
+  :global(.ant-btn)
+    margin-left: 10px
+
+.select
+  :global(.ant-select-selection-item)
+    padding-right: 25px !important
+
+.modal
+  width: 1000px !important
+  :global(.ant-modal-footer)
+    border-top: none
+
+  :global(.ant-modal-body)
+    padding: 0
+
+  .select
+    display: flex
+    align-items: center
+    justify-content: space-between
+
+    & > span:nth-last-child(1)
+      margin-right: 12px
+
+    :global(.ant-input-affix-wrapper)
+      width: 350px
+      margin: 12px

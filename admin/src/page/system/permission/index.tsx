@@ -1,8 +1,9 @@
-import { useAsyncFn } from 'react-use';
+import { useStore } from '@/hooks';
+import { useRequest } from 'ahooks';
+import { listToTree } from '@/utils';
+import Status from '@/layout/Status';
 import Search from '@/components/Search';
-import { usePageTurning } from '@/hooks';
-import { BtnEditDel } from '@/layout/Table';
-import StatusColor from '@/layout/StatusColor';
+import { BtnEditDel } from '@/layout/Button';
 import { KeyOutlined } from '@ant-design/icons';
 import { useEffect, useState, useCallback } from 'react';
 import EditPermission from './components/EditPermission';
@@ -12,19 +13,18 @@ import { getPermissionList, removePermission } from '@/api/system';
 import { ENUM_SYSTEM } from '@/enum/system';
 import { ENUM_COMMON } from '@/enum/common';
 import { DB_PRIMARY_KEY } from '@/config/db';
-import { CONSTANT_SYSTEM } from '@/constant/system';
 import { CONSTANT_COMMON } from '@/constant/common';
 
 import type { TypeSystemPermission } from '@/interface/system/permission';
 
 const query = [
-  { key: 'code', name: '权限Key', type: ENUM_COMMON.COMPONENT_TYPE.INPUT },
-  { key: 'name', name: '权限名称', type: ENUM_COMMON.COMPONENT_TYPE.INPUT },
+  { name: 'code', label: '权限Key', type: Search.ENUM.COMP_TYPE.INPUT },
+  { name: 'name', label: '权限名称', type: Search.ENUM.COMP_TYPE.INPUT },
   {
-    key: 'status',
-    name: '权限状态',
-    list: CONSTANT_COMMON.LIST_STATUS,
-    type: ENUM_COMMON.COMPONENT_TYPE.SELECT
+    name: 'status',
+    label: '权限状态',
+    list: CONSTANT_COMMON.STATUS.LIST,
+    type: Search.ENUM.COMP_TYPE.SELECT
   },
 ];
 
@@ -36,18 +36,14 @@ const Permission = () => {
   const [id, setId] = useState<number>();
   const [window, setWindow] = useState(false);
 
-  const [data, fetch] = useAsyncFn(getPermissionList);
-  const [search] = Form.useForm<TypeSystemPermission.QueryList>();
+  const { category: { PERMISSION_TYPE } } = useStore();
 
-  const pagination = usePageTurning(data.value?.count);
-  const { pageSize, currentPage } = pagination;
-
-  const initialize = useCallback(async () => {
+  const { data, loading, run: initialize } = useRequest(async () => {
     const param = await search.validateFields();
-    param.pageSize = pageSize;
-    param.currentPage = currentPage;
-    fetch(param);
-  }, [fetch, search, pageSize, currentPage]);
+    const list = await getPermissionList(param);
+    return listToTree(list);
+  }, { manual: true });
+  const [search] = Form.useForm<TypeSystemPermission.QueryList>();
 
   const onClose = useCallback((init?: boolean) => {
     init || initialize();
@@ -67,26 +63,29 @@ const Permission = () => {
   };
 
   const columns = [
+    { title: 'id', key: 'id', dataIndex: 'id' },
     { title: '权限名称', key: 'name', dataIndex: 'name' },
     { title: '权限Key', key: 'code', dataIndex: 'code' },
     {
       title: '类型',
       key: 'type',
       dataIndex: 'type',
-      render: (key: ENUM_SYSTEM.PERMISSION_TYPE) => CONSTANT_SYSTEM.KEY_VALUE_PERMISSION_TYPE[key]
+      render: (key: ENUM_SYSTEM.PERMISSION_TYPE) => PERMISSION_TYPE?.OBJ[key]
     },
     {
       title: '当前状态',
       key: 'status',
       dataIndex: 'status',
-      render: (key: ENUM_COMMON.STATUS) => <StatusColor status={key} />
+      render: (key: ENUM_COMMON.STATUS) => <Status status={key} />
     },
     { title: '备注', key: 'remark', dataIndex: 'remark' },
     {
       title: '操作',
       key: DB_PRIMARY_KEY,
-      dataIndex: DB_PRIMARY_KEY,
-      render: (_id: string) => <BtnEditDel value={_id} onEdit={edit} onRemove={remove} />
+      render: (row: TypeSystemPermission.DTO) => {
+        const showEdit = row.fStatus ? edit : undefined;
+        return <BtnEditDel value={row.id} onEdit={showEdit} onRemove={remove} />
+      }
     },
   ];
 
@@ -103,10 +102,10 @@ const Permission = () => {
       </Search>
       <Table
         columns={columns}
-        loading={data.loading}
+        loading={loading}
+        pagination={false}
         rowKey={DB_PRIMARY_KEY}
-        pagination={pagination}
-        dataSource={data.value?.list} />
+        dataSource={data} />
       <EditPermission id={id} visible={window} onClose={onClose} />
     </Card>
   );

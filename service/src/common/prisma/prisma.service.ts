@@ -1,8 +1,15 @@
-import { PrismaClient } from '@prisma/client';
-import { PrimaryKeyDTO } from '@/dto/common.dto';
-import { INestApplication, Injectable, OnModuleInit } from '@nestjs/common';
+import {
+  Injectable,
+  OnModuleInit,
+  INestApplication,
+  PreconditionFailedException,
+} from '@nestjs/common';
+import { PrimaryKeyDTO } from '@/dto/common/common.dto';
+import { type Prisma, PrismaClient } from '@prisma/client';
 
-// import type { Prisma } from 'prisma/prisma-client';
+interface TypeCheckFieldsRepeatDTO extends Partial<PrimaryKeyDTO> {
+  WHERE?: object;
+}
 
 /**
  * @description MySql
@@ -20,8 +27,78 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     });
   }
 
+  async checkFieldsRepeat<T extends TypeCheckFieldsRepeatDTO>(
+    relName: string,
+    DTO: T,
+    tips?: boolean,
+  ) {
+    const { WHERE, ...find } = DTO;
+    const OR = Object.entries(find).map(([k, v]) => ({ [k]: v }));
+    const list = await this[relName].findMany({ where: { ...WHERE, OR } });
+    const [target] = list;
+    const isRepeat = !Boolean(
+      !target || (list.length === 1 && target?.id === DTO.id),
+    );
+    if (tips && isRepeat) {
+      throw new PreconditionFailedException('字段值存在重复，无法保存');
+    }
+
+    return isRepeat;
+  }
+
+  // private softDeleteTable: ReadonlyArray<string> = ['SupplierProduct'];
+
+  // private softDeleting: Prisma.Middleware = async (params, next) => {
+  //   const { action, model } = params;
+  //   console.log('@-model', model, '-', action);
+  //   if (this.softDeleteTable.includes(model)) {
+  //     switch (action) {
+  //       case 'delete':
+  //         params.action = 'update';
+  //         params.args.data = { deleted: true };
+  //         break;
+  //       case 'deleteMany':
+  //         params.action = 'updateMany';
+  //         if (params.args.data != undefined) {
+  //           params.args.data.deleted = true;
+  //         } else {
+  //           params.args.data = { deleted: true };
+  //         }
+  //         break;
+  //       case 'findUnique':
+  //       case 'findFirst':
+  //         params.action = 'findFirst';
+  //         params.args.where['deleted'] = false;
+  //         break;
+  //       case 'findMany':
+  //         if (params.args.where) {
+  //           if (!params.args.where.deleted) {
+  //             params.args.where['deleted'] = false;
+  //           }
+  //         } else {
+  //           params.args['where'] = { deleted: false };
+  //         }
+  //         break;
+  //       case 'update':
+  //         params.action = 'updateMany';
+  //         params.args.where['deleted'] = false;
+  //         break;
+  //       case 'updateMany':
+  //         if (params.args.where) {
+  //           params.args.where['deleted'] = false;
+  //         } else {
+  //           params.args['where'] = { deleted: false };
+  //         }
+  //         break;
+  //       default:
+  //         break;
+  //     }
+  //   }
+  //   return next(params);
+  // };
+
   // private createMiddleware() {
-  //   // this.$use(this.cleanUpMeaninglessParameters);
+  //   this.$use(this.softDeleting);
   // }
 
   // private readonly cleanUpMeaninglessParameters: Prisma.Middleware = async (
@@ -52,5 +129,4 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
   //   }
   //   return params;
   // }
-
 }

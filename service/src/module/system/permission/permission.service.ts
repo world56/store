@@ -1,10 +1,13 @@
-import { PrimaryKeyDTO } from '@/dto/common.dto';
-import { PermissionDTO } from '@/dto/permission.dto';
+import { Prisma } from '@prisma/client';
+import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { UtilsService } from '@/common/utils/utils.service';
+import { PermissionDTO } from '@/dto/system/permission.dto';
 import { PrismaService } from '@/common/prisma/prisma.service';
 import { PermissionCheckRepeat } from './dto/permission-check-repeat';
 import { PermissionQueryListDto } from './dto/permission-query-list.dto';
 import { Injectable, PreconditionFailedException } from '@nestjs/common';
+
+import { ENUM_COMMON } from '@/enum/common';
 
 @Injectable()
 export class PermissionService {
@@ -13,44 +16,54 @@ export class PermissionService {
     private readonly PrismaService: PrismaService,
   ) {}
 
-  async getPermissionList(
-    query: Omit<PermissionQueryListDto, 'currentPage' | 'pageSize'>,
-  ) {
-    const { skip, take, ...where } = query;
-    const search = {
-      where: {
-        status: where.status,
-        name: { contains: where.name },
-        code: { contains: where.code },
-      },
-    };
-    const count = await this.PrismaService.permission.count(search);
-    const list = await this.PrismaService.permission.findMany({
-      ...search,
-      take,
-      skip,
-    });
-    return { list, count };
-  }
-
-  async findAll() {
-    return this.PrismaService.permission.findMany();
+  async getPermissionList(query: PermissionQueryListDto) {
+    let where = '';
+    const params = Object.entries(query).filter(
+      ([k, v]) => !this.UtilsServer.isVoid(v),
+    );
+    if (params.length) {
+      where += 'WHERE ';
+      params.forEach(([k, v]) => {
+        if (!this.UtilsServer.isVoid(v)) {
+          where += `p.${k} ${k !== 'status' ? `LIKE "%${v}%"` : ` = ${v}`}`;
+        }
+      });
+    }
+    return await this.PrismaService.$queryRawUnsafe(`
+      SELECT 
+       p.parent_id AS parentId, p.* , (CASE f.status WHEN 0 THEN false ELSE true END) AS fStatus
+      FROM 
+        permission AS p
+      LEFT OUTER JOIN
+        permission AS f ON p.parent_id = f.id
+      ${where}`);
   }
 
   async getDetails(where: PrimaryKeyDTO) {
     return await this.PrismaService.permission.findUnique({ where });
   }
 
+  async findSonTreeList(id: number) {
+    const list = await this.PrismaService.$queryRaw<{ id: number }[]>(
+      Prisma.sql`
+        WITH RECURSIVE ids AS (
+          SELECT id FROM permission WHERE parent_id = ${id}
+          UNION ALL
+          SELECT p.id FROM permission AS p, ids AS s WHERE p.parent_id = s.id
+        )
+        SELECT id FROM ids;
+      `,
+    );
+    return [id, ...list.map((v) => v.id)];
+  }
+
   async checkRepeat(OR: PermissionCheckRepeat, throwError?: boolean) {
     const { id, name, code } = OR;
-    const list = await this.PrismaService.permission.findMany({
-      where: { OR: { id, name, code } },
-    });
-    const isRepeat = this.UtilsServer.isRepeat(list, id);
-    if (throwError && isRepeat) {
-      throw new PreconditionFailedException('字段值存在重复，无法保存');
-    }
-    return isRepeat;
+    return await this.PrismaService.checkFieldsRepeat(
+      'permission',
+      { id, name, code },
+      throwError,
+    );
   }
 
   async insert(data: PermissionDTO) {
@@ -61,11 +74,26 @@ export class PermissionService {
   async update(data: PermissionDTO) {
     const { id, ...other } = data;
     await this.checkRepeat(data, true);
-    other.parentId = other.parentId ? other.parentId : null;
-    return await this.PrismaService.permission.update({
-      where: { id },
-      data: other,
+    await this.PrismaService.$transaction(async (prisma) => {
+      other.parentId = other.parentId ? other.parentId : null;
+      const [prev] = await Promise.all([
+        prisma.permission.findUnique({ where: { id } }),
+        prisma.permission.update({ where: { id }, data: other }),
+      ]);
+      if (
+        other.status !== prev.status &&
+        other.status === ENUM_COMMON.STATUS.FREEZE
+      ) {
+        const ids = await this.findSonTreeList(id);
+        if (ids?.length) {
+          await prisma.permission.updateMany({
+            where: { id: { in: ids } },
+            data: { status: other.status },
+          });
+        }
+      }
     });
+    return true;
   }
 
   async delete(where: PrimaryKeyDTO) {

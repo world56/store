@@ -1,35 +1,31 @@
 import {
   insertPermission,
   updatePermission,
-  getPermissionTree,
+  getPermissionList,
   getPermissionDetails,
   checkPermissionField,
 } from '@/api/system';
 import { memo } from 'react';
-import Modal from '@/layout/Modal';
-import { useGetDetails } from '@/hooks';
-import { FormMajorKey } from '@/components/Form';
+import { listToTree } from '@/utils';
+import { Modal } from "@/layout/PopUp";
 import { Switch } from '@/components/Formatting';
-import { permissionToTree } from '../../../../utils';
+import { useGetDetails, useStore } from '@/hooks';
 import { Form, Input, Radio, message, TreeSelect } from 'antd';
+import { FormHideKey, FormValueCheck } from '@/components/Form';
 
 import { ENUM_SYSTEM } from '@/enum/system';
 import { ENUM_COMMON } from '@/enum/common';
-import { DB_PRIMARY_KEY } from '@/config/db';
 import { CONSTANT_REG } from '@/constant/reg';
 import { CONFIG_ANTD_COMP } from '@/config/format';
-import { CONSTANT_SYSTEM } from '@/constant/system';
 
 import type { TypeCommon } from '@/interface/common';
 import type { TypeSystemPermission } from '@/interface/system/permission';
 
-/** 
- * @param id 查询ID
- * @param visible 控制开启、关闭弹窗
- * @param onClose 关闭窗口回调
- */
+
 export interface TypeEditPermissionProps extends Partial<TypeCommon.DatabaseMainParameter> {
+  /** @param visible 控制开启、关闭弹窗 */
   visible: boolean;
+  /** @name onClose 关闭窗口回调 */
   onClose(): void;
 };
 
@@ -47,6 +43,8 @@ const EditPermission: React.FC<TypeEditPermissionProps> = ({
   visible,
 }) => {
 
+  const { category: { PERMISSION_TYPE } } = useStore();
+
   const [form] = Form.useForm<TypeSystemPermission.DTO>();
 
   const { loading } = useGetDetails(async () => {
@@ -55,8 +53,8 @@ const EditPermission: React.FC<TypeEditPermissionProps> = ({
   }, [id, form]);
 
   const { value: treeData, loading: treeLoad } = useGetDetails(async () => {
-    const res = await getPermissionTree();
-    return permissionToTree(res, 0, id);
+    const res = await getPermissionList({ status: ENUM_COMMON.STATUS.ACTIVATE });
+    return listToTree(res, 0, id);
   }, [visible, id]);
 
   async function onSumbit() {
@@ -65,11 +63,6 @@ const EditPermission: React.FC<TypeEditPermissionProps> = ({
     else await insertPermission(values);
     message.success('操作成功');
     onCancel();
-  };
-
-  async function checkField(field: 'code' | 'name', value: string) {
-    const bol = await checkPermissionField({ [DB_PRIMARY_KEY]: id, [field]: value });
-    return bol ? Promise.reject('该字符已被占用，请更换后重试') : bol;
   };
 
   function onCancel() {
@@ -86,27 +79,22 @@ const EditPermission: React.FC<TypeEditPermissionProps> = ({
       title={id ? '编辑权限' : '新增权限'}>
       <Form form={form} {...formStyle}>
 
-        <FormMajorKey />
+        <FormHideKey />
 
-        <Form.Item
+        <FormValueCheck
+          id={id}
           name='name'
           label='权限名称'
-          rules={[
-            { required: true, message: '不得为空' },
-            { validator: async (r, v: string) => checkField('name', v) }
-          ]}>
-          <Input placeholder='请输入权限中文名称' allowClear />
-        </Form.Item>
+          checkFieldsFn={checkPermissionField}
+        />
 
-        <Form.Item
+        <FormValueCheck
+          id={id}
           name='code'
-          label='权限 Key'
-          rules={[
-            { required: true, pattern: CONSTANT_REG.EN, message: '且仅支持英文输入' },
-            { validator: async (r, v: string) => checkField('code', v) }
-          ]}>
-          <Input placeholder='请输入权限Key（英文名）' allowClear />
-        </Form.Item>
+          label='权限Key'
+          pattern={CONSTANT_REG.EN}
+          checkFieldsFn={checkPermissionField}
+        />
 
         <Form.Item name='parentId' label='所属模块'>
           <TreeSelect
@@ -123,7 +111,7 @@ const EditPermission: React.FC<TypeEditPermissionProps> = ({
           name='type'
           initialValue={ENUM_SYSTEM.PERMISSION_TYPE.PAGE}>
           <Radio.Group>
-            {CONSTANT_SYSTEM.LIST_PERMISSION_TYPE.map(v => <Radio key={v.key} value={v.key}>{v.value}</Radio>)}
+            {PERMISSION_TYPE?.LIST.map(v => <Radio key={v.id} value={v.id}>{v.name}</Radio>)}
           </Radio.Group>
         </Form.Item>
 

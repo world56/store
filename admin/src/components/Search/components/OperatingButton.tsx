@@ -1,12 +1,14 @@
-import styles from '../index.styl';
 import { Col, Button } from 'antd';
+import styles from '../index.module.sass';
 import { SearchOutlined, DeleteOutlined } from '@ant-design/icons';
+import React from 'react';
 
 interface OperatingButtonProps {
   /** @param onSumbit 提交 */
   onSumbit(): void;
   /** @param onEmpty 重制清空初始化 */
   onEmpty(): void;
+  children?: React.ReactNode;
 };
 
 /**

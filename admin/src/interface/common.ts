@@ -1,5 +1,10 @@
-import { ENUM_HTTP } from "@/enum/http";
-import React from "react";
+import type React from "react";
+import type store from "@/store";
+
+import { ENUM_COMMON } from "@/enum/common";
+import { ENUM_STORE } from "@/enum/store";
+
+import type { TypeSystemUser } from "./system/user";
 
 /**
  * @name TypeCommon 公共接口
@@ -21,32 +26,59 @@ export namespace TypeCommon {
   /**
    * @name DefaultKey 统一约束定义的枚举键值对
    */
-  export type DefaultKey<T = React.Key> = Record<"key" | "value", T>;
-
-  /**
-   * @name QueryDefaulsParam 搜索组件公共参数
-   */
-  export interface QueryDefaulsParam {
-    time?: number[];
+  export interface DefaultKey extends DatabaseMainParameter {
+    name: string;
   }
 
   /**
-   * @name PromiseReturns Promise reject
+   * @name DTO 公共DTO常用字段
+   * @param id 主键
+   * @param name 名称
+   * @param status 状态
+   * @param remark 备注
+   * @param parentId 父id
+   * @param category 所属类目
+   * @param createTime 初始化时间
+   */
+  export interface DTO extends DatabaseMainParameter {
+    status: ENUM_COMMON.STATUS;
+    remark?: string;
+    name: string;
+    parentId: number;
+    createTime: string;
+    category: Category[];
+  }
+
+  /**
+   * @name FieldsIsRepeatDTO 校验字段是否重复
+   */
+  export interface FieldsIsRepeatDTO extends Pick<DTO, "id" | "name"> {}
+
+  /**
+   * @name PromiseReturns Promise
    */
   export type PromiseReturns<T> = T extends Promise<infer R> ? R : never;
 
   /**
-   * @name Gateway 网关
-   * @param {number} code 请求状态CODE
-   * @param {string} message 返回的消息
-   * @param {boolean | void} 接口状态
-   * @param {unknown | void} content as T 返回的业务数据
+   * @name Dictionaries 字典
    */
-  export interface Gateway<T> {
-    content: T;
-    readonly message?: string;
-    readonly success: boolean;
-    readonly code: ENUM_HTTP.HTTP_CODE;
+  export interface Dictionaries {
+    readonly OBJ: GenericObject;
+    readonly LIST: Array<
+      DefaultKey & Partial<Pick<DTO, "parentId" | "remark">>
+    >;
+  }
+
+  /**
+   * @name Store Redux 状态机
+   */
+  export type Store = ReturnType<typeof store.getState>;
+
+  /**
+   * @name Category 类目
+   */
+  export interface Category extends Pick<DTO, "id" | "name" | "remark"> {
+    type: ENUM_STORE.CATEGORY;
   }
 
   /**
@@ -74,5 +106,25 @@ export namespace TypeCommon {
   export interface StandardTreeField
     extends Record<"key" | "value", React.Key> {
     children: StandardTreeField[];
+  }
+
+  /**
+   * @name File 服务器静态资源
+   * @param name 名称
+   * @param path 路径
+   * @param type 类型
+   * @param createTime 上传时间
+   * @param userId 上传人ID
+   * @param status 文件状态 （客户端使用）
+   */
+  export interface File {
+    id: number;
+    name: string;
+    path: string;
+    userId?: string;
+    createTime?: string;
+    type: ENUM_COMMON.FILE_TYPE;
+    status?: ENUM_COMMON.UPLOAD_STATUS;
+    user?: Pick<TypeSystemUser.DTO, "id" | "name">;
   }
 }

@@ -5,6 +5,11 @@ import type { TypeCommon } from "@/interface/common";
 import type { TypeSystemUser } from "@/interface/system/user";
 import type { TypeSystemRole } from "@/interface/system/role";
 import type { TypeSystemPermission } from "@/interface/system/permission";
+import type { TypeSystemDepartment } from "@/interface/system/department";
+
+/**
+ * -------------------------用户管理-------------------------------------
+ */
 
 /**
  * @name getUserList 用户管理-获取用户列表
@@ -80,6 +85,10 @@ export function freezeAdminUser(data: TypeSystemUser.FreezeStatusChange) {
 }
 
 /**
+ * -------------------------角色管理-------------------------------------
+ */
+
+/**
  * @name getRoleList 角色管理-获取角色列表
  */
 export function getRoleList(params: TypeSystemRole.QueryList) {
@@ -90,15 +99,6 @@ export function getRoleList(params: TypeSystemRole.QueryList) {
       params,
     },
   );
-}
-
-/**
- * @name getRoleSelectList 角色管理-获取全部角色列表
- */
-export function getRoleSelectList() {
-  return request<TypeSystemRole.DTO[]>("system/role/allRole", {
-    method: ENUM_HTTP.REQUEST_MODE.GET,
-  });
 }
 
 /**
@@ -152,16 +152,19 @@ export function checkRoleField(params: Record<string, string | number | void>) {
 }
 
 /**
+ * -------------------------权限管理-------------------------------------
+ */
+
+/**
  * @name getRoleList 权限管理-获取权限列表
  */
-export function getPermissionList(params: TypeSystemPermission.QueryList) {
-  return request<TypeCommon.ServiceReturn<TypeSystemPermission.DTO>>(
-    "system/permission/list",
-    {
-      method: ENUM_HTTP.REQUEST_MODE.GET,
-      params,
-    },
-  );
+export function getPermissionList(
+  params: Partial<TypeSystemPermission.QueryList>,
+) {
+  return request<TypeSystemPermission.DTO[]>("system/permission/list", {
+    method: ENUM_HTTP.REQUEST_MODE.GET,
+    params,
+  });
 }
 
 /**
@@ -197,7 +200,7 @@ export function removePermission(data: TypeCommon.DatabaseMainParameter) {
 /**
  * @name checkPermissionField 权限管理-检查字段是否重复
  */
-export function checkPermissionField(params: TypeSystemPermission.CheckFields) {
+export function checkPermissionField(params: TypeCommon.FieldsIsRepeatDTO) {
   return request("system/permission/check", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
     params,
@@ -215,10 +218,74 @@ export function getPermissionDetails(params: TypeCommon.DatabaseMainParameter) {
 }
 
 /**
- * @name getPermissionTree 权限管理-获取权限树
+ * -------------------------部门管理-------------------------------------
  */
-export function getPermissionTree() {
-  return request<TypeSystemPermission.DTO[]>("system/permission/findAll", {
+
+/**
+ * @name getDepartmentList 部门管理-获取部门列表
+ */
+export function getDepartmentList(params: TypeSystemDepartment.QueryList) {
+  return request<TypeCommon.ServiceReturn<TypeSystemDepartment.DTO[]>>(
+    "system/department/list",
+    {
+      method: ENUM_HTTP.REQUEST_MODE.GET,
+      params,
+    },
+  );
+}
+
+/**
+ * @name checkDepartmentField 权限管理-检查字段是否重复
+ */
+export function checkDepartmentField(params: TypeCommon.FieldsIsRepeatDTO) {
+  return request("system/department/check", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
+    params,
+  });
+}
+
+/**
+ * @name insertDepartment 部门管理-新增部门
+ */
+export function insertDepartment(data: TypeSystemDepartment.DTO) {
+  return request<TypeCommon.ServiceReturn<TypeSystemDepartment.DTO[]>>(
+    "system/department/insert",
+    {
+      method: ENUM_HTTP.REQUEST_MODE.POST,
+      data,
+    },
+  );
+}
+
+/**
+ * @name updateDepartment 部门管理-编辑部门
+ */
+export function updateDepartment(data: TypeSystemDepartment.DTO) {
+  return request<TypeCommon.ServiceReturn<TypeSystemDepartment.DTO[]>>(
+    "system/department/update",
+    {
+      method: ENUM_HTTP.REQUEST_MODE.POST,
+      data,
+    },
+  );
+}
+
+/**
+ * @name getDepartmentDetails 部门管理-获取部门详情
+ */
+export function getDepartmentDetails(data: TypeCommon.DatabaseMainParameter) {
+  return request<TypeSystemDepartment.DTO>("system/department/details", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
+}
+
+/**
+ * @name removeDepartment 部门管理-删除部门
+ */
+export function removeDepartment(data: TypeCommon.DatabaseMainParameter) {
+  return request("system/department/remove", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
   });
 }

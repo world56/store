@@ -1,1 +1,1 @@
-export const TOKEN_KEY = <const>"Authorization";
+export const TOKEN_KEY = "Authorization";

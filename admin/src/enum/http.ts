@@ -12,6 +12,16 @@ export namespace ENUM_HTTP {
   }
 
   /**
+   * @name CONTENT_TYPE 类型
+   */
+  export enum CONTENT_TYPE {
+    TEXT = "text/xml",
+    JSON = "application/json",
+    MULTIPART = "multipart/form-data",
+    FORM_DATA = "application/x-www-form-urlencoded"
+  }
+
+  /**
    * @name HTTP_CODE 通用状态码
    */
   export enum HTTP_CODE {

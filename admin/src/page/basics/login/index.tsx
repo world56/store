@@ -1,15 +1,19 @@
+import { useEffect } from 'react';
 import Hint from './component/Hint';
-import { useActions } from '@/hooks';
 import { Form, Input, Button } from 'antd';
 import Register from './component/Register';
 import Container from './component/Container';
+import { useActions, useStore } from '@/hooks';
+import { useNavigate } from 'react-router-dom';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import type { TypeSystemUser } from '@/interface/system/user';
 
 const Login = () => {
 
+  const { user } = useStore();
   const actions = useActions();
+  const naviagte = useNavigate();
 
   const [form] = Form.useForm<TypeSystemUser.Login>();
 
@@ -17,6 +21,10 @@ const Login = () => {
     const values = await form.validateFields();
     actions.userLogin(values);
   };
+
+  useEffect(() => {
+    user.id && naviagte('/', { replace: true });
+  }, [user, naviagte]);
 
   return (
     <Container>

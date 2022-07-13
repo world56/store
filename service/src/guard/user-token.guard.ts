@@ -22,9 +22,11 @@ export class UserTokenGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublicAPI = this.isWhiteList(context);
     if (isPublicAPI) return true;
-    const {
-      headers: { authorization },
-    } = context.switchToHttp().getRequest<FastifyRequest>();
-    return Boolean(await this.JwtAuthService.decode(authorization));
+    const request = context.switchToHttp().getRequest<FastifyRequest>();
+    const user = await this.JwtAuthService.decode(
+      request.headers.authorization,
+    );
+    request.requestContext.set('user', user);
+    return Boolean(user);
   }
 }

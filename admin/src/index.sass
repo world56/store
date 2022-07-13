@@ -1,0 +1,78 @@
+// 常用色
+$success: #52c41a
+$error: #ff4d4f
+$main: #1890ff
+$defaultBorderColor: rgba(0,0,0,.06)
+
+// 表单操作功能
+@mixin formItemFunc($list)
+  @each $var in $list
+    :global(.ant-form-item):nth-child(#{$var})
+      :global(.ant-form-item-label)
+        label
+          position: relative
+          width: 100%
+
+          :nth-child(2)
+            right: 0
+            position: absolute
+  @content
+
+// 抽屉对话框宽度
+@mixin drawerWidth($width)
+  :global(.ant-drawer-content-wrapper)
+    width: #{$width}px !important
+  @content
+
+// 抽屉对话框-Tabs
+.drawerTabs
+  :global(.ant-drawer-body)
+    padding: 0 0 20px 0
+  :global(.ant-tabs-content-holder)
+    padding: 0 20px
+  :global(.ant-tabs-nav-wrap)
+    display: flex
+    justify-content: center
+
+// 表格编辑-Form-Table
+.formTable
+  :global(.ant-form-item)
+    margin: 0
+
+// 详情页面-Tabs
+.detailsTabs
+  :global(.ant-tabs-nav)
+    margin-bottom: 10px
+
+  :global(.ant-tabs-nav-wrap)
+    background: #fff
+    padding: 4px 10px 8px 25px
+
+  :global(.ant-card)
+    margin-bottom: 10px
+
+  :global(.ant-descriptions)
+    margin-bottom: 10px
+
+  :global(.ant-card-body)
+    & > :global(.ant-descriptions):nth-last-child(1)
+      margin-bottom: 0
+
+  :global(.ant-tabs-tabpane)
+    &:nth-child(1)
+      :global(.ant-descriptions-item-label)
+        width: 150px
+        text-align: center
+        font-weight: bold
+
+      & > :global(.ant-card):nth-last-child(1)
+        :global(.ant-card-body)
+          padding: 16px
+
+      & > :global(.ant-card):nth-child(2)
+        :global(.ant-descriptions-view)
+          :global(.ant-descriptions-row)
+            & > :global(.ant-descriptions-item-content):nth-child(2)
+              width: 280px
+            & > :global(.ant-descriptions-item-content):nth-child(4)
+              width: 250px

@@ -1,9 +1,9 @@
 import { JwtService } from '@nestjs/jwt';
-import { AdminUserDTO } from '@/dto/admin-user.dto';
 import { PrismaService } from '../prisma/prisma.service';
+import { AdminUserDTO } from '@/dto/system/admin-user.dto';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 
-type TypeTokenParam = Omit<AdminUserDTO, 'roles'>;
+type TypeTokenParam = Omit<AdminUserDTO, 'roles' | 'deps'>;
 
 @Injectable()
 export class JwtAuthService {
@@ -28,9 +28,11 @@ export class JwtAuthService {
   async decode(token: string) {
     try {
       const { iat, exp, ...user } = this.JwtService.verify(token);
-      await this.findUser(user);
-      return user;
+      const data = await this.findUser(user);
+      const { status, password, remark, ...protectedData } = data;
+      return protectedData;
     } catch (error) {
+      console.log('JWT-error', error);
       throw new UnauthorizedException('账号过期,请重新登录');
     }
   }
