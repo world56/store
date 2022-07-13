@@ -7996,7 +7996,7 @@ react-router-dom@^6.4.0-pre.8:
   dependencies:
     react-router "6.4.0-pre.8"
 
-react-router@6.4.0-pre.8, react-router@^6.4.0-pre.8:
+react-router@6.4.0-pre.8:
   version "6.4.0-pre.8"
   resolved "https://registry.npmmirror.com/react-router/-/react-router-6.4.0-pre.8.tgz#90ce4cc590b453fc26ad2d131f51d908783c9091"
   integrity sha512-xwt2s9jW5NaakymlSRG0hZoGda6E/Skfgmj/4vlwvRX/kqoO8jU0g+Vi3sHDCatH/V+GjDyTQkdMEDm8qGsBsQ==
