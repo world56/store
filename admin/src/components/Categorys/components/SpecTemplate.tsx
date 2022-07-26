@@ -1,7 +1,7 @@
 import { Input, Table } from "antd";
 import { useRequest } from "ahooks";
 import { Modal } from "@/layout/PopUp";
-import styles from './index.module.sass';
+import styles from '../index.module.sass';
 import Categorys from "@/components/Categorys";
 import { Btn, FooterButton } from "@/layout/Button";
 import { SpecParatter } from '@/components/Details';
@@ -88,7 +88,7 @@ const SpecTemplate: React.FC<TypeSelectSpecProps> = ({ onChange }) => {
         onOk={onSumbit}
         visible={visible}
         onCancel={onCancel}
-        className={styles.select}
+        className={styles.specTemplate}
         footer={<FooterButton onSumbit={onSumbit} onCancel={onCancel} onRefresh={initializa} />}>
         <Input value={name} onChange={onNameChange} placeholder="请输入模板名称" allowClear />
         <Table

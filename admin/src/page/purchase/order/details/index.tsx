@@ -7,11 +7,12 @@ import BasicInfo from './components/BasicInfo';
 import { getPirchaseOrderDetails } from '@/api/purchase';
 import { useParams, useSearchParams } from 'react-router-dom';
 
+import type { TypeCommon } from '@/interface/common';
 import type { TypePurchaseOrder } from '@/interface/purchase/order';
 
 const { TabPane } = Tabs;
 
-interface TypePurchaseOrderRouteParam extends Pick<TypePurchaseOrder.DTO, 'id'> { }
+interface TypePurchaseOrderRouteParam extends Partial<TypeCommon.DatabaseMainParameter<string>> { }
 
 export interface TypePurchaseOrderDetailsDisplayProps {
   data?: TypePurchaseOrder.DTO;
@@ -25,7 +26,7 @@ const PurchaseOrderDetails = () => {
   const { id } = useParams<TypePurchaseOrderRouteParam>();
 
   const { value, loading } = useGetDetails(async () => {
-    return await getPirchaseOrderDetails({ id: id! });
+    return await getPirchaseOrderDetails({ id: parseInt(id!) });
   }, [id]);
 
   const [query, setQuery] = useSearchParams({ activeKey: '1' },);

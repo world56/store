@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { Modal } from "@/layout/PopUp";
+import { filterServiceToForm } from '../utils';
 import { Form, Input, message, Select } from "antd";
 import { useActions, useGetDetails, useStore } from "@/hooks";
 import { FormHideKey, FormValueCheck } from "@/components/Form";
@@ -27,11 +28,11 @@ const EditDep: React.FC<TypeEditDepProps> = ({ id, visible, onClose }) => {
   const actions = useActions();
 
   const { category } = useStore();
-  const [form] = Form.useForm<TypeSystemDepartment.DTO>();
+  const [form] = Form.useForm<TypeSystemDepartment.EditDTO>();
 
   const { loading } = useGetDetails(async () => {
     const data = await getDepartmentDetails({ id: id! });
-    data && form.setFieldsValue(data);
+    data && form.setFieldsValue(filterServiceToForm(data));
   }, [id, form]);
 
   useGetDetails(async () => {

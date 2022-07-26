@@ -17,9 +17,9 @@ export namespace ENUM_WAREHOUSE {
   }
 
   /**
-   * @name WAREHOUSING_TYPE 入库类型
+   * @name WAREHOUSING_TYPE 待入库类型
    * @param PURCHASE 采购入库
-   * @param 售后入库
+   * @param AFTER_SALES 售后入库
    */
   export enum WAREHOUSING_TYPE {
     PURCHASE,

@@ -19,7 +19,7 @@ export class SpecTemplateService {
     const where = {
       status,
       name: { contains: name },
-      parameter: parameterId ? { some: { id: parameterId } } : undefined,
+      parameter: { some: { id: parameterId } },
     };
     const [count, list] = await Promise.all([
       this.PrismaService.productSpec.count({ where }),

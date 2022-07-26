@@ -39,8 +39,8 @@ export class PermissionService {
       ${where}`);
   }
 
-  async getDetails(where: PrimaryKeyDTO) {
-    return await this.PrismaService.permission.findUnique({ where });
+  getDetails(where: PrimaryKeyDTO) {
+    return this.PrismaService.permission.findUnique({ where });
   }
 
   async findSonTreeList(id: number) {
@@ -57,23 +57,21 @@ export class PermissionService {
     return [id, ...list.map((v) => v.id)];
   }
 
-  async checkRepeat(OR: PermissionCheckRepeat, throwError?: boolean) {
+  checkRepeat(OR: PermissionCheckRepeat, throwError?: boolean) {
     const { id, name, code } = OR;
-    return await this.PrismaService.checkFieldsRepeat(
+    return this.PrismaService.checkFieldsRepeat(
       'permission',
       { id, name, code },
       throwError,
     );
   }
 
-  async insert(data: PermissionDTO) {
-    await this.checkRepeat(data, true);
-    return await this.PrismaService.permission.create({ data });
+  insert(data: PermissionDTO) {
+    return this.PrismaService.permission.create({ data });
   }
 
   async update(data: PermissionDTO) {
     const { id, ...other } = data;
-    await this.checkRepeat(data, true);
     await this.PrismaService.$transaction(async (prisma) => {
       other.parentId = other.parentId ? other.parentId : null;
       const [prev] = await Promise.all([
@@ -97,16 +95,19 @@ export class PermissionService {
   }
 
   async delete(where: PrimaryKeyDTO) {
-    const relation = await this.PrismaService.permission.findFirst({
-      where: { parentId: where.id },
-    });
+    const [relation, realtionRole] = await Promise.all([
+      this.PrismaService.permission.findFirst({
+        where: { parentId: where.id },
+      }),
+      this.PrismaService.permission.findFirst({
+        where,
+        include: { roles: true },
+      }),
+    ]);
     if (relation) {
       throw new PreconditionFailedException('存在层级关联关系，无法删除');
     }
-    const realtionRole = await this.PrismaService.relRolePermission.findFirst({
-      where: { permissionId: where.id },
-    });
-    if (realtionRole) {
+    if (realtionRole.roles.length) {
       throw new PreconditionFailedException('与角色存在关联关系，无法删除');
     }
     return this.PrismaService.permission.delete({ where });

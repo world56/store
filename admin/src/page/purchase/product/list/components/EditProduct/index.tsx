@@ -1,8 +1,3 @@
-import {
-  insertSupplierProduct,
-  updateSupplierProduct,
-  getSupplierProductDetails,
-} from '@/api/purchase';
 import BasicInfo from './BasicInfo';
 import { Drawer } from "@/layout/PopUp";
 import { useGetDetails } from '@/hooks';
@@ -10,8 +5,10 @@ import { serverToForm } from '../../utils';
 import Uploads from '@/components/Uploads';
 import styles from '../../index.module.sass';
 import { useCallback, useState } from 'react';
+import { filterFormError } from '@/utils/filter';
 import { WarningOutlined } from '@ant-design/icons';
 import { Form, Tabs, notification, message } from "antd";
+import { insertSupplierProduct, updateSupplierProduct, getSupplierProductDetails } from '@/api/purchase';
 
 import type { TypeCommon } from "@/interface/common";
 import type { TypeSupplierProductPageProps } from '../../';
@@ -24,6 +21,7 @@ export interface TypeEditProductProps
   visible: boolean;
   onClose(): void;
 };
+
 
 /**
  * @name EditProduct 编辑产品
@@ -40,11 +38,15 @@ const EditProduct: React.FC<TypeEditProductProps> = ({ id, visible, supplierId, 
   }, [id, form]);
 
   async function onSumbit() {
-    const values = await form.validateFields();
-    if (id) await updateSupplierProduct(values);
-    else await insertSupplierProduct(values);
-    message.success('操作成功')
-    onCancel();
+    try {
+      const values = await form.validateFields();
+      if (id) await updateSupplierProduct(values);
+      else await insertSupplierProduct(values);
+      message.success('操作成功')
+      onCancel();
+    } catch (e) {
+      filterFormError(e, 'pictures') && setActiveKey('2');
+    }
   };
 
   function onCancel() {
@@ -79,7 +81,7 @@ const EditProduct: React.FC<TypeEditProductProps> = ({ id, visible, supplierId, 
             <BasicInfo id={id} supplierId={supplierId} form={form} />
           </Tabs.TabPane>
           <Tabs.TabPane key='2' tab='产品实拍' forceRender>
-            <Form.Item name='pictures'>
+            <Form.Item name='pictures' rules={[{ required: true }]}>
               <Uploads verifyFormat={verifyFormat} />
             </Form.Item>
           </Tabs.TabPane>

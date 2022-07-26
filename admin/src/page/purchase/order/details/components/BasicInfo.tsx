@@ -1,7 +1,7 @@
 import { toTime } from '@/utils';
 import Status from '@/layout/Status';
+import { Link } from 'react-router-dom';
 import { Card, Descriptions } from 'antd';
-import { NavLink } from 'react-router-dom';
 
 import { ENUM_PURCHASE } from '@/enum/purchase';
 
@@ -22,9 +22,9 @@ const BasicInfo: React.FC<TypePurchaseOrderDetailsDisplayProps> = ({ data }) => 
         <Descriptions bordered column={1}>
           <Item label="订单号">{data?.id}</Item>
           <Item label="供应商名称">
-            <NavLink to={`/purchase/supplierDetails/${data?.supplier?.id}`}>
+            <Link to={`/purchase/supplierDetails/${data?.supplier?.id}`}>
               {data?.supplier?.name}
-            </NavLink>
+            </Link>
           </Item>
           <Item label="创建人">{data?.creator?.name}</Item>
           <Item label="创建时间">{toTime(data?.createTime)}</Item>

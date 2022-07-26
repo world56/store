@@ -61,7 +61,8 @@ const Product: React.FC<TypeSupplierProductPageProps> = ({ supplierId }) => {
   };
 
   function skipDetails(val: TypeSupplierProduct.DTO) {
-    navigate(`/purchase/supplierProductDetails/${val.id}`);
+    const jump = supplierId ? window.open : navigate;
+    jump(`/purchase/supplierProductDetails/${val.id}`);
   };
 
   const query = useMemo(() => [
@@ -77,14 +78,14 @@ const Product: React.FC<TypeSupplierProductPageProps> = ({ supplierId }) => {
       label: '状态',
       type: Search.ENUM.COMP_TYPE.SELECT,
       list: category?.STATUS?.LIST,
-      hide: () => supplierId
+      hide: () => Boolean(supplierId)
     },
     {
       name: 'supplierId',
       label: '供应商',
       type: Search.ENUM.COMP_TYPE.SELECT,
       list: category?.PURCHASE_SUPPLIER?.LIST,
-      hide: () => supplierId
+      hide: () => Boolean(supplierId)
     },
     {
       name: 'categoryId',
@@ -95,21 +96,22 @@ const Product: React.FC<TypeSupplierProductPageProps> = ({ supplierId }) => {
   ], [category, supplierId]);
 
   const columns = [
-    { key: 'name', dataIndex: 'name', title: '商品名称' },
     {
-      key: 'brand',
+      key: 'name',
+      title: '商品名称',
+      render: (row: TypeSupplierProduct.DTO) => <Btn onClick={() => skipDetails(row)}>{row.name}</Btn>
+    },
+    {
       dataIndex: 'brand',
       title: '品牌',
       render: (row: TypeSupplierProduct.DTO['brand']) => row.name
     },
     {
-      key: 'status',
       dataIndex: 'status',
       title: '状态',
       render: (status: ENUM_COMMON.STATUS) => <Status status={status} />
     },
     {
-      key: 'category',
       dataIndex: 'category',
       title: '类型',
       render: (row: TypeSupplierProduct.DTO['category']) => <Categorys.Tag list={row} />

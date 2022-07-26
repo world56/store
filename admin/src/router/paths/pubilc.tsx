@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import privateRoutes from './private';
-import Authentication from '../component/Authentication';
+import LoaderWhiteList from '../loader/WhiteList'
+import LoaderAuthentication from '../loader/Authentication';
 
 import type { TypeRoute } from '@/interface/route';
 
@@ -8,12 +9,13 @@ export default [
   {
     id: 'login',
     path: "/login",
+    loader: LoaderWhiteList,
     element: lazy(() => import("@/page/basics/login"))
   },
   {
     id: 'index',
     path: '/',
-    loader: Authentication,
+    loader: LoaderAuthentication,
     element: lazy(() => import('@/components/Entrance')),
     children: privateRoutes,
   },

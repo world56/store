@@ -1,6 +1,6 @@
 import { CommonDTO } from '../common/common.dto';
 import { ApiProperty, PickType } from '@nestjs/swagger';
-import { IsInt, IsDate, IsEnum, IsString, IsOptional } from 'class-validator';
+import { IsInt, IsEnum, IsString, IsOptional } from 'class-validator';
 
 import { ENUM_SYSTEM } from '@/enum/system';
 
@@ -13,6 +13,14 @@ export class AdminUserDTO extends PickType(CommonDTO, [
   'status',
   'remark',
 ] as const) {
+  /**
+   * @param avatar 用户头像
+   */
+  @ApiProperty({ description: '用户头像' })
+  @IsOptional()
+  @IsString()
+  avatar?: string;
+
   /**
    * @param account 登陆账号
    */
@@ -57,9 +65,7 @@ export class AdminUserDTO extends PickType(CommonDTO, [
   /**
    * @param email 电子邮箱
    */
-  @ApiProperty({
-    description: '电子邮箱地址',
-  })
+  @ApiProperty({ description: '电子邮箱地址' })
   @IsOptional()
   @IsString()
   email?: string;
@@ -67,20 +73,15 @@ export class AdminUserDTO extends PickType(CommonDTO, [
   /**
    * @param roles 关联的角色
    */
-  @ApiProperty({
-    description: '选择的角色',
-  })
+  @ApiProperty({ description: '选择的角色' })
   @IsOptional()
   @IsInt({ each: true })
   roles: number[];
 
-
   /**
    * @param deps 关联的部门id
    */
-   @ApiProperty({
-    description: '选择的角色',
-  })
+  @ApiProperty({ description: '选择的角色' })
   @IsOptional()
   @IsInt({ each: true })
   deps: number[];
@@ -89,19 +90,9 @@ export class AdminUserDTO extends PickType(CommonDTO, [
    * @param isSuper 是否为超级管理员
    * @description 0:非超管 1：“超管
    */
-  @ApiProperty({
-    description: '是否为超级管理员',
-    enum: ENUM_SYSTEM.SUPER_ADMIN,
-  })
+  @ApiProperty({ description: '是否为超级管理员' })
   @IsInt()
   @IsOptional()
   @IsEnum(ENUM_SYSTEM.SUPER_ADMIN)
   isSuper?: number;
-
-  /**
-   * @param createTime 创建时间
-   */
-  @IsDate()
-  @IsOptional()
-  createTime?: Date;
 }

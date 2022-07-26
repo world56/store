@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { AdminUserDTO } from '@/dto/system/admin-user.dto';
 import { PurchaseOrderDTO } from '@/dto/purchase/order.dto';
 import { UtilsService } from '@/common/utils/utils.service';
-import { PrimaryKeyStringDTO } from '@/dto/common/common.dto';
 import { PrismaService } from '@/common/prisma/prisma.service';
 import { PurchaseOrderQueryListDTO } from './dto/purchase-order-query-list.dto';
 
@@ -26,14 +26,7 @@ export class OrderService {
   }
 
   async getList(query: PurchaseOrderQueryListDTO) {
-    const { skip, take, id, creatorId, time } = query;
-    const where = {
-      id,
-      creatorId,
-      createTime: time
-        ? { gte: new Date(time[0]), lt: new Date(time[1]) }
-        : undefined,
-    };
+    const { skip, take, ...where } = query;
     const [count, list] = await Promise.all([
       this.PrismaService.purchaseOrder.count({ where }),
       this.PrismaService.purchaseOrder.findMany({
@@ -63,7 +56,7 @@ export class OrderService {
   // }
   // async updateLogistics(query: PurchaseOrderLogInsertDTO, user: AdminUserDTO) {}
 
-  getDetails(body: PrimaryKeyStringDTO) {
+  getDetails(body: PrimaryKeyDTO) {
     const { id } = body;
     return this.PrismaService.purchaseOrder.findUnique({
       where: { id },

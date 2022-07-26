@@ -40,10 +40,7 @@ const SupplierList = () => {
   const [statusParam, setStatusParam] = useState<TypeEditStatusInfo>();
   const [edit, setEdit] = useState<TypeEditSupplierInfo>({ visible: false });
 
-  const { data, run, loading } = useRequest(getPurchaseSupplierList, {
-    manual: true,
-    debounceWait: 200
-  });
+  const { data, run, loading } = useRequest(getPurchaseSupplierList, { manual: true, debounceWait: 200 });
 
   const pagination = usePageTurning(data?.count);
   const { pageSize, currentPage } = pagination;
@@ -89,7 +86,11 @@ const SupplierList = () => {
   ], [PURCHASE_PRODUCT_TYPE, STATUS]);
 
   const columns = [
-    { key: 'name', dataIndex: 'name', title: '供应商名称' },
+    {
+      key: 'name',
+      title: '供应商名称',
+      render: (row: TypePurchaseSupplier.DTO) => <Btn onClick={() => onSkip(row)}>{row.name}</Btn>
+    },
     {
       key: 'category',
       dataIndex: 'category',
@@ -107,11 +108,11 @@ const SupplierList = () => {
     {
       key: DB_PRIMARY_KEY,
       title: '操作',
-      render: (val: TypePurchaseSupplier.DTO) => (
+      render: (row: TypePurchaseSupplier.DTO) => (
         <>
-          <Btn onClick={() => onSkip(val)} >详情</Btn>
-          <Btn onClick={() => onEdit(val)} >编辑</Btn>
-          <StatusChange status={val.status} onClick={() => changeStatus(val)} />
+          <Btn onClick={() => onSkip(row)} >详情</Btn>
+          <Btn onClick={() => onEdit(row)} >编辑</Btn>
+          <StatusChange status={row.status} onClick={() => changeStatus(row)} />
         </>
       )
     }

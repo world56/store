@@ -1,5 +1,5 @@
 import { Table } from "antd";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { PreviewPicture } from '@/components/Details';
 import { OrderPriceQuantity } from "@/components/Details";
 
@@ -13,7 +13,7 @@ const columns = [
     title: '产品名称',
     dataIndex: 'product',
     render: (row: TypeSupplierProduct.DTO) => (
-      <NavLink to={`/purchase/supplierProductDetails/${row.id}`}>{row.name}</NavLink>
+      <Link to={`/purchase/supplierProductDetails/${row.id}`}>{row.name}</Link>
     )
   },
   { title: '品牌', dataIndex: ['product', 'brand', 'name'] },
@@ -29,7 +29,7 @@ const columns = [
  */
 const Products: React.FC<TypePurchaseOrderDetailsDisplayProps> = ({ data }) => (
   <>
-    <OrderPriceQuantity total={data?.total} price={data?.totalPrice} />
+    <OrderPriceQuantity total={data?.total} price={(data?.totalPrice || 0) / 100} />
     <Table
       columns={columns}
       pagination={false}

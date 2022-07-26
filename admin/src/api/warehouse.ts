@@ -74,3 +74,17 @@ export function removeWarehousePosition(
     data,
   });
 }
+
+/**
+ * --------------------- 待入库 ----------------------
+ */
+
+/**
+ * @name getWarehousingList 获取待入库列表
+ */
+export function getWarehousingList(params: any) {
+  return request("warehouse/warehousing/list", {
+    method: ENUM_HTTP.REQUEST_MODE.GET,
+    params,
+  });
+}

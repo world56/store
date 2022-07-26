@@ -1,8 +1,10 @@
+import { forwardRef } from 'react';
 import SelectProduct from './Select';
 import ProductBatchAdd from './Batch';
 import styles from './index.module.sass';
 import { Button, Popconfirm } from "antd";
 
+import type { TypeSelectProductSelectKey } from './Select';
 import type { TypeSupplierProduct } from "@/interface/purchase/product";
 
 export type TypeProductDTO = Pick<TypeSupplierProduct.DTO, 'id' | 'name' | 'pictures' | 'spec'>;
@@ -23,7 +25,10 @@ export interface TypeQueryProductProps<T = TypeProductDTO> {
   flex?: 'right' | 'left';
 };
 
-interface QueryProductComponentsProps extends React.FC<TypeQueryProductProps> {
+interface QueryProductComponentsProps extends React.ForwardRefRenderFunction<
+  TypeSelectProductSelectKey,
+  TypeQueryProductProps
+> {
   Select: typeof SelectProduct;
   Batch: typeof ProductBatchAdd;
 };
@@ -36,9 +41,9 @@ const QueryProduct: QueryProductComponentsProps = ({
   onReset,
   flex: justifyContent = 'right',
   ...restProps
-}) => (
+}, ref) => (
   <div className={styles.func} style={{ justifyContent }}>
-    <SelectProduct {...restProps} width={width} />
+    <SelectProduct {...restProps} width={width} ref={ref} />
     <ProductBatchAdd {...restProps} />
     <Popconfirm onConfirm={onReset} title='确定操作？'>
       <Button danger>重置</Button>
@@ -49,4 +54,4 @@ const QueryProduct: QueryProductComponentsProps = ({
 QueryProduct.Select = SelectProduct;
 QueryProduct.Batch = ProductBatchAdd;
 
-export default QueryProduct;
+export default forwardRef(QueryProduct);

@@ -1,13 +1,6 @@
-import {
-  Min,
-  IsInt,
-  IsEnum,
-  IsDate,
-  IsString,
-  IsOptional,
-} from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { IsInt, IsEnum, IsString, IsOptional } from 'class-validator';
 
 import { ENUM_COMMON } from '@/enum/common';
 
@@ -24,15 +17,6 @@ export class PrimaryKeyDTO {
   @Type(() => Number)
   @IsInt({ message: '主键ID仅支持INT' })
   id: number;
-}
-
-export class PrimaryKeyStringDTO {
-  /**
-   * @param id PRIMARY KEY Char
-   */
-  @ApiProperty({ description: 'PRIMARY KEY (string)' })
-  @IsString({ message: '主键ID仅支持string' })
-  id: string;
 }
 
 /**
@@ -74,38 +58,12 @@ export class CommonDTO extends PartialType(PrimaryKeyDTO) {
   remark?: string;
 
   /**
-   * @param currentPage 当前页码
+   * @param userId 用户ID
    */
-  @ApiProperty({ description: '当前页码' })
-  @Type(() => Number)
-  @Min(1)
-  @IsInt()
-  currentPage: number;
-
-  /**
-   * @param pageSize 每页条数
-   */
-  @ApiProperty({ description: '每页条数' })
-  @Min(1)
-  @Type(() => Number)
-  @IsInt()
-  pageSize: number;
-
-  /**
-   * @param time 时间范围
-   */
-  @ApiProperty({ description: '时间范围' })
   @Type(() => Number)
   @IsOptional()
-  @IsInt({ each: true })
-  time?: number[];
-
-  /**
-   * @name updateTime 更新时间
-   */
-  @IsDate()
-  @IsOptional()
-  updateTime?: Date;
+  @IsInt()
+  userId?: number;
 
   /**
    * @param ids ID列表

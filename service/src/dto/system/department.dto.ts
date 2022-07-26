@@ -15,14 +15,13 @@ export class DepartmentDTO extends PickType(CommonDTO, [
    */
   @ApiProperty({
     description: '部门名称',
+    required: true,
   })
   @MaxLength(15)
   @IsString()
   name: string;
 
-  @ApiProperty({
-    description: '部门用户',
-  })
+  @ApiProperty({ description: '部门用户' })
   @IsOptional()
   @IsInt({ each: true })
   users: number[];

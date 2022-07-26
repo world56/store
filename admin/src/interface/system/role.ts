@@ -29,6 +29,13 @@ export namespace TypeSystemRole {
    * @param createTime 创建时间
    */
   export interface DTO extends TypeCommon.DTO {
-    permission: string[] | TypeSystemPermission.DTO[];
+    permissions: TypeSystemPermission.DTO[];
+  }
+
+  /**
+   * @name EditDTO 编辑角色
+   */
+  export interface EditDTO extends Omit<DTO, "permissions"> {
+    permissionId: TypeCommon.DatabaseMainParameter["id"][];
   }
 }

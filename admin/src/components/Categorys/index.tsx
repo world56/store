@@ -2,13 +2,13 @@ import Tag from './Tag';
 import CategorySelect from './Select';
 import styles from './index.module.sass';
 import { getCategoryName } from './utils';
-import SpecTemplate from './SpecTemplate';
 import { useCallback, useState } from 'react';
 import { useActions, useStore } from '@/hooks';
 import { Btn, BtnEditDel } from '@/layout/Button';
+import SpecTemplate from './components/SpecTemplate';
 import { Modal, List, Avatar, Button, Empty } from 'antd';
-import EditUnit, { type TypeEditUnitProps } from './Edit';
 import { SyncOutlined, FontSizeOutlined } from '@ant-design/icons';
+import EditUnit, { type TypeEditUnitProps } from './components/Edit';
 
 import { ENUM_STORE } from '@/enum/store';
 
@@ -28,7 +28,7 @@ export interface TypeCategorys extends React.FC<TypeCategoryProps> {
    */
   Select: typeof CategorySelect;
   /**
-   * @name SpecTemplate 产品规格
+   * @name SpecTemplate 产品规格模板（批量选择规格）
    */
   SpecTemplate: typeof SpecTemplate;
 };

@@ -7,6 +7,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import SupplierProductList from "@/page/purchase/product/list";
 
 import type { TypeCommon } from '@/interface/common';
+import SupplierOrder from '../../order/list';
 
 const { TabPane } = Tabs;
 
@@ -43,9 +44,13 @@ const SupplierDetails = () => {
         <TabPane tab="付款账号" key="3">
         </TabPane>
 
-        <TabPane tab="数据分析" key="4" />
+        <TabPane tab="采购记录" key="4">
+          <SupplierOrder supplierId={id} />
+        </TabPane>
 
-        <TabPane tab="跟进日志" key="5">
+        <TabPane tab="数据分析" key="5" />
+
+        <TabPane tab="跟进日志" key="6">
           <Logs id={id} />
         </TabPane>
 

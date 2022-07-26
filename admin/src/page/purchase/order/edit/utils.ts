@@ -1,20 +1,17 @@
-import type { FormListFieldData } from "antd/es/form/FormList";
 import type { TypePurchaseOrder } from "@/interface/purchase/order";
 import type { TypeSupplierProduct } from "@/interface/purchase/product";
-
-export function rowKey(record: FormListFieldData) {
-  return record.name;
-}
 
 /**
  * @name filterDuplicatesProduct 过滤重复项产品
  */
 export function filterDuplicatesProduct(
   adds: TypeSupplierProduct.DTO[],
-  products: TypePurchaseOrder.EditDTO["products"],
+  products: TypePurchaseOrder.EditDTO["products"] = [],
+  supplierId: number,
 ) {
   for (const val of adds) {
     products.push({
+      supplierId,
       productId: val.id,
       name: val.name,
       brand: val.brand.name,

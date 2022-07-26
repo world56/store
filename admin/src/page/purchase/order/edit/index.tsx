@@ -6,8 +6,8 @@ import { Form, message, Spin } from "antd";
 import BasicInfo from "./components/BasicInfo";
 import Statistics from "./components/Statistics";
 import { useActions, useGetDetails } from '@/hooks';
-import { useNavigate, useSearchParams } from "react-router-dom";
 import SupplierProduct from "./components/SupplierProduct";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { getPirchaseOrderDetails, insertPurchaseOrder, updatePurchaseOrder } from "@/api/purchase";
 
 import { ENUM_STORE } from '@/enum/store';
@@ -21,7 +21,8 @@ import type { TypePurchaseOrder } from "@/interface/purchase/order";
 const EditPurchaseOrder = () => {
 
   const [params] = useSearchParams();
-  const id = params.get('id');
+  const id = parseInt(params.get('id')!);
+  const supplierId = parseInt(params.get('supplierId')!);
 
   const actions = useActions();
   const navigate = useNavigate();
@@ -53,6 +54,10 @@ const EditPurchaseOrder = () => {
       ENUM_STORE.CATEGORY.PURCHASE_SUPPLIER
     ]);
   }, [actions]);
+
+  useEffect(() => {
+    !id && supplierId && form.setFieldsValue({ supplierId });
+  }, [id, supplierId, form]);
 
   return (
     <Spin spinning={loading}>

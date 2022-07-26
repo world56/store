@@ -102,7 +102,7 @@ const AdminUser = () => {
       list: STATUS?.LIST,
       type: Search.ENUM.COMP_TYPE.SELECT
     },
-    { name: 'time', label: '注册时间', type: Search.ENUM.COMP_TYPE.TIME_SCOPE },
+    { name: 'createTime', label: '注册时间', type: Search.ENUM.COMP_TYPE.TIME_SCOPE },
   ], [DEPARTMENT, STATUS]);
 
   const columns = [
@@ -114,7 +114,7 @@ const AdminUser = () => {
       render: (key: ENUM_COMMON.STATUS) => <Status status={key} />
     },
     {
-      title: '创建时间',
+      title: '注册时间',
       key: 'createTime',
       dataIndex: 'createTime',
       width: 180,

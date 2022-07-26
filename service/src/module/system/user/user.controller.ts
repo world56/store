@@ -8,20 +8,23 @@ import { AdminUserUpdateDTO } from './dto/admin-user-update.dto';
 import { UserCheckFilesDto } from './dto/admin-user-check-fields.dto';
 import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
 import { AdminUserStatusChangeDto } from './dto/admin-user-status-change.dto';
+import { TimeFramePipe } from '@/pipe/time-frame.pipe';
 
 @ApiTags('后台系统用户')
 @Controller('system/user')
 export class UserController {
   constructor(private readonly UserService: UserService) {}
 
-  @UsePipes(new QueryListPipe())
   @Get('list')
-  getUserList(@Query() query: AdminUserQuery) {
+  getUserList(
+    @Query(new TimeFramePipe(['createTime']), new QueryListPipe())
+    query: AdminUserQuery,
+  ) {
     return this.UserService.getList(query);
   }
-  
+
   @Get('all')
-  getAllUser(){
+  getAllUser() {
     return this.UserService.getAllAdminUserList();
   }
 

@@ -21,7 +21,7 @@ export interface Columns {
   initialValue?: React.Key;
   type: ENUM_SEARCH.COMP_TYPE;
   list?: TypeCommon.DefaultKey[];
-  hide?: (f: FormInstance) => void;
+  hide?: (f: FormInstance) => boolean;
   /**
    * @param props 各类组件props
    * @description 暂不具体定义 参考antd官方文档对各类组件的定义
@@ -109,12 +109,13 @@ const Search: TypeSearchProps = ({
 
   const Columns = useMemo(() => initColumns(columns), [columns]);
 
-  const iniaializa = useMemo(() => Columns.map(v => {
-    const ele = <Col
+  const iniaializa = useMemo(() => Columns.map(v => (
+    <Col
       flex={2}
       key={v.name}
       span={spanSize}
-      style={{ width: '100%' }}>
+      style={{ width: '100%' }}
+      className={v?.hide?.(form) ? 'none' : ''}>
       <Form.Item
         name={v.name}
         label={v.label}
@@ -122,9 +123,8 @@ const Search: TypeSearchProps = ({
         initialValue={v.initialValue}>
         {toComType(v, onSearch, size)}
       </Form.Item>
-    </Col>;
-    return v?.hide?.(form) ? null : ele;
-  }), [form, spanSize, Columns, onSearch, size]);
+    </Col>
+  )), [form, spanSize, Columns, onSearch, size]);
 
   function onClear() {
     form.resetFields();

@@ -31,7 +31,7 @@ const SwitchSupplier: React.FC<TypeSwitchSupplierProps> = ({
       Modal.confirm({
         title: '警告！',
         icon: <ExclamationCircleOutlined />,
-        content: '切换供应商会导致当前已选"产品列表"清空',
+        content: '切换供应商会清空"产品列表"',
         onOk: () => {
           form.setFields([{ name: 'products', value: [] }]);
           onChange?.(e);
