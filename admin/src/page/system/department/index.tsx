@@ -1,24 +1,24 @@
 import { useRequest } from 'ahooks';
-import { useActions, usePageTurning, useStore } from '@/hooks';
 import Search from '@/components/Search';
 import EditDep from './components/EditDep';
 import { BtnEditDel } from '@/layout/Button';
 import { TeamOutlined } from '@ant-design/icons';
+import { useCategorys, usePageTurning } from '@/hooks';
 import { Card, Form, Table, Button, message } from 'antd';
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { getDepartmentList, removeDepartment } from '@/api/system';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { type TypeSystemDepartment } from '@/interface/system/department';
 
 import { DB_PRIMARY_KEY } from '@/config/db';
-import { ENUM_STORE } from '@/enum/store';
+
+const { ENUM_CATEGORY } = useCategorys;
 
 /**
  * @name Department 部门管理
  */
 const Department = () => {
 
-  const actions = useActions();
-  const { category: { ADMIN_USER } } = useStore();
+  const { ADMIN_USER } = useCategorys([ENUM_CATEGORY.ADMIN_USER]);
 
   const [id, setId] = useState<number>();
   const [visible, setVisible] = useState(false);
@@ -76,10 +76,6 @@ const Department = () => {
   useEffect(() => {
     initializa();
   }, [initializa]);
-
-  useEffect(() => {
-    actions.getCategory([ENUM_STORE.CATEGORY.ADMIN_USER]);
-  }, [actions]);
 
   return (
     <Card title='部门'>

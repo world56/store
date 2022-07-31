@@ -7,7 +7,16 @@ import { IntersectionType, PartialType, PickType } from '@nestjs/swagger';
  */
 export class PurchaseOrderQueryListDTO extends IntersectionType(
   PartialType(
-    PickType(PurchaseOrderDTO, ['creatorId', 'supplierId', 'id'] as const),
+    PickType(PurchaseOrderDTO, [
+      'id',
+      'status',
+      'creatorId',
+      'supplierId',
+      'settlement',
+      'shippingMethod',
+      'shippingNoteNumber',
+      'logisticsCompanyId',
+    ] as const),
   ),
   PickType(QueryDTO, ['pageSize', 'currentPage', 'createTime'] as const),
 ) {

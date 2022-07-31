@@ -46,9 +46,9 @@ export namespace TypeSupplierProduct {
   export interface Query<T = TypeCommon.DatabaseMainParameter["id"]>
     extends Pick<DTO, "name" | "status">,
       TypeCommon.PageTurning {
-    supplierId: T;
-    brandId: T;
-    categoryId: T;
+    supplierId?: T;
+    brandId?: T;
+    categoryId?: T;
   }
 
   /**

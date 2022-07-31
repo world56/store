@@ -13,10 +13,9 @@ import {
   IsString,
   IsOptional,
   ValidateNested,
-  IsIn,
 } from 'class-validator';
-import { CommonDTO, PrimaryKeyDTO } from '../common/common.dto';
 import { Transform, Type } from 'class-transformer';
+import { CommonDTO, PrimaryKeyDTO } from '../common/common.dto';
 
 import { ENUM_PURCHASE } from '@/enum/purchase';
 
@@ -56,6 +55,7 @@ export class PurchaseOrderDTO extends IntersectionType(
    */
   @ApiProperty({ description: '物流公司ID' })
   @IsOptional()
+  @Type(() => Number)
   @IsNumber()
   logisticsCompanyId?: number;
 
@@ -111,7 +111,7 @@ export class PruchaseOrderProductDetailsDTO extends IntersectionType(
   unitPrice: number;
 
   /**
-   * @param specId 规格ID *
+   * @param specId 规格ID
    */
   @ApiProperty({ description: '规格ID' })
   @Type(() => Number)
@@ -119,7 +119,7 @@ export class PruchaseOrderProductDetailsDTO extends IntersectionType(
   specId: number;
 
   /**
-   * @param quantity 采购数量 *
+   * @param quantity 采购数量
    */
   @ApiProperty({ description: '采购数量' })
   @Type(() => Number)
@@ -127,7 +127,7 @@ export class PruchaseOrderProductDetailsDTO extends IntersectionType(
   quantity: number;
 
   /**
-   * @param productId 产品ID *
+   * @param productId 产品ID
    */
   @ApiProperty({ description: '供应产品ID' })
   @Type(() => Number)

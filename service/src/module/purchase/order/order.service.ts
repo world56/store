@@ -5,6 +5,7 @@ import { PurchaseOrderDTO } from '@/dto/purchase/order.dto';
 import { UtilsService } from '@/common/utils/utils.service';
 import { PrismaService } from '@/common/prisma/prisma.service';
 import { PurchaseOrderQueryListDTO } from './dto/purchase-order-query-list.dto';
+import { ENUM_WAREHOUSE } from '@/enum/warehouse';
 
 @Injectable()
 export class OrderService {
@@ -93,7 +94,16 @@ export class OrderService {
         ...data,
         total,
         totalPrice,
+        no: `NO${new Date().valueOf()}`,
         products: { createMany: { data: products } },
+        warehousing: {
+          create: {
+            no: `NO${new Date().valueOf()}`,
+            creator: { connect: { id: user.id } },
+            status: ENUM_WAREHOUSE.WAREHOUSING_STATUS.AWAIT,
+            type: ENUM_WAREHOUSE.WAREHOUSING_TYPE.PURCHASE,
+          },
+        },
       },
     });
   }

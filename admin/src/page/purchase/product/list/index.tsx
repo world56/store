@@ -6,32 +6,35 @@ import { useNavigate } from "react-router-dom";
 import Categorys from "@/components/Categorys";
 import { Button, Card, Form, Table } from "antd";
 import EditProduct from "./components/EditProduct";
+import { useCategorys, usePageTurning } from "@/hooks";
 import { CodeSandboxOutlined } from '@ant-design/icons';
 import { getSupplierProductList } from "@/api/purchase";
-import { useActions, usePageTurning, useStore } from "@/hooks";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { ENUM_STORE } from "@/enum/store";
 import { ENUM_COMMON } from "@/enum/common";
 import { DB_PRIMARY_KEY } from "@/config/db";
 
-import type { TypeCommon } from '@/interface/common';
 import type { TypeEditProductProps } from './components/EditProduct';
 import type { TypeSupplierProduct } from "@/interface/purchase/product";
 
 type TypeEditProductParam = Omit<TypeEditProductProps, 'onClose'>;
 
-export interface TypeSupplierProductPageProps {
-  supplierId?: TypeCommon.DatabaseMainParameter['id'];
-};
+export interface TypeSupplierProductPageProps extends Pick<TypeSupplierProduct.Query, 'supplierId'> { };
+
+const { ENUM_CATEGORY } = useCategorys;
 
 /**
  * @name Product 采购供应产品库
  */
 const Product: React.FC<TypeSupplierProductPageProps> = ({ supplierId }) => {
 
-  const actions = useActions();
-  const { category } = useStore();
+  const category = useCategorys([
+    ENUM_CATEGORY.SPEC,
+    ENUM_CATEGORY.PRODUCT_BRAND,
+    ENUM_CATEGORY.WAREHOUSE_UNIT,
+    ENUM_CATEGORY.PURCHASE_SUPPLIER,
+    ENUM_CATEGORY.PURCHASE_PRODUCT_TYPE
+  ]);
 
   const navigate = useNavigate();
 
@@ -132,16 +135,6 @@ const Product: React.FC<TypeSupplierProductPageProps> = ({ supplierId }) => {
   useEffect(() => {
     initializa();
   }, [initializa]);
-
-  useEffect(() => {
-    actions.getCategory([
-      ENUM_STORE.CATEGORY.SPEC,
-      ENUM_STORE.CATEGORY.PRODUCT_BRAND,
-      ENUM_STORE.CATEGORY.WAREHOUSE_UNIT,
-      ENUM_STORE.CATEGORY.PURCHASE_SUPPLIER,
-      ENUM_STORE.CATEGORY.PURCHASE_PRODUCT_TYPE
-    ]);
-  }, [actions]);
 
   return (
     <Card title={supplierId ? '产品列表' : '供应产品库'}>

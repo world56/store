@@ -3,6 +3,7 @@ import { ENUM_HTTP } from "@/enum/http";
 
 import type { TypeCommon } from "@/interface/common";
 import type { TypeWarehousePosition } from "@/interface/warehouse/position";
+import type { TypeWarehouseWarehousing } from "@/interface/warehouse/warehousing";
 
 /**
  * --------------------- 仓位编排 ----------------------
@@ -82,9 +83,25 @@ export function removeWarehousePosition(
 /**
  * @name getWarehousingList 获取待入库列表
  */
-export function getWarehousingList(params: any) {
-  return request("warehouse/warehousing/list", {
-    method: ENUM_HTTP.REQUEST_MODE.GET,
-    params,
-  });
+export function getWarehousingList(params: TypeWarehouseWarehousing.Query) {
+  return request<TypeCommon.ServiceReturn<TypeWarehouseWarehousing.DTO>>(
+    "warehouse/warehousing/list",
+    {
+      method: ENUM_HTTP.REQUEST_MODE.GET,
+      params,
+    },
+  );
+}
+
+/**
+ * @name getWarehousingInfo 获取入库基本信息
+ */
+export function getWarehousingInfo(data: TypeCommon.DatabaseMainParameter) {
+  return request<TypeWarehouseWarehousing.DTO>(
+    "warehouse/warehousing/details",
+    {
+      method: ENUM_HTTP.REQUEST_MODE.POST,
+      data,
+    },
+  );
 }

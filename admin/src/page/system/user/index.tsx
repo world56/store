@@ -1,17 +1,16 @@
-import { toTime } from '@/utils';
 import { useRequest } from 'ahooks';
 import Status from '@/layout/Status';
+import { toTime } from '@/utils/format';
 import Search from '@/components/Search';
 import { Btn, StatusChange } from '@/layout/Button';
 import EditUserInfo from '@/components/EditUserInfo';
+import { useCategorys, usePageTurning } from '@/hooks';
 import { UsergroupAddOutlined } from '@ant-design/icons';
-import { useActions, usePageTurning, useStore } from '@/hooks';
 import { Card, Form, Table, Button, Modal, message } from 'antd';
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { ExclamationCircleOutlined, SmileOutlined } from '@ant-design/icons';
 import { getUserList, freezeAdminUser, resetAdminUserPwd } from '@/api/system';
 
-import { ENUM_STORE } from '@/enum/store';
 import { ENUM_COMMON } from '@/enum/common';
 import { ENUM_SYSTEM } from '@/enum/system';
 import { DB_PRIMARY_KEY } from '@/config/db';
@@ -22,13 +21,17 @@ interface TypeQueryUserList extends TypeSystemUser.QueryList {
   time?: number[];
 };
 
+const { ENUM_CATEGORY } = useCategorys;
+
 /**
  * @name AdminUser 系统用户管理
  */
 const AdminUser = () => {
 
-  const actions = useActions();
-  const { category: { DEPARTMENT, STATUS } } = useStore();
+  const { DEPARTMENT, STATUS } = useCategorys([
+    ENUM_CATEGORY.ROLE,
+    ENUM_CATEGORY.DEPARTMENT
+  ]);
 
   const [search] = Form.useForm<TypeQueryUserList>();
 
@@ -131,13 +134,6 @@ const AdminUser = () => {
       )
     }
   ];
-
-  useEffect(() => {
-    actions.getCategory([
-      ENUM_STORE.CATEGORY.ROLE,
-      ENUM_STORE.CATEGORY.DEPARTMENT
-    ]);
-  }, [actions]);
 
   useEffect(() => {
     initializa();

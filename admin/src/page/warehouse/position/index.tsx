@@ -4,23 +4,23 @@ import Search from "@/components/Search";
 import { BtnEditDel } from '@/layout/Button';
 import { InboxOutlined } from '@ant-design/icons';
 import EditPosition from "./components/EditPosition";
+import { usePageTurning, useCategorys } from "@/hooks";
 import { Button, Card, Form, message, Table } from "antd";
-import { useActions, usePageTurning, useStore } from "@/hooks";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { getWarehousePositionList, removeWarehousePosition } from "@/api/warehouse";
 
-import { ENUM_STORE } from "@/enum/store";
 import { DB_PRIMARY_KEY } from '@/config/db';
 
 import type { TypeWarehousePosition } from "@/interface/warehouse/position";
+
+const { ENUM_CATEGORY } = useCategorys;
 
 /**
  * @name Position 库房仓位编排
  */
 const Position = () => {
 
-  const actions = useActions();
-  const { category } = useStore();
+  const category = useCategorys([ENUM_CATEGORY.ADMIN_USER]);
 
   const [search] = Form.useForm<TypeWarehousePosition.Query>();
 
@@ -104,10 +104,6 @@ const Position = () => {
   useEffect(() => {
     initializa();
   }, [initializa]);
-
-  useEffect(() => {
-    actions.getCategory([ENUM_STORE.CATEGORY.ADMIN_USER]);
-  }, [actions]);
 
   return (
     <Card title='仓位管理'>

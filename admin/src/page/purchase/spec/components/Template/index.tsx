@@ -1,18 +1,18 @@
 import { useRequest } from "ahooks";
 import Status from "@/layout/Status";
+import { toTime } from '@/utils/format';
+import { statusReversal } from '@/utils';
 import Search from "@/components/Search";
 import EditTemplate from "./EditTemplate";
 import { Button, Form, Table } from "antd";
 import Categorys from "@/components/Categorys";
-import { statusReversal, toTime } from "@/utils";
 import { Btn, StatusChange } from "@/layout/Button";
 import { SpecParatter } from "@/components/Details";
 import { ScheduleOutlined } from '@ant-design/icons';
-import { usePageTurning, useActions, useStore } from "@/hooks";
+import { usePageTurning, useCategorys } from "@/hooks";
 import { useCallback, useEffect, useState, useMemo } from "react";
 import { changeSpecTemplateStatus, getSpecTemplateList } from "@/api/purchase";
 
-import { ENUM_STORE } from '@/enum/store';
 import { ENUM_COMMON } from "@/enum/common";
 import { DB_PRIMARY_KEY } from "@/config/db";
 
@@ -21,13 +21,14 @@ import type { TypeEditSpecTemplateProps } from './EditTemplate';
 
 type TypeEditSpecTemplate = Omit<TypeEditSpecTemplateProps, 'onClose' | 'spec'>;
 
+const { ENUM_CATEGORY } = useCategorys;
+
 /**
  * @name SpecTemplate 产规格管理
  */
 const SpecTemplate = () => {
 
-  const actions = useActions();
-  const { category: { SPEC } } = useStore();
+  const { SPEC } = useCategorys([ENUM_CATEGORY.SPEC]);
 
   const [search] = Form.useForm<TypeSpec.Query>();
 
@@ -99,10 +100,6 @@ const SpecTemplate = () => {
       )
     },
   ];
-
-  useEffect(() => {
-    actions.getCategory([ENUM_STORE.CATEGORY.SPEC]);
-  }, [actions]);
 
   useEffect(() => {
     iniaializa();

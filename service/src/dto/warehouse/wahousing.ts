@@ -31,6 +31,17 @@ export class WarehousingDTO extends PickType(CommonDTO, ['id']) {
   inspectorId: number;
 
   /**
+   * @param creatorId 创建人
+   */
+  @ApiProperty({
+    description: '创建人ID',
+    required: true,
+  })
+  @Type(() => Number)
+  @IsInt()
+  creatorId: number;
+
+  /**
    * @param type 待入库类型
    */
   @ApiProperty({
@@ -41,4 +52,16 @@ export class WarehousingDTO extends PickType(CommonDTO, ['id']) {
   @Type(() => Number)
   @IsInt()
   type: number;
+
+  /**
+   * @param status 入库状态
+   */
+  @ApiProperty({
+    description: '完成、待入库',
+    required: true,
+  })
+  @IsEnum(ENUM_WAREHOUSE.WAREHOUSING_STATUS)
+  @Type(() => Number)
+  @IsInt()
+  status: number;
 }

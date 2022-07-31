@@ -6,10 +6,10 @@ import {
   checkPermissionField,
 } from '@/api/system';
 import { memo } from 'react';
-import { listToTree } from '@/utils';
 import { Modal } from "@/layout/PopUp";
+import { listToTree } from '@/utils/format';
 import { Switch } from '@/components/Formatting';
-import { useGetDetails, useStore } from '@/hooks';
+import { useGetDetails, useCategorys } from '@/hooks';
 import { Form, Input, Radio, message, TreeSelect } from 'antd';
 import { FormHideKey, FormValueCheck } from '@/components/Form';
 
@@ -43,7 +43,7 @@ const EditPermission: React.FC<TypeEditPermissionProps> = ({
   visible,
 }) => {
 
-  const { category: { PERMISSION_TYPE } } = useStore();
+  const { PERMISSION_TYPE } = useCategorys();
 
   const [form] = Form.useForm<TypeSystemPermission.DTO>();
 

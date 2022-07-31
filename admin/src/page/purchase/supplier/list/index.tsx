@@ -8,11 +8,10 @@ import { AuditOutlined } from '@ant-design/icons';
 import ChangeStatus from "./components/EditStatus";
 import { Btn, StatusChange } from "@/layout/Button";
 import EditSupplier from "./components/EditSupplier";
+import { useCategorys, usePageTurning } from "@/hooks";
 import { getPurchaseSupplierList } from "@/api/purchase";
-import { useActions, usePageTurning, useStore } from "@/hooks";
 import { useCallback, useEffect, useState, useMemo } from "react";
 
-import { ENUM_STORE } from "@/enum/store";
 import { ENUM_COMMON } from "@/enum/common";
 import { DB_PRIMARY_KEY } from "@/config/db";
 
@@ -24,14 +23,16 @@ import type { TypePurchaseSupplier } from "@/interface/purchase/supplier";
 type TypeEditStatusInfo = Omit<TypeEditStatus, 'onClose'>;
 type TypeEditSupplierInfo = Omit<TypeEditSupplierProps, 'onClose'>;
 
+const { ENUM_CATEGORY } = useCategorys;
+
 /**
  * @name SupplierList 供应商列表
  */
 const SupplierList = () => {
 
-  const actions = useActions();
-  const { category } = useStore();
-  const { STATUS, PURCHASE_PRODUCT_TYPE } = category;
+  const { STATUS, PURCHASE_PRODUCT_TYPE } = useCategorys([
+    ENUM_CATEGORY.PURCHASE_PRODUCT_TYPE
+  ]);
 
   const navigate = useNavigate();
 
@@ -121,10 +122,6 @@ const SupplierList = () => {
   useEffect(() => {
     initializa();
   }, [initializa]);
-
-  useEffect(() => {
-    actions.getCategory([ENUM_STORE.CATEGORY.PURCHASE_PRODUCT_TYPE]);
-  }, [actions]);
 
   return (
     <Card title='供应商列表'>

@@ -8,7 +8,7 @@ import type { TypeRoute } from "@/interface/route";
 
 const Entrance = () => {
 
-  const createRouteMaps = useCallback((routes: TypeRoute.Route[]) => (
+  const routeMaps = useCallback((routes: TypeRoute.Route[]) => (
     routes.map(r => <Route
       key={r.id}
       path={r.path!}
@@ -18,14 +18,14 @@ const Entrance = () => {
           <r.element />
         </Suspense>
       }>
-      {r.children?.length ? createRouteMaps(r.children) : null}
+      {r.children?.length ? routeMaps(r.children) : null}
     </Route>)
   ), []);
 
   return (
     <DataBrowserRouter fallbackElement={<Loading />}>
-      <Route errorElement={<ExceptionCapture />}>
-        {createRouteMaps(routes)}
+      <Route errorElement={<ExceptionCapture />} >
+        {routeMaps(routes)}
       </Route>
     </DataBrowserRouter>
   );

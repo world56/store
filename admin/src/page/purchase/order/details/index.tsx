@@ -4,7 +4,7 @@ import { GoBack } from '@/layout/Button';
 import styles from './index.module.sass';
 import Products from './components/Products';
 import BasicInfo from './components/BasicInfo';
-import { getPirchaseOrderDetails } from '@/api/purchase';
+import { getPurchaseOrderDetails } from '@/api/purchase';
 import { useParams, useSearchParams } from 'react-router-dom';
 
 import type { TypeCommon } from '@/interface/common';
@@ -26,7 +26,7 @@ const PurchaseOrderDetails = () => {
   const { id } = useParams<TypePurchaseOrderRouteParam>();
 
   const { value, loading } = useGetDetails(async () => {
-    return await getPirchaseOrderDetails({ id: parseInt(id!) });
+    return await getPurchaseOrderDetails({ id: parseInt(id!) });
   }, [id]);
 
   const [query, setQuery] = useSearchParams({ activeKey: '1' },);

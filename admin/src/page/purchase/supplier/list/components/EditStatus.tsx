@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useStore } from "@/hooks";
+import { useCategorys } from "@/hooks";
 import { rules } from './EditSupplier';
 import { Modal } from "@/layout/PopUp";
 import { statusReversal } from "@/utils";
@@ -20,7 +20,7 @@ const { Option } = Select;
  */
 const EditStatus: React.FC<TypeEditStatus> = ({ id, status, onClose }) => {
 
-  const { category: { STATUS } } = useStore();
+  const { STATUS } = useCategorys();
   const [form] = Form.useForm<TypePurchaseSupplier.EditStatus>();
 
   async function onSumbit() {

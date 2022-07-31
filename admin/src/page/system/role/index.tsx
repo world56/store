@@ -3,11 +3,11 @@ import Status from '@/layout/Status';
 import Search from '@/components/Search';
 import { BtnEditDel } from '@/layout/Button';
 import EditRole from './components/EditRole';
-import { toTime, listToTree } from '@/utils';
+import { toTime, listToTree } from '@/utils/format';
 import { UserAddOutlined } from '@ant-design/icons';
 import { Form, Card, Table, Button, message } from 'antd';
-import { usePageTurning, useGetDetails, useStore } from '@/hooks';
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { usePageTurning, useGetDetails, useCategorys } from '@/hooks';
 import { getRoleList, removeRole, getPermissionList } from '@/api/system';
 
 import { ENUM_COMMON } from '@/enum/common';
@@ -24,7 +24,7 @@ const Role = () => {
   const [id, setId] = useState<number>();
   const [window, setWindow] = useState(false);
 
-  const { category: { STATUS } } = useStore();
+  const { STATUS } = useCategorys();
   const [search] = Form.useForm<TypeSystemRole.QueryList>();
 
   const { data, loading, run } = useRequest(getRoleList, { manual: true });

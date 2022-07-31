@@ -25,4 +25,14 @@ export namespace ENUM_WAREHOUSE {
     PURCHASE,
     AFTER_SALES,
   }
+
+  /**
+   * @name WAREHOUSING_STATUS 入库状态
+   * @param AWAIT 待入库
+   * @param COMPLETE 完成入库
+   */
+  export enum WAREHOUSING_STATUS {
+    AWAIT,
+    COMPLETE,
+  }
 }

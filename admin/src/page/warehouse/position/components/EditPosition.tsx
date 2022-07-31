@@ -5,8 +5,8 @@ import {
   getWarehousePositionDetails,
 } from "@/api/warehouse";
 import { Modal } from "@/layout/PopUp";
-import { useGetDetails, useStore } from "@/hooks";
 import { Form, Input, message, Select } from "antd";
+import { useGetDetails, useCategorys } from "@/hooks";
 import { FormHideKey, FormValueCheck } from "@/components/Form";
 
 import { ENUM_WAREHOUSE } from "@/enum/warehouse";
@@ -29,7 +29,7 @@ const formStyle = { labelCol: { span: 4 }, wrapperCol: { span: 20 } };
 const EditPosition: React.FC<TypeEditPositionProps> = ({ id, visible, onClose }) => {
 
   const [form] = Form.useForm<TypeWarehousePosition.DTO>();
-  const { category: { ADMIN_USER, WAREHOURE_STATUS } } = useStore();
+  const { ADMIN_USER, WAREHOURE_STATUS } = useCategorys();
 
   const { loading } = useGetDetails(async () => {
     const data = await getWarehousePositionDetails({ id: id! });

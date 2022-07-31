@@ -5,6 +5,8 @@ const RouteError = () => {
 
   const error = useRouteError();
 
+  console.log('@-error', error);
+
   if (error) {
     return <Error />
   } else {

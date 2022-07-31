@@ -1,9 +1,9 @@
 import AddLog from "./AddLog";
 import { useState } from "react";
-import { toTime } from "@/utils";
-import { useStore } from "@/hooks";
 import { useRequest } from "ahooks";
 import ExtendInfo from "./ExtendInfo";
+import { useCategorys } from "@/hooks";
+import { toTime } from '@/utils/format';
 import { Table, Select, Button } from "antd";
 import styles from '../../index.module.sass';
 import { SyncOutlined } from '@ant-design/icons';
@@ -25,7 +25,8 @@ export interface TypeLogsProps extends TypeCommon.DatabaseMainParameter { }
  */
 const Logs: React.FC<TypeLogsProps> = ({ id }) => {
 
-  const { category: { SUPPLIER_LOG_TYPE } } = useStore();
+  const { SUPPLIER_LOG_TYPE } = useCategorys();
+
   const [type, setType] = useState<ENUM_PURCHASE.SUPPLIER_LOG_TYPE>();
 
   const { data, loading, run } = useRequest(() => getPurchaseSupplierLogs({ id, type }), {

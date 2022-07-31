@@ -30,6 +30,7 @@ export namespace TypePurchaseOrder {
   export interface DTO<T = TypeCommon.DatabaseMainParameter["id"]>
     extends TypeCommon.DatabaseMainParameter,
       Pick<TypeCommon.DTO, "remark" | "createTime"> {
+    no?: string;
     estimatedDate: Date;
     shippingNoteNumber?: string;
     status: ENUM_PURCHASE.SUPPLIER_ORDER_STATUS;

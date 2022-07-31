@@ -106,7 +106,14 @@ export default [
         id: "warehousing",
         title: "待入库",
         path: "/warehouse/warehousing",
-        element: lazy(() => import("@/page/warehouse/warehousing")),
+        element: lazy(() => import("@/page/warehouse/warehousing/list")),
+      },
+      {
+        id: "warehousingPurchase",
+        title: "采购入库",
+        hide:true,
+        path: "/warehouse/warehousingPurchase/:id",
+        element: lazy(() => import("@/page/warehouse/warehousing/purchase")),
       },
       {
         id: "position",

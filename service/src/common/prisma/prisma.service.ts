@@ -18,6 +18,7 @@ interface TypeCheckFieldsRepeatDTO extends Partial<PrimaryKeyDTO> {
 export class PrismaService extends PrismaClient implements OnModuleInit {
   async onModuleInit() {
     await this.$connect();
+    this.createNO('createNO');
     // this.createMiddleware();
   }
 
@@ -27,14 +28,19 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     });
   }
 
+  /**
+   * @name checkFieldsRepeat 字段查重
+   * @param tableName table
+   * @returns
+   */
   async checkFieldsRepeat<T extends TypeCheckFieldsRepeatDTO>(
-    relName: string,
+    tableName: string,
     DTO: T,
     tips?: boolean,
   ) {
     const { WHERE, ...find } = DTO;
     const OR = Object.entries(find).map(([k, v]) => ({ [k]: v }));
-    const list = await this[relName].findMany({ where: { ...WHERE, OR } });
+    const list = await this[tableName].findMany({ where: { ...WHERE, OR } });
     const [target] = list;
     const isRepeat = !Boolean(
       !target || (list.length === 1 && target?.id === DTO.id),
@@ -44,6 +50,20 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     }
 
     return isRepeat;
+  }
+
+  /**
+   * @name createNO 创建流水号
+   * @param tableName table
+   */
+  async createNO(tableName: string) {
+    const [val]: object[] = await this.$queryRaw`
+    select 
+      concat('NO',date_format(now(),'%Y%m%d') , 
+      lpad(max(right('id' , 4)) + 1 , 4 , 0)) 
+    from 
+      purchase_order; 
+    `;
   }
 
   // private softDeleteTable: ReadonlyArray<string> = ['SupplierProduct'];

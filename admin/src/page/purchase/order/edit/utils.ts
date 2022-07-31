@@ -18,8 +18,6 @@ export function filterDuplicatesProduct(
       unit: val.unit.name,
       spec: val.spec.map((v) => v.specParameter),
       surplus: 1000, // 剩余库存
-      // quantity: 1, // 采购量
-      // unitPrice: 10, // 单价
     });
   }
   return products;
@@ -43,4 +41,14 @@ export function serverToForm(data: TypePurchaseOrder.DTO) {
     });
   }
   return { ...data, products };
+}
+
+/**
+ * @name formToServer 序列化产品顺序
+ */
+export function formToServer(form: TypePurchaseOrder.EditDTO) {
+  return {
+    ...form,
+    products: form.products.sort((l, r) => l.productId! - r.productId!),
+  };
 }

@@ -362,9 +362,9 @@ export function getPurchaseOrderList(params: TypePurchaseOrder.Query) {
 // }
 
 /**
- * @name getPirchaseOrderDetails 获取采购订单详情
+ * @name getPurchaseOrderDetails 获取采购订单详情
  */
-export function getPirchaseOrderDetails(
+export function getPurchaseOrderDetails(
   data: Pick<TypePurchaseOrder.DTO, "id">,
 ) {
   return request<TypePurchaseOrder.DTO>("purchase/order/details", {
