@@ -1,29 +1,37 @@
 import { useRequest } from "ahooks";
+import Link from "@/components/Link";
 import Status from "@/layout/Status";
 import { Btn } from "@/layout/Button";
 import Search from '@/components/Search';
 import { Button, Card, Form, Table } from "antd";
 import { getPurchaseOrderList } from "@/api/purchase";
+import { useCategorys, usePageTurning } from "@/hooks";
 import { OrderedListOutlined } from '@ant-design/icons';
 import { useCallback, useEffect, useMemo } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useActions, usePageTurning, useStore } from "@/hooks";
-import { toTime as render, convertCurrencyUnits } from '@/utils';
+import { toTime as render, monetaryUnit, urlSearchParams } from '@/utils/format';
 
-import { ENUM_STORE } from "@/enum/store";
 import { DB_PRIMARY_KEY } from '@/config/db';
 import { ENUM_PURCHASE } from "@/enum/purchase";
 
 import type { TypePurchaseOrder } from "@/interface/purchase/order";
 
+interface TypeSupplierOrderProps extends Pick<TypePurchaseOrder.Query, 'supplierId'> { }
+
+const { ENUM_CATEGORY } = useCategorys;
+
 /**
  * @name SupplierOrder 采购订单
  */
-const SupplierOrder = () => {
+const SupplierOrder: React.FC<TypeSupplierOrderProps> = ({ supplierId }) => {
 
-  const actions = useActions();
+  const category = useCategorys([
+    ENUM_CATEGORY.ADMIN_USER,
+    ENUM_CATEGORY.PURCHASE_SUPPLIER,
+    ENUM_CATEGORY.LOGISTSCS_COMPANY,
+  ]);
+
   const navigate = useNavigate();
-  const { category } = useStore();
 
   const [search] = Form.useForm<TypePurchaseOrder.Query>();
   const { run, data, loading } = useRequest(getPurchaseOrderList, { manual: true });
@@ -38,15 +46,48 @@ const SupplierOrder = () => {
     run(values);
   }, [run, search, pageSize, currentPage]);
 
-  function onEdit(row?: TypePurchaseOrder.DTO) {
+  const onEdit = useCallback((row?: TypePurchaseOrder.DTO) => {
     navigate({
       pathname: '/purchase/supplierOrderEdit',
-      search: `?id=${row?.id}`,
+      search: urlSearchParams({ supplierId, id: row?.id })
     });
-  };
+  }, [navigate, supplierId]);
 
   const query = useMemo(() => [
-    { name: 'id', label: '订单编号', type: Search.ENUM.COMP_TYPE.INPUT },
+    { name: 'no', label: '流 水 号', type: Search.ENUM.COMP_TYPE.INPUT },
+    { name: 'shippingNoteNumber', label: '运输单号', type: Search.ENUM.COMP_TYPE.INPUT },
+    {
+      name: 'shippingMethod',
+      label: '发货方式',
+      type: Search.ENUM.COMP_TYPE.SELECT,
+      list: category?.SUPPLIER_SHIPPING_METHOD?.LIST
+    },
+    {
+      name: 'logisticsCompanyId',
+      label: '物流公司',
+      type: Search.ENUM.COMP_TYPE.SELECT,
+      list: category?.LOGISTSCS_COMPANY?.LIST
+    },
+    {
+      name: 'supplierId',
+      label: '供 应 商',
+      type: Search.ENUM.COMP_TYPE.SELECT,
+      list: category?.PURCHASE_SUPPLIER?.LIST,
+      hide: () => Boolean(supplierId),
+      initialValue: supplierId,
+    },
+    {
+      name: 'settlement',
+      label: '结算方式',
+      type: Search.ENUM.COMP_TYPE.SELECT,
+      list: category?.SUPPLIER_SETTLEMENT?.LIST
+    },
+    {
+      name: 'status',
+      label: '订单状态',
+      type: Search.ENUM.COMP_TYPE.SELECT,
+      list: category?.SUPPLIER_ORDER_STATUS?.LIST
+    },
     {
       name: 'creatorId',
       label: '创建人',
@@ -54,53 +95,57 @@ const SupplierOrder = () => {
       list: category?.ADMIN_USER?.LIST
     },
     { name: 'createTime', label: '创建时间', type: Search.ENUM.COMP_TYPE.TIME_SCOPE },
-  ], [category]);
+  ], [category, supplierId]);
 
-  const columns = [
-    { key: DB_PRIMARY_KEY, dataIndex: DB_PRIMARY_KEY, title: '订单号', width: 200 },
-    {
-      key: 'supplier',
-      dataIndex: 'supplier',
-      title: '供应商',
-      render: (row: TypePurchaseOrder.DTO['supplier']) => (
-        <NavLink to={`/purchase/supplierDetails/${row.id}`}>{row?.name}</NavLink>
-      )
-    },
-    { key: 'total', dataIndex: 'total', title: '采购量' },
-    { key: 'totalPrice', dataIndex: 'totalPrice', title: '总价（元）', render: convertCurrencyUnits },
-    {
-      key: 'settlement',
-      dataIndex: 'settlement',
-      width: 150,
-      title: '结算方式',
-      render: (type: ENUM_PURCHASE.SUPPLIER_SETTLEMENT) => (
-        <Status status={type} matching={Status.type.PURCHASE_ORDER_SETTLEMENT} />
-      )
-    },
-    {
-      key: 'status',
-      dataIndex: 'status',
-      title: '订单状态',
-      render: (status: ENUM_PURCHASE.SUPPLIER_ORDER_STATUS) => (
-        <Status status={status} matching={Status.type.PURCHASE_ORDER} />
-      )
-    },
-    { key: 'createTime', dataIndex: 'createTime', title: '创建时间', width: 180, render },
-    { key: 'creator', dataIndex: ['creator', 'name'], title: '创建人' },
-    {
-      key: 'status',
-      title: '操作',
-      width: 120,
-      render: (row: TypePurchaseOrder.DTO) => [
-        <NavLink key='1' to={`/purchase/supplierOrderDetails/${row.id}`}>详情</NavLink>,
-        <Btn key='2' onClick={() => onEdit(row)}>编辑</Btn>,
-      ]
-    }
-  ];
-
-  useEffect(() => {
-    actions.getCategory([ENUM_STORE.CATEGORY.ADMIN_USER]);
-  }, [actions]);
+  const columns = useMemo(() => {
+    const list = [
+      {
+        key: DB_PRIMARY_KEY,
+        title: '流水号',
+        render: (row: TypePurchaseOrder.DTO) => (
+          <Link to={`/purchase/supplierOrderDetails/${row.id}`}>{row.no}</Link>
+        )
+      },
+      {
+        dataIndex: 'supplier',
+        title: '供应商',
+        render: (row: TypePurchaseOrder.DTO['supplier']) => (
+          <NavLink to={`/purchase/supplierDetails/${row.id}`}>{row?.name}</NavLink>
+        )
+      },
+      { dataIndex: ['creator', 'name'], title: '创建人' },
+      { dataIndex: 'createTime', title: '创建时间', width: 180, render },
+      { dataIndex: 'total', title: '采购量' },
+      { dataIndex: 'totalPrice', title: '总价（元）', render: monetaryUnit },
+      {
+        dataIndex: 'settlement',
+        width: 150,
+        title: '结算方式',
+        render: (type: ENUM_PURCHASE.SUPPLIER_SETTLEMENT) => (
+          <Status status={type} matching={Status.type.PURCHASE_ORDER_SETTLEMENT} />
+        )
+      },
+      {
+        dataIndex: 'status',
+        title: '订单状态',
+        render: (status: ENUM_PURCHASE.SUPPLIER_ORDER_STATUS) => (
+          <Status status={status} matching={Status.type.PURCHASE_ORDER} />
+        )
+      },
+      {
+        key: 'status',
+        title: '操作',
+        width: 120,
+        render: (row: TypePurchaseOrder.DTO) => (
+          row.status === ENUM_PURCHASE.SUPPLIER_ORDER_STATUS.TO_BE_WAREHOUSED ?
+            <Btn onClick={() => onEdit(row)}>编辑</Btn> :
+            null
+        )
+      }
+    ]
+    supplierId && list.splice(1, 1);
+    return list;
+  }, [supplierId, onEdit]);
 
   useEffect(() => {
     initializa();

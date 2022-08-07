@@ -1,4 +1,4 @@
-import { useStore } from "@/hooks";
+import { useCategorys } from "@/hooks";
 import { useMemo, useState } from "react";
 import { ENUM_PURCHASE } from "@/enum/purchase";
 import { FormHideKey } from "@/components/Form";
@@ -23,7 +23,7 @@ const AddLog: React.FC<TypeAddLogProps> = ({ id, initializa }) => {
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm<TypePurchaseSupplier.LogDTO>();
 
-  const { category: { SUPPLIER_LOG_TYPE } } = useStore();
+  const { SUPPLIER_LOG_TYPE } = useCategorys();
 
   async function onSumbit() {
     const values = await form.validateFields();

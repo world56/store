@@ -22,16 +22,13 @@ export class ProductService {
       where: {
         name: { contains: name },
         status: ENUM_COMMON.STATUS.ACTIVATE,
-        supplier: { some: { id: supplierId } },
+        supplier: { some: { supplierId, deleted: false } },
       },
       include: {
-        pictures: true,
-        brand: true,
         unit: true,
-        spec: {
-          where: { deleted: false },
-          include: { specParameter: true },
-        },
+        brand: true,
+        pictures: true,
+        spec: { where: { deleted: false }, include: { specParameter: true } },
       },
     });
   }
@@ -40,10 +37,10 @@ export class ProductService {
     const { name, branId, supplierId, categoryId, status, skip, take } = query;
     const where = {
       status,
-      name: { contains: name },
       brand: { id: branId },
-      supplier: supplierId ? { some: { id: supplierId } } : undefined,
-      category: categoryId ? { some: { id: categoryId } } : undefined,
+      name: { contains: name },
+      supplier: { some: { supplierId } },
+      category: { some: { id: categoryId } },
     };
     const [count, list] = await Promise.all([
       this.PrismaService.supplierProduct.count({ where }),
@@ -64,17 +61,15 @@ export class ProductService {
         unit: true,
         brand: true,
         category: true,
-        supplier: true,
         pictures: true,
-        spec: {
-          where: { deleted: false },
-          include: { specParameter: true },
-        },
+        supplier: { where: { deleted: false }, include: { supplier: true } },
+        spec: { where: { deleted: false }, include: { specParameter: true } },
       },
     });
     return {
       ...data,
       spec: data.spec.map((v) => v.specParameter),
+      supplier: data.supplier.map((v) => v.supplier),
     };
   }
 
@@ -91,10 +86,12 @@ export class ProductService {
       data: {
         ...data,
         category: { connect: category.map((id) => ({ id })) },
-        supplier: { connect: supplier.map((id) => ({ id })) },
         pictures: { connect: pictures.map((v) => ({ id: v.id })) },
         spec: {
           createMany: { data: spec.map((id) => ({ specParameterId: id })) },
+        },
+        supplier: {
+          createMany: { data: supplier.map((supplierId) => ({ supplierId })) },
         },
       },
     });
@@ -104,12 +101,7 @@ export class ProductService {
     const { id, spec, category, supplier, pictures, ...data } = dto;
     const target = await this.PrismaService.supplierProduct.findUnique({
       where: { id },
-      include: {
-        spec: true,
-        category: true,
-        supplier: true,
-        pictures: true,
-      },
+      include: { spec: true, category: true, supplier: true, pictures: true },
     });
     const [specInsert, specDel] = this.UtilsService.filterArrayRepeatKeys(
       spec,
@@ -124,8 +116,7 @@ export class ProductService {
     const [supplierInsert, supplierDel] =
       this.UtilsService.filterArrayRepeatKeys(
         supplier,
-        target.supplier.map((v) => v.id),
-        true,
+        target.supplier.map((v) => v.supplierId),
       );
     const [picturesInsert, picturesDel] =
       this.UtilsService.filterArrayRepeatKeys(
@@ -149,8 +140,21 @@ export class ProductService {
             }),
           ),
         ),
+        Promise.all(
+          supplierInsert.map((supplierId) =>
+            db.relSupplierOnProduct.upsert({
+              where: { productId_supplierId: { supplierId, productId: id } },
+              create: { supplierId, productId: id },
+              update: { deleted: false },
+            }),
+          ),
+        ),
         db.relPurchaseProductOnSpec.updateMany({
           where: { supplierProductId: id, specParameterId: { in: specDel } },
+          data: { deleted: true },
+        }),
+        db.relSupplierOnProduct.updateMany({
+          where: { productId: id, supplierId: { in: supplierDel } },
           data: { deleted: true },
         }),
         db.supplierProduct.update({
@@ -158,7 +162,6 @@ export class ProductService {
           data: {
             ...data,
             category: { connect: categoryInsert, disconnect: categoryDel },
-            supplier: { connect: supplierInsert, disconnect: supplierDel },
             pictures: { connect: picturesInsert, disconnect: picturesDel },
           },
         }),

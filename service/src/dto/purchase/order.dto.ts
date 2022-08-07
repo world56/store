@@ -15,64 +15,15 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
-import { CommonDTO, PrimaryKeyStringDTO } from '../common/common.dto';
+import { CommonDTO, PrimaryKeyDTO } from '../common/common.dto';
 
 import { ENUM_PURCHASE } from '@/enum/purchase';
-
-/**
- * @name PruchaseOrderProductDetailsDTO 采购订单
- */
-export class PruchaseOrderProductDetailsDTO extends PickType(CommonDTO, [
-  'id',
-  'remark',
-] as const) {
-  /**
-   * @param unitPrice 采购单价
-   */
-  @ApiProperty({ description: '采购单价' })
-  @Transform(({ value }) => Number(value))
-  @IsNumber()
-  unitPrice: number;
-
-  /**
-   * @param specId 规格ID *
-   */
-  @ApiProperty({ description: '规格ID' })
-  @Type(() => Number)
-  @IsInt()
-  specId: number;
-
-  /**
-   * @param quantity 采购数量 *
-   */
-  @ApiProperty({ description: '采购数量' })
-  @Type(() => Number)
-  @IsInt()
-  quantity: number;
-
-  /**
-   * @param productId 产品ID *
-   */
-  @ApiProperty({ description: '供应产品ID' })
-  @Type(() => Number)
-  @IsInt()
-  productId: number;
-
-  /**
-   * @param productOrderId 采购订单ID
-   */
-  @ApiProperty({ description: '采购订单ID' })
-  @Type(() => Number)
-  @IsOptional()
-  @IsInt()
-  productOrderId: number;
-}
 
 /**
  * @name PurchaseOrderDTO 采购订单DTO
  */
 export class PurchaseOrderDTO extends IntersectionType(
-  PartialType(PrimaryKeyStringDTO),
+  PartialType(PrimaryKeyDTO),
   PickType(CommonDTO, ['status', 'remark'] as const),
 ) {
   /**
@@ -104,6 +55,7 @@ export class PurchaseOrderDTO extends IntersectionType(
    */
   @ApiProperty({ description: '物流公司ID' })
   @IsOptional()
+  @Type(() => Number)
   @IsNumber()
   logisticsCompanyId?: number;
 
@@ -136,5 +88,58 @@ export class PurchaseOrderDTO extends IntersectionType(
   /**
    * @param creatorId 创建人ID
    */
+  @ApiProperty({ description: '创建人ID' })
+  @Type(() => Number)
+  @IsOptional()
+  @IsInt()
   creatorId: number;
+}
+
+/**
+ * @name PruchaseOrderProductDetailsDTO 采购产品DTO
+ */
+export class PruchaseOrderProductDetailsDTO extends IntersectionType(
+  PickType(CommonDTO, ['id', 'remark'] as const),
+  PickType(PurchaseOrderDTO, ['supplierId'] as const),
+) {
+  /**
+   * @param unitPrice 采购单价
+   */
+  @ApiProperty({ description: '采购单价' })
+  @Transform(({ value }) => Number(value))
+  @IsNumber()
+  unitPrice: number;
+
+  /**
+   * @param specId 规格ID
+   */
+  @ApiProperty({ description: '规格ID' })
+  @Type(() => Number)
+  @IsInt()
+  specId: number;
+
+  /**
+   * @param quantity 采购数量
+   */
+  @ApiProperty({ description: '采购数量' })
+  @Type(() => Number)
+  @IsInt()
+  quantity: number;
+
+  /**
+   * @param productId 产品ID
+   */
+  @ApiProperty({ description: '供应产品ID' })
+  @Type(() => Number)
+  @IsInt()
+  productId: number;
+
+  /**
+   * @param productOrderId 采购订单ID
+   */
+  @ApiProperty({ description: '采购订单ID' })
+  @Type(() => Number)
+  @IsOptional()
+  @IsInt()
+  productOrderId: number;
 }

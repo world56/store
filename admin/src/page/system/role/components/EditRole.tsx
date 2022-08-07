@@ -12,6 +12,7 @@ import { CONFIG_ANTD_COMP } from '@/config/format';
 import type { TypeCommon } from '@/interface/common';
 import type { TypeSystemRole } from '@/interface/system/role';
 import type { TypeSystemPermission } from '@/interface/system/permission';
+import { serviceToForm } from '../utils';
 
 interface TypeEditRoleProps extends Partial<TypeCommon.DatabaseMainParameter> {
   /** @param visible 是否开启编辑弹窗 */
@@ -35,11 +36,11 @@ const EditRole: React.FC<TypeEditRoleProps> = ({
   permissionTree
 }) => {
 
-  const [form] = Form.useForm<TypeSystemRole.DTO>();
+  const [form] = Form.useForm<TypeSystemRole.EditDTO>();
 
   const { loading } = useGetDetails(async () => {
     const info = await getRoleDetails({ id: id! });
-    info && form.setFieldsValue(info);
+    info && form.setFieldsValue(serviceToForm(info));
   }, [id]);
 
   async function onSumbit() {

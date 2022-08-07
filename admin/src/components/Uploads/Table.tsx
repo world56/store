@@ -1,7 +1,7 @@
-import { toTime } from '@/utils';
 import { useStore } from "@/hooks";
 import { message, Table } from "antd";
 import { Btn } from "@/layout/Button";
+import { toTime } from '@/utils/format';
 import { removeFiles } from '@/api/common';
 import { STATIC_RESOURCE } from '@/config/request';
 

@@ -1,6 +1,6 @@
-import { toTime } from '@/utils';
 import Status from '@/layout/Status';
 import { useGetDetails } from '@/hooks';
+import { toTime } from '@/utils/format';
 import Uploads from '@/components/Uploads';
 import Categorys from '@/components/Categorys';
 import { Card, Descriptions, message } from "antd";

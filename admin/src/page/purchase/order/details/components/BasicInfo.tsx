@@ -1,7 +1,7 @@
-import { toTime } from '@/utils';
 import Status from '@/layout/Status';
+import { Link } from 'react-router-dom';
+import { toTime } from '@/utils/format';
 import { Card, Descriptions } from 'antd';
-import { NavLink } from 'react-router-dom';
 
 import { ENUM_PURCHASE } from '@/enum/purchase';
 
@@ -20,11 +20,11 @@ const BasicInfo: React.FC<TypePurchaseOrderDetailsDisplayProps> = ({ data }) => 
     <>
       <Card title='基本信息'>
         <Descriptions bordered column={1}>
-          <Item label="订单号">{data?.id}</Item>
+          <Item label="流水号">{data?.no}</Item>
           <Item label="供应商名称">
-            <NavLink to={`/purchase/supplierDetails/${data?.supplier?.id}`}>
+            <Link to={`/purchase/supplierDetails/${data?.supplier?.id}`}>
               {data?.supplier?.name}
-            </NavLink>
+            </Link>
           </Item>
           <Item label="创建人">{data?.creator?.name}</Item>
           <Item label="创建时间">{toTime(data?.createTime)}</Item>
@@ -51,7 +51,7 @@ const BasicInfo: React.FC<TypePurchaseOrderDetailsDisplayProps> = ({ data }) => 
       {isLgistics ? < Card title='物流（快递）信息'>
         <Descriptions bordered >
           <Item label="委托公司">{data?.logisticsCompany?.name}</Item>
-          <Item label="业务单号">{data?.shippingNoteNumber}</Item>
+          <Item label="业务单号">{data?.shippingNoteNumber || '-'}</Item>
         </Descriptions>
       </Card> : null}
 

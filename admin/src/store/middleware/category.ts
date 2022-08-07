@@ -1,7 +1,7 @@
 import * as API from "@/api/enum";
-import { toDictionaries } from "@/utils";
 import ActionsMiddleware from "./actions";
 import { ActiosnsCategory } from "../category";
+import { toDictionaries } from "@/utils/format";
 import { all, call, put, takeEvery } from "redux-saga/effects";
 
 import { ENUM_STORE } from "@/enum/store";

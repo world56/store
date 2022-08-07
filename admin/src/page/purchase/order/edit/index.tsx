@@ -1,14 +1,14 @@
 import { useEffect } from 'react';
-import { serverToForm } from './utils';
 import { GoBack } from "@/layout/Button";
 import styles from './index.module.sass';
 import { Form, message, Spin } from "antd";
 import BasicInfo from "./components/BasicInfo";
 import Statistics from "./components/Statistics";
 import { useActions, useGetDetails } from '@/hooks';
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { formToServer, serverToForm } from './utils';
 import SupplierProduct from "./components/SupplierProduct";
-import { getPirchaseOrderDetails, insertPurchaseOrder, updatePurchaseOrder } from "@/api/purchase";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { getPurchaseOrderDetails, insertPurchaseOrder, updatePurchaseOrder } from "@/api/purchase";
 
 import { ENUM_STORE } from '@/enum/store';
 
@@ -21,7 +21,8 @@ import type { TypePurchaseOrder } from "@/interface/purchase/order";
 const EditPurchaseOrder = () => {
 
   const [params] = useSearchParams();
-  const id = params.get('id');
+  const id = parseInt(params.get('id')!);
+  const supplierId = parseInt(params.get('supplierId')!);
 
   const actions = useActions();
   const navigate = useNavigate();
@@ -29,15 +30,16 @@ const EditPurchaseOrder = () => {
   const [form] = Form.useForm<TypePurchaseOrder.EditDTO>();
 
   const { loading } = useGetDetails(async () => {
-    const data = await getPirchaseOrderDetails({ id: id! });
+    const data = await getPurchaseOrderDetails({ id: id! });
     const values = serverToForm(data);
     form.setFieldsValue(values);
   }, [id, form]);
 
   async function onSumbit() {
     const values = await form.validateFields();
-    if (id) await updatePurchaseOrder(values);
-    else await insertPurchaseOrder(values);
+    const data = formToServer(values);
+    if (id) await updatePurchaseOrder(data);
+    else await insertPurchaseOrder(data);
     form.resetFields();
     message.success(id ? '操作成功' : '操作成功，可继续新建采购单');
     id && navigate(-1);
@@ -53,6 +55,10 @@ const EditPurchaseOrder = () => {
       ENUM_STORE.CATEGORY.PURCHASE_SUPPLIER
     ]);
   }, [actions]);
+
+  useEffect(() => {
+    !id && supplierId && form.setFieldsValue({ supplierId });
+  }, [id, supplierId, form]);
 
   return (
     <Spin spinning={loading}>

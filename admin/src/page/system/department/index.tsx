@@ -1,22 +1,24 @@
 import { useRequest } from 'ahooks';
-import { usePageTurning } from '@/hooks';
 import Search from '@/components/Search';
 import EditDep from './components/EditDep';
 import { BtnEditDel } from '@/layout/Button';
 import { TeamOutlined } from '@ant-design/icons';
+import { useCategorys, usePageTurning } from '@/hooks';
 import { Card, Form, Table, Button, message } from 'antd';
-import { memo, useCallback, useEffect, useState } from 'react';
 import { getDepartmentList, removeDepartment } from '@/api/system';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { type TypeSystemDepartment } from '@/interface/system/department';
 
 import { DB_PRIMARY_KEY } from '@/config/db';
 
-const query = [{ name: 'name', label: '部门名称', type: Search.ENUM.COMP_TYPE.INPUT }]
+const { ENUM_CATEGORY } = useCategorys;
 
 /**
- * @name Department 部门管理 department
+ * @name Department 部门管理
  */
 const Department = () => {
+
+  const { ADMIN_USER } = useCategorys([ENUM_CATEGORY.ADMIN_USER]);
 
   const [id, setId] = useState<number>();
   const [visible, setVisible] = useState(false);
@@ -48,7 +50,17 @@ const Department = () => {
     await removeDepartment({ id });
     message.success('操作成功');
     initializa();
-  }
+  };
+
+  const query = useMemo(() => [
+    { name: 'name', label: '部门名称', type: Search.ENUM.COMP_TYPE.INPUT },
+    {
+      name: 'userId',
+      label: '部门员工',
+      type: Search.ENUM.COMP_TYPE.SELECT,
+      list: ADMIN_USER?.LIST
+    }
+  ], [ADMIN_USER]);
 
   const columns = [
     { title: '部门名称', key: 'name', dataIndex: 'name' },

@@ -6,7 +6,6 @@ import { ActionsUser } from "@/store/user";
 
 import { ENUM_HTTP } from "@/enum/http";
 import { TOKEN_KEY } from "@/config/user";
-import { CONSTANT_HTTP } from "@/constant/http";
 import { REQUEST_TIMEOUT, REQUEST_PREFIX } from "@/config/request";
 
 import type { Response } from "express";
@@ -56,10 +55,8 @@ request.interceptors.response.use(
         case ENUM_HTTP.HTTP_CODE.UNAUTHORIZED:
           Cookies.remove(TOKEN_KEY);
           store.dispatch(ActionsUser.delUserInfo());
-          message.warn(
-            data?.message ||
-              CONSTANT_HTTP.HTTP_CODE_MESSAGE[ENUM_HTTP.HTTP_CODE.UNAUTHORIZED],
-          );
+          message.warn(data?.message || "账户异常");
+          setTimeout(() => window.location.reload());
           return Promise.reject();
         default:
           message.error(data.message);

@@ -3,11 +3,11 @@ import Status from '@/layout/Status';
 import Search from '@/components/Search';
 import { BtnEditDel } from '@/layout/Button';
 import EditRole from './components/EditRole';
-import { toTime, listToTree } from '@/utils';
+import { toTime, listToTree } from '@/utils/format';
 import { UserAddOutlined } from '@ant-design/icons';
 import { Form, Card, Table, Button, message } from 'antd';
-import { usePageTurning, useGetDetails, useStore } from '@/hooks';
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import { usePageTurning, useGetDetails, useCategorys } from '@/hooks';
 import { getRoleList, removeRole, getPermissionList } from '@/api/system';
 
 import { ENUM_COMMON } from '@/enum/common';
@@ -16,7 +16,6 @@ import { CONFIG_ANTD_COMP } from '@/config/format';
 
 import type { TypeSystemRole } from '@/interface/system/role';
 
-
 /**
  * @name Role 角色管理
  */
@@ -24,10 +23,11 @@ const Role = () => {
 
   const [id, setId] = useState<number>();
   const [window, setWindow] = useState(false);
-  const { category: { STATUS } } = useStore()
+
+  const { STATUS } = useCategorys();
+  const [search] = Form.useForm<TypeSystemRole.QueryList>();
 
   const { data, loading, run } = useRequest(getRoleList, { manual: true });
-  const [search] = Form.useForm<TypeSystemRole.QueryList>();
 
   const pagination = usePageTurning(data?.count);
   const { pageSize, currentPage } = pagination;
@@ -61,7 +61,11 @@ const Role = () => {
 
   const query = useMemo(() => (
     [
-      { name: 'name', label: '角色名称', type: Search.ENUM.COMP_TYPE.INPUT },
+      {
+        name: 'name',
+        label: '角色名称',
+        type: Search.ENUM.COMP_TYPE.INPUT
+      },
       {
         name: 'permissionId',
         label: '权限关联',
@@ -79,16 +83,13 @@ const Role = () => {
   ), [STATUS, permissionTree]);
 
   const columns = [
-    { title: '角色名称', key: 'name', dataIndex: 'name' },
+    { title: '角色名称', dataIndex: 'name' },
     {
-      title: '状态', key: 'status', dataIndex: 'status',
+      title: '状态', dataIndex: 'status',
       render: (key: ENUM_COMMON.STATUS) => <Status status={key} />
     },
-    {
-      title: '创建时间', key: 'createTime',
-      dataIndex: 'createTime', render: toTime
-    },
-    { title: '描述', key: 'remark', dataIndex: 'remark' },
+    { title: '创建时间', dataIndex: 'createTime', render: toTime },
+    { title: '描述', dataIndex: 'remark' },
     {
       title: '操作',
       key: DB_PRIMARY_KEY,

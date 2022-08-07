@@ -5,7 +5,7 @@ import {
   IntersectionType,
 } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { CommonDTO } from '@/dto/common/common.dto';
+import { QueryDTO } from '@/dto/common/query.dto';
 import { IsInt, IsOptional } from 'class-validator';
 import { SupplierProductDTO } from '@/dto/purchase/product.dto';
 
@@ -13,7 +13,7 @@ import { SupplierProductDTO } from '@/dto/purchase/product.dto';
  * @name SupplierProductQueryListDTO 查询供应产品列表
  */
 export class SupplierProductQueryListDTO extends IntersectionType(
-  PickType(CommonDTO, ['pageSize', 'currentPage'] as const),
+  PickType(QueryDTO, ['pageSize', 'currentPage'] as const),
   PartialType(PickType(SupplierProductDTO, ['name', 'status'] as const)),
 ) {
   /**

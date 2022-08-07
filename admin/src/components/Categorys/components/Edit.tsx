@@ -1,8 +1,8 @@
-import { FormHideKey } from '../Form';
 import { Modal } from "@/layout/PopUp";
 import { useGetDetails } from '@/hooks';
-import styles from './index.module.sass';
-import { getCategoryName } from './utils';
+import { FormHideKey } from '../../Form';
+import styles from '../index.module.sass';
+import { getCategoryName } from '../utils';
 import { Form, Input, message } from 'antd';
 import { DB_PRIMARY_KEY } from '@/config/db';
 import { insertCategory, updateCategory, getCategoryDetails, checkCategoryFields } from '@/api/enum';

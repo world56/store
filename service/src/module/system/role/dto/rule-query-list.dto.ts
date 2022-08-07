@@ -6,7 +6,7 @@ import {
 } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { RoleDto } from '@/dto/system/role.dto';
-import { CommonDTO } from '@/dto/common/common.dto';
+import { QueryDTO } from '@/dto/common/query.dto';
 import { IsInt, IsOptional } from 'class-validator';
 
 /**
@@ -14,7 +14,7 @@ import { IsInt, IsOptional } from 'class-validator';
  */
 export class RuleQueryListDTO extends IntersectionType(
   PartialType(PickType(RoleDto, ['name', 'status'] as const)),
-  PickType(CommonDTO, ['currentPage', 'pageSize'] as const),
+  PickType(QueryDTO, ['currentPage', 'pageSize'] as const),
 ) {
   @ApiProperty({
     description: '有关联关系的权限id',
@@ -27,5 +27,3 @@ export class RuleQueryListDTO extends IntersectionType(
   take: number;
   skip: number;
 }
-
-const letters = new Set();

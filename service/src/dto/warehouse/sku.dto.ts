@@ -5,7 +5,7 @@ import { ApiProperty, PickType } from '@nestjs/swagger';
 /**
  * @name WarehouseSkuDTO 库房存储单位
  */
-export class WarehouseSkuDTO extends PickType(CommonDTO, ['id', 'updateTime']) {
+export class WarehouseSkuDTO extends PickType(CommonDTO, ['id']) {
   /**
    * @param sku 库存数量
    */

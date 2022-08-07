@@ -1,9 +1,6 @@
-import { useEffect } from 'react';
-import { useActions, useStore } from '@/hooks';
+import { Form, Input } from "antd";
 import Categorys from "@/components/Categorys";
 import { Switch } from '@/components/Formatting';
-import { Form, Input, Select, Tooltip } from "antd";
-import { filterOptionTooltip } from '@/utils/filter';
 import { checkSupplierProductFields } from '@/api/purchase';
 import { FormHideKey, FormValueCheck } from "@/components/Form";
 
@@ -19,25 +16,15 @@ interface TypeProductBasicInfo extends Pick<TypeEditProductProps, 'id' | 'suppli
   form: FormInstance<TypeSupplierProduct.EditDTO>;
 };
 
-const { Option } = Select;
-const selectShow = { keepParent: false };
-
 /**
  * @name BasicInfo 产品基本信息
  */
 const BasicInfo: React.FC<TypeProductBasicInfo> = ({ id, supplierId, form }) => {
 
-  const actions = useActions();
-  const { category: { SPEC, PURCHASE_SUPPLIER } } = useStore();
-
   function onSelectSpec(ids: TypeCommon.DatabaseMainParameter['id'][]) {
     const spec: number[] = form.getFieldValue('spec') || [];
     form.setFieldsValue({ spec: [...new Set([...spec, ...ids])] });
   };
-
-  useEffect(() => {
-    actions.getCategory([ENUM_STORE.CATEGORY.SPEC]);
-  }, [actions]);
 
   return (
     <>
@@ -88,36 +75,19 @@ const BasicInfo: React.FC<TypeProductBasicInfo> = ({ id, supplierId, form }) => 
           <span>产品规格</span>
           <Categorys.SpecTemplate onChange={onSelectSpec} />
         </>}>
-        <Select
-          showSearch
-          allowClear
-          mode='multiple'
-          optionFilterProp="children"
-          placeholder='请选择该模板关联的规格'
-          filterOption={filterOptionTooltip}>
-          {SPEC?.LIST?.map(v => <Option key={v.id} value={v.id} >
-            <Tooltip title={v.remark} destroyTooltipOnHide={selectShow}>
-              <p>{v.name}</p>
-            </Tooltip>
-          </Option>)}
-        </Select>
+        <Categorys.Select mode='multiple' type={ENUM_STORE.CATEGORY.SPEC} />
       </Form.Item>
 
       <Form.Item
         label='供应商'
         name='supplier'
-        tooltip='产品可以有多个供应商参与供应'
+        tooltip='单个产品可由多个供应商参与供应'
         rules={[{ required: true, message: '请选择供应商' }]}
         initialValue={supplierId ? [supplierId] : undefined}>
-        <Select
-          showSearch
-          allowClear
+        <Categorys.Select
           mode='multiple'
-          optionFilterProp="children"
           disabled={Boolean(supplierId)}
-          placeholder='请选择该模板关联的规格'>
-          {PURCHASE_SUPPLIER?.LIST?.map(v => <Option key={v.id} value={v.id}>{v.name}</Option>)}
-        </Select>
+          type={ENUM_STORE.CATEGORY.PURCHASE_SUPPLIER} />
       </Form.Item>
 
       <Form.Item

@@ -4,7 +4,9 @@ $error: #ff4d4f
 $main: #1890ff
 $defaultBorderColor: rgba(0,0,0,.06)
 
-// 表单操作功能
+/*
+ * @name formItemFunc 弹窗、抽屉表单编辑按钮
+ */
 @mixin formItemFunc($list)
   @each $var in $list
     :global(.ant-form-item):nth-child(#{$var})
@@ -12,19 +14,22 @@ $defaultBorderColor: rgba(0,0,0,.06)
         label
           position: relative
           width: 100%
-
           :nth-child(2)
             right: 0
             position: absolute
   @content
 
-// 抽屉对话框宽度
+/*
+ * @name drawerWidth 抽屉宽度
+ */
 @mixin drawerWidth($width)
   :global(.ant-drawer-content-wrapper)
     width: #{$width}px !important
   @content
 
-// 抽屉对话框-Tabs
+/*
+ * @name drawerTabs 抽屉对话框 Tabs居中
+ */
 .drawerTabs
   :global(.ant-drawer-body)
     padding: 0 0 20px 0
@@ -34,12 +39,16 @@ $defaultBorderColor: rgba(0,0,0,.06)
     display: flex
     justify-content: center
 
-// 表格编辑-Form-Table
+/*
+ * @name formTable 编辑Table样式
+ */
 .formTable
   :global(.ant-form-item)
     margin: 0
 
-// 详情页面-Tabs
+/*
+ * @name detailsTabs 详情页面 Tabs排列
+ */
 .detailsTabs
   :global(.ant-tabs-nav)
     margin-bottom: 10px
@@ -76,3 +85,13 @@ $defaultBorderColor: rgba(0,0,0,.06)
               width: 280px
             & > :global(.ant-descriptions-item-content):nth-child(4)
               width: 250px
+
+/*
+ * @name Descriptions Title长度
+ */
+@mixin info($width)
+  :global(.ant-descriptions-item-label)
+    width: #{$width}px
+    text-align: center
+    font-weight: bold
+  @content

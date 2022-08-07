@@ -33,6 +33,7 @@ export namespace TypeCommon {
   /**
    * @name DTO 公共DTO常用字段
    * @param id 主键
+   * @param no 流水号
    * @param name 名称
    * @param status 状态
    * @param remark 备注
@@ -41,12 +42,13 @@ export namespace TypeCommon {
    * @param createTime 初始化时间
    */
   export interface DTO extends DatabaseMainParameter {
-    status: ENUM_COMMON.STATUS;
+    no: string;
     remark?: string;
     name: string;
     parentId: number;
     createTime: string;
     category: Category[];
+    status: ENUM_COMMON.STATUS;
   }
 
   /**

@@ -27,12 +27,26 @@ export namespace CONSTANT_WAREHOURE {
    */
   export const WAREHOUSING_TYPE = {
     OBJ: {
-      [ENUM_WAREHOUSE.WAREHOUSING_TYPE.PURCHASE]: "采购",
-      [ENUM_WAREHOUSE.WAREHOUSING_TYPE.AFTER_SALES]: "售后",
+      [ENUM_WAREHOUSE.WAREHOUSING_TYPE.PURCHASE]: "采购入库",
+      [ENUM_WAREHOUSE.WAREHOUSING_TYPE.AFTER_SALES]: "售后入库",
     },
-    LIST:[
-      { id: ENUM_WAREHOUSE.WAREHOUSING_TYPE.PURCHASE, name: "采购" },
-      { id: ENUM_WAREHOUSE.WAREHOUSING_TYPE.AFTER_SALES, name: "售后" },
-    ]
+    LIST: [
+      { id: ENUM_WAREHOUSE.WAREHOUSING_TYPE.PURCHASE, name: "采购入库" },
+      { id: ENUM_WAREHOUSE.WAREHOUSING_TYPE.AFTER_SALES, name: "售后入库" },
+    ],
+  };
+
+  /**
+   * @name WAREHOUSING_STATUS 入库状态（进度）
+   */
+  export const WAREHOUSING_STATUS = {
+    OBJ: {
+      [ENUM_WAREHOUSE.WAREHOUSING_STATUS.AWAIT]: "等待入库",
+      [ENUM_WAREHOUSE.WAREHOUSING_STATUS.COMPLETE]: "完成",
+    },
+    LIST: [
+      { id: ENUM_WAREHOUSE.WAREHOUSING_STATUS.AWAIT, name: "等待入库" },
+      { id: ENUM_WAREHOUSE.WAREHOUSING_STATUS.COMPLETE, name: "完成" },
+    ],
   };
 }

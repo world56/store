@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { AdminUserDTO } from '@/dto/system/admin-user.dto';
-import { UtilsService } from '@/common/utils/utils.service';
 import { AdminUserQuery } from './dto/admin-user-query.dto';
 import { PrismaService } from '@/common/prisma/prisma.service';
 import { AdminUserUpdateDTO } from './dto/admin-user-update.dto';
@@ -12,44 +11,41 @@ import { AdminUserStatusChangeDto } from './dto/admin-user-status-change.dto';
 import { ENUM_COMMON } from '@/enum/common';
 import { ENUM_SYSTEM } from '@/enum/system';
 
-
 @Injectable()
 export class UserService {
   constructor(
-    private readonly UtilsService: UtilsService,
+    // private readonly UtilsService: UtilsService,
     private readonly PrismaService: PrismaService,
     private readonly EncryptionService: EncryptionService,
   ) {}
 
   async getList(query: AdminUserQuery) {
-    const { name, account, phone, status, skip, take, departmentId, time } =
-      query;
-    let userIds: number[] = [];
-    if (departmentId) {
-      const list = await this.PrismaService.relDepartmentOnAdminUser.findMany({
-        where: { departmentId },
-      });
-      userIds = list.map((v) => v.adminUserId);
-    }
-    const search = {
-      where: {
-        status,
-        name: { contains: name },
-        phone: { contains: phone },
-        account: { contains: account },
-        isSuper: ENUM_SYSTEM.SUPER_ADMIN.NOT_SUPER,
-        id: { in: userIds.length ? userIds : undefined },
-        createTime: time
-          ? { gte: new Date(time[0]), lt: new Date(time[1]) }
-          : undefined,
-      },
+    const {
+      skip,
+      take,
+      name,
+      phone,
+      status,
+      account,
+      departmentId,
+      createTime,
+    } = query;
+    const where = {
+      status,
+      createTime,
+      name: { contains: name },
+      phone: { contains: phone },
+      account: { contains: account },
+      isSuper: ENUM_SYSTEM.SUPER_ADMIN.NOT_SUPER,
+      departments: { some: { id: departmentId } },
     };
     const [count, list] = await Promise.all([
-      this.PrismaService.adminUser.count(search),
+      this.PrismaService.adminUser.count({ where }),
       this.PrismaService.adminUser.findMany({
-        ...search,
+        where,
         skip,
         take,
+        include: { departments: true },
       }),
     ]);
     return { list, count };
@@ -66,23 +62,14 @@ export class UserService {
   }
 
   async getDetails(where: PrimaryKeyDTO) {
-    const relWhere = { adminUserId: where.id };
-    const [user, roles, departments] = await Promise.all([
-      this.PrismaService.adminUser.findUnique({ where }),
-      this.PrismaService.relAdminUserRole.findMany({ where: relWhere }),
-      this.PrismaService.relDepartmentOnAdminUser.findMany({ where: relWhere }),
-    ]);
-    return {
-      ...user,
-      roles: roles.map((v) => v.roleId),
-      deps: departments.map((v) => v.departmentId),
-    };
+    return this.PrismaService.adminUser.findUnique({
+      where,
+      include: { departments: true, roles: true },
+    });
   }
 
-  async checkFields(
-    { id, account, name, phone, email }: UserCheckFilesDto,
-    tips?: boolean,
-  ) {
+  async checkFields(dto: UserCheckFilesDto, tips?: boolean) {
+    const { id, account, name, phone, email } = dto;
     return await this.PrismaService.checkFieldsRepeat(
       'adminUser',
       { id, account, name, phone, email },
@@ -100,94 +87,23 @@ export class UserService {
     return pwd;
   }
 
-  async freezeStatus({ id, status }: AdminUserStatusChangeDto) {
-    await this.PrismaService.adminUser.update({
+  freezeStatus({ id, status }: AdminUserStatusChangeDto) {
+    return this.PrismaService.adminUser.update({
       where: { id },
       data: { status },
     });
-    return true;
   }
 
-  async insert(info: AdminUserDTO) {
-    return await this.PrismaService.$transaction(async (prisma) => {
-      const { roles, deps, ...data } = info;
-      const password = this.EncryptionService.decrypt(data.password);
-      data.password = this.EncryptionService.md5(password);
-      const { id: adminUserId } = await prisma.adminUser.create({ data });
-      if (roles?.length) {
-        await prisma.relAdminUserRole.createMany({
-          data: roles.map((roleId) => ({ roleId, adminUserId })),
-        });
-      }
-      if (deps?.length) {
-        await prisma.relDepartmentOnAdminUser.createMany({
-          data: deps.map((departmentId) => ({ departmentId, adminUserId })),
-        });
-      }
-      return true;
-    });
+  async insert(dto: AdminUserDTO) {
+    const { roles, deps, ...data } = dto;
+    console.log(dto);
+    const password = this.EncryptionService.decrypt(data.password);
+    data.password = this.EncryptionService.md5(password);
+    return this.PrismaService.adminUser.create({ data });
   }
 
-  async update(info: AdminUserUpdateDTO) {
-    return await this.PrismaService.$transaction(async (prisma) => {
-      const { id, deps, roles, ...data } = info;
-      const handle = [];
-      const [relRoles, relDeps] = await Promise.all([
-        prisma.relAdminUserRole.findMany({
-          where: { adminUserId: id },
-        }),
-        prisma.relDepartmentOnAdminUser.findMany({
-          where: { adminUserId: id },
-        }),
-      ]);
-
-      if (roles?.length) {
-        const [roleInsert, roleDel] = this.UtilsService.filterArrayRepeatKeys(
-          roles,
-          relRoles.map((v) => v.roleId),
-        );
-        if (roleInsert.length) {
-          handle.push(
-            prisma.relAdminUserRole.createMany({
-              data: roleInsert.map((roleId) => ({ roleId, adminUserId: id })),
-            }),
-          );
-        }
-        if (roleDel.length) {
-          handle.push(
-            prisma.relAdminUserRole.deleteMany({
-              where: { roleId: { in: roleDel }, adminUserId: id },
-            }),
-          );
-        }
-      }
-      if (deps?.length) {
-        const [depInsert, depDel] = this.UtilsService.filterArrayRepeatKeys(
-          deps,
-          relDeps.map((v) => v.departmentId),
-        );
-        if (depInsert.length) {
-          handle.push(
-            prisma.relDepartmentOnAdminUser.createMany({
-              data: depInsert.map((departmentId) => ({
-                adminUserId: id,
-                departmentId,
-              })),
-            }),
-          );
-        }
-        if (depDel.length) {
-          handle.push(
-            prisma.relDepartmentOnAdminUser.deleteMany({
-              where: { departmentId: { in: depDel }, adminUserId: id },
-            }),
-          );
-        }
-      }
-      handle.length && (await Promise.all(handle));
-      data.remark = data.remark ? data.remark : null;
-      await this.PrismaService.adminUser.update({ where: { id }, data });
-      return true;
-    });
+  update(dto: AdminUserUpdateDTO) {
+    const { id, ...data } = dto;
+    return this.PrismaService.adminUser.update({ where: { id }, data });
   }
 }

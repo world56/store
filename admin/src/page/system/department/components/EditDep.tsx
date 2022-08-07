@@ -1,15 +1,13 @@
 import { memo } from 'react';
 import { Modal } from "@/layout/PopUp";
+import { filterServiceToForm } from '../utils';
 import { Form, Input, message, Select } from "antd";
-import { useActions, useGetDetails, useStore } from "@/hooks";
+import { useGetDetails, useCategorys } from "@/hooks";
 import { FormHideKey, FormValueCheck } from "@/components/Form";
 import { checkDepartmentField, getDepartmentDetails, insertDepartment, updateDepartment } from "@/api/system";
 
-import { ENUM_STORE } from '@/enum/store';
-
 import type { TypeCommon } from "@/interface/common";
 import type { TypeSystemDepartment } from "@/interface/system/department";
-
 
 interface TypeEditDepProps extends Partial<TypeCommon.DatabaseMainParameter> {
   visible: boolean;
@@ -19,24 +17,21 @@ interface TypeEditDepProps extends Partial<TypeCommon.DatabaseMainParameter> {
 const { Option } = Select;
 const formStyle = { labelCol: { span: 4 }, wrapperCol: { span: 20 } };
 
+const { ENUM_CATEGORY } = useCategorys;
+
 /**
  * @name EditDep 编辑部门
  */
 const EditDep: React.FC<TypeEditDepProps> = ({ id, visible, onClose }) => {
 
-  const actions = useActions();
+  const category = useCategorys([ENUM_CATEGORY.ADMIN_USER], [visible]);
 
-  const { category } = useStore();
-  const [form] = Form.useForm<TypeSystemDepartment.DTO>();
+  const [form] = Form.useForm<TypeSystemDepartment.EditDTO>();
 
   const { loading } = useGetDetails(async () => {
     const data = await getDepartmentDetails({ id: id! });
-    data && form.setFieldsValue(data);
+    data && form.setFieldsValue(filterServiceToForm(data));
   }, [id, form]);
-
-  useGetDetails(async () => {
-    return actions.getCategory([ENUM_STORE.CATEGORY.ADMIN_USER]);
-  }, [visible]);
 
   async function onSumbit() {
     const values = await form.validateFields();

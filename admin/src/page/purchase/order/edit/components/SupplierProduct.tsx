@@ -1,11 +1,12 @@
 import { useRequest } from 'ahooks';
 import { Btn } from '@/layout/Button';
 import styles from '../index.module.sass';
+import { useEffect, useRef } from 'react';
 import { QueryProduct } from '@/components/Query';
+import { filterDuplicatesProduct } from '../utils';
 import { filterOptionTooltip } from '@/utils/filter';
 import { querySupplierProduct } from '@/api/purchase';
 import { InputNumber } from '@/components/Formatting';
-import { filterDuplicatesProduct, rowKey } from '../utils';
 import { FormHideKey, ReadOnlytext } from '@/components/Form';
 import { Form, Table, Card, Select, Tooltip, Input, message } from "antd";
 
@@ -14,6 +15,7 @@ import type { RuleObject } from 'rc-field-form/lib/interface';
 import type { FormListFieldData } from 'antd/es/form/FormList';
 import type { TypePurchaseOrder } from '@/interface/purchase/order';
 import type { TypeSupplierProduct } from "@/interface/purchase/product";
+import type { TypeSelectProductSelectKey } from '@/components/Query/Product/Select';
 
 interface TypeSupplierProductProps {
   form: FormInstance<TypePurchaseOrder.EditDTO>;
@@ -28,6 +30,8 @@ const selectShow = { keepParent: false };
  */
 const SupplierProduct: React.FC<TypeSupplierProductProps> = ({ form }) => {
 
+  const RefQuery = useRef<TypeSelectProductSelectKey>(null!);
+
   const { supplierId, products = [] } = form.getFieldsValue();
 
   const { data, run } = useRequest(async (name: string) => {
@@ -36,7 +40,7 @@ const SupplierProduct: React.FC<TypeSupplierProductProps> = ({ form }) => {
 
   function onAddProduct(adds: TypeSupplierProduct.DTO[]) {
     const { products = [] } = form.getFieldsValue();
-    form.setFieldsValue({ products: filterDuplicatesProduct(adds, products) });
+    form.setFieldsValue({ products: filterDuplicatesProduct(adds, products, supplierId) });
   };
 
   function onRemove(field: FormListFieldData) {
@@ -65,6 +69,7 @@ const SupplierProduct: React.FC<TypeSupplierProductProps> = ({ form }) => {
       title: '产品名称',
       render: (field: FormListFieldData) => <>
         <FormHideKey name={[field.name, 'id']} />
+        <FormHideKey name={[field.name, 'supplierId']} />
         <Form.Item name={[field.name, 'name']}>
           <ReadOnlytext title='预览' onClick={() => onPreview(field)} />
         </Form.Item>
@@ -150,10 +155,15 @@ const SupplierProduct: React.FC<TypeSupplierProductProps> = ({ form }) => {
     }
   ];
 
+  useEffect(() => {
+    supplierId && RefQuery.current(undefined);
+  }, [supplierId, RefQuery]);
+
   return (
     <Card title='产品列表' extra={
       <QueryProduct
         list={data}
+        ref={RefQuery}
         onCreate={run}
         onReset={onReset}
         onChange={onAddProduct}
@@ -161,7 +171,7 @@ const SupplierProduct: React.FC<TypeSupplierProductProps> = ({ form }) => {
     }>
       <Form.List name='products' rules={[{ validator }]}>
         {(fields) => <Table
-          rowKey={rowKey}
+          rowKey='name'
           columns={columns}
           pagination={false}
           dataSource={fields}

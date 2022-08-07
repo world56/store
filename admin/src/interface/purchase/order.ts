@@ -28,8 +28,9 @@ export namespace TypePurchaseOrder {
    * @param totalPrice 总价
    */
   export interface DTO<T = TypeCommon.DatabaseMainParameter["id"]>
-    extends TypeCommon.DatabaseMainParameter<string>,
+    extends TypeCommon.DatabaseMainParameter,
       Pick<TypeCommon.DTO, "remark" | "createTime"> {
+    no?: string;
     estimatedDate: Date;
     shippingNoteNumber?: string;
     status: ENUM_PURCHASE.SUPPLIER_ORDER_STATUS;
@@ -44,6 +45,8 @@ export namespace TypePurchaseOrder {
     // logs: Log[];
     total: number;
     totalPrice: number;
+    actualTotal?: number;
+    actualTotalPrice?: number;
   }
 
   /**
@@ -55,13 +58,16 @@ export namespace TypePurchaseOrder {
    * @param productOrderId 采购单号
    * @param product 供应商产品详情
    * @param purchaseOrder 订单详情
+   * @param actualQuantity 实际数量
    */
   export interface ProductDetails
-    extends Pick<TypeCommon.DTO, "id" | "remark">,
+    extends Pick<DTO, "supplierId">,
+      Pick<TypeCommon.DTO, "id" | "remark">,
       Record<"quantity" | "unitPrice", number>,
       Record<"specId" | "productId", TypeCommon.DatabaseMainParameter["id"]> {
     purchaseOrder: DTO;
     productOrderId: string;
+    actualQuantity?: number;
     spec: TypeSpec.SpecParameterDTO;
     product: TypeSupplierProduct.DTO;
   }
@@ -97,7 +103,7 @@ export namespace TypePurchaseOrder {
    * @param creatorId 创建人ID
    */
   export interface Query
-    extends Partial<Pick<DTO, "status">>,
+    extends Partial<Pick<DTO, "status" | "id" | "supplierId">>,
       TypeCommon.PageTurning {
     creatorId?: TypeCommon.DatabaseMainParameter["id"];
   }

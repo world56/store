@@ -2,11 +2,12 @@ import { User } from '@/decorator/user';
 import { ApiTags } from '@nestjs/swagger';
 import { OrderService } from './order.service';
 import { QueryListPipe } from '@/pipe/query-list.pipe';
+import { TimeFramePipe } from '@/pipe/time-frame.pipe';
+import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { AdminUserDTO } from '@/dto/system/admin-user.dto';
 import { PurchaseOrderDTO } from '@/dto/purchase/order.dto';
-import { PrimaryKeyStringDTO } from '@/dto/common/common.dto';
-import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
-import { ConvertCurrencyUnitsPipe } from '@/pipe/convert-currency-units.pipe;';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { ConvertCurrencyUnitsPipe } from '@/pipe/convert-currency-units.pipe';
 import { PurchaseOrderQueryListDTO } from './dto/purchase-order-query-list.dto';
 
 @ApiTags('采购订单')
@@ -15,13 +16,15 @@ export class OrderController {
   public constructor(private readonly OrderService: OrderService) {}
 
   @Get('list')
-  @UsePipes(new QueryListPipe())
-  getList(@Query() query: PurchaseOrderQueryListDTO) {
+  getList(
+    @Query(new QueryListPipe(), new TimeFramePipe(['createTime']))
+    query: PurchaseOrderQueryListDTO,
+  ) {
     return this.OrderService.getList(query);
   }
 
   @Post('details')
-  details(@Body() body: PrimaryKeyStringDTO) {
+  details(@Body() body: PrimaryKeyDTO) {
     return this.OrderService.getDetails(body);
   }
 

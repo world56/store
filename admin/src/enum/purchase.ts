@@ -42,13 +42,11 @@ export namespace ENUM_PURCHASE {
 
   /**
    * @name SUPPLIER_ORDER_STATUS 采购订单状态
-   * @param TO_BE_RECEIVED 待收货
    * @param TO_BE_WAREHOUSED 待入库
    * @param TO_BE_PAID 待付款 （跟付款方式有关系）
    * @param COMPLETE 完成
    */
   export enum SUPPLIER_ORDER_STATUS {
-    TO_BE_RECEIVED,
     TO_BE_WAREHOUSED,
     TO_BE_PAID,
     COMPLETE,

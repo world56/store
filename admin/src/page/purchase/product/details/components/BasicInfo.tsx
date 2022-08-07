@@ -10,7 +10,7 @@ import { DB_PRIMARY_KEY } from '@/config/db';
 import { STATIC_RESOURCE } from '@/config/request';
 
 import type { TypeCommon } from '@/interface/common';
-import { TypePurchaseSupplier } from '@/interface/purchase/supplier';
+import type { TypePurchaseSupplier } from '@/interface/purchase/supplier';
 
 const { Item } = Descriptions;
 

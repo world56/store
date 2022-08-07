@@ -10,6 +10,7 @@ import { SAGA_DEBOUNCE } from "@/config/request";
 
 import type { PayloadAction } from "@reduxjs/toolkit/dist";
 import type { TypeSystemUser } from "@/interface/system/user";
+import { message } from "antd";
 
 type TypeActionsTaskInUserLogin = PayloadAction<
   TypeSystemUser.Login,
@@ -30,7 +31,9 @@ function* taskInGetUserInfo() {
   try {
     const user: TypeSystemUser.DTO = yield getUserInfo();
     yield put(ActionsUser.setUserInfo(user));
-  } catch {}
+  } catch {
+    message.success("获取用户信息失败!");
+  }
 }
 
 export default function* SagaUser() {

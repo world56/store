@@ -1,7 +1,6 @@
-import { useEffect } from 'react';
+import { useCategorys } from '@/hooks';
 import styles from '../index.module.sass';
 import Uploads from '@/components/Uploads';
-import { useActions, useStore } from '@/hooks';
 import Categorys from '@/components/Categorys';
 import { Drawer, Form, Input, InputNumber, Select, Button } from "antd";
 
@@ -14,6 +13,8 @@ export interface TypeEditWarehouseProductProps extends Partial<TypeCommon.Databa
   visible: boolean;
 };
 
+const { ENUM_CATEGORY } = useCategorys;
+
 const { Option } = Select;
 const rules = [{ required: true }];
 
@@ -22,8 +23,11 @@ const rules = [{ required: true }];
  */
 const EditWarehouseProduct: React.FC<TypeEditWarehouseProductProps> = ({ id, visible }) => {
 
-  const actions = useActions();
-  const { category } = useStore();
+  const category = useCategorys([
+    ENUM_CATEGORY.WAREHOUSE_UNIT,
+    ENUM_CATEGORY.WAREHOUSE_POSITION,
+    ENUM_CATEGORY.WAREHOUSE_PRODUCT_TYPE,
+  ]);
 
   const [form] = Form.useForm<TypeWarehouseProduct.DTO>();
 
@@ -31,14 +35,6 @@ const EditWarehouseProduct: React.FC<TypeEditWarehouseProductProps> = ({ id, vis
     const value = await form.validateFields();
     console.log(value);
   };
-
-  useEffect(() => {
-    actions.getCategory([
-      ENUM_STORE.CATEGORY.WAREHOUSE_UNIT,
-      ENUM_STORE.CATEGORY.WAREHOUSE_POSITION,
-      ENUM_STORE.CATEGORY.WAREHOUSE_PRODUCT_TYPE,
-    ]);
-  }, [actions, form]);
 
   return (
     <Drawer

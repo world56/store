@@ -114,7 +114,7 @@ export function getRoleDetails(params: TypeCommon.DatabaseMainParameter) {
 /**
  * @name insertRole 角色管理-新增角色
  */
-export function insertRole(data: TypeSystemRole.DTO) {
+export function insertRole(data: TypeSystemRole.EditDTO) {
   return request("system/role/insert", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,
@@ -124,7 +124,7 @@ export function insertRole(data: TypeSystemRole.DTO) {
 /**
  * @name updateRole 角色管理-更新角色信息
  */
-export function updateRole(data: TypeSystemRole.DTO) {
+export function updateRole(data: TypeSystemRole.EditDTO) {
   return request("system/role/update", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,
@@ -247,7 +247,7 @@ export function checkDepartmentField(params: TypeCommon.FieldsIsRepeatDTO) {
 /**
  * @name insertDepartment 部门管理-新增部门
  */
-export function insertDepartment(data: TypeSystemDepartment.DTO) {
+export function insertDepartment(data: TypeSystemDepartment.EditDTO) {
   return request<TypeCommon.ServiceReturn<TypeSystemDepartment.DTO[]>>(
     "system/department/insert",
     {
@@ -260,7 +260,7 @@ export function insertDepartment(data: TypeSystemDepartment.DTO) {
 /**
  * @name updateDepartment 部门管理-编辑部门
  */
-export function updateDepartment(data: TypeSystemDepartment.DTO) {
+export function updateDepartment(data: TypeSystemDepartment.EditDTO) {
   return request<TypeCommon.ServiceReturn<TypeSystemDepartment.DTO[]>>(
     "system/department/update",
     {
