@@ -45,6 +45,8 @@ export namespace TypePurchaseOrder {
     // logs: Log[];
     total: number;
     totalPrice: number;
+    actualTotal?: number;
+    actualTotalPrice?: number;
   }
 
   /**
@@ -56,6 +58,7 @@ export namespace TypePurchaseOrder {
    * @param productOrderId 采购单号
    * @param product 供应商产品详情
    * @param purchaseOrder 订单详情
+   * @param actualQuantity 实际数量
    */
   export interface ProductDetails
     extends Pick<DTO, "supplierId">,
@@ -64,6 +67,7 @@ export namespace TypePurchaseOrder {
       Record<"specId" | "productId", TypeCommon.DatabaseMainParameter["id"]> {
     purchaseOrder: DTO;
     productOrderId: string;
+    actualQuantity?: number;
     spec: TypeSpec.SpecParameterDTO;
     product: TypeSupplierProduct.DTO;
   }

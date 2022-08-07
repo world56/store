@@ -5,11 +5,6 @@ import { DependencyList, useEffect } from "react";
 
 import { ENUM_STORE } from "@/enum/store";
 
-const ENUM_CATEGORY = {
-  ...ENUM_STORE.CATEGORY,
-  ...ENUM_STORE.CATEGORY_DEFAULT,
-};
-
 /**
  * @name useCategorys 获取类目（枚举）
  */
@@ -32,7 +27,4 @@ export default function useCategorys(
   return category;
 }
 
-/**
- * @name ENUM_CATEGORY 枚举
- */
-useCategorys.ENUM_CATEGORY = ENUM_CATEGORY;
+useCategorys.ENUM_CATEGORY = ENUM_STORE.CATEGORY;

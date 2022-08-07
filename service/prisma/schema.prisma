@@ -304,8 +304,10 @@ model PurchaseOrder {
   supplierId         Int       @map("supplier_id") @db.Int() // 供应商
   logisticsCompanyId Int?      @map("logistics_company_id") @db.Int() // 物流公司
 
-  total      Int // 商品总数
-  totalPrice Int @map("total_price") // 总价格 
+  total            Int // 商品总数
+  totalPrice       BigInt  @map("total_price")
+  actualTotal      Int?    @map("actual_total") // 实际总数
+  actualTotalPrice BigInt? @map("actual_total_price") // 总价格
 
   creator          AdminUser              @relation(fields: [creatorId], references: [id])
   supplier         PurchaseSupplier       @relation(fields: [supplierId], references: [id])
@@ -326,6 +328,7 @@ model PurchaseOrderProduct {
   id             Int     @id() @default(autoincrement())
   quantity       Int     @db.Int() // 采购数量
   unitPrice      BigInt  @map("unit_price") @db.BigInt // 单价 (分)
+  actualQuantity Int?    @map("actual_quantity") @db.Int() // 实际数量
   remark         String? @db.VarChar(255) // 备注
   specId         Int     @map("spec_id") @db.Int() // 规格
   productId      Int     @map("product_id") @db.Int()

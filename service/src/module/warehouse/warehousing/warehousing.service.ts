@@ -29,7 +29,11 @@ export class WarehousingService {
     const userProp = { select: { name: true, id: true } };
     return this.PrismaService.warehousing.findUnique({
       where,
-      include: { creator: userProp, inspector: userProp },
+      include: {
+        creator: userProp,
+        inspector: userProp,
+        order: { include: { supplier: true } },
+      },
     });
   }
 }

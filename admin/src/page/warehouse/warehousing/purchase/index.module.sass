@@ -1,4 +1,13 @@
 @import '@/index.sass'
-  
+
+.layout
+  @extend .detailsTabs
+  & > :global(.ant-card):nth-child(3)
+    :global(.ant-card-body)
+      padding: 0
+
 .basic
-  @include info(150)
+  @include info(180)
+
+.table
+  @extend .formTable

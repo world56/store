@@ -51,7 +51,7 @@ const BasicInfo: React.FC<TypePurchaseOrderDetailsDisplayProps> = ({ data }) => 
       {isLgistics ? < Card title='物流（快递）信息'>
         <Descriptions bordered >
           <Item label="委托公司">{data?.logisticsCompany?.name}</Item>
-          <Item label="业务单号">{data?.shippingNoteNumber}</Item>
+          <Item label="业务单号">{data?.shippingNoteNumber || '-'}</Item>
         </Descriptions>
       </Card> : null}
 

@@ -3,18 +3,16 @@ import Status from "@/layout/Status";
 import { toTime } from "@/utils/format";
 import { Card, Descriptions } from "antd";
 import styles from '../index.module.sass';
-import { useParams } from "react-router-dom";
 import { getWarehousingInfo } from "@/api/warehouse";
+
+import type { TypeWarehousingPurchaseQuery } from '../';
 
 const { Item } = Descriptions;
 
 /**
  * @name BasicInfo 采购单基本信息
  */
-const BasicInfo = () => {
-
-  const params = useParams();
-  const id = parseInt(params.id!);
+const BasicInfo: React.FC<TypeWarehousingPurchaseQuery> = ({ id }) => {
 
   const { data } = useRequest(() => getWarehousingInfo({ id }), { refreshDeps: [id] });
 
@@ -23,7 +21,6 @@ const BasicInfo = () => {
       <Descriptions bordered column={1} className={styles.basic}>
         <Item label="流水号">{data?.no}</Item>
         <Item label="发起时间">{toTime(data?.createTime)}</Item>
-        <Item label="流程发起人">{data?.creator?.name}</Item>
         <Item label="入库清点人">{data?.inspector?.name || '-'}</Item>
         <Item label="入库类型">
           <Status status={data?.type} matching={Status.type.WAREHOUSING_TYPE} />
