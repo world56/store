@@ -1,16 +1,37 @@
-import styles from '../index.module.sass';
-import { Card, Form, Input, Table, Tooltip } from 'antd';
+import Statistics from './Statistics';
+import styles from '../../index.module.sass';
 import { InputNumber } from '@/components/Formatting';
+import { Card, Form, Input, Table, Tooltip } from 'antd';
+import ProductDetails from '@/components/Details/Product';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { FormHideKey, ReadOnlytext } from '@/components/Form';
 
-import type { TypeWarehousingPurchaseQuery } from '../';
+import type { TypeWarehousingPurchaseQuery } from '../../';
 import type { FormListFieldData } from 'antd/es/form/FormList';
+import type { TypePurchaseOrder } from '@/interface/purchase/order';
+import { useCallback, useState } from 'react';
+
+export interface TypeProductConfirmProps
+  extends
+  TypeWarehousingPurchaseQuery,
+  Partial<Pick<TypePurchaseOrder.DTO, 'total'>> { }
 
 /**
- * @name Products 实际入库
+ * @name ProductConfirm 产品确认清单
  */
-const Products: React.FC<TypeWarehousingPurchaseQuery> = (props) => {
+const ProductConfirm: React.FC<TypeProductConfirmProps> = ({ total, form }) => {
+
+  const [productId, setProductId] = useState<number>();
+
+  const toProduct = useCallback((field?: FormListFieldData) => {
+    if (field) {
+      const products = form?.getFieldValue('products');
+      const { id } = products[field.name];
+      setProductId(id);
+    } else {
+      setProductId(undefined);
+    }
+  }, [form]);
 
   const columns = [
     {
@@ -18,7 +39,7 @@ const Products: React.FC<TypeWarehousingPurchaseQuery> = (props) => {
       render: (field: FormListFieldData) => <>
         <FormHideKey name={[field.name, 'id']} />
         <Form.Item name={[field.name, 'name']}>
-          <ReadOnlytext title='预览' />
+          <ReadOnlytext onClick={() => toProduct(field)} title='预览' />
         </Form.Item>
       </>
     },
@@ -88,7 +109,7 @@ const Products: React.FC<TypeWarehousingPurchaseQuery> = (props) => {
 
   return (
     <>
-      <Card title='核对清单' extra={<span>预计到货量：200</span>}>
+      <Card title='核对清单' extra={<Statistics total={total} />}>
         <Form.List name='products'>
           {(fields) => <Table
             rowKey='name'
@@ -105,8 +126,10 @@ const Products: React.FC<TypeWarehousingPurchaseQuery> = (props) => {
         </Form.Item>
       </Card>
 
+      <ProductDetails id={productId} onClose={toProduct} />
+
     </>
   );
 };
 
-export default Products;
+export default ProductConfirm;

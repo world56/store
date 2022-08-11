@@ -327,8 +327,8 @@ model PurchaseOrder {
 model PurchaseOrderProduct {
   id             Int     @id() @default(autoincrement())
   quantity       Int     @db.Int() // 采购数量
-  unitPrice      BigInt  @map("unit_price") @db.BigInt // 单价 (分)
   actualQuantity Int?    @map("actual_quantity") @db.Int() // 实际数量
+  unitPrice      BigInt  @map("unit_price") @db.BigInt // 单价 (分)
   remark         String? @db.VarChar(255) // 备注
   specId         Int     @map("spec_id") @db.Int() // 规格
   productId      Int     @map("product_id") @db.Int()

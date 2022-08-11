@@ -22,20 +22,20 @@ export namespace TypeSupplierProduct {
     brand: T;
     brandId: number;
     unit: T;
-    spec: RelSpecParameterDTO[];
+    spec: TypeSpec.SpecParameterDTO[];
   }
 
   /**
    * @name RelSpecParameterDTO 规格关联DTO
    */
-  export interface RelSpecParameterDTO<
-    T = TypeCommon.DatabaseMainParameter["id"],
-  > {
-    id: T;
-    specParameterId: T;
-    supplierProductId: T;
-    specParameter: TypeSpec.SpecParameterDTO;
-  }
+  // export interface RelSpecParameterDTO<
+  //   T = TypeCommon.DatabaseMainParameter["id"],
+  // > {
+  //   id: T;
+  //   specParameterId: T;
+  //   supplierProductId: T;
+  //   specParameter: TypeSpec.SpecParameterDTO;
+  // }
 
   /**
    * @name Query 查询产品库列表

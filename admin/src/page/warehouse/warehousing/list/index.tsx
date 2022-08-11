@@ -67,7 +67,7 @@ const Warehousing = () => {
       key: DB_PRIMARY_KEY,
       title: '流水号',
       render: (row: TypeWarehouseWarehousing.DTO) => (
-        <Link to={`/warehouse/warehousingPurchase/${row.id}`}>{row.no}</Link>
+        <Link to={`/warehouse/warehousingPurchase/${row.id}/${row.orderId}`}>{row.no}</Link>
       )
     },
     {
@@ -96,7 +96,7 @@ const Warehousing = () => {
       id: 'id',
       title: '操作',
       render: (row: TypeWarehouseWarehousing.DTO) => (
-        <Link to={`/warehouse/warehousingPurchase/${row.id}`}>入库</Link>
+        <Link to={`/warehouse/warehousingPurchase/${row.id}/${row.orderId}`}>入库</Link>
       )
     },
   ];

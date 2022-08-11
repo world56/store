@@ -18,7 +18,7 @@ export function serviceToForm(data: TypePurchaseOrder.DTO) {
   for (const val of data.products) {
     if (!dic[val.productId]) {
       dic[val.productId] = Object.fromEntries(
-        val.product.spec.map((v) => [v.specParameter.id, v.specParameter.name]),
+        val.product.spec.map((v) => [v.id, v.name]),
       );
     }
     products.push({
@@ -36,5 +36,6 @@ export function serviceToForm(data: TypePurchaseOrder.DTO) {
         : val.actualQuantity,
     });
   }
+  
   return { products };
 }

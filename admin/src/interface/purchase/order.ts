@@ -20,7 +20,7 @@ export namespace TypePurchaseOrder {
    * @param supplierId 供应商ID
    * @param logisticsCompanyId 物流公司ID
    * @param products 采购产品列表
-   * @param creator 订单创人
+   * @param creator 订单创建人
    * @param supplier 供应商
    * @param logisticsCompany 物流公司名称
    * @param logs 状态日志

@@ -9,14 +9,16 @@ export function filterDuplicatesProduct(
   products: TypePurchaseOrder.EditDTO["products"] = [],
   supplierId: number,
 ) {
-  for (const val of adds) {
+  for (const val of adds) 
+  {
+    console.log(val);
     products.push({
       supplierId,
       productId: val.id,
       name: val.name,
       brand: val.brand.name,
       unit: val.unit.name,
-      spec: val.spec.map((v) => v.specParameter),
+      spec: val.spec,
       surplus: 1000, // 剩余库存
     });
   }
@@ -32,7 +34,7 @@ export function serverToForm(data: TypePurchaseOrder.DTO) {
       name: val.product.name,
       brand: val.product.brand.name,
       unit: val.product.unit.name,
-      spec: val.product.spec.map((v) => v.specParameter),
+      spec: val.product.spec,
       specId: val.spec.id,
       surplus: 1000, // 剩余库存
       quantity: val.quantity,

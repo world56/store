@@ -112,7 +112,7 @@ export default [
         id: "warehousingPurchase",
         title: "采购入库",
         hide:true,
-        path: "/warehouse/warehousingPurchase/:id",
+        path: "/warehouse/warehousingPurchase/:id/:orderId",
         element: lazy(() => import("@/page/warehouse/warehousing/purchase")),
       },
       {

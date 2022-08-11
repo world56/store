@@ -9,16 +9,14 @@ export class WarehousingService {
 
   async getList(query: WarehousingQueryList) {
     const { take, skip, ...where } = query;
+    const userSelect = { select: { id: true, name: true } };
     const [count, list] = await Promise.all([
       this.PrismaService.warehousing.count({ where }),
       this.PrismaService.warehousing.findMany({
         take,
         skip,
         where,
-        include: {
-          creator: { select: { id: true, name: true } },
-          inspector: { select: { id: true, name: true } },
-        },
+        include: { creator: userSelect, inspector: userSelect },
         orderBy: { createTime: 'desc' },
       }),
     ]);
@@ -29,11 +27,7 @@ export class WarehousingService {
     const userProp = { select: { name: true, id: true } };
     return this.PrismaService.warehousing.findUnique({
       where,
-      include: {
-        creator: userProp,
-        inspector: userProp,
-        order: { include: { supplier: true } },
-      },
+      include: { order: true, creator: userProp, inspector: userProp },
     });
   }
 }

@@ -16,9 +16,9 @@ export class ProductService {
     private readonly PrismaService: PrismaService,
   ) {}
 
-  query(query: SupplierProductQuery) {
+  async query(query: SupplierProductQuery) {
     const { name, supplierId } = query;
-    return this.PrismaService.supplierProduct.findMany({
+    const list = await this.PrismaService.supplierProduct.findMany({
       where: {
         name: { contains: name },
         status: ENUM_COMMON.STATUS.ACTIVATE,
@@ -31,6 +31,10 @@ export class ProductService {
         spec: { where: { deleted: false }, include: { specParameter: true } },
       },
     });
+    return list.map((v) => ({
+      ...v,
+      spec: v.spec.map((v) => v.specParameter),
+    }));
   }
 
   async getList(query: SupplierProductQueryListDTO) {

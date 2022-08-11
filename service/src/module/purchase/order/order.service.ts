@@ -57,9 +57,9 @@ export class OrderService {
   // }
   // async updateLogistics(query: PurchaseOrderLogInsertDTO, user: AdminUserDTO) {}
 
-  getDetails(body: PrimaryKeyDTO) {
+  async getDetails(body: PrimaryKeyDTO) {
     const { id } = body;
-    return this.PrismaService.purchaseOrder.findUnique({
+    const data = await this.PrismaService.purchaseOrder.findUnique({
       where: { id },
       include: {
         supplier: { include: { contacts: true } },
@@ -83,6 +83,14 @@ export class OrderService {
         },
       },
     });
+    const products = data.products.map((v) => ({
+      ...v,
+      product: {
+        ...v.product,
+        spec: v.product.spec.map((v) => v.specParameter),
+      },
+    }));
+    return { ...data, products };
   }
 
   insert(dto: PurchaseOrderDTO, user: AdminUserDTO) {

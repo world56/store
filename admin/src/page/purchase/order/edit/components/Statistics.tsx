@@ -8,7 +8,8 @@ const Statistics: React.FC = () => (
   <Form.Item shouldUpdate>
     {(props) => {
       const products = props.getFieldValue('products');
-      return <OrderPriceQuantity {...OrderPriceQuantity.calculation(products)} />
+      const [total, price] = OrderPriceQuantity.calculation(products);
+      return <OrderPriceQuantity price={price} total={total} />
     }}
   </Form.Item>
 );
