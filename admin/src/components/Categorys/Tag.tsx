@@ -23,12 +23,15 @@ const COLORS = [
 /**
  * @name CategorysTag 类目标签
  */
-const CategorysTag: React.FC<TypeCategorysTagProps> = ({ maxWidth = '100%', list = [] }) => {
+const CategorysTag: React.FC<TypeCategorysTagProps> = ({ maxWidth, list = [] }) => {
 
   const randomColors = useMemo(() => createRandNum(list.length).map(k => COLORS[k]), [list]);
 
   return (
-    <div className={styles.tag} title={list.map(v => v.name).join('、')}>
+    <div
+      style={{ maxWidth }}
+      title={list.map(v => v.name).join('、')}
+      className={maxWidth ? styles.tagHidden : styles.tagShow}>
       {list.map((v, i) => <Tooltip key={v.id} title={v.remark}>
         <Tag color={randomColors[i]}>{v.name}</Tag>
       </Tooltip>)}

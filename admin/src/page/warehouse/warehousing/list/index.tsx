@@ -1,7 +1,7 @@
 import { useRequest } from "ahooks";
 import Status from "@/layout/Status";
 import Link from "@/components/Link";
-import { useCategorys } from "@/hooks";
+import { useCategorys, usePageTurning } from "@/hooks";
 import { Card, Form, Table } from "antd";
 import Search from "@/components/Search";
 import { DB_PRIMARY_KEY } from "@/config/db";
@@ -16,22 +16,24 @@ import type { TypeWarehouseWarehousing } from "@/interface/warehouse/warehousing
 const { ENUM_CATEGORY } = useCategorys;
 
 /**
- * @name Warehousing 入库
+ * @name Warehousing 待入库列表
  */
 const Warehousing = () => {
 
   const category = useCategorys([ENUM_CATEGORY.ADMIN_USER]);
+  const [form] = Form.useForm<TypeWarehouseWarehousing.Query>();
 
   const { run, data } = useRequest(getWarehousingList, { manual: true });
 
-  const [form] = Form.useForm<TypeWarehouseWarehousing.Query>();
+  const pagination = usePageTurning(data?.count);
+  const { pageSize, currentPage } = pagination;
 
   const initializa = useCallback(async () => {
     const values = await form.validateFields();
-    values.pageSize = 1;
-    values.currentPage = 1;
+    values.pageSize = pageSize;
+    values.currentPage = currentPage;
     run(values);
-  }, [form, run]);
+  }, [run, form, pageSize, currentPage]);
 
   const query = useMemo(() => [
     {
@@ -40,12 +42,12 @@ const Warehousing = () => {
       type: Search.ENUM.COMP_TYPE.SELECT,
       list: category?.WAREHOUSING_TYPE?.LIST
     },
-    {
-      name: 'status',
-      label: '入库状态',
-      type: Search.ENUM.COMP_TYPE.SELECT,
-      list: category?.WAREHOUSING_STATUS?.LIST
-    },
+    // {
+    //   name: 'status',
+    //   label: '入库状态',
+    //   type: Search.ENUM.COMP_TYPE.SELECT,
+    //   list: category?.WAREHOUSING_STATUS?.LIST
+    // },
     {
       name: 'creatorId',
       label: '创建人',
@@ -80,7 +82,7 @@ const Warehousing = () => {
     {
       dataIndex: 'status',
       title: '入库状态',
-      render: (status: ENUM_WAREHOUSE.WAREHOUSING_STATUS) => (
+      render: (status: ENUM_WAREHOUSE.WAREHOUSING_PROCESS) => (
         <Status status={status} matching={Status.type.WAREHOUSING_STATUS} />
       )
     },
@@ -108,7 +110,11 @@ const Warehousing = () => {
   return (
     <Card title='产品待入库'>
       <Search form={form} columns={query} onSearch={initializa} />
-      <Table columns={columns} dataSource={data?.list} rowKey={DB_PRIMARY_KEY} />
+      <Table
+        columns={columns}
+        rowKey={DB_PRIMARY_KEY}
+        dataSource={data?.list}
+        pagination={pagination} />
     </Card>
   );
 };

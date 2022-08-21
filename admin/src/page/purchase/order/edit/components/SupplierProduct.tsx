@@ -1,16 +1,18 @@
 import { useRequest } from 'ahooks';
 import { Btn } from '@/layout/Button';
 import styles from '../index.module.sass';
-import { useEffect, useRef } from 'react';
 import { QueryProduct } from '@/components/Query';
 import { filterDuplicatesProduct } from '../utils';
+import { useEffect, useRef, useState } from 'react';
 import { filterOptionTooltip } from '@/utils/filter';
 import { querySupplierProduct } from '@/api/purchase';
 import { InputNumber } from '@/components/Formatting';
+import { ProductDetails } from '@/components/Details';
 import { FormHideKey, ReadOnlytext } from '@/components/Form';
 import { Form, Table, Card, Select, Tooltip, Input, message } from "antd";
 
 import type { FormInstance } from 'antd/es';
+import type { TypeCommon } from '@/interface/common';
 import type { RuleObject } from 'rc-field-form/lib/interface';
 import type { FormListFieldData } from 'antd/es/form/FormList';
 import type { TypePurchaseOrder } from '@/interface/purchase/order';
@@ -32,6 +34,8 @@ const SupplierProduct: React.FC<TypeSupplierProductProps> = ({ form }) => {
 
   const RefQuery = useRef<TypeSelectProductSelectKey>(null!);
 
+  const [productId, setProductId] = useState<TypeCommon.PrimaryKey>();
+
   const { supplierId, products = [] } = form.getFieldsValue();
 
   const { data, run } = useRequest(async (name: string) => {
@@ -49,9 +53,8 @@ const SupplierProduct: React.FC<TypeSupplierProductProps> = ({ form }) => {
     form.setFieldsValue({ products });
   };
 
-  function onPreview(field: FormListFieldData) {
-    const { productId } = products[field.name];
-    window.open(`/purchase/supplierProductDetails/${productId}`);
+  function onPreview(field?: FormListFieldData) {
+    setProductId(products?.[field?.name!]?.productId);
   };
 
   function onReset() {
@@ -169,6 +172,7 @@ const SupplierProduct: React.FC<TypeSupplierProductProps> = ({ form }) => {
         onChange={onAddProduct}
         disabled={Boolean(supplierId)} />
     }>
+      <ProductDetails id={productId} onClose={onPreview} />
       <Form.List name='products' rules={[{ validator }]}>
         {(fields) => <Table
           rowKey='name'

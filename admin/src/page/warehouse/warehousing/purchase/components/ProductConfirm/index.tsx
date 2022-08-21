@@ -1,5 +1,6 @@
 import Statistics from './Statistics';
 import styles from '../../index.module.sass';
+import { useCallback, useState } from 'react';
 import { InputNumber } from '@/components/Formatting';
 import { Card, Form, Input, Table, Tooltip } from 'antd';
 import ProductDetails from '@/components/Details/Product';
@@ -9,7 +10,6 @@ import { FormHideKey, ReadOnlytext } from '@/components/Form';
 import type { TypeWarehousingPurchaseQuery } from '../../';
 import type { FormListFieldData } from 'antd/es/form/FormList';
 import type { TypePurchaseOrder } from '@/interface/purchase/order';
-import { useCallback, useState } from 'react';
 
 export interface TypeProductConfirmProps
   extends
@@ -26,8 +26,8 @@ const ProductConfirm: React.FC<TypeProductConfirmProps> = ({ total, form }) => {
   const toProduct = useCallback((field?: FormListFieldData) => {
     if (field) {
       const products = form?.getFieldValue('products');
-      const { id } = products[field.name];
-      setProductId(id);
+      const { productId } = products[field.name];
+      setProductId(productId);
     } else {
       setProductId(undefined);
     }
@@ -110,6 +110,9 @@ const ProductConfirm: React.FC<TypeProductConfirmProps> = ({ total, form }) => {
   return (
     <>
       <Card title='核对清单' extra={<Statistics total={total} />}>
+
+        <FormHideKey />
+
         <Form.List name='products'>
           {(fields) => <Table
             rowKey='name'
@@ -120,9 +123,9 @@ const ProductConfirm: React.FC<TypeProductConfirmProps> = ({ total, form }) => {
         </Form.List>
       </Card>
 
-      <Card title='备注'>
+      <Card title='入库备注'>
         <Form.Item name='remark' noStyle>
-          <Input.TextArea rows={4} placeholder='请输入备注' />
+          <Input.TextArea rows={4} placeholder='请输入库备注（例如实际入库数量、原因）' />
         </Form.Item>
       </Card>
 

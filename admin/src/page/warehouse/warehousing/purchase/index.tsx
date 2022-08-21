@@ -12,6 +12,7 @@ import { getPurchaseOrderDetails } from '@/api/purchase';
 
 import type { FormInstance } from 'antd/es';
 import type { EditWarehousingProductDetails } from './utils';
+import type { TypePurchaseOrder } from "@/interface/purchase/order";
 
 export interface TypeEditWarehousingProducts {
   products: EditWarehousingProductDetails[];
@@ -29,13 +30,18 @@ const WarehousingPurchase = () => {
   const { id, orderId } = useParams();
   const [form] = Form.useForm<TypeEditWarehousingProducts>();
 
+  function toSaveFormData(data: TypePurchaseOrder.DTO) {
+    const { remark, ...values } = serviceToForm(data);
+    form.setFieldsValue(values);
+  };
+
   const { data = [], loading } = useRequest(async () => {
-    const list = await Promise.all([
+    const data = await Promise.all([
       getWarehousingInfo({ id: Number(id) }),
       getPurchaseOrderDetails({ id: Number(orderId) })
     ]);
-    list[1] && form.setFieldsValue(serviceToForm(list[1]))
-    return list;
+    toSaveFormData(data[1]);
+    return data;
   }, { refreshDeps: [id, orderId] });
 
   const [warehousing, purchase] = data;
@@ -48,10 +54,10 @@ const WarehousingPurchase = () => {
   return (
     <Spin spinning={loading}>
       <Form form={form} className={styles.layout}>
-        <BasicInfo data={warehousing} />
+        <BasicInfo data={warehousing} remark={purchase?.remark} />
         <Purchase data={purchase} />
         <ProductConfirm form={form} total={purchase?.total} />
-        <GoBack onSumbit={onSumbit} />
+        <GoBack onSumbit={onSumbit} top={28} bottom={24} />
       </Form>
     </Spin>
   );

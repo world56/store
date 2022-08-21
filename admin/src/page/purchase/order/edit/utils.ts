@@ -9,9 +9,7 @@ export function filterDuplicatesProduct(
   products: TypePurchaseOrder.EditDTO["products"] = [],
   supplierId: number,
 ) {
-  for (const val of adds) 
-  {
-    console.log(val);
+  for (const val of adds) {
     products.push({
       supplierId,
       productId: val.id,

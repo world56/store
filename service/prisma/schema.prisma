@@ -298,7 +298,6 @@ model PurchaseOrder {
   shippingMethod     Int       @map("shipping_method") @db.Int() // 运输方式
   shippingNoteNumber String?   @map("shipping_note_number") @db.VarChar(30) // 运输单号
   createTime         DateTime? @default(now()) @map("create_time")
-  status             Int?      @default(0) @db.Int()
   remark             String?   @db.VarChar(255) // 备注
   creatorId          Int       @map("creator_id") @db.Int() // 创建人
   supplierId         Int       @map("supplier_id") @db.Int() // 供应商
@@ -361,21 +360,21 @@ model WarehousePosition {
 
 // 待入库
 model Warehousing {
-  id          Int       @id() @default(autoincrement())
-  no          String    @unique // 流水序列号
-  orderId     Int       @unique() @map("order_id") @db.Int()
-  inspectorId Int?      @map("inspector_id") @db.Int()
-  creatorId   Int       @map("creator_id") @db.Int()
-  updateTime  DateTime?
-  createTime  DateTime? @default(now()) @map("create_time")
-  type        Int       @db.Int()
-  status      Int       @db.Int()
+  id           Int       @id() @default(autoincrement())
+  no           String    @unique // 流水序列号
+  orderId      Int       @unique() @map("order_id") @db.Int()
+  inspectorId  Int?      @map("inspector_id") @db.Int()
+  creatorId    Int       @map("creator_id") @db.Int()
+  updateTime   DateTime?
+  createTime   DateTime? @default(now()) @map("create_time")
+  type         Int       @db.Int()
+  status       Int       @db.Int()
 
-  order PurchaseOrder @relation(fields: [orderId], references: [id])
+  order     PurchaseOrder @relation(fields: [orderId], references: [id])
+  creator   AdminUser     @relation(name: "rel_warehousing_creator", fields: [creatorId], references: [id])
+  inspector AdminUser?    @relation(name: "rel_warehousing_inspector", fields: [inspectorId], references: [id])
 
-  creator   AdminUser  @relation(name: "rel_warehousing_creator", fields: [creatorId], references: [id])
-  inspector AdminUser? @relation(name: "rel_warehousing_inspector", fields: [inspectorId], references: [id])
-
+  @@index([no])
   @@index([orderId])
   @@index([creatorId])
   @@index([inspectorId])

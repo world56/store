@@ -36,6 +36,6 @@ export function serviceToForm(data: TypePurchaseOrder.DTO) {
         : val.actualQuantity,
     });
   }
-  
-  return { products };
+
+  return { ...data, products };
 }

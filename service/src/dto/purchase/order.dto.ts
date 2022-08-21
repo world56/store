@@ -18,13 +18,14 @@ import { Transform, Type } from 'class-transformer';
 import { CommonDTO, PrimaryKeyDTO } from '../common/common.dto';
 
 import { ENUM_PURCHASE } from '@/enum/purchase';
+import { ENUM_WAREHOUSE } from '@/enum/warehouse';
 
 /**
  * @name PurchaseOrderDTO 采购订单DTO
  */
 export class PurchaseOrderDTO extends IntersectionType(
   PartialType(PrimaryKeyDTO),
-  PickType(CommonDTO, ['status', 'remark'] as const),
+  PickType(CommonDTO, ['remark'] as const),
 ) {
   /**
    * @param estimatedDate 预期抵达时间
@@ -77,7 +78,7 @@ export class PurchaseOrderDTO extends IntersectionType(
   supplierId: number;
 
   /**
-   * @name  product 采购产品列表
+   * @name product 采购产品列表
    */
   @ApiProperty({ description: '采购产品列表' })
   @ValidateNested()

@@ -54,13 +54,13 @@ export class WarehousingDTO extends PickType(CommonDTO, ['id']) {
   type: number;
 
   /**
-   * @param status 入库状态
+   * @param status 入库流程状态
    */
   @ApiProperty({
     description: '完成、待入库',
     required: true,
   })
-  @IsEnum(ENUM_WAREHOUSE.WAREHOUSING_STATUS)
+  @IsEnum(ENUM_WAREHOUSE.WAREHOUSING_PROCESS)
   @Type(() => Number)
   @IsInt()
   status: number;

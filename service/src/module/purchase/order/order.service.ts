@@ -5,7 +5,9 @@ import { PurchaseOrderDTO } from '@/dto/purchase/order.dto';
 import { UtilsService } from '@/common/utils/utils.service';
 import { PrismaService } from '@/common/prisma/prisma.service';
 import { PurchaseOrderQueryListDTO } from './dto/purchase-order-query-list.dto';
+
 import { ENUM_WAREHOUSE } from '@/enum/warehouse';
+import { ENUM_PURCHASE } from '@/enum/purchase';
 
 @Injectable()
 export class OrderService {
@@ -26,8 +28,8 @@ export class OrderService {
     return { total, totalPrice };
   }
 
-  async getList(query: PurchaseOrderQueryListDTO) {
-    const { skip, take, ...where } = query;
+  async getList({ skip, take, status, ...query }: PurchaseOrderQueryListDTO) {
+    const where = { ...query, warehousing: { status } };
     const [count, list] = await Promise.all([
       this.PrismaService.purchaseOrder.count({ where }),
       this.PrismaService.purchaseOrder.findMany({
@@ -37,6 +39,7 @@ export class OrderService {
         include: {
           supplier: true,
           logisticsCompany: true,
+          warehousing: { select: { status: true } },
           creator: { select: { id: true, name: true } },
         },
         orderBy: { createTime: 'desc' },
@@ -94,21 +97,27 @@ export class OrderService {
   }
 
   insert(dto: PurchaseOrderDTO, user: AdminUserDTO) {
-    const { products, ...data } = dto;
+    const { products, settlement, ...data } = dto;
     data.creatorId = user.id;
     const { total, totalPrice } = this.statistics(products);
+    // 根据结算方式 发起对应流程
+    const status =
+      settlement === ENUM_PURCHASE.SUPPLIER_SETTLEMENT.CASH_ON_DELIVERY
+        ? ENUM_WAREHOUSE.WAREHOUSING_PROCESS.GOODS_TO_BE_RECEIVED
+        : ENUM_WAREHOUSE.WAREHOUSING_PROCESS.WAITING_FOR_PAYMENT;
     return this.PrismaService.purchaseOrder.create({
       data: {
         ...data,
         total,
         totalPrice,
+        settlement,
         no: `NO${new Date().valueOf()}`,
         products: { createMany: { data: products } },
         warehousing: {
           create: {
+            status,
             no: `NO${new Date().valueOf()}`,
             creator: { connect: { id: user.id } },
-            status: ENUM_WAREHOUSE.WAREHOUSING_STATUS.AWAIT,
             type: ENUM_WAREHOUSE.WAREHOUSING_TYPE.PURCHASE,
           },
         },

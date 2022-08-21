@@ -13,7 +13,7 @@ export namespace TypeWarehouseWarehousing {
    * @param orderId 订单ID (可能是采购、售后单)
    * @param inspectorId 操作人ID
    * @param type 订单ID 采购入库、售后入库
-   * @param status 入库进度 （待入库、完成入库）
+   * @param status 入库流程
    * @param createTime 创建时间
    * @param updateTime 操作时间
    * @param creator 流程创建人
@@ -29,7 +29,7 @@ export namespace TypeWarehouseWarehousing {
     createTime: Date;
     updateTime?: Date;
     type: ENUM_WAREHOUSE.WAREHOUSING_TYPE;
-    status: ENUM_WAREHOUSE.WAREHOUSING_STATUS;
+    status: ENUM_WAREHOUSE.WAREHOUSING_PROCESS;
     creator: TypeSystemUser.DTO;
     inspector?: TypeSystemUser.DTO;
   }

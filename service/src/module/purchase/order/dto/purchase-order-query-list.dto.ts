@@ -1,5 +1,6 @@
 import { QueryDTO } from '@/dto/common/query.dto';
 import { PurchaseOrderDTO } from '@/dto/purchase/order.dto';
+import { WarehousingDTO } from '@/dto/warehouse/wahousing';
 import { IntersectionType, PartialType, PickType } from '@nestjs/swagger';
 
 /**
@@ -7,16 +8,18 @@ import { IntersectionType, PartialType, PickType } from '@nestjs/swagger';
  */
 export class PurchaseOrderQueryListDTO extends IntersectionType(
   PartialType(
-    PickType(PurchaseOrderDTO, [
-      'id',
-      'status',
-      'creatorId',
-      'supplierId',
-      'settlement',
-      'shippingMethod',
-      'shippingNoteNumber',
-      'logisticsCompanyId',
-    ] as const),
+    IntersectionType(
+      PickType(PurchaseOrderDTO, [
+        'id',
+        'creatorId',
+        'supplierId',
+        'settlement',
+        'shippingMethod',
+        'shippingNoteNumber',
+        'logisticsCompanyId',
+      ] as const),
+      PickType(WarehousingDTO, ['status'] as const),
+    ),
   ),
   PickType(QueryDTO, ['pageSize', 'currentPage', 'createTime'] as const),
 ) {

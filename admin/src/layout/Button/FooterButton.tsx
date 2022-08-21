@@ -8,6 +8,7 @@ export interface TypeFooterButtonProps {
   onCancelText?: string;
   onRefresh?(): void;
   align?: 'left' | 'right' | 'center';
+  style?: React.CSSProperties;
 };
 
 /**
@@ -20,8 +21,9 @@ const FooterButton: React.FC<TypeFooterButtonProps> = ({
   onRefresh,
   onCancelText,
   align = 'right',
+  style = {},
 }) => (
-  <div className={styles.footer} style={{ justifyContent: align }}>
+  <div className={styles.footer} style={{ justifyContent: align, ...style }}>
     {children}
     {onRefresh ? <Button onClick={onRefresh} icon={<SyncOutlined />}> 刷新 </Button> : null}
     {onSumbit ? <Button onClick={onSumbit} type='primary'>提交</Button> : null}

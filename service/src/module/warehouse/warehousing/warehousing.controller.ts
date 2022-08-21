@@ -4,7 +4,7 @@ import { TimeFramePipe } from '@/pipe/time-frame.pipe';
 import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { WarehousingService } from './warehousing.service';
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
-import { WarehousingQueryList } from './dto/warehousing-query-list';
+import { WarehousingQueryList } from './dto/warehousing-query-list.dto';
 
 @ApiTags('仓库入库')
 @Controller('warehouse/warehousing')

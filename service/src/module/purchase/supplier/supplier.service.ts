@@ -45,7 +45,10 @@ export class SupplierService {
         status: query.status,
         name: { contains: query.name },
         phone: { contains: query.companyPhone },
-        category: { some: { id: query.category } },
+        category: query.category ? { some: { id: query.category } } : undefined,
+        product: query.productId
+          ? { some: { id: query.productId } }
+          : undefined,
         contacts: {
           some: {
             phone: { contains: query.phone },

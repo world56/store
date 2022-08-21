@@ -5,6 +5,7 @@ import type { TypeSystemUser } from "../system/user";
 import type { TypePurchaseSupplier } from "./supplier";
 
 import { ENUM_PURCHASE } from "@/enum/purchase";
+import { ENUM_WAREHOUSE } from "@/enum/warehouse";
 
 /**
  * @name TypePurchaseOrder  采购管理-采购订单
@@ -16,7 +17,7 @@ export namespace TypePurchaseOrder {
    * @param settlement 结算方式
    * @param shippingMethod 运输方式
    * @param shippingNoteNumber 物流单号
-   * @param status 订单状态
+   * @param status 入库流程状态
    * @param supplierId 供应商ID
    * @param logisticsCompanyId 物流公司ID
    * @param products 采购产品列表
@@ -33,7 +34,7 @@ export namespace TypePurchaseOrder {
     no?: string;
     estimatedDate: Date;
     shippingNoteNumber?: string;
-    status: ENUM_PURCHASE.SUPPLIER_ORDER_STATUS;
+    warehousing: { status: ENUM_WAREHOUSE.WAREHOUSING_PROCESS };
     settlement: ENUM_PURCHASE.SUPPLIER_SETTLEMENT;
     shippingMethod?: ENUM_PURCHASE.SUPPLIER_SHIPPING_METHOD;
     supplierId: T;
@@ -103,8 +104,9 @@ export namespace TypePurchaseOrder {
    * @param creatorId 创建人ID
    */
   export interface Query
-    extends Partial<Pick<DTO, "status" | "id" | "supplierId">>,
+    extends Partial<Pick<DTO, "id" | "supplierId">>,
       TypeCommon.PageTurning {
+    status: ENUM_WAREHOUSE.WAREHOUSING_PROCESS;
     creatorId?: TypeCommon.DatabaseMainParameter["id"];
   }
 

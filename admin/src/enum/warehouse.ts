@@ -27,12 +27,20 @@ export namespace ENUM_WAREHOUSE {
   }
 
   /**
-   * @name WAREHOUSING_STATUS 入库状态
-   * @param AWAIT 待入库
-   * @param COMPLETE 完成入库
+   * @name WAREHOUSING_PROCESS 入库流程
+   * @param GOODS_TO_BE_RECEIVED 待收货
+   * @param WAITING_FOR_STORAGE 待入库
+   * @param UNDER_REVIEW 待审核
+   * @param WAITING_FOR_PAYMENT 待付款
+   * @param COMPLETE 完成
+   * @param ABANDONED 废弃
    */
-  export enum WAREHOUSING_STATUS {
-    AWAIT,
+  export enum WAREHOUSING_PROCESS {
+    GOODS_TO_BE_RECEIVED,
+    WAITING_FOR_STORAGE,
+    UNDER_REVIEW,
+    WAITING_FOR_PAYMENT,
     COMPLETE,
+    ABANDONED
   }
 }

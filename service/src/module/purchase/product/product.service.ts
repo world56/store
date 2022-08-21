@@ -72,8 +72,8 @@ export class ProductService {
     });
     return {
       ...data,
-      spec: data.spec.map((v) => v.specParameter),
-      supplier: data.supplier.map((v) => v.supplier),
+      spec: data?.spec.map((v) => v.specParameter),
+      supplier: data?.supplier.map((v) => v.supplier),
     };
   }
 
