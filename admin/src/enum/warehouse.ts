@@ -41,6 +41,6 @@ export namespace ENUM_WAREHOUSE {
     UNDER_REVIEW,
     WAITING_FOR_PAYMENT,
     COMPLETE,
-    ABANDONED
+    ABANDONED,
   }
 }

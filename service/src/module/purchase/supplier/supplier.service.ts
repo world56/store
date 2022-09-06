@@ -20,19 +20,19 @@ export class SupplierService {
   ) {}
 
   getLogs({ id, type }: SupplierQueryLogsDTO) {
-    return this.PrismaService.purchaseSupplierLog.findMany({
-      where: { supplierId: id, type },
-      orderBy: { createTime: 'desc' },
-      include: { user: { select: { id: true, name: true, avatar: true } } },
-    });
+    // return this.PrismaService.purchaseSupplierLog.findMany({
+    //   where: { supplierId: id, type },
+    //   orderBy: { createTime: 'desc' },
+    //   include: { user: { select: { id: true, name: true, avatar: true } } },
+    // });
   }
 
   addLog(dto: SupplierLogDTO, userId: number) {
-    const { id, ...data } = dto;
-    return this.PrismaService.purchaseSupplier.update({
-      where: { id },
-      data: { log: { create: { ...data, userId } } },
-    });
+    // const { id, ...data } = dto;
+    // return this.PrismaService.purchaseSupplier.update({
+    //   where: { id },
+    //   data: { log: { create: { ...data, userId } } },
+    // });
   }
 
   getAll() {
@@ -103,9 +103,9 @@ export class SupplierService {
       where: { id },
       data: {
         status,
-        log: {
-          create: { userId, content, type: ENUM_PURCHASE.LOG_TYPE.STATUS },
-        },
+        // log: {
+        //   create: { userId, content, type: ENUM_PURCHASE.LOG_TYPE.STATUS },
+        // },
       },
     });
   }

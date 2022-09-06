@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Form, Input } from "antd";
 import { useActions } from "@/hooks";
 import { Modal } from "@/layout/PopUp";
-import styles from '../index.module.sass';
+import styles from './index.module.sass';
 import Uploads from "@/components/Uploads";
 
 import { ENUM_STORE } from "@/enum/store";

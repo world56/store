@@ -2,7 +2,8 @@ import { Type } from 'class-transformer';
 import { IsEnum, IsInt } from 'class-validator';
 import { CommonDTO } from '../common/common.dto';
 import { ENUM_WAREHOUSE } from '@/enum/warehouse';
-import { ApiProperty, PickType } from '@nestjs/swagger';
+import { ApiProperty, OmitType, PickType } from '@nestjs/swagger';
+import { PurchaseOrderProductDetailsDTO } from '../purchase/order.dto';
 
 /**
  * @name WarehousingDTO 采购、售后待入库
@@ -64,4 +65,20 @@ export class WarehousingDTO extends PickType(CommonDTO, ['id']) {
   @Type(() => Number)
   @IsInt()
   status: number;
+}
+
+/**
+ * @name PurchaseOrderProductConfirmDTO 采购产品入库前确认
+ */
+export class PurchaseOrderProductConfirmDTO extends OmitType(
+  PurchaseOrderProductDetailsDTO,
+  ['specId', 'unitPrice'] as const,
+) {
+  /**
+   * @param actualQuantity 确认实际数量
+   */
+  @ApiProperty({ description: '实际可入库数量' })
+  @Type(() => Number)
+  @IsInt()
+  actualQuantity: number;
 }

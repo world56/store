@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
 import { CommonDTO } from './common.dto';
-import { IsInt, IsNumber, IsString } from 'class-validator';
 import { PickType, ApiProperty } from '@nestjs/swagger';
+import { IsInt, IsNumber, IsString } from 'class-validator';
 
 /**
  * @name FileDTO 静态资源

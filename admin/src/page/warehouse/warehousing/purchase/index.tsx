@@ -1,25 +1,20 @@
-import { Form, Spin } from 'antd';
 import { useRequest } from "ahooks";
 import { serviceToForm } from './utils';
 import { GoBack } from "@/layout/Button";
 import styles from './index.module.sass';
+import { Form, Spin, message } from 'antd';
+import { editableBtn } from '../list/utils';
 import Purchase from './components/Purchase';
-import { useParams } from "react-router-dom";
 import BasicInfo from "./components/BasicInfo";
-import { getWarehousingInfo } from "@/api/warehouse";
 import ProductConfirm from "./components/ProductConfirm";
-import { getPurchaseOrderDetails } from '@/api/purchase';
+import { useNavigate, useParams } from "react-router-dom";
+import { confirmWarehousing, getWarehousingInfo } from "@/api/warehouse";
 
 import type { FormInstance } from 'antd/es';
-import type { EditWarehousingProductDetails } from './utils';
-import type { TypePurchaseOrder } from "@/interface/purchase/order";
-
-export interface TypeEditWarehousingProducts {
-  products: EditWarehousingProductDetails[];
-};
+import type { TypeWarehouseWarehousing } from '@/interface/warehouse/warehousing';
 
 export interface TypeWarehousingPurchaseQuery {
-  form?: FormInstance<TypeEditWarehousingProducts>;
+  form?: FormInstance<TypeWarehouseWarehousing.ConfirmPurchaseWarehousing>;
 };
 
 /**
@@ -27,37 +22,33 @@ export interface TypeWarehousingPurchaseQuery {
  */
 const WarehousingPurchase = () => {
 
-  const { id, orderId } = useParams();
-  const [form] = Form.useForm<TypeEditWarehousingProducts>();
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-  function toSaveFormData(data: TypePurchaseOrder.DTO) {
-    const { remark, ...values } = serviceToForm(data);
-    form.setFieldsValue(values);
-  };
+  const [form] = Form.useForm<TypeWarehouseWarehousing.ConfirmPurchaseWarehousing>();
 
-  const { data = [], loading } = useRequest(async () => {
-    const data = await Promise.all([
-      getWarehousingInfo({ id: Number(id) }),
-      getPurchaseOrderDetails({ id: Number(orderId) })
-    ]);
-    toSaveFormData(data[1]);
-    return data;
-  }, { refreshDeps: [id, orderId] });
-
-  const [warehousing, purchase] = data;
+  const { data, loading } = useRequest(async () => {
+    const values = await getWarehousingInfo({ id: Number(id) });
+    form.setFieldsValue(serviceToForm(values));
+    return values;
+  }, { refreshDeps: [id] });
 
   async function onSumbit() {
     const values = await form.validateFields();
-    console.log('@-val', values);
+    await confirmWarehousing(values);
+    message.success('提交成功，审核成功后生效');
+    navigate(-1);
   };
+
+  const isEdit = editableBtn(data?.status!);
 
   return (
     <Spin spinning={loading}>
       <Form form={form} className={styles.layout}>
-        <BasicInfo data={warehousing} remark={purchase?.remark} />
-        <Purchase data={purchase} />
-        <ProductConfirm form={form} total={purchase?.total} />
-        <GoBack onSumbit={onSumbit} top={28} bottom={24} />
+        <BasicInfo data={data} />
+        <Purchase data={data?.order} />
+        <ProductConfirm form={form} isEdit={isEdit} total={data?.order?.total} />
+        <GoBack onSumbit={isEdit ? onSumbit : undefined} top={28} bottom={24} />
       </Form>
     </Spin>
   );

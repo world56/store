@@ -27,19 +27,19 @@ export function showEditBtn(row: TypePurchaseOrder.DTO) {
 
 /**
  * @name showAbandoned 显示废弃按钮
+ * @desc 只有在仓储部门 确认收货前，才能进行作废操作
+ *       先付款在发货 在付款前可以废弃（财务付款后就不能废弃了）
+ *       先发货在付款 收到货前可以废弃 （仓储部门确认收货后肯定不能废弃）
  */
 export function showAbandoned(row: TypePurchaseOrder.DTO) {
-  if (row.settlement === ENUM_PURCHASE.SUPPLIER_SETTLEMENT.CASH_ON_DELIVERY) {
-    return (
-      row.warehousing.status ===
-      ENUM_WAREHOUSE.WAREHOUSING_PROCESS.GOODS_TO_BE_RECEIVED
-    );
-  } else {
-    return (
-      row.warehousing.status ===
-        ENUM_WAREHOUSE.WAREHOUSING_PROCESS.GOODS_TO_BE_RECEIVED ||
-      row.warehousing.status ===
-        ENUM_WAREHOUSE.WAREHOUSING_PROCESS.WAITING_FOR_PAYMENT
-    );
-  }
+  const cashOnDelivery =
+    row.settlement === ENUM_PURCHASE.SUPPLIER_SETTLEMENT.CASH_ON_DELIVERY &&
+    row.warehousing.status ===
+      ENUM_WAREHOUSE.WAREHOUSING_PROCESS.GOODS_TO_BE_RECEIVED;
+  const deliveryAfterPayment =
+    row.settlement ===
+      ENUM_PURCHASE.SUPPLIER_SETTLEMENT.DELIVERY_AFTER_PAYMENT &&
+    row.warehousing.status ===
+      ENUM_WAREHOUSE.WAREHOUSING_PROCESS.WAITING_FOR_PAYMENT;
+  return cashOnDelivery || deliveryAfterPayment;
 }

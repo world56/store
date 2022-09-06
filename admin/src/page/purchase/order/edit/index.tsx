@@ -1,13 +1,13 @@
-import { useEffect } from 'react';
 import { GoBack } from "@/layout/Button";
 import styles from './index.module.sass';
+import { useEffect, useMemo } from 'react';
 import { Form, message, Spin } from "antd";
 import BasicInfo from "./components/BasicInfo";
 import Statistics from "./components/Statistics";
 import { useActions, useGetDetails } from '@/hooks';
-import { formToServer, serverToForm } from './utils';
 import SupplierProduct from "./components/SupplierProduct";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { formToServer, serverToForm, editParams } from './utils';
 import { getPurchaseOrderDetails, insertPurchaseOrder, updatePurchaseOrder } from "@/api/purchase";
 
 import { ENUM_STORE } from '@/enum/store';
@@ -29,15 +29,19 @@ const EditPurchaseOrder = () => {
 
   const [form] = Form.useForm<TypePurchaseOrder.EditDTO>();
 
-  const { loading } = useGetDetails(async () => {
+  const { loading, value } = useGetDetails(async () => {
     const data = await getPurchaseOrderDetails({ id: id! });
     const values = serverToForm(data);
     form.setFieldsValue(values);
+    return data;
   }, [id, form]);
 
   async function onSumbit() {
     const values = await form.validateFields();
     const data = formToServer(values);
+    data.products.forEach(v => {
+      v.remark = '9999'
+    })
     if (id) await updatePurchaseOrder(data);
     else await insertPurchaseOrder(data);
     form.resetFields();
@@ -45,9 +49,7 @@ const EditPurchaseOrder = () => {
     id && navigate(-1);
   };
 
-  const shouldUpdate: ShouldUpdate<TypePurchaseOrder.EditDTO> = (prve, next) => {
-    return prve.supplierId !== next.supplierId;
-  };
+  const editStatus = useMemo(() => editParams(value), [value]);
 
   useEffect(() => {
     actions.getCategory([
@@ -60,15 +62,19 @@ const EditPurchaseOrder = () => {
     !id && supplierId && form.setFieldsValue({ supplierId });
   }, [id, supplierId, form]);
 
+  const shouldUpdate: ShouldUpdate<TypePurchaseOrder.EditDTO> = (prve, next) => {
+    return prve.supplierId !== next.supplierId;
+  };
+
   return (
     <Spin spinning={loading}>
       <Form form={form} layout='vertical' className={styles.layout}>
         <BasicInfo />
         <Form.Item noStyle shouldUpdate={shouldUpdate}>
-          {() => <SupplierProduct form={form} />}
+          {() => <SupplierProduct form={form} editStatus={editStatus} />}
         </Form.Item>
         <Statistics />
-        <GoBack onSumbit={onSumbit} />
+        <GoBack onSumbit={editStatus ? undefined : onSumbit} />
       </Form>
     </Spin>
   );

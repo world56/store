@@ -18,8 +18,6 @@ interface TypeCheckFieldsRepeatDTO extends Partial<PrimaryKeyDTO> {
 export class PrismaService extends PrismaClient implements OnModuleInit {
   async onModuleInit() {
     await this.$connect();
-    this.createNO('createNO');
-    // this.createMiddleware();
   }
 
   async enableShutdownHooks(app: INestApplication) {
@@ -56,7 +54,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
    * @name createNO 创建流水号
    * @param tableName table
    */
-  async createNO(tableName: string) {
+  async createNO(tableName: string) {    
     const [val]: object[] = await this.$queryRaw`
     select 
       concat('NO',date_format(now(),'%Y%m%d') , 

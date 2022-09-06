@@ -20,6 +20,8 @@ import type { TypeSupplierProduct } from "@/interface/purchase/product";
 import type { TypeSelectProductSelectKey } from '@/components/Query/Product/Select';
 
 interface TypeSupplierProductProps {
+  /** @param editStatus 可否编辑 */
+  editStatus?: boolean;
   form: FormInstance<TypePurchaseOrder.EditDTO>;
 };
 
@@ -30,7 +32,7 @@ const selectShow = { keepParent: false };
 /**
  * @name SupplierProduct 选择供应产品
  */
-const SupplierProduct: React.FC<TypeSupplierProductProps> = ({ form }) => {
+const SupplierProduct: React.FC<TypeSupplierProductProps> = ({ form, editStatus }) => {
 
   const RefQuery = useRef<TypeSelectProductSelectKey>(null!);
 
@@ -110,6 +112,7 @@ const SupplierProduct: React.FC<TypeSupplierProductProps> = ({ form }) => {
           <Select
             showSearch
             allowClear
+            disabled={editStatus}
             placeholder='请选择采购规格'
             optionFilterProp="children"
             filterOption={filterOptionTooltip}>
@@ -127,7 +130,7 @@ const SupplierProduct: React.FC<TypeSupplierProductProps> = ({ form }) => {
       width: 140,
       render: (field: FormListFieldData) => (
         <Form.Item name={[field.name, 'quantity']} rules={rules}>
-          <InputNumber placeholder='仅数字' min={1} />
+          <InputNumber placeholder='仅数字' min={1} disabled={editStatus} />
         </Form.Item>
       )
     },
@@ -136,7 +139,7 @@ const SupplierProduct: React.FC<TypeSupplierProductProps> = ({ form }) => {
       width: 140,
       render: (field: FormListFieldData) => (
         <Form.Item name={[field.name, 'unitPrice']} rules={rules}>
-          <InputNumber money placeholder='元' min={0.01} />
+          <InputNumber money placeholder='元' min={0.01} disabled={editStatus} />
         </Form.Item>
       )
     },
@@ -145,7 +148,7 @@ const SupplierProduct: React.FC<TypeSupplierProductProps> = ({ form }) => {
       width: 200,
       render: (field: FormListFieldData) => (
         <Form.Item name={[field.name, 'remark']}>
-          <Input.TextArea rows={1} placeholder='请输入备注' />
+          <Input.TextArea rows={1} placeholder='请输入备注' disabled={editStatus} />
         </Form.Item>
       )
     },

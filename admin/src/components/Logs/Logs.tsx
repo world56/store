@@ -1,9 +1,9 @@
 import AddLog from "./Add";
-// import { Comment } from "antd";
+import { Comment } from "antd";
 // import { toTime } from "@/utils";
 import { useRequest } from "ahooks";
 import { Drawer } from "@/layout/PopUp";
-import styles from '../index.module.sass';
+import styles from './index.module.sass';
 // import StatusColor from "@/layout/StatusColor";
 // import { getPurchaseOrderLogs } from "@/api/purchase";
 
@@ -35,21 +35,30 @@ const Logs: React.FC<TypeLogsProps> = ({ id, onClose }) => {
       visible={Boolean(id)}
       onCancel={onCancel}
       className={styles.logs}>
-      {/* {[]?.map(v =>
-        <Comment
-          key={v.id}
-          author={v.creator.name}
-          avatar={v.creator.avatar}
-          content={v.remark}
-          datetime={
-            <>
-              <span>{toTime(v.createTime)}</span>
-              <StatusColor status={v.status} matching={ORDER_STATUS_COLOR} className={styles.status} />
-            </>
-          }
-        />
-      )} */}
-      <AddLog />
+      <Comment
+        author='张学友'
+        avatar='https://joeschmoe.io/api/v1/random'
+        content='remarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremark'
+        datetime={
+          <>
+            <span>2020-12-12 01:01:01</span>
+            {/* <StatusColor status={1} className={styles.status} /> */}
+          </>
+        }
+      />
+
+      <Comment
+        author='里黑帅'
+        avatar='https://joeschmoe.io/api/v1/random'
+        content='审核通过'
+        datetime={
+          <>
+            <span>2020-12-12 01:01:01</span>
+            {/* <StatusColor status={1} className={styles.status} /> */}
+          </>
+        }
+      />
+      {/* <AddLog /> */}
     </Drawer>
   );
 };

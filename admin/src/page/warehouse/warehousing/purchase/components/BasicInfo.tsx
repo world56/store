@@ -2,19 +2,19 @@ import Status from "@/layout/Status";
 import { toTime } from "@/utils/format";
 import { Card, Descriptions } from "antd";
 import styles from '../index.module.sass';
-import { TypeWarehouseWarehousing } from "@/interface/warehouse/warehousing";
-import { TypePurchaseSupplier } from "@/interface/purchase/supplier";
+
+import type { TypeWarehouseWarehousing } from "@/interface/warehouse/warehousing";
 
 const { Item } = Descriptions;
 
-interface TypeWarehousingBasicInfo extends Pick<TypePurchaseSupplier.DTO, 'remark'> {
+interface TypeWarehousingBasicInfo {
   data?: TypeWarehouseWarehousing.DTO;
 };
 
 /**
  * @name BasicInfo 采购单基本信息
  */
-const BasicInfo: React.FC<TypeWarehousingBasicInfo> = ({ data, remark }) => (
+const BasicInfo: React.FC<TypeWarehousingBasicInfo> = ({ data }) => (
   <Card title='基本信息'>
     <Descriptions bordered column={1} className={styles.basic}>
       <Item label="流水号">{data?.no}</Item>
@@ -26,7 +26,7 @@ const BasicInfo: React.FC<TypeWarehousingBasicInfo> = ({ data, remark }) => (
       <Item label="入库状态">
         <Status status={data?.status} matching={Status.type.WAREHOUSING_STATUS} />
       </Item>
-      <Item label="备注">{remark || '-'}</Item>
+      <Item label="备注">{data?.order?.remark || '-'}</Item>
     </Descriptions>
   </Card>
 );

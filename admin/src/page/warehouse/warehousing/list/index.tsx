@@ -1,17 +1,20 @@
 import { useRequest } from "ahooks";
 import Status from "@/layout/Status";
 import Link from "@/components/Link";
-import { useCategorys, usePageTurning } from "@/hooks";
-import { Card, Form, Table } from "antd";
+import { editableBtn } from './utils';
 import Search from "@/components/Search";
 import { DB_PRIMARY_KEY } from "@/config/db";
 import { toTime as render } from '@/utils/format';
-import { getWarehousingList } from "@/api/warehouse";
+import { Card, Form, message, Table } from "antd";
+import { Link as LinkTo } from 'react-router-dom';
+import { useCategorys, usePageTurning } from "@/hooks";
 import { useCallback, useEffect, useMemo } from "react";
+import { confirmReceiving, getWarehousingList } from "@/api/warehouse";
 
 import { ENUM_WAREHOUSE } from "@/enum/warehouse";
 
 import type { TypeWarehouseWarehousing } from "@/interface/warehouse/warehousing";
+import { Btn } from "@/layout/Button";
 
 const { ENUM_CATEGORY } = useCategorys;
 
@@ -35,6 +38,12 @@ const Warehousing = () => {
     run(values);
   }, [run, form, pageSize, currentPage]);
 
+  async function onConfirm(row: TypeWarehouseWarehousing.DTO) {
+    await confirmReceiving({ id: row.id });
+    message.success('确认成功');
+    initializa();
+  };
+
   const query = useMemo(() => [
     {
       name: 'type',
@@ -42,12 +51,12 @@ const Warehousing = () => {
       type: Search.ENUM.COMP_TYPE.SELECT,
       list: category?.WAREHOUSING_TYPE?.LIST
     },
-    // {
-    //   name: 'status',
-    //   label: '入库状态',
-    //   type: Search.ENUM.COMP_TYPE.SELECT,
-    //   list: category?.WAREHOUSING_STATUS?.LIST
-    // },
+    {
+      name: 'status',
+      label: '入库状态',
+      type: Search.ENUM.COMP_TYPE.SELECT,
+      list: category?.WAREHOUSING_PROCESS?.LIST
+    },
     {
       name: 'creatorId',
       label: '创建人',
@@ -69,7 +78,7 @@ const Warehousing = () => {
       key: DB_PRIMARY_KEY,
       title: '流水号',
       render: (row: TypeWarehouseWarehousing.DTO) => (
-        <Link to={`/warehouse/warehousingPurchase/${row.id}/${row.orderId}`}>{row.no}</Link>
+        <Link to={`/warehouse/warehousingPurchase/${row.id}`}>{row.no}</Link>
       )
     },
     {
@@ -97,9 +106,14 @@ const Warehousing = () => {
     {
       id: 'id',
       title: '操作',
-      render: (row: TypeWarehouseWarehousing.DTO) => (
-        <Link to={`/warehouse/warehousingPurchase/${row.id}/${row.orderId}`}>入库</Link>
-      )
+      render: (row: TypeWarehouseWarehousing.DTO) => {
+        const isEdit = editableBtn(row.status);
+        if (row.status === ENUM_WAREHOUSE.WAREHOUSING_PROCESS.GOODS_TO_BE_RECEIVED) {
+          return <Btn onClick={() => onConfirm(row)} >确认收货</Btn>
+        } else {
+          return <LinkTo to={`/warehouse/warehousingPurchase/${row.id}`}>{isEdit ? '清点入库' : '详情'}</LinkTo>
+        }
+      }
     },
   ];
 

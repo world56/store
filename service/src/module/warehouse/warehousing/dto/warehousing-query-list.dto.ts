@@ -1,5 +1,5 @@
 import { QueryDTO } from '@/dto/common/query.dto';
-import { WarehousingDTO } from '@/dto/warehouse/wahousing';
+import { WarehousingDTO } from '@/dto/warehouse/wahousing.dto';
 import { IntersectionType, PartialType, PickType } from '@nestjs/swagger';
 
 /**

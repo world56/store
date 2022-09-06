@@ -21,7 +21,7 @@ const Statistics: React.FC<Pick<TypeProductConfirmProps, 'total'>> = ({ total })
           </span>
           <Tooltip
             visible={inconsistent}
-            title='请与采购确认到货数量'
+            title='需要与采购核对实际数量'
             getPopupContainer={e => e}>
             <span style={{ color: inconsistent ? 'red' : '' }}>
               <span>实际入库量：</span>

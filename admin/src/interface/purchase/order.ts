@@ -6,6 +6,7 @@ import type { TypePurchaseSupplier } from "./supplier";
 
 import { ENUM_PURCHASE } from "@/enum/purchase";
 import { ENUM_WAREHOUSE } from "@/enum/warehouse";
+import { TypeWarehouseWarehousing } from "../warehouse/warehousing";
 
 /**
  * @name TypePurchaseOrder  采购管理-采购订单
@@ -25,6 +26,7 @@ export namespace TypePurchaseOrder {
    * @param supplier 供应商
    * @param logisticsCompany 物流公司名称
    * @param logs 状态日志
+   * @param warehousing 入库流程详情
    * @param total 商品总量
    * @param totalPrice 总价
    */
@@ -34,7 +36,7 @@ export namespace TypePurchaseOrder {
     no?: string;
     estimatedDate: Date;
     shippingNoteNumber?: string;
-    warehousing: { status: ENUM_WAREHOUSE.WAREHOUSING_PROCESS };
+    warehousing: TypeWarehouseWarehousing.DTO;
     settlement: ENUM_PURCHASE.SUPPLIER_SETTLEMENT;
     shippingMethod?: ENUM_PURCHASE.SUPPLIER_SHIPPING_METHOD;
     supplierId: T;

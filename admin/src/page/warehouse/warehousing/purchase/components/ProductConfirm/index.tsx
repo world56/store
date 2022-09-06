@@ -14,12 +14,15 @@ import type { TypePurchaseOrder } from '@/interface/purchase/order';
 export interface TypeProductConfirmProps
   extends
   TypeWarehousingPurchaseQuery,
-  Partial<Pick<TypePurchaseOrder.DTO, 'total'>> { }
+  Partial<Pick<TypePurchaseOrder.DTO, 'total'>> {
+  /** @param isEdit 是否可编辑 */
+  isEdit?: boolean;
+}
 
 /**
  * @name ProductConfirm 产品确认清单
  */
-const ProductConfirm: React.FC<TypeProductConfirmProps> = ({ total, form }) => {
+const ProductConfirm: React.FC<TypeProductConfirmProps> = ({ form, total, isEdit }) => {
 
   const [productId, setProductId] = useState<number>();
 
@@ -93,7 +96,7 @@ const ProductConfirm: React.FC<TypeProductConfirmProps> = ({ total, form }) => {
       width: 150,
       render: (field: FormListFieldData) => (
         <Form.Item name={[field.name, 'actualQuantity']}>
-          <InputNumber placeholder='仅数字' min={0} />
+          {isEdit ? <InputNumber placeholder='仅数字' min={0} /> : <ReadOnlytext />}
         </Form.Item>
       )
     },
@@ -125,7 +128,7 @@ const ProductConfirm: React.FC<TypeProductConfirmProps> = ({ total, form }) => {
 
       <Card title='入库备注'>
         <Form.Item name='remark' noStyle>
-          <Input.TextArea rows={4} placeholder='请输入库备注（例如实际入库数量、原因）' />
+          {isEdit ? <Input.TextArea rows={6} placeholder='请输入库备注（例如实际入库数量、原因）' /> : <ReadOnlytext />}
         </Form.Item>
       </Card>
 

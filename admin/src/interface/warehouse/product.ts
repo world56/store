@@ -1,4 +1,4 @@
-import { TypeCommon } from "../common";
+import type { TypeCommon } from "../common";
 
 /**
  * @name TypeWarehouseProduct 仓库产品出入库管理

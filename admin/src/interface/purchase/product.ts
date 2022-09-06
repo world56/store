@@ -1,5 +1,5 @@
+import type { TypeSpec } from "./spec";
 import type { TypeCommon } from "../common";
-import { TypeSpec } from "./spec";
 
 /**
  * @name TypeSupplierProduct 采购管理-产品库
