@@ -25,10 +25,15 @@ type TypeEditSupplierInfo = Omit<TypeEditSupplierProps, 'onClose'>;
 
 const { ENUM_CATEGORY } = useCategorys;
 
+
+interface TypeSupplierListProps {
+  productId?: TypeCommon.DatabaseMainParameter['id'];
+};
+
 /**
  * @name SupplierList 供应商列表
  */
-const SupplierList = () => {
+const SupplierList: React.FC<TypeSupplierListProps> = ({ productId }) => {
 
   const { STATUS, PURCHASE_PRODUCT_TYPE } = useCategorys([
     ENUM_CATEGORY.PURCHASE_PRODUCT_TYPE
@@ -68,6 +73,13 @@ const SupplierList = () => {
   };
 
   const query = useMemo(() => [
+    {
+      name: 'productId',
+      label: '产品名称',
+      type: Search.ENUM.COMP_TYPE.SELECT,
+      initialValue: productId,
+      hide: () => true
+    },
     { name: 'name', label: '供应商名称', type: Search.ENUM.COMP_TYPE.INPUT },
     { name: 'companyPhone', label: '供应商电话', type: Search.ENUM.COMP_TYPE.INPUT },
     {
@@ -84,7 +96,7 @@ const SupplierList = () => {
     },
     { name: 'contactsName', label: '联系人姓名', type: Search.ENUM.COMP_TYPE.INPUT },
     { name: 'phone', label: '联系人电话', type: Search.ENUM.COMP_TYPE.INPUT },
-  ], [PURCHASE_PRODUCT_TYPE, STATUS]);
+  ], [PURCHASE_PRODUCT_TYPE, STATUS, productId]);
 
   const columns = [
     {

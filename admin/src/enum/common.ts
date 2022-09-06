@@ -41,16 +41,24 @@ export namespace ENUM_COMMON {
   }
 
   /**
-   * @name STATUS_COLOR_TYPE
-   * @param DEFAULT 默认色号 #1890ff 浅蓝
-   * @param SUCCESS 成功色号 #67c23a 浅绿
-   * @param DANGER  危险色号 #f56c6c 浅红
-   * @param WARNING 警告色号 #e6a23c 浅黄
+   * @name COLOR
+   * @param BLACK 灰色
+   * @param GREY 灰色
+   * @param BLUE 浅蓝
+   * @param GREEN 浅绿
+   * @param RED 浅红
+   * @param YELLOW 浅黄
+   * @param ORANGE 橙色
+   * @param PURPLE 紫色
    */
-  export enum STATUS_COLOR_TYPE {
-    DEFAULT = "#1890ff",
-    SUCCESS = "#67c23a",
-    DANGER = "#f56c6c",
-    WARNING = "#e6a23c",
+  export enum COLOR {
+    BLACK = "#000000d9",
+    GREY = "#696969",
+    BLUE = "#1890ff",
+    GREEN = "#67c23a",
+    RED = "#f56c6c",
+    YELLOW = "#e6a23c",
+    ORANGE = "#ff8c00",
+    PURPLE = "#800080",
   }
 }

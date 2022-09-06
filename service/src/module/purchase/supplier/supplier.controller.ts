@@ -35,8 +35,8 @@ export class SupplierController {
   }
 
   @Post('addLog')
-  addLog(@Body() data: SupplierLogDTO, @User() user: AdminUserDTO) {
-    return this.SupplierService.addLog(data, user.id);
+  addLog(@Body() data: SupplierLogDTO) {
+    // this.SupplierService.addLog(data, user.id);
   }
 
   @Get('details')

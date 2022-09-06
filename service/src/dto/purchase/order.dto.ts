@@ -1,10 +1,4 @@
 import {
-  PickType,
-  PartialType,
-  ApiProperty,
-  IntersectionType,
-} from '@nestjs/swagger';
-import {
   IsInt,
   IsDate,
   IsEnum,
@@ -14,6 +8,12 @@ import {
   IsOptional,
   ValidateNested,
 } from 'class-validator';
+import {
+  PickType,
+  PartialType,
+  ApiProperty,
+  IntersectionType,
+} from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
 import { CommonDTO, PrimaryKeyDTO } from '../common/common.dto';
 
@@ -24,7 +24,7 @@ import { ENUM_PURCHASE } from '@/enum/purchase';
  */
 export class PurchaseOrderDTO extends IntersectionType(
   PartialType(PrimaryKeyDTO),
-  PickType(CommonDTO, ['status', 'remark'] as const),
+  PickType(CommonDTO, ['remark'] as const),
 ) {
   /**
    * @param estimatedDate 预期抵达时间
@@ -77,15 +77,6 @@ export class PurchaseOrderDTO extends IntersectionType(
   supplierId: number;
 
   /**
-   * @name  product 采购产品列表
-   */
-  @ApiProperty({ description: '采购产品列表' })
-  @ValidateNested()
-  @Type(() => PruchaseOrderProductDetailsDTO)
-  @IsArray()
-  products: PruchaseOrderProductDetailsDTO[];
-
-  /**
    * @param creatorId 创建人ID
    */
   @ApiProperty({ description: '创建人ID' })
@@ -93,12 +84,21 @@ export class PurchaseOrderDTO extends IntersectionType(
   @IsOptional()
   @IsInt()
   creatorId: number;
+
+  /**
+   * @name product 采购产品列表
+   */
+  @ApiProperty({ description: '采购产品列表' })
+  @ValidateNested()
+  @Type(() => PurchaseOrderProductDetailsDTO)
+  @IsArray()
+  products: PurchaseOrderProductDetailsDTO[];
 }
 
 /**
- * @name PruchaseOrderProductDetailsDTO 采购产品DTO
+ * @name PurchaseOrderProductDetailsDTO 采购产品DTO
  */
-export class PruchaseOrderProductDetailsDTO extends IntersectionType(
+export class PurchaseOrderProductDetailsDTO extends IntersectionType(
   PickType(CommonDTO, ['id', 'remark'] as const),
   PickType(PurchaseOrderDTO, ['supplierId'] as const),
 ) {

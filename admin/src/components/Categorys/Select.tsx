@@ -27,7 +27,7 @@ const selectShow = { keepParent: false };
 /**
  * @name CategorySelect 快速选择类目
  */
-const CategorySelect: TypeCategorySelectProps = ({ type, value, onChange, ...props }) => {
+const CategorySelect: TypeCategorySelectProps = ({ type, value, onChange, disabled, ...props }) => {
 
   const isCategory = Object.keys(ENUM_STORE.CATEGORY).includes(type);
 
@@ -48,7 +48,7 @@ const CategorySelect: TypeCategorySelectProps = ({ type, value, onChange, ...pro
   const val = onChange ? value : key;
 
   const tool = (
-    <>
+    disabled ? null : <>
       {isCategory ? <Tooltip title='更新筛选项'>
         <SyncOutlined onClick={onRefresh} />
       </Tooltip> : null}
@@ -66,6 +66,7 @@ const CategorySelect: TypeCategorySelectProps = ({ type, value, onChange, ...pro
       showSearch
       value={val}
       suffixIcon={tool}
+      disabled={disabled}
       placeholder='请选择关联项'
       className={styles.select}
       onChange={onSelectChange}

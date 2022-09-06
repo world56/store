@@ -46,7 +46,7 @@ const Btn: React.FC<TypeBtnProps> = ({
 
   return confirmTips ?
     <Popconfirm
-      title={confirmTips === true ? '确认删除？' : confirmTips}
+      title={confirmTips === true ? '确认操作？' : confirmTips}
       onConfirm={onConfirm}>{btn}</Popconfirm>
     : btn;
 };

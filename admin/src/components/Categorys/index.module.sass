@@ -33,9 +33,16 @@
   p
     margin: 0
 
-.tag
+.tagShow
+  user-select: none
+  margin-bottom: -10px
+  :global(.ant-tag)
+    margin-bottom: 10px
+
+.tagHidden
   user-select: none
   overflow: hidden
+  height: 23px
   text-overflow: ellipsis
   white-space: nowrap
 

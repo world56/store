@@ -10,11 +10,17 @@ import type { TypeSystemUser } from "./system/user";
  * @name TypeCommon 公共接口
  */
 export namespace TypeCommon {
+
+  /**
+   * @name PrimaryKey DB主键类型
+   */
+  export type PrimaryKey = number;
+
   /**
    * @name DatabaseMainParameter 数据库主要参数
    * @param id 主键
    */
-  export interface DatabaseMainParameter<T = number> {
+  export interface DatabaseMainParameter<T = PrimaryKey> {
     readonly id: T;
   }
 

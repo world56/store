@@ -57,6 +57,15 @@ export class SupplierQueryListDTO extends IntersectionType(
   @IsString()
   companyPhone?: string;
 
+  /**
+   * @param productId 产品ID
+   */
+  @ApiProperty({ description: '产品ID' })
+  @Type(() => Number)
+  @IsOptional()
+  @IsInt()
+  productId?: number;
+
   take: number;
   skip: number;
 }

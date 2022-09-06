@@ -3,18 +3,21 @@ import Link from "@/components/Link";
 import Status from "@/layout/Status";
 import { Btn } from "@/layout/Button";
 import Search from '@/components/Search';
-import { Button, Card, Form, Table } from "antd";
+import { showEditBtn, showAbandoned } from './utils';
 import { getPurchaseOrderList } from "@/api/purchase";
 import { useCategorys, usePageTurning } from "@/hooks";
 import { OrderedListOutlined } from '@ant-design/icons';
 import { useCallback, useEffect, useMemo } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { Button, Card, Form, message, Table } from "antd";
 import { toTime as render, monetaryUnit, urlSearchParams } from '@/utils/format';
 
 import { DB_PRIMARY_KEY } from '@/config/db';
 import { ENUM_PURCHASE } from "@/enum/purchase";
+import { ENUM_WAREHOUSE } from "@/enum/warehouse";
 
 import type { TypePurchaseOrder } from "@/interface/purchase/order";
+import { scrapPurchaseOrder } from "@/api/warehouse";
 
 interface TypeSupplierOrderProps extends Pick<TypePurchaseOrder.Query, 'supplierId'> { }
 
@@ -53,6 +56,13 @@ const SupplierOrder: React.FC<TypeSupplierOrderProps> = ({ supplierId }) => {
     });
   }, [navigate, supplierId]);
 
+  const onAbandoned = useCallback(async (row: TypePurchaseOrder.DTO) => {
+    const { id } = row.warehousing;
+    await scrapPurchaseOrder({ id });
+    message.success('订单已废弃');
+    initializa();
+  }, [initializa]);
+
   const query = useMemo(() => [
     { name: 'no', label: '流 水 号', type: Search.ENUM.COMP_TYPE.INPUT },
     { name: 'shippingNoteNumber', label: '运输单号', type: Search.ENUM.COMP_TYPE.INPUT },
@@ -86,7 +96,7 @@ const SupplierOrder: React.FC<TypeSupplierOrderProps> = ({ supplierId }) => {
       name: 'status',
       label: '订单状态',
       type: Search.ENUM.COMP_TYPE.SELECT,
-      list: category?.SUPPLIER_ORDER_STATUS?.LIST
+      list: category?.WAREHOUSING_PROCESS?.LIST
     },
     {
       name: 'creatorId',
@@ -126,26 +136,28 @@ const SupplierOrder: React.FC<TypeSupplierOrderProps> = ({ supplierId }) => {
         )
       },
       {
-        dataIndex: 'status',
         title: '订单状态',
-        render: (status: ENUM_PURCHASE.SUPPLIER_ORDER_STATUS) => (
-          <Status status={status} matching={Status.type.PURCHASE_ORDER} />
+        dataIndex: ['warehousing', 'status'],
+        render: (status: ENUM_WAREHOUSE.WAREHOUSING_PROCESS) => (
+          <Status status={status} matching={Status.type.WAREHOUSING_STATUS} />
         )
       },
       {
         key: 'status',
         title: '操作',
-        width: 120,
+        width: 140,
         render: (row: TypePurchaseOrder.DTO) => (
-          row.status === ENUM_PURCHASE.SUPPLIER_ORDER_STATUS.TO_BE_WAREHOUSED ?
-            <Btn onClick={() => onEdit(row)}>编辑</Btn> :
-            null
+          <>
+            {showAbandoned(row) && <Btn confirmTips type='danger' onClick={() => onAbandoned(row)}>作废</Btn>}
+            {showEditBtn(row) && <Btn onClick={() => onEdit(row)}>编辑</Btn>}
+            <Link to={`/purchase/supplierOrderDetails/${row.id}`}>详情</Link>
+          </>
         )
       }
     ]
     supplierId && list.splice(1, 1);
     return list;
-  }, [supplierId, onEdit]);
+  }, [supplierId, onEdit, onAbandoned]);
 
   useEffect(() => {
     initializa();

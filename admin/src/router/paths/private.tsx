@@ -103,6 +103,12 @@ export default [
     element: Outlet,
     children: [
       {
+        id: "warehousingAudit",
+        title: "入库审核",
+        path: "/warehouse/warehousingAudit",
+        element: lazy(() => import("@/page/warehouse/audit")),
+      },
+      {
         id: "warehousing",
         title: "待入库",
         path: "/warehouse/warehousing",
@@ -111,7 +117,7 @@ export default [
       {
         id: "warehousingPurchase",
         title: "采购入库",
-        hide:true,
+        hide: true,
         path: "/warehouse/warehousingPurchase/:id",
         element: lazy(() => import("@/page/warehouse/warehousing/purchase")),
       },

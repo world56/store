@@ -1,3 +1,5 @@
+import { ENUM_PURCHASE } from "@/enum/purchase";
+import { ENUM_WAREHOUSE } from "@/enum/warehouse";
 import type { TypePurchaseOrder } from "@/interface/purchase/order";
 import type { TypeSupplierProduct } from "@/interface/purchase/product";
 
@@ -16,7 +18,7 @@ export function filterDuplicatesProduct(
       name: val.name,
       brand: val.brand.name,
       unit: val.unit.name,
-      spec: val.spec.map((v) => v.specParameter),
+      spec: val.spec,
       surplus: 1000, // 剩余库存
     });
   }
@@ -32,7 +34,7 @@ export function serverToForm(data: TypePurchaseOrder.DTO) {
       name: val.product.name,
       brand: val.product.brand.name,
       unit: val.product.unit.name,
-      spec: val.product.spec.map((v) => v.specParameter),
+      spec: val.product.spec,
       specId: val.spec.id,
       surplus: 1000, // 剩余库存
       quantity: val.quantity,
@@ -52,3 +54,29 @@ export function formToServer(form: TypePurchaseOrder.EditDTO) {
     products: form.products.sort((l, r) => l.productId! - r.productId!),
   };
 }
+
+/**
+ * @name editParams 编辑价格、规格、采购数
+ * @desc 货到付款 待收货、待入库可编辑
+ *       先款后货 待付款可编辑
+ */
+export function editParams(data?: TypePurchaseOrder.DTO) {
+  if (data) {
+    const {
+      settlement,
+      warehousing: { status },
+    } = data;
+    if (settlement === ENUM_PURCHASE.SUPPLIER_SETTLEMENT.CASH_ON_DELIVERY) {
+      return !(
+        status === ENUM_WAREHOUSE.WAREHOUSING_PROCESS.GOODS_TO_BE_RECEIVED ||
+        status === ENUM_WAREHOUSE.WAREHOUSING_PROCESS.WAITING_FOR_STORAGE
+      );
+    } else {
+      return !(
+        status === ENUM_WAREHOUSE.WAREHOUSING_PROCESS.WAITING_FOR_PAYMENT
+      );
+    }
+  }
+  return true;
+}
+

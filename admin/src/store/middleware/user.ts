@@ -32,7 +32,7 @@ function* taskInGetUserInfo() {
     const user: TypeSystemUser.DTO = yield getUserInfo();
     yield put(ActionsUser.setUserInfo(user));
   } catch {
-    message.success("获取用户信息失败!");
+    message.error("获取用户信息失败");
   }
 }
 

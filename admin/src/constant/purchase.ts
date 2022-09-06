@@ -64,22 +64,22 @@ export namespace CONSTANT_PURCHASE {
     ],
   };
 
-  /**
-   * @name SUPPLIER_ORDER_STATUS 供应商订单采购状态
-   */
-  export const SUPPLIER_ORDER_STATUS = {
-    OBJ: {
-      [ENUM_PURCHASE.SUPPLIER_ORDER_STATUS.TO_BE_WAREHOUSED]: "待入库",
-      [ENUM_PURCHASE.SUPPLIER_ORDER_STATUS.TO_BE_PAID]: "待付款",
-      [ENUM_PURCHASE.SUPPLIER_ORDER_STATUS.COMPLETE]: "完成",
-    },
-    LIST: [
-      {
-        id: ENUM_PURCHASE.SUPPLIER_ORDER_STATUS.TO_BE_WAREHOUSED,
-        name: "待入库",
-      },
-      { id: ENUM_PURCHASE.SUPPLIER_ORDER_STATUS.TO_BE_PAID, name: "待付款" },
-      { id: ENUM_PURCHASE.SUPPLIER_ORDER_STATUS.COMPLETE, name: "完成" },
-    ],
-  };
+  // /**
+  //  * @name SUPPLIER_ORDER_STATUS 供应商订单采购状态
+  //  */
+  // export const SUPPLIER_ORDER_STATUS = {
+  //   OBJ: {
+  //     [ENUM_PURCHASE.SUPPLIER_ORDER_STATUS.TO_BE_WAREHOUSED]: "待入库",
+  //     [ENUM_PURCHASE.SUPPLIER_ORDER_STATUS.TO_BE_PAID]: "待付款",
+  //     [ENUM_PURCHASE.SUPPLIER_ORDER_STATUS.COMPLETE]: "完成",
+  //   },
+  //   LIST: [
+  //     {
+  //       id: ENUM_PURCHASE.SUPPLIER_ORDER_STATUS.TO_BE_WAREHOUSED,
+  //       name: "待入库",
+  //     },
+  //     { id: ENUM_PURCHASE.SUPPLIER_ORDER_STATUS.TO_BE_PAID, name: "待付款" },
+  //     { id: ENUM_PURCHASE.SUPPLIER_ORDER_STATUS.COMPLETE, name: "完成" },
+  //   ],
+  // };
 }

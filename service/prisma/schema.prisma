@@ -78,7 +78,6 @@ model AdminUser {
   files                Files[]
   purchaseOrder        PurchaseOrder[]
   warehousePosition    WarehousePosition[]
-  supplierLog          PurchaseSupplierLog[]
   warehousingInspector Warehousing[]         @relation(name: "rel_warehousing_creator")
   warehousingCreator   Warehousing[]         @relation(name: "rel_warehousing_inspector")
 
@@ -178,7 +177,6 @@ model PurchaseSupplier {
 
   files          Files[]
   category       Categorys[]
-  log            PurchaseSupplierLog[]
   contacts       PurchaseSupplierContacts[]
   purchaseOrders PurchaseOrder[]
   product        RelSupplierOnProduct[]
@@ -217,22 +215,6 @@ model PurchaseSupplierContacts {
   @@map("purchase_supplier_contacts")
 }
 
-model PurchaseSupplierLog {
-  id         Int       @id() @default(autoincrement())
-  type       Int       @default(5) @db.Int() // 类型 默认“其他”
-  content    String    @db.VarChar(200)
-  createTime DateTime? @default(now()) @map("create_time")
-  userId     Int       @map("user_id") @db.Int()
-  supplierId Int       @map("supplier_id") @db.Int()
-
-  user     AdminUser        @relation(fields: [userId], references: [id])
-  supplier PurchaseSupplier @relation(fields: [supplierId], references: [id])
-
-  @@index([type])
-  @@index([userId])
-  @@index([supplierId])
-  @@map("purchase_supplier_status_log")
-}
 
 model RelPurchaseProductOnSpec {
   id                Int     @id() @default(autoincrement())
@@ -298,7 +280,6 @@ model PurchaseOrder {
   shippingMethod     Int       @map("shipping_method") @db.Int() // 运输方式
   shippingNoteNumber String?   @map("shipping_note_number") @db.VarChar(30) // 运输单号
   createTime         DateTime? @default(now()) @map("create_time")
-  status             Int?      @default(0) @db.Int()
   remark             String?   @db.VarChar(255) // 备注
   creatorId          Int       @map("creator_id") @db.Int() // 创建人
   supplierId         Int       @map("supplier_id") @db.Int() // 供应商
@@ -327,8 +308,8 @@ model PurchaseOrder {
 model PurchaseOrderProduct {
   id             Int     @id() @default(autoincrement())
   quantity       Int     @db.Int() // 采购数量
-  unitPrice      BigInt  @map("unit_price") @db.BigInt // 单价 (分)
   actualQuantity Int?    @map("actual_quantity") @db.Int() // 实际数量
+  unitPrice      BigInt  @map("unit_price") @db.BigInt // 单价 (分)
   remark         String? @db.VarChar(255) // 备注
   specId         Int     @map("spec_id") @db.Int() // 规格
   productId      Int     @map("product_id") @db.Int()
@@ -345,6 +326,32 @@ model PurchaseOrderProduct {
 
 // ***********************货仓****************************
 
+// 待入库
+model Warehousing {
+  id          Int       @id() @default(autoincrement())
+  no          String    @unique // 流水序列号
+  orderId     Int       @unique() @map("order_id") @db.Int()
+  inspectorId Int?      @map("inspector_id") @db.Int()
+  creatorId   Int       @map("creator_id") @db.Int()
+  updateTime  DateTime?
+  createTime  DateTime? @default(now()) @map("create_time")
+  type        Int       @db.Int()
+  status      Int       @db.Int()
+  audit       Boolean   @default(false)
+  remark      String?   @db.VarChar(255) // 备注
+
+  order     PurchaseOrder @relation(fields: [orderId], references: [id])
+  creator   AdminUser     @relation(name: "rel_warehousing_creator", fields: [creatorId], references: [id])
+  inspector AdminUser?    @relation(name: "rel_warehousing_inspector", fields: [inspectorId], references: [id])
+
+  @@index([no])
+  @@index([orderId])
+  @@index([creatorId])
+  @@index([inspectorId])
+  @@index([createTime])
+  @@map("warehouseing")
+}
+
 // 仓位位置
 model WarehousePosition {
   id       Int       @id() @default(autoincrement())
@@ -357,28 +364,4 @@ model WarehousePosition {
   @@index([name])
   @@index([personId])
   @@map("warehouse_position")
-}
-
-// 待入库
-model Warehousing {
-  id          Int       @id() @default(autoincrement())
-  no          String    @unique // 流水序列号
-  orderId     Int       @unique() @map("order_id") @db.Int()
-  inspectorId Int?      @map("inspector_id") @db.Int()
-  creatorId   Int       @map("creator_id") @db.Int()
-  updateTime  DateTime?
-  createTime  DateTime? @default(now()) @map("create_time")
-  type        Int       @db.Int()
-  status      Int       @db.Int()
-
-  order PurchaseOrder @relation(fields: [orderId], references: [id])
-
-  creator   AdminUser  @relation(name: "rel_warehousing_creator", fields: [creatorId], references: [id])
-  inspector AdminUser? @relation(name: "rel_warehousing_inspector", fields: [inspectorId], references: [id])
-
-  @@index([orderId])
-  @@index([creatorId])
-  @@index([inspectorId])
-  @@index([createTime])
-  @@map("warehouseing")
 }

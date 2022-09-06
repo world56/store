@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
-import { ConfigModule } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
 import { FileModule } from './common/file/file.module';
 import { AuthModule } from './module/auth/auth.module';
 import { UserTokenGuard } from './guard/user-token.guard';
+import { PrismaModule } from './common/prisma/prisma.module';
 import { SystemModule } from './module/system/system.module';
 import { JwtAuthModule } from './common/jwtAuth/jwtAuth.module';
 import { CategoryModule } from './common/category/category.module';
@@ -12,7 +13,8 @@ import { WarehouseModule } from './module/warehouse/warehouse.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    PrismaModule,
+    MongooseModule.forRoot(process.env.DATABASE_MONGODB_URL),
     FileModule,
     AuthModule,
     SystemModule,

@@ -108,7 +108,7 @@ const SpecTemplate = () => {
   return (
     <>
       <Search form={search} columns={query} onSearch={iniaializa}>
-        <Button onClick={() => onEdit()} icon={<ScheduleOutlined />}>新增规格</Button>
+        <Button onClick={() => onEdit()} icon={<ScheduleOutlined />}>新增模板</Button>
       </Search>
       <Table
         loading={loading}

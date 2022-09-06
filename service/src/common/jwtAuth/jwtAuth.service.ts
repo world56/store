@@ -32,7 +32,6 @@ export class JwtAuthService {
       const { status, password, remark, ...protectedData } = data;
       return protectedData;
     } catch (error) {
-      console.log('JWT-error', error);
       throw new UnauthorizedException('账号过期,请重新登录');
     }
   }

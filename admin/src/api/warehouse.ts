@@ -105,3 +105,38 @@ export function getWarehousingInfo(data: TypeCommon.DatabaseMainParameter) {
     },
   );
 }
+
+/**
+ * @name scrapPurchaseOrder 废弃采购订单
+ */
+export function scrapPurchaseOrder(data: TypeCommon.DatabaseMainParameter) {
+  return request<boolean>("warehouse/warehousing/void", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
+}
+
+/**
+ * @name confirmReceiving 确认收货
+ */
+export function confirmReceiving(data: TypeCommon.DatabaseMainParameter) {
+  return request<boolean>("warehouse/warehousing/receiving", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
+}
+
+/**
+ * @name confirmWarehousing 清点确认入库产品
+ */
+export function confirmWarehousing(
+  data: TypeWarehouseWarehousing.ConfirmPurchaseWarehousing,
+) {
+  return request<TypeWarehouseWarehousing.DTO>(
+    "warehouse/warehousing/confirm",
+    {
+      method: ENUM_HTTP.REQUEST_MODE.POST,
+      data,
+    },
+  );
+}

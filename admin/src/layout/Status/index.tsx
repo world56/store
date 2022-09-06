@@ -17,7 +17,7 @@ interface TypeStatusProps extends React.FC<{
 
 /**
  * @name Status 当前状态
- * @description 冻结状态 显示红色、激活状态 显示绿色。
+ * @description 默认：冻结状态 显示红色、激活状态 显示绿色。
  */
 const Status: TypeStatusProps = ({
   status,
