@@ -1,8 +1,9 @@
-import type { RouteObject } from "@remix-run/router";
 import React from "react";
 
+import type { RouteProps } from "react-router-dom";
+
 export namespace TypeRoute {
-  export interface Route extends Omit<RouteObject, "children" | "element"> {
+  export interface Route extends Omit<RouteProps, "children" | "element"> {
     title?: string;
     hide?: boolean | undefined;
     children?: Route[];

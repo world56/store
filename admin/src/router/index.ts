@@ -1,1 +1,0 @@
-export { default as Entrance } from "./component/Entrance";

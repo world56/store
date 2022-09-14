@@ -9,6 +9,10 @@ import type { LoaderFunctionArgs } from "@remix-run/router";
 
 let uninstall: () => void;
 
+/**
+ * @name Authentication 路由鉴权
+ * @param _arg 自带参数
+ */
 export default async function Authentication(_arg: LoaderFunctionArgs) {
   return new Promise((reslove) => {
     const token = Cookies.get(TOKEN_KEY);
