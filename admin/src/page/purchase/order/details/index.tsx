@@ -1,11 +1,14 @@
 import { Spin, Tabs } from 'antd';
 import { useGetDetails } from '@/hooks';
-import { GoBack } from '@/layout/Button';
 import styles from './index.module.sass';
+import { GoBack } from '@/layout/Button';
+import Logs from '@/components/Logs/Logs';
 import Products from './components/Products';
 import BasicInfo from './components/BasicInfo';
 import { getPurchaseOrderDetails } from '@/api/purchase';
 import { useParams, useSearchParams } from 'react-router-dom';
+
+import { ENUM_COMMON } from '@/enum/common';
 
 import type { TypeCommon } from '@/interface/common';
 import type { TypePurchaseOrder } from '@/interface/purchase/order';
@@ -23,11 +26,10 @@ export interface TypePurchaseOrderDetailsDisplayProps {
  */
 const PurchaseOrderDetails = () => {
 
-  const { id } = useParams<TypePurchaseOrderRouteParam>();
+  const params = useParams<TypePurchaseOrderRouteParam>();
+  const id = parseInt(params.id!)
 
-  const { value, loading } = useGetDetails(async () => {
-    return await getPurchaseOrderDetails({ id: parseInt(id!) });
-  }, [id]);
+  const { value, loading } = useGetDetails(() => getPurchaseOrderDetails({ id }), [id]);
 
   const [query, setQuery] = useSearchParams({ activeKey: '1' },);
 
@@ -46,6 +48,9 @@ const PurchaseOrderDetails = () => {
         </TabPane>
         <TabPane tab="采购产品" key="2">
           <Products data={value} />
+        </TabPane>
+        <TabPane tab="跟踪日志" key="3">
+          <Logs id={id} module={ENUM_COMMON.LOG_MODULE.PURCHASE} />
         </TabPane>
       </Tabs>
       <GoBack />

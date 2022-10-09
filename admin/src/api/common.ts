@@ -4,6 +4,7 @@ import { ENUM_HTTP } from "@/enum/http";
 import { REQUEST_PREFIX } from "@/config/request";
 
 import type { TypeCommon } from "@/interface/common";
+import { TypeLog } from "@/interface/log";
 
 /**
  * @name API_URL_UPLOAD 上传文件
@@ -30,5 +31,25 @@ export function uploadFile(file: File) {
     data,
     method: ENUM_HTTP.REQUEST_MODE.POST,
     headers: { "Content-Type": ENUM_HTTP.CONTENT_TYPE.MULTIPART },
+  });
+}
+
+/**
+ * @name getLogs 查询日志
+ */
+export function getLogs(params: TypeLog.QueryList) {
+  return request<TypeLog.DTO[]>("log/list", {
+    method: ENUM_HTTP.REQUEST_MODE.GET,
+    params,
+  });
+}
+
+/**
+ * @name insertLog 新增日志
+ */
+export function insertLog(data: TypeLog.Insert) {
+  return request<TypeLog.DTO>("log/insert", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
   });
 }

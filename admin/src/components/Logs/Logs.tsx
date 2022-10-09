@@ -1,65 +1,66 @@
-import AddLog from "./Add";
 import { Comment } from "antd";
-// import { toTime } from "@/utils";
 import { useRequest } from "ahooks";
-import { Drawer } from "@/layout/PopUp";
-import styles from './index.module.sass';
-// import StatusColor from "@/layout/StatusColor";
-// import { getPurchaseOrderLogs } from "@/api/purchase";
+// import { useCategorys } from "@/hooks";
+import { getLogs } from "@/api/common";
+import { toTime } from "@/utils/format";
+import StatusColor from "@/layout/Status";
+import Container from './components/Container';
 
-// import { ORDER_STATUS_COLOR } from "../utils";
-
+import type { TypeLog } from "@/interface/log";
 import type { TypeCommon } from "@/interface/common";
 
-interface TypeLogsProps extends TypeCommon.DatabaseMainParameter {
-  onClose(): void;
+interface TypeLogsProps extends TypeCommon.DatabaseMainParameter, Pick<TypeLog.QueryList, 'module'> {
+  /**
+   * @name onClose 传递该参数则为抽屉打开
+   */
+  onClose?(): void;
 };
 
+// const { ENUM_CATEGORY } = useCategorys;
+
 /**
- * @name Logs 日志 （暂不启用）
+ * @name Logs 日志
  */
-const Logs: React.FC<TypeLogsProps> = ({ id, onClose }) => {
+const Logs: React.FC<TypeLogsProps> = ({
+  module,
+  onClose,
+  id: relationId,
+}) => {
 
-  const { loading } = useRequest(async () => {
-    // return id ? getPurchaseOrderLogs({ id }) : [];
-  }, { refreshDeps: [id] });
+  // const { ADMIN_USER } = useCategorys([ENUM_CATEGORY.ADMIN_USER]);
 
-  function onCancel() {
-    onClose();
+  const { data, loading } = useRequest(() => getLogs({ relationId, module }), {
+    refreshDeps: [relationId, module]
+  });
+
+  const statusStyle: React.CSSProperties = {
+    right: 0,
+    position: 'absolute',
+    top: onClose ? 1 : -2,
+    fontSize: onClose ? 13 : 14,
   };
 
+  // console.log('@-ADMIN_USER', ADMIN_USER);
+
   return (
-    <Drawer
+    <Container
       title='采购日志'
       loading={loading}
-      visible={Boolean(id)}
-      onCancel={onCancel}
-      className={styles.logs}>
-      <Comment
-        author='张学友'
+      onCancel={onClose}
+      visible={Boolean(relationId)}>
+      {data?.map(v => <Comment
+        key={v._id}
+        author={v.creatorId}
         avatar='https://joeschmoe.io/api/v1/random'
-        content='remarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremarkremark'
+        content={v.remark}
         datetime={
           <>
-            <span>2020-12-12 01:01:01</span>
-            {/* <StatusColor status={1} className={styles.status} /> */}
+            <span>{toTime(v.createTime)}</span>
+            <StatusColor status={v.type} style={statusStyle} />
           </>
         }
-      />
-
-      <Comment
-        author='里黑帅'
-        avatar='https://joeschmoe.io/api/v1/random'
-        content='审核通过'
-        datetime={
-          <>
-            <span>2020-12-12 01:01:01</span>
-            {/* <StatusColor status={1} className={styles.status} /> */}
-          </>
-        }
-      />
-      {/* <AddLog /> */}
-    </Drawer>
+      />)}
+    </Container>
   );
 };
 

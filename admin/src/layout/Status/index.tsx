@@ -3,9 +3,11 @@ import { isVoid } from '@/utils';
 import styles from './index.module.sass';
 
 import { COLOR_TYPE } from './conf';
+import React from 'react';
 
 interface TypeStatusProps extends React.FC<{
   className?: string;
+  style?: React.CSSProperties;
   status?: number;
   matching?: Record<number, {
     color?: string;
@@ -22,11 +24,12 @@ interface TypeStatusProps extends React.FC<{
 const Status: TypeStatusProps = ({
   status,
   className,
+  style = {},
   matching = COLOR_TYPE.DEFAULT_MATCHING
 }) => {
   const conf = isVoid(status) ? undefined : matching[status!];
   return (
-    <span style={{ color: conf?.color }} className={`${styles.layout} ${className || ''}`}>
+    <span style={{ color: conf?.color, ...style }} className={`${styles.layout} ${className || ''}`}>
       {conf?.color ? <Badge color={conf?.color} /> : null}
       {conf?.text || '-'}
     </span>

@@ -9,6 +9,7 @@ import { PurchaseOrderQueryListDTO } from './dto/purchase-order-query-list.dto';
 
 import { ENUM_PURCHASE } from '@/enum/purchase';
 import { ENUM_WAREHOUSE } from '@/enum/warehouse';
+import { ENUM_COMMON } from '@/enum/common';
 
 @Injectable()
 export class OrderService {
@@ -87,7 +88,7 @@ export class OrderService {
     return { ...data, products };
   }
 
-  insert(dto: PurchaseOrderDTO, user: AdminUserDTO) {
+  async insert(dto: PurchaseOrderDTO, user: AdminUserDTO) {
     const { products, settlement, ...data } = dto;
     data.creatorId = user.id;
     const { total, totalPrice } = this.statistics(products);
@@ -96,7 +97,7 @@ export class OrderService {
       settlement === ENUM_PURCHASE.SUPPLIER_SETTLEMENT.CASH_ON_DELIVERY
         ? ENUM_WAREHOUSE.WAREHOUSING_PROCESS.GOODS_TO_BE_RECEIVED
         : ENUM_WAREHOUSE.WAREHOUSING_PROCESS.WAITING_FOR_PAYMENT;
-    return this.PrismaService.purchaseOrder.create({
+    const info = await this.PrismaService.purchaseOrder.create({
       data: {
         ...data,
         total,
@@ -113,7 +114,15 @@ export class OrderService {
           },
         },
       },
+      include: { warehousing: true },
     });
+    this.LogService.insert({
+      type: status,
+      remark: '新建了采购单',
+      relationId: info.warehousing.id,
+      module: ENUM_COMMON.LOG_MODULE.PURCHASE,
+    });
+    return info;
   }
 
   async update(dto: PurchaseOrderDTO) {
@@ -138,7 +147,7 @@ export class OrderService {
         target.products.map((v) => v.id),
         true,
       );
-      return this.PrismaService.purchaseOrder.update({
+      const updateData = await this.PrismaService.purchaseOrder.update({
         where: { id },
         data: {
           ...data,
@@ -153,6 +162,13 @@ export class OrderService {
             })),
           },
         },
+        include: { warehousing: true },
+      });
+      this.LogService.insert({
+        type: updateData.warehousing.status,
+        remark: '更新了采购单信息',
+        relationId: updateData.id,
+        module: ENUM_COMMON.LOG_MODULE.PURCHASE,
       });
     } else {
       throw new BadRequestException('无法编辑采购单，请确认当前流程是否错误');

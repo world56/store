@@ -10,7 +10,6 @@ import type { TypeSystemUser } from "./system/user";
  * @name TypeCommon 公共接口
  */
 export namespace TypeCommon {
-
   /**
    * @name PrimaryKey DB主键类型
    */
@@ -135,4 +134,5 @@ export namespace TypeCommon {
     status?: ENUM_COMMON.UPLOAD_STATUS;
     user?: Pick<TypeSystemUser.DTO, "id" | "name">;
   }
+
 }

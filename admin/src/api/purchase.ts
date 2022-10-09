@@ -349,18 +349,6 @@ export function getPurchaseOrderList(params: TypePurchaseOrder.Query) {
   );
 }
 
-// /**
-//  * @name getPurchaseOrderLogs 获取采购订单日志
-//  */
-// export function getPurchaseOrderLogs(
-//   params: Pick<TypePurchaseOrder.DTO, "id">,
-// ) {
-//   return request<TypePurchaseOrder.Log[]>("purchase/order/logs", {
-//     method: ENUM_HTTP.REQUEST_MODE.GET,
-//     params,
-//   });
-// }
-
 /**
  * @name getPurchaseOrderDetails 获取采购订单详情
  */

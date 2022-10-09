@@ -37,7 +37,7 @@ export class UserService {
       phone: { contains: phone },
       account: { contains: account },
       isSuper: ENUM_SYSTEM.SUPER_ADMIN.NOT_SUPER,
-      departments: { some: { id: departmentId } },
+      departments: departmentId ? { some: { id: departmentId } } : undefined,
     };
     const [count, list] = await Promise.all([
       this.PrismaService.adminUser.count({ where }),
@@ -53,10 +53,10 @@ export class UserService {
 
   async getAllAdminUserList() {
     return this.PrismaService.adminUser.findMany({
-      select: { id: true, name: true },
+      select: { id: true, name: true, avatar: true },
       where: {
         status: ENUM_COMMON.STATUS.ACTIVATE,
-        isSuper: ENUM_SYSTEM.SUPER_ADMIN.NOT_SUPER,
+        // isSuper: ENUM_SYSTEM.SUPER_ADMIN.NOT_SUPER,
       },
     });
   }
@@ -96,7 +96,6 @@ export class UserService {
 
   async insert(dto: AdminUserDTO) {
     const { roles, deps, ...data } = dto;
-    console.log(dto);
     const password = this.EncryptionService.decrypt(data.password);
     data.password = this.EncryptionService.md5(password);
     return this.PrismaService.adminUser.create({ data });

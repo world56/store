@@ -31,6 +31,14 @@ export namespace ENUM_COMMON {
   }
 
   /**
+   * @name LOG_MODULE 日志模块
+   * @param PURCHASE 采购模块
+   */
+  export enum LOG_MODULE {
+    PURCHASE,
+  }
+
+  /**
    * @name CATEGORY_TYPE 类型类目
    * @param WAREHOUSE_UNIT 仓库计量单位
    * @param PURCHASE_PRODUCT_TYPE 供应商产品类目

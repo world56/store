@@ -1,21 +1,37 @@
 import { Model } from 'mongoose';
-import { Log } from './schema/Log';
-import { Injectable } from '@nestjs/common';
+import { Log } from '@/schema/log.shcema';
 import { InjectModel } from '@nestjs/mongoose';
-import { LogDTO } from '@/dto/common/Log.dto';
+import { InsertLogDTO } from './dto/insert-log.dto';
+import { QueryLogListDTO } from './dto/query-log-list.dto';
 import { requestContext } from '@fastify/request-context';
+import { AdminUserDTO } from '@/dto/system/admin-user.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
+
+import { ENUM_COMMON } from '@/enum/common';
 
 @Injectable()
 export class LogService {
   public constructor(
-    @InjectModel(Log.name) private readonly LogModel: Model<Log>,
+    @InjectModel('pruchaseLog') private readonly pruchaseLogModel: Model<Log>,
   ) {}
 
-  async insert(dto: LogDTO) {
-    const user = requestContext.get('user');
-    console.log('@-user', user);
-    return await this.LogModel.create(dto);
+  private getModel(type: ENUM_COMMON.LOG_MODULE) {
+    switch (type) {
+      case ENUM_COMMON.LOG_MODULE.PURCHASE:
+        return this.pruchaseLogModel;
+      default:
+        throw new BadRequestException('模块参数错误');
+    }
   }
 
-  async getList() {}
+  insert(body: InsertLogDTO) {
+    const { module, ...dto } = body;
+    const { id: creatorId }: AdminUserDTO = requestContext.get('user');
+    return this.getModel(module).create({ ...dto, creatorId });
+  }
+
+  getLogs(dto: QueryLogListDTO) {
+    const { module, relationId } = dto;
+    return this.getModel(module).find({ relationId });
+  }
 }
