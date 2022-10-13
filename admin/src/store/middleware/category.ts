@@ -1,16 +1,23 @@
 import * as API from "@/api/enum";
 import ActionsMiddleware from "./actions";
+import { toCategorys } from "@/utils/format";
 import { ActiosnsCategory } from "../category";
-import { toDictionaries } from "@/utils/format";
 import { all, call, put, takeEvery } from "redux-saga/effects";
 
 import { ENUM_STORE } from "@/enum/store";
 
-import type { TypeCategoryState } from "../category";
+import type { TypeCommon } from "@/interface/common";
 import type { PayloadAction } from "@reduxjs/toolkit/dist";
-import type { TypeDefaultConversionFields } from "@/utils";
+import type {
+  TypeCategorysState,
+  TypeCategorysBusiness,
+  TypeCategorysUserDefind,
+} from "../category";
 
-const REQUEST = {
+type TypeCategorysBusinessKeys = keyof TypeCategorysBusiness;
+type TypeCategorysUserDefindKeys = keyof TypeCategorysUserDefind;
+
+export const REQUEST = {
   [ENUM_STORE.CATEGORY.ROLE]: API.getRoleSelectList,
   [ENUM_STORE.CATEGORY.SPEC]: API.getSpecAllParameter,
   [ENUM_STORE.CATEGORY.ADMIN_USER]: API.getAllAdminUserList,
@@ -19,36 +26,34 @@ const REQUEST = {
   [ENUM_STORE.CATEGORY.PURCHASE_SUPPLIER]: API.getPurchaseSpplierList,
 };
 
-type TypeRequestAPI = keyof typeof REQUEST;
-
-type TypeCategoryKeys = keyof typeof ENUM_STORE.CATEGORY;
-
 function* handlerCategory(
   action: PayloadAction<
-    Array<TypeCategoryKeys>,
+    `${ENUM_STORE.CATEGORY}`[],
     ENUM_STORE.ACTION_CATEGORY.QUERY
   >,
 ) {
   try {
-    const type: TypeCategoryKeys[] = [];
-    const batch: TypeCategoryKeys[] = [];
-    let data: TypeCategoryState = {};
+    const data: Partial<TypeCategorysState> = {} as const;
+    const batch: Array<TypeCategorysBusinessKeys> = [];
+    const type: TypeCategorysUserDefindKeys[] = [];
     for (const key of action.payload) {
-      if (REQUEST[key as TypeRequestAPI]) batch.push(key);
-      else type.push(key);
+      if (REQUEST.propertyIsEnumerable(key)) {
+        batch.push(key as TypeCategorysBusinessKeys);
+      } else {
+        type.push(key as TypeCategorysUserDefindKeys);
+      }
     }
     if (type.length) {
-      const list: Array<TypeDefaultConversionFields[]> = yield call(
+      const list: Array<TypeCommon.Category[]> = yield call(
         API.getCategoryList,
         { type },
       );
-      list.forEach((v, i) => (data[type[i]] = toDictionaries(v)));
+      list.forEach((v, i) => (data[type[i]] = toCategorys(v)));
     }
     if (batch.length) {
-      const list: Array<TypeDefaultConversionFields[]> = yield all(
-        batch.map((v) => call(REQUEST[v as TypeRequestAPI])),
-      );
-      list.forEach((v, i) => (data[batch[i]] = toDictionaries(v)));
+      const list: TypeCategorysBusiness[keyof TypeCategorysBusiness][][0]["LIST"][] =
+        yield all(batch.map((v) => call(REQUEST[v])));
+      list.forEach((v = [], i) => (data[batch[i]] = toCategorys(v as [])));
     }
     yield put(ActiosnsCategory.setCategory({ data }));
   } catch (e) {

@@ -32,9 +32,9 @@ const BasicInfo: React.FC<TypePurchaseOrderDetailsDisplayProps> = ({ data }) => 
             <Status status={data?.settlement} matching={Status.type.PURCHASE_ORDER_SETTLEMENT} />
           </Item>
           <Item label="订单状态">
-            <Status
+            {/* <Status
               status={data?.warehousing?.status}
-              matching={Status.type.WAREHOUSING_STATUS} />
+              matching={Status.type.WAREHOUSING_STATUS} /> */}
           </Item>
           <Item label="采购数量">{data?.total || 0}</Item>
           <Item label="订单总价">{(data?.totalPrice || 0) / 100}元 </Item>

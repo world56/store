@@ -2,10 +2,14 @@ import dayjs from "dayjs";
 
 import { CONFIG_TIME_FORMAT } from "@/config/format";
 
+import type { Key } from "react";
 import type { TypeCommon } from "@/interface/common";
 
-export interface TypeDefaultConversionFields
-  extends Pick<TypeCommon.DTO, "id" | "name" | "parentId"> {}
+export type TypeCategoryParam = Pick<TypeCommon.DTO, "id" | "name" | "remark"> &
+  Record<number, Key> & {
+    parentId?: number;
+    remark?: string;
+  };
 
 /**
  * @name toTime 时间戳转成标准时间格式
@@ -21,13 +25,13 @@ export function toTime(timestamp?: number | Date | string): string {
  * @param list service data
  */
 export function listToTree<
-  T extends TypeDefaultConversionFields = TypeDefaultConversionFields,
+  T extends Pick<TypeCommon.DTO, "id" | "name" | "parentId">,
 >(list: T[] = [], parentId = 0, id?: number): T[] {
   let parentObj: TypeCommon.GenericObject<T> = {};
   list.forEach((o) => (parentObj[o.id] = o));
   return list
     .filter((v) =>
-      parentId ? v.parentId === parentId : !parentObj[v.parentId],
+      parentId ? v.parentId === parentId : !parentObj[v.parentId!],
     )
     .map((o) => ({
       ...parentObj[o.id],
@@ -37,17 +41,15 @@ export function listToTree<
 }
 
 /**
- * @name toDictionaries 转成字典结构
+ * @name toCategorys 转为标准字典类型
  */
-export function toDictionaries<
-  T extends TypeDefaultConversionFields = TypeDefaultConversionFields,
->(data: T[] = []) {
-  const OBJ: TypeCommon.GenericObject = {};
-  const LIST = data.map((v) => {
-    OBJ[v.id] = v.name;
-    return v;
-  });
-  return { OBJ, LIST };
+export function toCategorys<
+  T extends Pick<TypeCommon.DTO, "id" | "name"> = Pick<
+    TypeCommon.DTO,
+    "id" | "name"
+  >,
+>(LIST: T[]) {
+  return { LIST, OBJ: Object.fromEntries(LIST.map((v) => [v.id, v])) };
 }
 
 /**

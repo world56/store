@@ -8,7 +8,7 @@ import type { Dayjs } from 'dayjs';
 import type { RangeValue } from 'rc-picker/lib/interface';
 import type { RangePickerSharedProps } from 'rc-picker/lib/RangePicker';
 
-const DatePickerComponent :any= generatePicker<Dayjs>(dayjsGenerateConfig);
+const DatePickerComponent: any = generatePicker<Dayjs>(dayjsGenerateConfig);
 
 type TypeTimeScope = Array<number | undefined> | undefined;
 

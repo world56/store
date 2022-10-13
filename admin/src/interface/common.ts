@@ -1,9 +1,7 @@
-import type React from "react";
-import type store from "@/store";
-
-import { ENUM_COMMON } from "@/enum/common";
 import { ENUM_STORE } from "@/enum/store";
+import { ENUM_COMMON } from "@/enum/common";
 
+import type store from "@/store";
 import type { TypeSystemUser } from "./system/user";
 
 /**
@@ -66,15 +64,18 @@ export namespace TypeCommon {
    */
   export type PromiseReturns<T> = T extends Promise<infer R> ? R : never;
 
-  /**
-   * @name Dictionaries 字典
-   */
-  export interface Dictionaries {
-    readonly OBJ: GenericObject;
-    readonly LIST: Array<
-      DefaultKey & Partial<Pick<DTO, "parentId" | "remark">>
-    >;
-  }
+  // /**
+  //  * @name Dictionaries 字典
+  //  */
+  // export interface Dictionaries<
+  //   T = Pick<TypeCommon.DTO, "id" | "name"> &
+  //     Record<number, React.Key> & {
+  //       parentId?: number;
+  //     },
+  // > {
+  //   readonly LIST: Array<T>;
+  //   readonly OBJ: TypeCommon.GenericObject<T>;
+  // }
 
   /**
    * @name Store Redux 状态机
@@ -134,5 +135,4 @@ export namespace TypeCommon {
     status?: ENUM_COMMON.UPLOAD_STATUS;
     user?: Pick<TypeSystemUser.DTO, "id" | "name">;
   }
-
 }

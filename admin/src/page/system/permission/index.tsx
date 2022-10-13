@@ -70,7 +70,7 @@ const Permission = () => {
       title: '类型',
       key: 'type',
       dataIndex: 'type',
-      render: (key: ENUM_SYSTEM.PERMISSION_TYPE) => PERMISSION_TYPE?.OBJ[key]
+      render: (key: ENUM_SYSTEM.PERMISSION_TYPE) => PERMISSION_TYPE?.OBJ[key].name
     },
     {
       title: '当前状态',

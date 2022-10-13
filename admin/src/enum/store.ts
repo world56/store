@@ -11,7 +11,8 @@ export namespace ENUM_STORE {
   }
 
   /**
-   * @name CATEGORY 词典（存储在服务器）
+   * @name CATEGORY 词典类目（业务维护DB）
+   * @desc src/api/ ENUM-API
    */
   export enum CATEGORY {
     /** @name SPEC 产品规格 */
@@ -26,30 +27,30 @@ export namespace ENUM_STORE {
     /** @name DEPARTMENT 部门 */
     DEPARTMENT = "DEPARTMENT",
 
-    /** @name PURCHASE_PRODUCT_TYPE 供应商类型 */
-    PURCHASE_PRODUCT_TYPE = "PURCHASE_PRODUCT_TYPE",
-
-    /** @name WAREHOUSE_UNIT 库房计量单位 */
-    WAREHOUSE_UNIT = "WAREHOUSE_UNIT",
-
-    /** @name WAREHOUSE_POSITION 仓库仓位位置 */
-    WAREHOUSE_POSITION = "WAREHOUSE_POSITION",
-
-    /** @name WAREHOUSE_PRODUCT_TYPE 仓库产品类型 */
-    WAREHOUSE_PRODUCT_TYPE = "WAREHOUSE_PRODUCT_TYPE",
-
-    /** @name PRODUCT_BRAND 产品品牌 */
-    PRODUCT_BRAND = "PRODUCT_BRAND",
-
     /** @name PURCHASE_SUPPLIER 供应商 */
     PURCHASE_SUPPLIER = "PURCHASE_SUPPLIER",
 
-    /** @name LOGISTSCS_COMPANY 物流公司 */
+    /** @name WAREHOUSE_POSITION 仓库仓位位置（用户自定义） */
+    WAREHOUSE_POSITION = "WAREHOUSE_POSITION",
+
+    /** @name PURCHASE_PRODUCT_TYPE 供应商类型（用户自定义） */
+    PURCHASE_PRODUCT_TYPE = "PURCHASE_PRODUCT_TYPE",
+
+    /** @name WAREHOUSE_UNIT 库房计量单位（用户自定义） */
+    WAREHOUSE_UNIT = "WAREHOUSE_UNIT",
+
+    /** @name WAREHOUSE_PRODUCT_TYPE 仓库产品类型（用户自定义） */
+    WAREHOUSE_PRODUCT_TYPE = "WAREHOUSE_PRODUCT_TYPE",
+
+    /** @name PRODUCT_BRAND 产品品牌（用户自定义） */
+    PRODUCT_BRAND = "PRODUCT_BRAND",
+
+    /** @name LOGISTSCS_COMPANY 物流公司（用户自定义） */
     LOGISTSCS_COMPANY = "LOGISTSCS_COMPANY",
   }
 
   /**
-   * @name CATEGORY_DEFAULT 词典 （本地）
+   * @name CATEGORY_DEFAULT 词典类目 （本地默认写死的）
    */
   export enum CATEGORY_DEFAULT {
     /** @name STATUS 状态 */

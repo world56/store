@@ -1,6 +1,7 @@
 import request from "@/utils/request";
 
 import { ENUM_HTTP } from "@/enum/http";
+import { ENUM_STORE } from "@/enum/store";
 
 import type { TypeCommon } from "@/interface/common";
 import type { TypeSpec } from "@/interface/purchase/spec";
@@ -16,7 +17,7 @@ import type { TypeWarehousePosition } from "@/interface/warehouse/position";
 /**
  * @name getCategoryList 类目列表
  */
-export function getCategoryList(params: { type: string[] }) {
+export function getCategoryList(params: { type: `${ENUM_STORE.CATEGORY}`[] }) {
   return request<TypeCommon.Category[]>("category/list", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
     params,

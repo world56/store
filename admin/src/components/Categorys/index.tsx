@@ -11,6 +11,7 @@ import { SyncOutlined, FontSizeOutlined } from '@ant-design/icons';
 import EditUnit, { type TypeEditUnitProps } from './components/Edit';
 
 import { ENUM_STORE } from '@/enum/store';
+import { TypeCommon } from '@/interface/common';
 
 type TypeEditCategory = Pick<TypeEditUnitProps, 'visible' | 'id'>;
 
@@ -77,12 +78,12 @@ const Categorys: TypeCategorys = ({ type }) => {
       >
         {list ? <List
           itemLayout="horizontal"
-          dataSource={list}
+          dataSource={list as TypeCommon.Category[]}
           renderItem={item => (
             <List.Item actions={[<BtnEditDel value={item.id} onEdit={onEdit} />]}>
               <List.Item.Meta
                 title={item.name}
-                description={item.remark}
+                description={item.remark} 
                 avatar={<Avatar>{item.name}</Avatar>}
               />
             </List.Item>

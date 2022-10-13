@@ -74,7 +74,8 @@ const CategorySelect: TypeCategorySelectProps = ({ type, value, onChange, disabl
       getPopupContainer={triggerNode => triggerNode.parentNode}
       {...props}>
       {category[type]?.LIST?.map(v => <Option key={v.id} value={v.id} >
-        <Tooltip title={v.remark} destroyTooltipOnHide={selectShow}>
+        {/* // ? */}
+        <Tooltip title={v.name} destroyTooltipOnHide={selectShow}>
           <p>{v.name}</p>
         </Tooltip>
       </Option>)}

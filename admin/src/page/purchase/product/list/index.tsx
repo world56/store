@@ -79,16 +79,16 @@ const Product: React.FC<TypeSupplierProductPageProps> = ({ supplierId }) => {
     {
       name: 'status',
       label: '状态',
+      hide: () => Boolean(supplierId),
       type: Search.ENUM.COMP_TYPE.SELECT,
       list: category?.STATUS?.LIST,
-      hide: () => Boolean(supplierId)
     },
     {
       name: 'supplierId',
       label: '供应商',
+      hide: () => Boolean(supplierId),
       type: Search.ENUM.COMP_TYPE.SELECT,
       list: category?.PURCHASE_SUPPLIER?.LIST,
-      hide: () => Boolean(supplierId)
     },
     {
       name: 'categoryId',

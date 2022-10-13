@@ -1,6 +1,6 @@
 import { Comment } from "antd";
 import { useRequest } from "ahooks";
-// import { useCategorys } from "@/hooks";
+import { useCategorys } from "@/hooks";
 import { getLogs } from "@/api/common";
 import { toTime } from "@/utils/format";
 import StatusColor from "@/layout/Status";
@@ -16,7 +16,7 @@ interface TypeLogsProps extends TypeCommon.DatabaseMainParameter, Pick<TypeLog.Q
   onClose?(): void;
 };
 
-// const { ENUM_CATEGORY } = useCategorys;
+const { ENUM_CATEGORY } = useCategorys;
 
 /**
  * @name Logs 日志
@@ -27,7 +27,7 @@ const Logs: React.FC<TypeLogsProps> = ({
   id: relationId,
 }) => {
 
-  // const { ADMIN_USER } = useCategorys([ENUM_CATEGORY.ADMIN_USER]);
+  const { ADMIN_USER } = useCategorys([ENUM_CATEGORY.ADMIN_USER]);
 
   const { data, loading } = useRequest(() => getLogs({ relationId, module }), {
     refreshDeps: [relationId, module]
@@ -40,26 +40,27 @@ const Logs: React.FC<TypeLogsProps> = ({
     fontSize: onClose ? 13 : 14,
   };
 
-  // console.log('@-ADMIN_USER', ADMIN_USER);
-
   return (
     <Container
       title='采购日志'
       loading={loading}
       onCancel={onClose}
       visible={Boolean(relationId)}>
-      {data?.map(v => <Comment
-        key={v._id}
-        author={v.creatorId}
-        avatar='https://joeschmoe.io/api/v1/random'
-        content={v.remark}
-        datetime={
-          <>
-            <span>{toTime(v.createTime)}</span>
-            <StatusColor status={v.type} style={statusStyle} />
-          </>
-        }
-      />)}
+      {data?.map(v => {
+        const user = ADMIN_USER?.OBJ?.[v.creatorId];
+        return <Comment
+          key={v._id}
+          author={user?.name}
+          avatar={user?.avatar}
+          content={v.remark}
+          datetime={
+            <>
+              <span>{toTime(v.createTime)}</span>
+              <StatusColor status={v.type} style={statusStyle} />
+            </>
+          }
+        />
+      })}
     </Container>
   );
 };

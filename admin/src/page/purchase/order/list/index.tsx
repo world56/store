@@ -135,13 +135,13 @@ const SupplierOrder: React.FC<TypeSupplierOrderProps> = ({ supplierId }) => {
           <Status status={type} matching={Status.type.PURCHASE_ORDER_SETTLEMENT} />
         )
       },
-      {
-        title: '订单状态',
-        dataIndex: ['warehousing', 'status'],
-        render: (status: ENUM_WAREHOUSE.WAREHOUSING_PROCESS) => (
-          <Status status={status} matching={Status.type.WAREHOUSING_STATUS} />
-        )
-      },
+      // {
+      //   title: '订单状态',
+      //   dataIndex: ['warehousing', 'status'],
+      //   render: (status: ENUM_WAREHOUSE.WAREHOUSING_PROCESS) => (
+      //     <Status status={status} matching={Status.type.WAREHOUSING_STATUS} />
+      //   )
+      // },
       {
         key: 'status',
         title: '操作',

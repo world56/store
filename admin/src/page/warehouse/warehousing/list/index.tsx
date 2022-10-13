@@ -88,13 +88,13 @@ const Warehousing = () => {
         <Status status={text} matching={Status.type.WAREHOUSING_TYPE} />
       )
     },
-    {
-      dataIndex: 'status',
-      title: '入库状态',
-      render: (status: ENUM_WAREHOUSE.WAREHOUSING_PROCESS) => (
-        <Status status={status} matching={Status.type.WAREHOUSING_STATUS} />
-      )
-    },
+    // {
+    //   dataIndex: 'status',
+    //   title: '入库状态',
+    //   render: (status: ENUM_WAREHOUSE.WAREHOUSING_PROCESS) => (
+    //     <Status status={status} matching={Status.type.WAREHOUSING_STATUS} />
+    //   )
+    // },
     { dataIndex: ['creator', 'name'], title: '流程创建人' },
     {
       dataIndex: 'inspector',
