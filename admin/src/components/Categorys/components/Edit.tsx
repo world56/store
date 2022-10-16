@@ -56,8 +56,8 @@ const EditUnit: React.FC<TypeEditUnitProps> = ({ id, type, visible, onClose }) =
 
   return (
     <Modal
+      open={visible}
       onOk={onSumbit}
-      visible={visible}
       loading={loading}
       onCancel={onCancel}
       className={styles.edit}

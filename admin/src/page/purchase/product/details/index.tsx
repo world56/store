@@ -6,8 +6,6 @@ import BasicInfo from './components/BasicInfo';
 
 import type { TypeCommon } from '@/interface/common';
 
-const { TabPane } = Tabs;
-
 interface TypeSuplierProductDetailsRouteParam extends Partial<TypeCommon.DatabaseMainParameter<string>> { }
 
 /**
@@ -20,12 +18,18 @@ const SuplierProductDetails = () => {
 
   return (
     <>
-      <Tabs defaultActiveKey="1" className={styles.layout}>
-        <TabPane tab="基本详情" key="1">
-          <BasicInfo id={id} />
-        </TabPane>
-        {/* <TabPane tab="数据统计" key="2" /> */}
-      </Tabs>
+      <Tabs
+        defaultActiveKey="1"
+        className={styles.layout}
+        items={[
+          {
+            key: '1',
+            label: '基本详情',
+            children: <BasicInfo id={id} />,
+          },
+          // { key: '2', label: '数据统计', children: null }
+        ]}
+      />
       <GoBack />
     </>
   );

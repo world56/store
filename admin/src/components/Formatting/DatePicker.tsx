@@ -6,9 +6,12 @@ import generatePicker from 'antd/es/date-picker/generatePicker';
 
 import type { Dayjs } from 'dayjs';
 import type { RangeValue } from 'rc-picker/lib/interface';
-import type { RangePickerSharedProps } from 'rc-picker/lib/RangePicker';
+import type { RangePickerSharedProps, } from 'rc-picker/lib/RangePicker';
 
-const DatePickerComponent: any = generatePicker<Dayjs>(dayjsGenerateConfig);
+const DatePickerComponent = generatePicker<Dayjs>(dayjsGenerateConfig);
+
+// 暂时这么解决 后期等升级React18 antd5
+const RangePickerToDayJS = DatePickerComponent.RangePicker as unknown as React.FC<Pick<RangePickerSharedProps<Dayjs>, 'value' | 'onChange'>>;
 
 type TypeTimeScope = Array<number | undefined> | undefined;
 
@@ -43,7 +46,7 @@ const DatePicker: React.FC<DatePickerScopeProps> = ({
     }
   };
 
-  return <DatePickerComponent.RangePicker {...props} value={values} onChange={onRangePicker} />;
+  return <RangePickerToDayJS {...props} value={values} onChange={onRangePicker} />;
 };
 
 export { DatePicker };

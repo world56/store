@@ -54,8 +54,8 @@ const RelationCategory: React.FC<TypeRelationCategoryProps> = ({ id, onClose }) 
       loading={load}
       footer={footer}
       title='规格所属类目'
+      open={Boolean(id)}
       onCancel={onCancel}
-      visible={Boolean(id)}
       className={styles.selectCategory}>
       <Form form={form}>
         <FormHideKey />

@@ -13,8 +13,6 @@ import { ENUM_COMMON } from '@/enum/common';
 import type { TypeCommon } from '@/interface/common';
 import type { TypePurchaseOrder } from '@/interface/purchase/order';
 
-const { TabPane } = Tabs;
-
 interface TypePurchaseOrderRouteParam extends Partial<TypeCommon.DatabaseMainParameter<string>> { }
 
 export interface TypePurchaseOrderDetailsDisplayProps {
@@ -42,17 +40,25 @@ const PurchaseOrderDetails = () => {
       <Tabs
         onChange={onChange}
         className={styles.layout}
-        defaultActiveKey={query.get('activeKey')!}>
-        <TabPane tab="基本详情" key="1">
-          <BasicInfo data={value} />
-        </TabPane>
-        <TabPane tab="采购产品" key="2">
-          <Products data={value} />
-        </TabPane>
-        <TabPane tab="跟踪日志" key="3">
-          <Logs id={id} module={ENUM_COMMON.LOG_MODULE.PURCHASE} />
-        </TabPane>
-      </Tabs>
+        defaultActiveKey={query.get('activeKey')!}
+        items={[
+          {
+            key: '1',
+            label: '基本详情',
+            children: <BasicInfo data={value} />,
+          },
+          {
+            key: '2',
+            label: '采购产品',
+            children: <Products data={value} />,
+          },
+          {
+            key: '3',
+            label: '跟踪日志',
+            children: <Logs id={id} module={ENUM_COMMON.LOG_MODULE.PURCHASE} />
+          },
+        ]}
+      />
       <GoBack />
     </Spin>
   );

@@ -38,7 +38,7 @@ const EditWarehouseProduct: React.FC<TypeEditWarehouseProductProps> = ({ id, vis
 
   return (
     <Drawer
-      visible={visible}
+      open={visible}
       title='编辑仓库产品状态'
       className={styles.edit}
       footer={[

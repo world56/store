@@ -39,7 +39,7 @@ const EditUserPassword: React.FC<TypeEditUserPasswordProps> = ({ visible, onClos
   };
 
   return (
-    <Modal title='修改密码' visible={visible} onOk={onSumbit} onCancel={onCancel}>
+    <Modal title='修改密码' open={visible} onOk={onSumbit} onCancel={onCancel}>
       <Form form={form}>
 
         <FormHideKey initialValue={user.id} />

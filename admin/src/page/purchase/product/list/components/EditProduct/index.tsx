@@ -22,7 +22,6 @@ export interface TypeEditProductProps
   onClose(): void;
 };
 
-
 /**
  * @name EditProduct 编辑产品
  */
@@ -69,23 +68,31 @@ const EditProduct: React.FC<TypeEditProductProps> = ({ id, visible, supplierId, 
 
   return (
     <Drawer
+      open={visible}
       loading={loading}
-      visible={visible}
       onCancel={onCancel}
       onSumbit={onSumbit}
       className={styles.edit}
       title={id ? '编辑产品' : '新增产品'}>
       <Form form={form} layout='vertical'>
-        <Tabs size='small' activeKey={activeKey} onChange={setActiveKey}>
-          <Tabs.TabPane key='1' tab='基本信息' forceRender>
-            <BasicInfo id={id} supplierId={supplierId} form={form} />
-          </Tabs.TabPane>
-          <Tabs.TabPane key='2' tab='产品实拍' forceRender>
-            <Form.Item name='pictures' rules={[{ required: true }]}>
-              <Uploads verifyFormat={verifyFormat} />
-            </Form.Item>
-          </Tabs.TabPane>
-        </Tabs>
+        <Tabs size='small' activeKey={activeKey} onChange={setActiveKey}
+          items={[
+            {
+              key: '1',
+              label: '基本信息',
+              forceRender: true,
+              children: <BasicInfo id={id} supplierId={supplierId} form={form} />
+            },
+            {
+              key: '2',
+              label: '产品实拍',
+              forceRender: true,
+              children: <Form.Item name='pictures' rules={[{ required: true }]}>
+                <Uploads verifyFormat={verifyFormat} />
+              </Form.Item>
+            },
+          ]}
+        />
       </Form>
     </Drawer>
   );

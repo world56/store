@@ -104,7 +104,7 @@ const Search: TypeSearchProps = ({
   columns,
   onSearch,
   children,
-  spanSize = 5,
+  spanSize = 6,
 }) => {
 
   const Columns = useMemo(() => initColumns(columns), [columns]);

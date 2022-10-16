@@ -9,8 +9,6 @@ import SupplierProductList from "@/page/purchase/product/list";
 
 import type { TypeCommon } from '@/interface/common';
 
-const { TabPane } = Tabs;
-
 interface TypeSupplierDetailsRouteParam extends Partial<TypeCommon.DatabaseMainParameter<string>> { }
 
 /**
@@ -32,29 +30,40 @@ const SupplierDetails = () => {
       <Tabs
         onChange={onChange}
         className={styles.layout}
-        defaultActiveKey={query.get('activeKey')!}>
-        <TabPane tab="基本详情" key="1">
-          <BasicInfo id={id} />
-        </TabPane>
-
-        <TabPane tab="供应产品" key="2">
-          <SupplierProductList supplierId={id} />
-        </TabPane>
-
-        <TabPane tab="采购记录" key="3">
-          <SupplierOrder supplierId={id} />
-        </TabPane>
-
-        <TabPane tab="付款账号" key="4">
-        </TabPane>
-
-        <TabPane tab="数据分析" key="5" />
-
-        <TabPane tab="跟进日志" key="6">
-          <Logs id={id} />
-        </TabPane>
-
-      </Tabs>
+        defaultActiveKey={query.get('activeKey')!}
+        items={[
+          {
+            key: '1',
+            label: '基本详情',
+            children: <BasicInfo id={id} />
+          },
+          {
+            key: '2',
+            label: '供应产品',
+            children: <SupplierProductList supplierId={id} />
+          },
+          {
+            key: '3',
+            label: '采购记录',
+            children: <SupplierOrder supplierId={id} />
+          },
+          {
+            key: '4',
+            label: '付款账号',
+            children: null
+          },
+          {
+            key: '5',
+            label: '数据分析',
+            children: null
+          },
+          {
+            key: '6',
+            label: '跟进日志',
+            children: <Logs id={id} />
+          }
+        ]}
+      />
       <GoBack />
     </>
   );

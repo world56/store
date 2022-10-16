@@ -51,8 +51,8 @@ const EditDep: React.FC<TypeEditDepProps> = ({ id, visible, onClose }) => {
   return (
     <Modal
       title={title}
+      open={visible}
       onOk={onSumbit}
-      visible={visible}
       loading={loading}
       onCancel={onCancel}>
       <Form form={form} {...formStyle}>

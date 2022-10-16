@@ -42,8 +42,8 @@ const EditStatus: React.FC<TypeEditStatus> = ({ id, status, onClose }) => {
   return (
     <Modal
       onOk={onSumbit}
+      open={Boolean(id)}
       title='供应商状态编辑'
-      visible={Boolean(id)}
       onCancel={onCancel}>
       <Form form={form} layout='vertical'>
 

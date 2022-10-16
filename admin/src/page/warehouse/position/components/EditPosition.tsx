@@ -51,10 +51,10 @@ const EditPosition: React.FC<TypeEditPositionProps> = ({ id, visible, onClose })
 
   return (
     <Modal
+      open={visible}
       title='编辑仓位'
       onOk={onSumbit}
       loading={loading}
-      visible={visible}
       onCancel={onCancel}>
       <Form form={form} {...formStyle}>
 

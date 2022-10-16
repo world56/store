@@ -62,8 +62,8 @@ const EditRole: React.FC<TypeEditRoleProps> = ({
     <Modal
       forceRender
       title={title}
+      open={visible}
       onOk={onSumbit}
-      visible={visible}
       loading={loading}
       onCancel={onCancel}>
       <Form form={form} {...formStyle}>

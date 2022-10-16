@@ -84,9 +84,9 @@ const SpecTemplate: React.FC<TypeSelectSpecProps> = ({ onChange }) => {
     <>
       <Btn onClick={onCancel}>规格模板</Btn>
       <Modal
+        open={visible}
         title='规格模板'
         onOk={onSumbit}
-        visible={visible}
         onCancel={onCancel}
         className={styles.specTemplate}
         footer={<FooterButton onSumbit={onSumbit} onCancel={onCancel} onRefresh={initializa} />}>

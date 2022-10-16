@@ -72,8 +72,8 @@ const EditPermission: React.FC<TypeEditPermissionProps> = ({
 
   return (
     <Modal
+      open={visible}
       onOk={onSumbit}
-      visible={visible}
       loading={loading}
       onCancel={onCancel}
       title={id ? '编辑权限' : '新增权限'}>

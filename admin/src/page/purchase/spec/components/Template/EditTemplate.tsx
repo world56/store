@@ -54,9 +54,9 @@ const EditTemplate: React.FC<TypeEditSpecTemplateProps> = ({
 
   return (
     <Drawer
+      open={visible}
       title='编辑规格模板'
       loading={loading}
-      visible={visible}
       onSumbit={onSumbit}
       onCancel={onCancel}
       className={styles.edit}>

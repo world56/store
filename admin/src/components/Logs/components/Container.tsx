@@ -16,8 +16,8 @@ const LogsContainer: React.FC<TypeLogsContainer> = ({
 }) => {
   return onCancel ? <Drawer
     title='日志记录'
+    open={visible}
     loading={loading}
-    visible={visible}
     onCancel={onCancel}
     className={styles.drawer}>
     {children}

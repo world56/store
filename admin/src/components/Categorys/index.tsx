@@ -67,7 +67,7 @@ const Categorys: TypeCategorys = ({ type }) => {
     <>
       <Modal
         title={name}
-        visible={visible}
+        open={visible}
         onCancel={visibleChange}
         className={styles.layout}
         footer={[

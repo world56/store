@@ -36,7 +36,7 @@ const AddLog: React.FC<TypeAddLogsProps> = ({ onClose }) => {
 
   return (
     <Modal
-      visible
+      open
       onOk={onSumbit}
       title='添加日志记录'
       onCancel={onCancel}
