@@ -1,16 +1,17 @@
 import { Spin, Tabs } from 'antd';
+import Logs from '@/components/Logs';
 import { useGetDetails } from '@/hooks';
-import { GoBack } from '@/layout/Button';
 import styles from './index.module.sass';
+import { GoBack } from '@/layout/Button';
 import Products from './components/Products';
 import BasicInfo from './components/BasicInfo';
 import { getPurchaseOrderDetails } from '@/api/purchase';
 import { useParams, useSearchParams } from 'react-router-dom';
 
+import { ENUM_COMMON } from '@/enum/common';
+
 import type { TypeCommon } from '@/interface/common';
 import type { TypePurchaseOrder } from '@/interface/purchase/order';
-
-const { TabPane } = Tabs;
 
 interface TypePurchaseOrderRouteParam extends Partial<TypeCommon.DatabaseMainParameter<string>> { }
 
@@ -23,11 +24,10 @@ export interface TypePurchaseOrderDetailsDisplayProps {
  */
 const PurchaseOrderDetails = () => {
 
-  const { id } = useParams<TypePurchaseOrderRouteParam>();
+  const params = useParams<TypePurchaseOrderRouteParam>();
+  const id = parseInt(params.id!)
 
-  const { value, loading } = useGetDetails(async () => {
-    return await getPurchaseOrderDetails({ id: parseInt(id!) });
-  }, [id]);
+  const { value, loading } = useGetDetails(() => getPurchaseOrderDetails({ id }), [id]);
 
   const [query, setQuery] = useSearchParams({ activeKey: '1' },);
 
@@ -40,14 +40,25 @@ const PurchaseOrderDetails = () => {
       <Tabs
         onChange={onChange}
         className={styles.layout}
-        defaultActiveKey={query.get('activeKey')!}>
-        <TabPane tab="基本详情" key="1">
-          <BasicInfo data={value} />
-        </TabPane>
-        <TabPane tab="采购产品" key="2">
-          <Products data={value} />
-        </TabPane>
-      </Tabs>
+        defaultActiveKey={query.get('activeKey')!}
+        items={[
+          {
+            key: '1',
+            label: '基本详情',
+            children: <BasicInfo data={value} />,
+          },
+          {
+            key: '2',
+            label: '采购产品',
+            children: <Products data={value} />,
+          },
+          {
+            key: '3',
+            label: '跟踪日志',
+            children: <Logs id={id} module={ENUM_COMMON.LOG_MODULE.PURCHASE} />
+          },
+        ]}
+      />
       <GoBack />
     </Spin>
   );

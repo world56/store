@@ -60,10 +60,19 @@ export class CommonDTO extends PartialType(PrimaryKeyDTO) {
   /**
    * @param userId 用户ID
    */
+  @ApiProperty({ description: '用户ID' })
   @Type(() => Number)
   @IsOptional()
   @IsInt()
   userId?: number;
+
+  /**
+   * @param userId 创建人ID
+   */
+  @ApiProperty({ description: '创建人ID' })
+  @Type(() => Number)
+  @IsInt()
+  creatorId: number;
 
   /**
    * @param ids ID列表

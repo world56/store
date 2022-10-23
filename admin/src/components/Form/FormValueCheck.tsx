@@ -4,7 +4,9 @@ import { DB_PRIMARY_KEY } from '@/config/db';
 
 import type { TypeCommon } from "@/interface/common";
 
-interface TypeFormNameCheckProps extends Partial<TypeCommon.DatabaseMainParameter> {
+type TypeDefaultCheckParams = Pick<TypeCommon.DTO, 'id' | 'name'>
+
+interface TypeFormNameCheckProps<T extends TypeDefaultCheckParams = TypeDefaultCheckParams> extends Partial<TypeCommon.DatabaseMainParameter> {
   /** @param name 字段英文名 */
   name: string | React.Key[];
   /** @param fieldKey 针对Form.List */
@@ -14,7 +16,7 @@ interface TypeFormNameCheckProps extends Partial<TypeCommon.DatabaseMainParamete
   /** @param placeholder 输入框提示 */
   placeholder?: string;
   /** @name checkFieldsFn 检测字段接口 */
-  checkFieldsFn: (param: any) => Promise<boolean>;
+  checkFieldsFn: (param: T) => Promise<boolean>;
   /** @param pattern 正则 */
   pattern?: RegExp;
 };
@@ -32,7 +34,7 @@ const FormValueCheck: React.FC<TypeFormNameCheckProps> = ({
 }) => {
 
   async function checkField(field: React.Key, value: string) {
-    const bol = await checkFieldsFn({ [DB_PRIMARY_KEY]: id!, [field]: value });
+    const bol = await checkFieldsFn({ [DB_PRIMARY_KEY]: id!, [field]: value } as TypeDefaultCheckParams);
     return bol ? Promise.reject('该字符已被占用，请更换后重试') : bol;
   };
 

@@ -1,38 +1,43 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { LogService } from '@/common/log/log.service';
 import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { PrismaService } from '@/common/prisma/prisma.service';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { WarehousingQueryList } from './dto/warehousing-query-list.dto';
 import { ConfirmPurchaseWarehousingDTO } from './dto/confirm-purchase-warehousing.dto';
 
+import { ENUM_COMMON } from '@/enum/common';
 import { ENUM_PURCHASE } from '@/enum/purchase';
 import { ENUM_WAREHOUSE } from '@/enum/warehouse';
 import { AdminUserDTO } from '@/dto/system/admin-user.dto';
 
 @Injectable()
 export class WarehousingService {
-  public constructor(private readonly PrismaService: PrismaService) {}
+  public constructor(
+    private readonly LogService: LogService,
+    private readonly PrismaService: PrismaService,
+  ) {}
 
   async getList({ take, skip, ...query }: WarehousingQueryList) {
-    const where = {};
+    const where = {
+      ...query,
+      AND: {
+        order: {
+          is: {
+            settlement: ENUM_PURCHASE.SUPPLIER_SETTLEMENT.CASH_ON_DELIVERY,
+          },
+        },
+        status: {
+          notIn: ENUM_WAREHOUSE.WAREHOUSING_PROCESS.WAITING_FOR_PAYMENT,
+        },
+      },
+    };
     const userSelect = { select: { id: true, name: true } };
     const [count, list] = await Promise.all([
       this.PrismaService.warehousing.count({ where }),
       this.PrismaService.warehousing.findMany({
         take,
         skip,
-        where: {
-          ...query,
-          AND: {
-            order: {
-              is: {
-                settlement: ENUM_PURCHASE.SUPPLIER_SETTLEMENT.CASH_ON_DELIVERY,
-              },
-            },
-            status: {
-              notIn: ENUM_WAREHOUSE.WAREHOUSING_PROCESS.WAITING_FOR_PAYMENT,
-            },
-          },
-        },
+        where,
         orderBy: { createTime: 'desc' },
         include: { creator: userSelect, inspector: userSelect },
       }),
@@ -64,18 +69,32 @@ export class WarehousingService {
     });
   }
 
-  toVoid(dto: PrimaryKeyDTO) {
-    return this.PrismaService.warehousing.update({
+  async toVoid(dto: PrimaryKeyDTO) {
+    const data = await this.PrismaService.warehousing.update({
       where: { id: dto.id },
       data: { status: ENUM_WAREHOUSE.WAREHOUSING_PROCESS.ABANDONED },
     });
+    this.LogService.insert({
+      type: data.status,
+      relationId: data.id,
+      remark: '终止了采购流程',
+      module: ENUM_COMMON.LOG_MODULE.PURCHASE,
+    });
+    return data;
   }
 
-  receiving(dto: PrimaryKeyDTO) {
-    return this.PrismaService.warehousing.update({
+  async receiving(dto: PrimaryKeyDTO) {
+    const data = await this.PrismaService.warehousing.update({
       where: { id: dto.id },
       data: { status: ENUM_WAREHOUSE.WAREHOUSING_PROCESS.WAITING_FOR_STORAGE },
     });
+    this.LogService.insert({
+      type: data.status,
+      remark: '确认收货',
+      relationId: data.id,
+      module: ENUM_COMMON.LOG_MODULE.PURCHASE,
+    });
+    return data;
   }
 
   async confirmWarehousing(
@@ -85,7 +104,7 @@ export class WarehousingService {
     const { id, remark, products } = dto;
     const next = await this.prepareForReview(dto.id);
     if (next) {
-      return this.PrismaService.warehousing.update({
+      const info = await this.PrismaService.warehousing.update({
         where: { id },
         data: {
           remark: remark ? remark : null,
@@ -102,7 +121,17 @@ export class WarehousingService {
             },
           },
         },
+        include: { audit: true },
       });
+      if (info.audit) {
+      }
+      this.LogService.insert({
+        type: info.status,
+        relationId: info.id,
+        module: ENUM_COMMON.LOG_MODULE.PURCHASE,
+        remark: '确认入库信息 ' + (info.remark || ''),
+      });
+      return info;
     } else {
       throw new BadRequestException('无法确认清点，请确认当前流程是否错误');
     }

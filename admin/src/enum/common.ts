@@ -41,6 +41,14 @@ export namespace ENUM_COMMON {
   }
 
   /**
+   * @name LOG_MODULE 日志模块
+   * @param PURCHASE 采购模块
+   */
+  export enum LOG_MODULE {
+    PURCHASE,
+  }
+
+  /**
    * @name COLOR
    * @param BLACK 灰色
    * @param GREY 灰色

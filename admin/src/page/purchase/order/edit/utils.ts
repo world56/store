@@ -71,12 +71,14 @@ export function editParams(data?: TypePurchaseOrder.DTO) {
         status === ENUM_WAREHOUSE.WAREHOUSING_PROCESS.GOODS_TO_BE_RECEIVED ||
         status === ENUM_WAREHOUSE.WAREHOUSING_PROCESS.WAITING_FOR_STORAGE
       );
-    } else {
+    } else if (
+      settlement === ENUM_PURCHASE.SUPPLIER_SETTLEMENT.DELIVERY_AFTER_PAYMENT
+    ) {
       return !(
         status === ENUM_WAREHOUSE.WAREHOUSING_PROCESS.WAITING_FOR_PAYMENT
       );
+    } else {
+      return true;
     }
   }
-  return true;
 }
-

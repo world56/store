@@ -18,32 +18,8 @@
   .shouldUpdate
     margin: 0
 
-  :global(.ant-col)
-    padding-left: 0 !important
+  .component
+    width: 100%
 
-  :global(.ant-form-item)
-    display: flex
-
-  :global(.ant-form-item-control-wrapper)
-    flex: 1
-
-  :global(.ant-select-selector)
-    position: relative
-    overflow: hidden
-    :global(.ant-select-selection-placeholder)
-      position: absolute
-      width: calc(100% - 10px)
-
-    :global(.ant-select-selection-item)
-      position: absolute
-      width: calc(100% - 16px) !important
-
-  :global(.ant-form-item-explain)
-    position: absolute
-    bottom: -21px
-    div
-      display: inline !important
-      white-space: nowrap
-
-.component
-  width: 100%
+  :global(.ant-form-item-label)
+    width: 75px

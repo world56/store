@@ -29,7 +29,7 @@ const formStyle = { labelCol: { span: 4 }, wrapperCol: { span: 20 } };
 const EditPosition: React.FC<TypeEditPositionProps> = ({ id, visible, onClose }) => {
 
   const [form] = Form.useForm<TypeWarehousePosition.DTO>();
-  const { ADMIN_USER, WAREHOURE_STATUS } = useCategorys();
+  const { ADMIN_USER, WAREHOUSE_STATUS } = useCategorys();
 
   const { loading } = useGetDetails(async () => {
     const data = await getWarehousePositionDetails({ id: id! });
@@ -51,10 +51,10 @@ const EditPosition: React.FC<TypeEditPositionProps> = ({ id, visible, onClose })
 
   return (
     <Modal
+      open={visible}
       title='编辑仓位'
       onOk={onSumbit}
       loading={loading}
-      visible={visible}
       onCancel={onCancel}>
       <Form form={form} {...formStyle}>
 
@@ -88,7 +88,7 @@ const EditPosition: React.FC<TypeEditPositionProps> = ({ id, visible, onClose })
             optionFilterProp='children'
             placeholder='请选择仓位状态'
           >
-            {WAREHOURE_STATUS?.LIST?.map(v => <Option key={v.id} value={v.id}>{v.name}</Option>)}
+            {WAREHOUSE_STATUS?.LIST?.map(v => <Option key={v.id} value={v.id}>{v.name}</Option>)}
           </Select>
         </Form.Item>
 

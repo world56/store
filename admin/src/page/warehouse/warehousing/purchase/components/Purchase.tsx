@@ -23,7 +23,7 @@ const Purchase: React.FC<TypePurchaseBasicInfo> = ({ data }) => {
         <Item label="流程发起人">{data?.creator?.name}</Item>
         <Item label="供应商">{data?.supplier?.name}</Item>
         <Item label="运输方式">
-          {SUPPLIER_SHIPPING_METHOD?.OBJ[data?.shippingMethod!]}
+          {SUPPLIER_SHIPPING_METHOD?.OBJ[data?.shippingMethod!]?.name}
         </Item>
         <Item label="物流（快递）公司">{data?.logisticsCompany?.name}</Item>
         <Item label="物流（快递）单号">{data?.shippingNoteNumber || '暂无'}</Item>

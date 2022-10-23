@@ -18,7 +18,7 @@ import type { TypeSpec } from '@/interface/purchase/spec';
 export interface TypeEditSpecTemplateProps extends Partial<TypeCommon.DatabaseMainParameter> {
   visible: boolean;
   onClose(): void;
-  spec?: TypeCommon.Dictionaries;
+  spec?: TypeCommon.Store['category']['SPEC'];
 };
 
 const { Option } = Select;
@@ -54,9 +54,9 @@ const EditTemplate: React.FC<TypeEditSpecTemplateProps> = ({
 
   return (
     <Drawer
+      open={visible}
       title='编辑规格模板'
       loading={loading}
-      visible={visible}
       onSumbit={onSumbit}
       onCancel={onCancel}
       className={styles.edit}>
@@ -77,7 +77,8 @@ const EditTemplate: React.FC<TypeEditSpecTemplateProps> = ({
             placeholder='请选择该模板关联的规格'
             filterOption={filterOptionTooltip}>
             {spec?.LIST?.map(v => <Option key={v.id} value={v.id} >
-              <Tooltip title={v.remark} destroyTooltipOnHide={selectShow}>
+              {/* /// ? */}
+              <Tooltip title={v.name} destroyTooltipOnHide={selectShow}>
                 <p>{v.name}</p>
               </Tooltip>
             </Option>)}

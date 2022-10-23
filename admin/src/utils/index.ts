@@ -1,10 +1,6 @@
 import { ENUM_COMMON } from "@/enum/common";
 
-import type { TypeCommon } from "@/interface/common";
 import type { FormListFieldData } from "antd/es/form/FormList";
-
-export interface TypeDefaultConversionFields
-  extends Pick<TypeCommon.DTO, "id" | "name" | "parentId"> {}
 
 /**
  * @name isVoid 判断值是否为void

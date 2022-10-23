@@ -3,7 +3,7 @@ import { DB_PRIMARY_KEY } from "@/config/db";
 
 import type { RuleObject } from "rc-field-form/lib/interface";
 
-export default function useFieldCheck(fn: any, id?: number) {
+export default function useFieldCheck(fn: Function, id?: number) {
   const { run } = useThrottleFn(
     async (rule: RuleObject, name: string | void) => {
       const bol = await fn({ [DB_PRIMARY_KEY]: id, name });

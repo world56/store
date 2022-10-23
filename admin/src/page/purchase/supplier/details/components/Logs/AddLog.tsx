@@ -51,8 +51,8 @@ const AddLog: React.FC<TypeAddLogProps> = ({ id, initializa }) => {
       </Button>
 
       <Modal
+        open={visible}
         onOk={onSumbit}
-        visible={visible}
         onCancel={onCancel}
         title='新增供应商日志记录'>
         <Form form={form}>

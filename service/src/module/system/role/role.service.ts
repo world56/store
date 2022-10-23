@@ -20,7 +20,7 @@ export class RoleService {
     const where = {
       status,
       name: { contains: name },
-      permissions: { some: { id: permissionId } },
+      permissions: permissionId ? { some: { id: permissionId } } : undefined,
     };
     const [count, list] = await Promise.all([
       this.PrismaService.role.count({ where }),
@@ -49,7 +49,7 @@ export class RoleService {
   }
 
   async insert(info: Omit<RoleDto, 'id'>) {
-    const { permissionId, ...update } = info;
+    const { permissionId = [], ...update } = info;
     const connect = permissionId.map((id) => ({ id }));
     return this.PrismaService.role.create({
       data: {

@@ -9,7 +9,7 @@ interface TypeSwitchSupplierProps {
   value?: number;
   form: FormInstance;
   onChange?(val?: number): void;
-  category?: TypeCommon.Dictionaries;
+  category?: TypeCommon.Store['category']['PURCHASE_SUPPLIER'];
 };
 
 const { Option } = Select;
@@ -49,7 +49,7 @@ const SwitchSupplier: React.FC<TypeSwitchSupplierProps> = ({
       disabled={disabled}
       onChange={onSelectChange}
       placeholder='请选择所属供应商'>
-      {category?.LIST.map(v => <Option key={v.id} value={v.id}>{v.name}</Option>)}
+      {category?.LIST?.map(v => <Option key={v.id} value={v.id}>{v.name}</Option>)}
     </Select>
   );
 };

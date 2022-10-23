@@ -38,7 +38,7 @@ const EditWarehouseProduct: React.FC<TypeEditWarehouseProductProps> = ({ id, vis
 
   return (
     <Drawer
-      visible={visible}
+      open={visible}
       title='编辑仓库产品状态'
       className={styles.edit}
       footer={[
@@ -74,7 +74,7 @@ const EditWarehouseProduct: React.FC<TypeEditWarehouseProductProps> = ({ id, vis
             allowClear
             mode="multiple"
             placeholder='请选择存放仓位'>
-            {category.WAREHOUSE_POSITION?.LIST.map(v => <Option key={v.id} value={v.id}>{v.name}</Option>)}
+            {category?.WAREHOUSE_POSITION?.LIST?.map(v => <Option key={v.id} value={v.id}>{v.name}</Option>)}
           </Select>
         </Form.Item>
 

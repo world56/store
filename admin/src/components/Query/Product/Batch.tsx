@@ -77,8 +77,8 @@ const ProductBatchAdd: React.FC<TypeProductBatchAddProps> = ({
       </Tooltip>
 
       <Modal
+        open={visible}
         onOk={onSumbit}
-        visible={visible}
         title='批量选择产品'
         onCancel={onVisible}
         className={styles.modal}>

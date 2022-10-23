@@ -93,8 +93,8 @@ const EditUserInfo: React.FC<TypeEditUserInfoProps> = ({ id, type, visible, onCl
 
   return (
     <Modal
+      open={visible}
       onOk={onSumbit}
-      visible={visible}
       loading={loading}
       onCancel={onCancel}
       title={isSuperAdmin ? '注册超级管理员' : id ? isPersonal ? '编辑个人信息' : '编辑用户' : '新增用户'}>

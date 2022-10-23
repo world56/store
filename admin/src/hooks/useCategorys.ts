@@ -1,9 +1,11 @@
+import { useEffect } from "react";
 import useStore from "./useStore";
 import useActions from "./useActions";
 import Actions from "@/store/middleware/actions";
-import { DependencyList, useEffect } from "react";
 
 import { ENUM_STORE } from "@/enum/store";
+
+import type { DependencyList } from "react";
 
 /**
  * @name useCategorys 获取类目（枚举）

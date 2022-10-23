@@ -1,13 +1,13 @@
+import { User } from '@/decorator/user';
 import { ApiTags } from '@nestjs/swagger';
 import { QueryListPipe } from '@/pipe/query-list.pipe';
 import { TimeFramePipe } from '@/pipe/time-frame.pipe';
 import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { WarehousingService } from './warehousing.service';
+import { AdminUserDTO } from '@/dto/system/admin-user.dto';
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { WarehousingQueryList } from './dto/warehousing-query-list.dto';
 import { ConfirmPurchaseWarehousingDTO } from './dto/confirm-purchase-warehousing.dto';
-import { User } from '@/decorator/user';
-import { AdminUserDTO } from '@/dto/system/admin-user.dto';
 
 @ApiTags('仓库入库')
 @Controller('warehouse/warehousing')

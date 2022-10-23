@@ -1,9 +1,9 @@
 import { ENUM_WAREHOUSE } from "@/enum/warehouse";
 
 import type { TypeCommon } from "../common";
+import type { TypeSpec } from "../purchase/spec";
 import type { TypeSystemUser } from "../system/user";
 import type { TypePurchaseOrder } from "../purchase/order";
-import { TypeSpec } from "../purchase/spec";
 
 /**
  * @name TypeWarehouseWarehousing 仓储-待入库
@@ -26,6 +26,7 @@ export namespace TypeWarehouseWarehousing {
     extends TypeCommon.DatabaseMainParameter,
       Pick<TypeCommon.DTO, "no" | "remark">,
       Record<"user" | "creator", TypeSystemUser.DTO> {
+    seq: string;
     orderId: T;
     creatorId: T;
     inspectorId: T;
@@ -61,6 +62,7 @@ export namespace TypeWarehouseWarehousing {
       Partial<
         Pick<
           DTO,
+          | "seq"
           | "type"
           | "status"
           | "createTime"

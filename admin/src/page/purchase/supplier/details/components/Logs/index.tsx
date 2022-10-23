@@ -41,7 +41,7 @@ const Logs: React.FC<TypeLogsProps> = ({ id }) => {
       dataIndex: 'type',
       render: (key: ENUM_PURCHASE.SUPPLIER_LOG_TYPE) => {
         const isStatus = key === ENUM_PURCHASE.SUPPLIER_LOG_TYPE.STATUS;
-        return <span className={isStatus ? 'error' : ''}>{SUPPLIER_LOG_TYPE?.OBJ[key]}</span>;
+        return <span className={isStatus ? 'error' : ''}>{SUPPLIER_LOG_TYPE?.OBJ[key]?.name}</span>;
       }
     },
     {

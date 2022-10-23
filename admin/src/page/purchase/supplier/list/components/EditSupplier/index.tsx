@@ -87,71 +87,83 @@ const EditSupplier: React.FC<TypeEditSupplierProps> = ({ id, visible, onClose })
   return (
     <Drawer
       title={title}
+      open={visible}
       loading={loading}
-      visible={visible}
       onCancel={onCancel}
       onSumbit={onSumbit}
       className={styles.layout}>
       <Form form={form} layout='vertical'>
-        <Tabs size='small' onChange={setActiveKey} activeKey={activeKey}>
+        <Tabs
+          size='small'
+          activeKey={activeKey}
+          onChange={setActiveKey}
+          items={[
+            {
+              key: '1',
+              label: '基本信息',
+              forceRender: true,
+              children: <>
+                <FormHideKey />
 
-          <Tabs.TabPane key='1' tab='基本信息' forceRender>
+                <FormValueCheck
+                  id={id}
+                  name='name'
+                  label='公司名称'
+                  checkFieldsFn={checkPurchaseSupplierFields}
+                />
 
-            <FormHideKey />
+                <Form.Item name='phone' label='公司电话' rules={rules}>
+                  <Input placeholder="请输入公司电话" allowClear />
+                </Form.Item>
 
-            <FormValueCheck
-              id={id}
-              name='name'
-              label='公司名称'
-              checkFieldsFn={checkPurchaseSupplierFields}
-            />
+                <Form.Item name='address' label='公司地址' rules={rules}>
+                  <Input placeholder="请输入公司地址" allowClear />
+                </Form.Item>
 
-            <Form.Item name='phone' label='公司电话' rules={rules}>
-              <Input placeholder="请输入公司电话" allowClear />
-            </Form.Item>
+                <Form.Item
+                  name='category'
+                  rules={[{ required: true, message: '请选择供应产品类型' }]}
+                  label={<>
+                    <span>供应产品类型</span>
+                    <Categorys type={ENUM_STORE.CATEGORY.PURCHASE_PRODUCT_TYPE} />
+                  </>}>
+                  <Categorys.Select mode='multiple' type={ENUM_STORE.CATEGORY.PURCHASE_PRODUCT_TYPE} />
+                </Form.Item>
 
-            <Form.Item name='address' label='公司地址' rules={rules}>
-              <Input placeholder="请输入公司地址" allowClear />
-            </Form.Item>
-
-            <Form.Item
-              name='category'
-              rules={[{ required: true, message: '请选择供应产品类型' }]}
-              label={<>
-                <span>供应产品类型</span>
-                <Categorys type={ENUM_STORE.CATEGORY.PURCHASE_PRODUCT_TYPE} />
-              </>}>
-              <Categorys.Select mode='multiple' type={ENUM_STORE.CATEGORY.PURCHASE_PRODUCT_TYPE} />
-            </Form.Item>
-
-            <Form.Item name='remark' label='备注'>
-              <Input.TextArea placeholder="请输入备注" rows={3} allowClear />
-            </Form.Item>
-
-          </Tabs.TabPane>
-
-          <Tabs.TabPane key='2' tab='联系人' forceRender>
-            <Form.Item shouldUpdate>
-              {(props) => {
-                const contacts = props.getFieldValue('contacts');
-                return <Form.List name='contacts' initialValue={[{}]}>
-                  {(fields, props) => fields.map(field => <Contacts
-                    key={field.key}
-                    itemProps={field}
-                    remove={contacts?.length > 1 ? () => props.remove(field.name) : undefined} />)}
-                </Form.List>
-              }}
-            </Form.Item>
-            <PopUpAddBtn onClick={addContacts}>新增联系方式</PopUpAddBtn>
-          </Tabs.TabPane>
-
-          <Tabs.TabPane key='3' tab='附件' forceRender>
-            <Form.Item name='files'>
-              <Uploads onDelete={onDelete} />
-            </Form.Item>
-          </Tabs.TabPane>
-
-        </Tabs>
+                <Form.Item name='remark' label='备注'>
+                  <Input.TextArea placeholder="请输入备注" rows={3} allowClear />
+                </Form.Item>
+              </>
+            },
+            {
+              key: '2',
+              label: '联系人',
+              forceRender: true,
+              children: <>
+                <Form.Item shouldUpdate>
+                  {(props) => {
+                    const contacts = props.getFieldValue('contacts');
+                    return <Form.List name='contacts' initialValue={[{}]}>
+                      {(fields, props) => fields.map(field => <Contacts
+                        key={field.key}
+                        itemProps={field}
+                        remove={contacts?.length > 1 ? () => props.remove(field.name) : undefined} />)}
+                    </Form.List>
+                  }}
+                </Form.Item>
+                <PopUpAddBtn onClick={addContacts}>新增联系方式</PopUpAddBtn>
+              </>
+            },
+            {
+              key: '3',
+              label: '附件',
+              forceRender: true,
+              children: <Form.Item name='files'>
+                <Uploads onDelete={onDelete} />
+              </Form.Item>
+            }
+          ]}
+        />
       </Form>
     </Drawer>
   );

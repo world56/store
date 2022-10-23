@@ -4,6 +4,7 @@ import { ENUM_HTTP } from "@/enum/http";
 import type { TypeCommon } from "@/interface/common";
 import type { TypeWarehousePosition } from "@/interface/warehouse/position";
 import type { TypeWarehouseWarehousing } from "@/interface/warehouse/warehousing";
+import { TypeWarehousingAudit } from "@/interface/warehouse/audit";
 
 /**
  * --------------------- 仓位编排 ----------------------
@@ -137,6 +138,23 @@ export function confirmWarehousing(
     {
       method: ENUM_HTTP.REQUEST_MODE.POST,
       data,
+    },
+  );
+}
+
+/**
+ * --------------------- 入库审核 ----------------------
+ */
+
+/**
+ * @name getWarehouseAuditList 获取入库审核列表
+ */
+export function getWarehouseAuditList(params: TypeWarehousingAudit.Query) {
+  return request<TypeCommon.ServiceReturn<TypeWarehousingAudit.DTO>>(
+    "warehouse/audit/list",
+    {
+      method: ENUM_HTTP.REQUEST_MODE.GET,
+      params,
     },
   );
 }

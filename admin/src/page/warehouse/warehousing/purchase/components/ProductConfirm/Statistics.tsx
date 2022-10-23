@@ -20,7 +20,7 @@ const Statistics: React.FC<Pick<TypeProductConfirmProps, 'total'>> = ({ total })
             {total || 0}
           </span>
           <Tooltip
-            visible={inconsistent}
+            open={inconsistent}
             title='需要与采购核对实际数量'
             getPopupContainer={e => e}>
             <span style={{ color: inconsistent ? 'red' : '' }}>

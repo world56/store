@@ -24,7 +24,7 @@ export interface Columns {
   hide?: (f: FormInstance) => boolean;
   /**
    * @param props 各类组件props
-   * @description 暂不具体定义 参考antd官方文档对各类组件的定义
+   * @description 暂不具体定义 参考antd组件文档 https://ant.design/components/overview-cn/
    */
   props?: any;
 };
@@ -104,7 +104,7 @@ const Search: TypeSearchProps = ({
   columns,
   onSearch,
   children,
-  spanSize = 5,
+  spanSize = 6,
 }) => {
 
   const Columns = useMemo(() => initColumns(columns), [columns]);

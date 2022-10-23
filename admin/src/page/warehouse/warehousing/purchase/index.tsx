@@ -1,9 +1,9 @@
 import { useRequest } from "ahooks";
+import { editableBtn } from './utils';
 import { serviceToForm } from './utils';
 import { GoBack } from "@/layout/Button";
 import styles from './index.module.sass';
 import { Form, Spin, message } from 'antd';
-import { editableBtn } from '../list/utils';
 import Purchase from './components/Purchase';
 import BasicInfo from "./components/BasicInfo";
 import ProductConfirm from "./components/ProductConfirm";
@@ -40,7 +40,7 @@ const WarehousingPurchase = () => {
     navigate(-1);
   };
 
-  const isEdit = editableBtn(data?.status!);
+  const isEdit = editableBtn(data?.status);
 
   return (
     <Spin spinning={loading}>

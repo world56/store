@@ -65,7 +65,7 @@ const EditSpecParameter: React.FC<TypeEditSpecParameterProps> = ({
 
   return (
     <Drawer
-      visible={visible}
+      open={visible}
       loading={loading}
       onCancel={onCancel}
       onSumbit={onSumbit}

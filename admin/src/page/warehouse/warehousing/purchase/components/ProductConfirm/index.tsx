@@ -128,7 +128,7 @@ const ProductConfirm: React.FC<TypeProductConfirmProps> = ({ form, total, isEdit
 
       <Card title='入库备注'>
         <Form.Item name='remark' noStyle>
-          {isEdit ? <Input.TextArea rows={6} placeholder='请输入库备注（例如实际入库数量、原因）' /> : <ReadOnlytext />}
+          {isEdit ? <Input.TextArea rows={6} placeholder='请输入库备注（例如实际入库数量、原因）' /> : <ReadOnlytext replaceValue='无' />}
         </Form.Item>
       </Card>
 

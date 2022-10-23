@@ -28,19 +28,6 @@ export class OrderController {
     return this.OrderService.getDetails(body);
   }
 
-  // @Get('logs')
-  // getLogs(@Query() query: PrimaryKeyStringDTO) {
-  //   return this.OrderService.getLogs(query);
-  // }
-
-  // @Post('log')
-  // logistics(
-  //   @Body() body: PurchaseOrderLogInsertDTO,
-  //   @User() user: AdminUserDTO,
-  // ) {
-  //   return this.OrderService.updateLogistics(body, user);
-  // }
-
   @Post('insert')
   insert(
     @Body(new ConvertCurrencyUnitsPipe(['products', 'unitPrice']))

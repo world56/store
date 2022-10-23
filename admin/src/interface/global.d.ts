@@ -19,13 +19,6 @@ declare module "*.avif" {
   export default src;
 }
 
-declare module "encryptlong" {
-  const JSEncrypt: any;
-  const publicEncrypt: any;
-  export { JSEncrypt };
-  export default src;
-}
-
 declare module "*.bmp" {
   const src: string;
   export default src;

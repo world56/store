@@ -30,7 +30,7 @@ const ProductDetails: React.FC<TypeProductDetailsProps> = ({ id, onClose }) => {
   return (
     <Modal
       title='产品详情'
-      visible={Boolean(id)}
+      open={Boolean(id)}
       className={styles.layout}
       onCancel={() => onClose()}
       footer={[

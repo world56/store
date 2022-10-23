@@ -1,6 +1,6 @@
-import { useStore } from "@/hooks";
 import { message, Table } from "antd";
 import { Btn } from "@/layout/Button";
+import { useCategorys } from "@/hooks";
 import { toTime } from '@/utils/format';
 import { removeFiles } from '@/api/common';
 import { STATIC_RESOURCE } from '@/config/request';
@@ -21,7 +21,7 @@ interface TypeFilesTableProps {
  */
 const FilesTable: React.FC<TypeFilesTableProps> = ({ list, onCreate }) => {
 
-  const { category: { FILE_TYPE } } = useStore();
+  const { FILE_TYPE } = useCategorys();
 
   function preview(val: TypeCommon.File) {
     window.open(`${STATIC_RESOURCE}/${val.path}`);
@@ -34,12 +34,12 @@ const FilesTable: React.FC<TypeFilesTableProps> = ({ list, onCreate }) => {
   };
 
   const column = [
-    {  title: '文件名', dataIndex: 'name' },
+    { title: '文件名', dataIndex: 'name' },
     {
       width: 150,
       title: '文件类型',
       dataIndex: 'type',
-      render: (type: ENUM_COMMON.FILE_TYPE) => FILE_TYPE?.OBJ[type]
+      render: (type: ENUM_COMMON.FILE_TYPE) => FILE_TYPE?.OBJ[type]?.name
     },
     {
       title: '上传人',

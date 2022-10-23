@@ -1,3 +1,4 @@
+import { message } from "antd";
 import Cookies from "js-cookie";
 import { ActionsUser } from "../user";
 import { TOKEN_KEY } from "@/config/user";
@@ -10,7 +11,6 @@ import { SAGA_DEBOUNCE } from "@/config/request";
 
 import type { PayloadAction } from "@reduxjs/toolkit/dist";
 import type { TypeSystemUser } from "@/interface/system/user";
-import { message } from "antd";
 
 type TypeActionsTaskInUserLogin = PayloadAction<
   TypeSystemUser.Login,
@@ -22,7 +22,7 @@ function* taskInUserLogin(data: TypeActionsTaskInUserLogin) {
     const key: string = yield getPubilcKey();
     data.payload.password = encryption(key, data.payload.password);
     const token: string = yield call(login, data.payload);
-    Cookies.set(TOKEN_KEY, token);
+    Cookies.set(TOKEN_KEY, token, { sameSite: "strict" });
     yield put(ActionsMiddleware.getUserInfo());
   } catch {}
 }

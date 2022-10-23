@@ -4,7 +4,7 @@ import { FooterButton } from '../Button';
 
 import type { DrawerProps } from 'antd/lib/drawer';
 
-interface TypePopUpProps extends Omit<DrawerProps, 'onClose'> {
+export interface TypePopUpProps extends Omit<DrawerProps, 'onClose'> {
   loading?: boolean;
   onSumbit?(): void;
   onCancel?(): void;
