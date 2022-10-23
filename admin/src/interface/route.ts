@@ -1,5 +1,4 @@
-import React from "react";
-
+import type React from "react";
 import type { RouteProps } from "react-router-dom";
 
 export namespace TypeRoute {

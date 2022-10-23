@@ -1,8 +1,8 @@
 import { Spin, Tabs } from 'antd';
+import Logs from '@/components/Logs';
 import { useGetDetails } from '@/hooks';
 import styles from './index.module.sass';
 import { GoBack } from '@/layout/Button';
-import Logs from '@/components/Logs/Logs';
 import Products from './components/Products';
 import BasicInfo from './components/BasicInfo';
 import { getPurchaseOrderDetails } from '@/api/purchase';

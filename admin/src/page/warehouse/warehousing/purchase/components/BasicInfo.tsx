@@ -24,7 +24,7 @@ const BasicInfo: React.FC<TypeWarehousingBasicInfo> = ({ data }) => (
         <Status status={data?.type} matching={Status.type.WAREHOUSING_TYPE} />
       </Item>
       <Item label="入库状态">
-        {/* <Status status={data?.status} matching={Status.type.WAREHOUSING_STATUS} /> */}
+        <Status status={data?.status} matching={Status.type.WAREHOUSING_STATUS} />
       </Item>
       <Item label="备注">{data?.order?.remark || '-'}</Item>
     </Descriptions>

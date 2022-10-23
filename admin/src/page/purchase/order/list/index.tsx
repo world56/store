@@ -15,6 +15,7 @@ import { toTime as render, monetaryUnit, urlSearchParams } from '@/utils/format'
 
 import { DB_PRIMARY_KEY } from '@/config/db';
 import { ENUM_PURCHASE } from "@/enum/purchase";
+import { ENUM_WAREHOUSE } from '@/enum/warehouse';
 
 import type { TypePurchaseOrder } from "@/interface/purchase/order";
 
@@ -134,13 +135,13 @@ const SupplierOrder: React.FC<TypeSupplierOrderProps> = ({ supplierId }) => {
           <Status status={type} matching={Status.type.PURCHASE_ORDER_SETTLEMENT} />
         )
       },
-      // {
-      //   title: '订单状态',
-      //   dataIndex: ['warehousing', 'status'],
-      //   render: (status: ENUM_WAREHOUSE.WAREHOUSING_PROCESS) => (
-      //     <Status status={status} matching={Status.type.WAREHOUSING_STATUS} />
-      //   )
-      // },
+      {
+        title: '订单状态',
+        dataIndex: ['warehousing', 'status'],
+        render: (status: ENUM_WAREHOUSE.WAREHOUSING_PROCESS) => (
+          <Status status={status} matching={Status.type.WAREHOUSING_STATUS} />
+        )
+      },
       {
         key: 'status',
         title: '操作',

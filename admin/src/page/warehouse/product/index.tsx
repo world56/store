@@ -24,10 +24,10 @@ const Product = () => {
   }, [form]);
 
   const columns = [
-    { key: 'name', dataIndex: 'name', title: '产品名称' },
-    { key: 'positionId', dataIndex: 'positionId', title: '仓位位置' },
-    { key: 'count', dataIndex: 'count', title: '库存存量' },
-    { key: 'alertQuantity', dataIndex: 'alertQuantity', title: '警戒状态' },
+    { dataIndex: 'name', title: '产品名称' },
+    { dataIndex: 'positionId', title: '仓位位置' },
+    { dataIndex: 'count', title: '库存存量' },
+    { dataIndex: 'alertQuantity', title: '警戒状态' },
   ];
 
   return (

@@ -32,9 +32,9 @@ const BasicInfo: React.FC<TypePurchaseOrderDetailsDisplayProps> = ({ data }) => 
             <Status status={data?.settlement} matching={Status.type.PURCHASE_ORDER_SETTLEMENT} />
           </Item>
           <Item label="订单状态">
-            {/* <Status
+            <Status
               status={data?.warehousing?.status}
-              matching={Status.type.WAREHOUSING_STATUS} /> */}
+              matching={Status.type.WAREHOUSING_STATUS} />
           </Item>
           <Item label="采购数量">{data?.total || 0}</Item>
           <Item label="订单总价">{(data?.totalPrice || 0) / 100}元 </Item>
@@ -43,7 +43,7 @@ const BasicInfo: React.FC<TypePurchaseOrderDetailsDisplayProps> = ({ data }) => 
       </Card>
 
       <Card title='供应商联系人'>
-        {data?.supplier?.contacts.map(v => <Descriptions key={v.id} size='small' bordered column={3}>
+        {data?.supplier?.contacts.map(v => <Descriptions key={v.id} bordered column={3}>
           <Item label="名称">{v.name}</Item>
           <Item label="联系电话">{v.phone}</Item>
           <Item label="备注">{v.remark}</Item>
@@ -52,7 +52,7 @@ const BasicInfo: React.FC<TypePurchaseOrderDetailsDisplayProps> = ({ data }) => 
 
       {isLgistics ? < Card title='物流（快递）信息'>
         <Descriptions bordered >
-          <Item label="委托公司">{data?.logisticsCompany?.name}</Item>
+          <Item label="委托方">{data?.logisticsCompany?.name}</Item>
           <Item label="业务单号">{data?.shippingNoteNumber || '-'}</Item>
         </Descriptions>
       </Card> : null}

@@ -15,7 +15,12 @@ export class WarehousingQueryList extends IntersectionType(
       'inspectorId',
     ] as const),
   ),
-  PickType(QueryDTO, ['updateTime', 'pageSize', 'currentPage'] as const),
+  PickType(QueryDTO, [
+    'pageSize',
+    'updateTime',
+    'createTime',
+    'currentPage',
+  ] as const),
 ) {
   take: number;
   skip: number;

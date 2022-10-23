@@ -5,7 +5,7 @@ import { REQUEST } from "./middleware/category";
 import { CONSTANT_SYSTEM } from "@/constant/system";
 import { CONSTANT_COMMON } from "@/constant/common";
 import { CONSTANT_PURCHASE } from "@/constant/purchase";
-import { CONSTANT_WAREHOURE } from "@/constant/warehouse";
+import { CONSTANT_WAREHOUSE } from "@/constant/warehouse";
 
 import type { TypeCommon } from "@/interface/common";
 import type { PayloadAction } from "@reduxjs/toolkit/dist";
@@ -27,15 +27,15 @@ export type TypeCategorysUserDefind = Record<
 >;
 
 export interface TypeCategorysState
-  extends TypeCategorysBusiness,
-    TypeCategorysUserDefind,
+  extends TypeCategorysUserDefind,
+    Partial<TypeCategorysBusiness>,
     Required<typeof DEFAULT_DICTIONARY> {}
 
 export const DEFAULT_DICTIONARY = {
   ...CONSTANT_COMMON,
   ...CONSTANT_SYSTEM,
   ...CONSTANT_PURCHASE,
-  ...CONSTANT_WAREHOURE,
+  ...CONSTANT_WAREHOUSE,
 };
 
 const categorySlice = createSlice({

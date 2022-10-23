@@ -62,24 +62,25 @@ model Categorys {
 
 // 管理系统用户
 model AdminUser {
-  id                   Int                   @id @default(autoincrement())
-  avatar               String?               @db.VarChar(100)
-  account              String                @unique @db.VarChar(50) // 账号
-  password             String                @db.VarChar(100) // 密码
-  name                 String                @db.Char(5) // 名称
-  phone                String                @db.Char(11) // 联系电话
-  email                String?               @db.VarChar(100) // 电子邮箱地址
-  status               Int                   @default(1) @db.Int() // 状态
-  isSuper              Int                   @default(0) @map("is_super") @db.Int() // 是否为超管 
-  remark               String?               @db.VarChar(255) // 备注
-  createTime           DateTime              @default(now()) @map("create_time") @db.Timestamp(6) // 创建时间
+  id                   Int                 @id @default(autoincrement())
+  avatar               String?             @db.VarChar(100)
+  account              String              @unique @db.VarChar(50) // 账号
+  password             String              @db.VarChar(100) // 密码
+  name                 String              @db.Char(5) // 名称
+  phone                String              @db.Char(11) // 联系电话
+  email                String?             @db.VarChar(100) // 电子邮箱地址
+  status               Int                 @default(1) @db.Int() // 状态
+  isSuper              Int                 @default(0) @map("is_super") @db.Int() // 是否为超管 
+  remark               String?             @db.VarChar(255) // 备注
+  createTime           DateTime            @default(now()) @map("create_time") @db.Timestamp(6) // 创建时间
   roles                Role[]
   departments          Department[]
   files                Files[]
   purchaseOrder        PurchaseOrder[]
   warehousePosition    WarehousePosition[]
-  warehousingInspector Warehousing[]         @relation(name: "rel_warehousing_creator")
-  warehousingCreator   Warehousing[]         @relation(name: "rel_warehousing_inspector")
+  inventoryAudit       InventoryAudit[]
+  warehousingInspector Warehousing[]       @relation(name: "rel_warehousing_creator")
+  warehousingCreator   Warehousing[]       @relation(name: "rel_warehousing_inspector")
 
   @@index([account])
   @@index([name])
@@ -215,7 +216,6 @@ model PurchaseSupplierContacts {
   @@map("purchase_supplier_contacts")
 }
 
-
 model RelPurchaseProductOnSpec {
   id                Int     @id() @default(autoincrement())
   specParameterId   Int     @map("spec_parameter_id") @db.Int()
@@ -337,12 +337,12 @@ model Warehousing {
   createTime  DateTime? @default(now()) @map("create_time")
   type        Int       @db.Int()
   status      Int       @db.Int()
-  audit       Boolean   @default(false)
   remark      String?   @db.VarChar(255) // 备注
 
-  order     PurchaseOrder @relation(fields: [orderId], references: [id])
-  creator   AdminUser     @relation(name: "rel_warehousing_creator", fields: [creatorId], references: [id])
-  inspector AdminUser?    @relation(name: "rel_warehousing_inspector", fields: [inspectorId], references: [id])
+  order     PurchaseOrder   @relation(fields: [orderId], references: [id])
+  creator   AdminUser       @relation(name: "rel_warehousing_creator", fields: [creatorId], references: [id])
+  inspector AdminUser?      @relation(name: "rel_warehousing_inspector", fields: [inspectorId], references: [id])
+  audit     InventoryAudit?
 
   @@index([no])
   @@index([orderId])
@@ -350,6 +350,27 @@ model Warehousing {
   @@index([inspectorId])
   @@index([createTime])
   @@map("warehouseing")
+}
+
+// 库存审核
+model InventoryAudit {
+  id         Int       @id() @default(autoincrement())
+  status     Int       @default(0) @db.Int()
+  auditTime  DateTime? @default(now()) @map("audit_time") @db.Timestamp(6)
+  createTime DateTime  @map("create_time") @db.Timestamp(6)
+  remark     String?   @db.VarChar(255)
+  type       Int       @default(0) @db.Int()
+
+  operatorId     Int @map("operator_id") @db.Int()
+  warehouseingId Int @unique() @map("warehousing_id") @db.Int()
+
+  operator     AdminUser   @relation(fields: [operatorId], references: [id])
+  warehouseing Warehousing @relation(fields: [warehouseingId], references: [id])
+
+  @@index([status])
+  @@index([operatorId])
+  @@index([warehouseingId])
+  @@map("inventory_audit")
 }
 
 // 仓位位置

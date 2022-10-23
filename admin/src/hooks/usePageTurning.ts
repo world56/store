@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback } from "react";
 
 import type { TypeCommon } from "@/interface/common";
 
@@ -26,14 +26,6 @@ export default function usePageTurning(totalNum: number | undefined) {
     [pageSize],
   );
 
-  const getPageIndex = useMemo(
-    () => ({
-      title: "序",
-      render: (r: unknown, d: unknown, i: number) => pageIndex + i + 1,
-    }),
-    [pageIndex],
-  );
-
   return {
     total,
     pageSize,
@@ -41,7 +33,6 @@ export default function usePageTurning(totalNum: number | undefined) {
     showTotal,
     pageIndex,
     currentPage,
-    getPageIndex,
     pageSizeOptions,
     showSizeChanger: true,
     showQuickJumper: true,

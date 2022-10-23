@@ -1,15 +1,16 @@
+import { memo } from 'react';
 import { Comment } from "antd";
 import { useRequest } from "ahooks";
+import Status from "@/layout/Status";
 import { useCategorys } from "@/hooks";
 import { getLogs } from "@/api/common";
 import { toTime } from "@/utils/format";
-import StatusColor from "@/layout/Status";
 import Container from './components/Container';
 
 import type { TypeLog } from "@/interface/log";
 import type { TypeCommon } from "@/interface/common";
 
-interface TypeLogsProps extends TypeCommon.DatabaseMainParameter, Pick<TypeLog.QueryList, 'module'> {
+interface TypeLogsProps extends Partial<TypeCommon.DatabaseMainParameter>, Pick<TypeLog.QueryList, 'module'> {
   /**
    * @name onClose 传递该参数则为抽屉打开
    */
@@ -29,7 +30,7 @@ const Logs: React.FC<TypeLogsProps> = ({
 
   const { ADMIN_USER } = useCategorys([ENUM_CATEGORY.ADMIN_USER]);
 
-  const { data, loading } = useRequest(() => getLogs({ relationId, module }), {
+  const { data, loading } = useRequest(async () => relationId ? getLogs({ relationId, module }) : [], {
     refreshDeps: [relationId, module]
   });
 
@@ -56,7 +57,7 @@ const Logs: React.FC<TypeLogsProps> = ({
           datetime={
             <>
               <span>{toTime(v.createTime)}</span>
-              <StatusColor status={v.type} style={statusStyle} />
+              <Status status={v.type} style={statusStyle} matching={Status.type.WAREHOUSING_STATUS} />
             </>
           }
         />
@@ -65,4 +66,4 @@ const Logs: React.FC<TypeLogsProps> = ({
   );
 };
 
-export default Logs;
+export default memo(Logs);

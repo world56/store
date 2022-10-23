@@ -43,4 +43,28 @@ export namespace ENUM_WAREHOUSE {
     COMPLETE,
     ABANDONED,
   }
+
+  /**
+   * @name WAREHOUSE_AUDIT_STATUS 仓储审核状态
+   * @param PENDING 待审核
+   * @param RESOLVED 通过
+   * @param REJECT 拒绝
+   */
+  export enum WAREHOUSE_AUDIT_STATUS {
+    PENDING,
+    RESOLVED,
+    REJECT,
+  }
+
+  /**
+   * @name WAREHOUSE_AUDIT_TYPE 仓储审核类型
+   * @param STOCK_IN 入库
+   * @param STOCK_OUT 出库
+   * @param INVENTORY 盘点
+   */
+  export enum WAREHOUSE_AUDIT_TYPE {
+    STOCK_IN,
+    STOCK_OUT,
+    INVENTORY,
+  }
 }

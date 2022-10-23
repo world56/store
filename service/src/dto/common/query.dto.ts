@@ -6,7 +6,7 @@ import {
 } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { CommonDTO } from './common.dto';
-import { Min, IsInt, IsOptional, IsDate } from 'class-validator';
+import { Min, IsInt, IsOptional } from 'class-validator';
 
 /**
  * @name QueryDTO 查询通用DTO

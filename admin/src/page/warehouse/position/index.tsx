@@ -61,7 +61,7 @@ const Position = () => {
     {
       name: 'status',
       label: "仓位状态",
-      list: category.WAREHOURE_STATUS?.LIST,
+      list: category.WAREHOUSE_STATUS?.LIST,
       type: Search.ENUM.COMP_TYPE.SELECT,
     },
     {

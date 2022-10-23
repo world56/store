@@ -7,9 +7,9 @@ import { PrismaService } from '@/common/prisma/prisma.service';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PurchaseOrderQueryListDTO } from './dto/purchase-order-query-list.dto';
 
+import { ENUM_COMMON } from '@/enum/common';
 import { ENUM_PURCHASE } from '@/enum/purchase';
 import { ENUM_WAREHOUSE } from '@/enum/warehouse';
-import { ENUM_COMMON } from '@/enum/common';
 
 @Injectable()
 export class OrderService {
@@ -118,7 +118,7 @@ export class OrderService {
     });
     this.LogService.insert({
       type: status,
-      remark: '新建了采购单',
+      remark: '新建采购单',
       relationId: info.warehousing.id,
       module: ENUM_COMMON.LOG_MODULE.PURCHASE,
     });

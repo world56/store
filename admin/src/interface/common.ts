@@ -64,19 +64,6 @@ export namespace TypeCommon {
    */
   export type PromiseReturns<T> = T extends Promise<infer R> ? R : never;
 
-  // /**
-  //  * @name Dictionaries 字典
-  //  */
-  // export interface Dictionaries<
-  //   T = Pick<TypeCommon.DTO, "id" | "name"> &
-  //     Record<number, React.Key> & {
-  //       parentId?: number;
-  //     },
-  // > {
-  //   readonly LIST: Array<T>;
-  //   readonly OBJ: TypeCommon.GenericObject<T>;
-  // }
-
   /**
    * @name Store Redux 状态机
    */
