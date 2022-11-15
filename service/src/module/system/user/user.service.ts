@@ -53,7 +53,14 @@ export class UserService {
 
   async getAllAdminUserList() {
     return this.PrismaService.adminUser.findMany({
-      select: { id: true, name: true, avatar: true, isSuper: true },
+      select: {
+        id: true,
+        name: true,
+        phone: true,
+        avatar: true,
+        isSuper: true,
+        departments: true,
+      },
       where: {
         status: ENUM_COMMON.STATUS.ACTIVATE,
         // isSuper: ENUM_SYSTEM.SUPER_ADMIN.NOT_SUPER,

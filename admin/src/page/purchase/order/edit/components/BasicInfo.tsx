@@ -24,7 +24,7 @@ const BasicInfo = () => {
           const id = form.getFieldValue('id');
           const logisticsCompanyId = form.getFieldValue('logisticsCompanyId');
           const showLogistics = form.getFieldValue('shippingMethod')
-            === ENUM_PURCHASE.SUPPLIER_SHIPPING_METHOD.LOGISTICS;
+            === ENUM_PURCHASE.PURCHASE_SHIPPING_METHOD.LOGISTICS;
 
           return <Row gutter={24}>
 
@@ -47,13 +47,13 @@ const BasicInfo = () => {
                 label='结算方式'
                 name='settlement'
                 tooltip='确定结算方式后不得更改'>
-                <Categorys.Select disabled={id} type={ENUM_STORE.CATEGORY_DEFAULT.SUPPLIER_SETTLEMENT} />
+                <Categorys.Select disabled={id} type={ENUM_STORE.CATEGORY_DEFAULT.PURCHASE_SETTLEMENT_METHOD} />
               </Form.Item>
             </Col>
 
             <Col span={8}>
               <Form.Item label='运输方式' name='shippingMethod' rules={rules}>
-                <Categorys.Select type={ENUM_STORE.CATEGORY_DEFAULT.SUPPLIER_SHIPPING_METHOD} />
+                <Categorys.Select type={ENUM_STORE.CATEGORY_DEFAULT.PURCHASE_SHIPPING_METHOD} />
               </Form.Item>
             </Col>
 
@@ -74,12 +74,6 @@ const BasicInfo = () => {
                 <Input placeholder="清输入物流（快递）单号" />
               </Form.Item>
             </Col> : null}
-
-            <Col span={24}>
-              <Form.Item label='备注' name='remark'>
-                <Input.TextArea placeholder="清输入备注" allowClear />
-              </Form.Item>
-            </Col>
 
           </Row>
         }}

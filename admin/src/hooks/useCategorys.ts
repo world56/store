@@ -20,7 +20,7 @@ export default function useCategorys(
 
   useEffect(
     () => {
-      prop && actions.getCategory(prop);
+      prop?.length && actions.getCategory(prop);
     },
     // eslint-disable-next-line
     deps ? [actions, ...deps] : [actions],

@@ -1,9 +1,10 @@
 import type { TypeCommon } from "../common";
+import type { TypeSystemDepartment } from "./department";
 
 /**
- * @name TypeSystemUser 系统管理-用户
+ * @name TypeAdminUser 系统管理-用户
  */
-export namespace TypeSystemUser {
+export namespace TypeAdminUser {
   /**
    * @name PubilcKey 用户模块-公匙
    */
@@ -41,7 +42,8 @@ export namespace TypeSystemUser {
     email?: string;
     role?: number[];
     deps?: number[];
-    avatar?:string;
+    avatar?: string;
+    departments?: TypeSystemDepartment.DTO[];
   }
 
   /**

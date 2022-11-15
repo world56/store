@@ -12,9 +12,10 @@ import { HttpExceptionFilter } from './filter/http-exception.filter';
 import { fastifyRequestContextPlugin } from '@fastify/request-context';
 import { HttpSucessInterceptor } from '@/interceptor/http-sucess.interceptor';
 
-(BigInt.prototype as any).toJSON = function () {
-  return this.toString();
-  };
+(BigInt.prototype as any).toJSON  = function () {
+  const int = Number.parseInt(this.toString());
+  return int ?? this.toString();
+};
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(

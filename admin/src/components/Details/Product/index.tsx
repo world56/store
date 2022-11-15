@@ -44,10 +44,7 @@ const ProductDetails: React.FC<TypeProductDetailsProps> = ({ id, onClose }) => {
         </Descriptions.Item>
       </Descriptions>
 
-      <Descriptions
-        bordered
-        size='middle'
-        layout="vertical">
+      <Descriptions bordered size='middle' layout="vertical">
         <Descriptions.Item label="品牌">
           {value?.brand?.name}
         </Descriptions.Item>
@@ -59,10 +56,7 @@ const ProductDetails: React.FC<TypeProductDetailsProps> = ({ id, onClose }) => {
         </Descriptions.Item>
       </Descriptions>
 
-      <Descriptions
-        bordered
-        size='middle'
-        layout="vertical">
+      <Descriptions bordered size='middle' layout="vertical">
 
         <Descriptions.Item label="类目" span={3}>
           <Categorys.Tag maxWidth={720} list={value?.category} />

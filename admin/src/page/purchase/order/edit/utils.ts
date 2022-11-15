@@ -1,5 +1,5 @@
 import { ENUM_PURCHASE } from "@/enum/purchase";
-import { ENUM_WAREHOUSE } from "@/enum/warehouse";
+
 import type { TypePurchaseOrder } from "@/interface/purchase/order";
 import type { TypeSupplierProduct } from "@/interface/purchase/product";
 
@@ -39,7 +39,6 @@ export function serverToForm(data: TypePurchaseOrder.DTO) {
       surplus: 1000, // 剩余库存
       quantity: val.quantity,
       unitPrice: val.unitPrice / 100,
-      remark: val.remark,
     });
   }
   return { ...data, products };
@@ -62,20 +61,20 @@ export function formToServer(form: TypePurchaseOrder.EditDTO) {
  */
 export function editParams(data?: TypePurchaseOrder.DTO) {
   if (data) {
-    const {
-      settlement,
-      warehousing: { status },
-    } = data;
-    if (settlement === ENUM_PURCHASE.SUPPLIER_SETTLEMENT.CASH_ON_DELIVERY) {
-      return !(
-        status === ENUM_WAREHOUSE.WAREHOUSING_PROCESS.GOODS_TO_BE_RECEIVED ||
-        status === ENUM_WAREHOUSE.WAREHOUSING_PROCESS.WAITING_FOR_STORAGE
-      );
-    } else if (
-      settlement === ENUM_PURCHASE.SUPPLIER_SETTLEMENT.DELIVERY_AFTER_PAYMENT
+    const { status, settlement } = data;
+    if (
+      settlement === ENUM_PURCHASE.PURCHASE_SETTLEMENT_METHOD.CASH_ON_DELIVERY
     ) {
       return !(
-        status === ENUM_WAREHOUSE.WAREHOUSING_PROCESS.WAITING_FOR_PAYMENT
+        status === ENUM_PURCHASE.PURCHASE_PROCESS_STATUS.GOODS_TO_BE_RECEIVED ||
+        status === ENUM_PURCHASE.PURCHASE_PROCESS_STATUS.WAITING_FOR_STORAGE
+      );
+    } else if (
+      settlement ===
+      ENUM_PURCHASE.PURCHASE_SETTLEMENT_METHOD.DELIVERY_AFTER_PAYMENT
+    ) {
+      return !(
+        status === ENUM_PURCHASE.PURCHASE_PROCESS_STATUS.WAITING_FOR_PAYMENT
       );
     } else {
       return true;

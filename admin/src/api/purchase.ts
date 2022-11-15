@@ -380,3 +380,13 @@ export function updatePurchaseOrder(data: TypePurchaseOrder.EditDTO) {
     data,
   });
 }
+
+/**
+ * @name terminationPurchaseOrder 冻结、终止采购订单
+ */
+export function terminationPurchaseOrder(data: Pick<TypePurchaseOrder.DTO, "id">) {
+  return request<boolean>("purchase/order/termination", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
+}

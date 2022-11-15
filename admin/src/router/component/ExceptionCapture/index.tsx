@@ -10,7 +10,6 @@ const RouteError = () => {
   if (error) {
     return <Error />
   } else {
-    console.log(error);
     return <span>???</span>
   }
 

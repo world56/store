@@ -1,19 +1,19 @@
 import { message } from "antd";
 import Cookies from "js-cookie";
+import { encryption } from '@/utils';
 import { ActionsUser } from "../user";
 import { TOKEN_KEY } from "@/config/user";
 import ActionsMiddleware from "./actions";
-import { encryption } from "@/utils/crypto";
 import { login, getUserInfo, getPubilcKey } from "@/api/auth";
 import { put, call, throttle, takeLatest } from "redux-saga/effects";
 
 import { SAGA_DEBOUNCE } from "@/config/request";
 
 import type { PayloadAction } from "@reduxjs/toolkit/dist";
-import type { TypeSystemUser } from "@/interface/system/user";
+import type { TypeAdminUser } from "@/interface/system/user";
 
 type TypeActionsTaskInUserLogin = PayloadAction<
-  TypeSystemUser.Login,
+  TypeAdminUser.Login,
   typeof ActionsMiddleware.userLogin.type
 >;
 
@@ -29,7 +29,7 @@ function* taskInUserLogin(data: TypeActionsTaskInUserLogin) {
 
 function* taskInGetUserInfo() {
   try {
-    const user: TypeSystemUser.DTO = yield getUserInfo();
+    const user: TypeAdminUser.DTO = yield getUserInfo();
     yield put(ActionsUser.setUserInfo(user));
   } catch {
     message.error("获取用户信息失败");

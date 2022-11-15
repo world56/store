@@ -53,23 +53,17 @@ export namespace ENUM_STORE {
    * @name CATEGORY_DEFAULT 词典类目 （本地默认写死的）
    */
   export enum CATEGORY_DEFAULT {
-    /** @name STATUS 状态 */
+    /** @name STATUS 基础状态（冻结、激活） */
     STATUS = "STATUS",
 
-    /** @name FILE_TYPE 状态 */
+    /** @name FILE_TYPE 文件类型状态 */
     FILE_TYPE = "FILE_TYPE",
 
-    /** @name SUPPLIER_LOG_TYPE 供应商日志类型 */
-    SUPPLIER_LOG_TYPE = "SUPPLIER_LOG_TYPE",
+    /** @name PURCHASE_SHIPPING_METHOD 采购单运输方式 */
+    PURCHASE_SHIPPING_METHOD = "PURCHASE_SHIPPING_METHOD",
 
-    /** @name SUPPLIER_SHIPPING_METHOD 采购订单运输方式 */
-    SUPPLIER_SHIPPING_METHOD = "SUPPLIER_SHIPPING_METHOD",
-
-    /** @name SUPPLIER_SETTLEMENT 采购订单结算方式 */
-    SUPPLIER_SETTLEMENT = "SUPPLIER_SETTLEMENT",
-
-    /** @name SUPPLIER_ORDER_STATUS 采购订单状态 */
-    SUPPLIER_ORDER_STATUS = "SUPPLIER_ORDER_STATUS",
+    /** @name PURCHASE_SETTLEMENT_METHOD 采购订单结算方式 */
+    PURCHASE_SETTLEMENT_METHOD = "PURCHASE_SETTLEMENT_METHOD",
 
     /** @name PERMISSION_TYPE 权限类型 */
     PERMISSION_TYPE = "PERMISSION_TYPE",

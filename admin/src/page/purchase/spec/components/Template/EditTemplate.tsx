@@ -77,8 +77,7 @@ const EditTemplate: React.FC<TypeEditSpecTemplateProps> = ({
             placeholder='请选择该模板关联的规格'
             filterOption={filterOptionTooltip}>
             {spec?.LIST?.map(v => <Option key={v.id} value={v.id} >
-              {/* /// ? */}
-              <Tooltip title={v.name} destroyTooltipOnHide={selectShow}>
+              <Tooltip title={v.remark} destroyTooltipOnHide={selectShow}>
                 <p>{v.name}</p>
               </Tooltip>
             </Option>)}

@@ -82,7 +82,7 @@ const EditPosition: React.FC<TypeEditPositionProps> = ({ id, visible, onClose })
           label='状态'
           name='status'
           rules={rules}
-          initialValue={ENUM_WAREHOUSE.STATUS.NORMAL}>
+          initialValue={ENUM_WAREHOUSE.WAREHOUSE_STATUS.NORMAL}>
           <Select
             showSearch
             optionFilterProp='children'

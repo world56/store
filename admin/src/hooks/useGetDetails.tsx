@@ -1,22 +1,26 @@
+import { isVoid } from "@/utils";
 import { useState, useEffect, useCallback } from "react";
 
 import type { DependencyList } from 'react';
-import type { TypeCommon } from '@/interface/common';
 
 type TypePromiseFn<T = unknown> = (...rgas: unknown[]) => Promise<T>;
 
 interface TypeUseGetDetailsState<T extends TypePromiseFn> {
   loading: boolean;
-  value?: TypeCommon.PromiseReturns<ReturnType<T>> | undefined;
+  value?: Awaited<ReturnType<T>> | undefined;
 };
 
+/**
+ * @name useGetDetails 快速查询
+ * @returns 适用于详情页面
+ */
 export default function useGetDetails<T extends TypePromiseFn<any>>(fn: T, dep: DependencyList = []) {
 
   const [state, setState] = useState<TypeUseGetDetailsState<T>>({ loading: false });
 
   const initializa = useCallback(async () => {
     const [bol] = dep;
-    if (bol) {
+    if (!isVoid(bol)) {
       try {
         setState({ loading: true });
         const value = await fn();

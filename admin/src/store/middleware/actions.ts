@@ -4,9 +4,9 @@ import { createAction } from "@reduxjs/toolkit";
 
 import { ENUM_STORE } from "@/enum/store";
 
-import type { TypeSystemUser } from "@/interface/system/user";
+import type { TypeAdminUser } from "@/interface/system/user";
 
-const userLogin = createAction<TypeSystemUser.Login>(
+const userLogin = createAction<TypeAdminUser.Login>(
   `${userSlice.name}/USER_LOGIN`,
 );
 

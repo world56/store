@@ -2,7 +2,7 @@ import { ENUM_COMMON } from "@/enum/common";
 import { ENUM_PURCHASE } from "@/enum/purchase";
 
 import type { TypeCommon } from "../common";
-import type { TypeSystemUser } from "../system/user";
+import type { TypeAdminUser } from "../system/user";
 
 /**
  * @name TypePurchaseSupplier 采购管理-供应商
@@ -61,7 +61,7 @@ export namespace TypePurchaseSupplier {
     /** @param type 日志类型 */
     content: string;
     type: ENUM_PURCHASE.SUPPLIER_LOG_TYPE;
-    user: Pick<TypeSystemUser.DTO, "id" | "name" | "avatar">;
+    user: Pick<TypeAdminUser.DTO, "id" | "name" | "avatar">;
   }
 
   /** @name QueryLog 查询日志列表 */

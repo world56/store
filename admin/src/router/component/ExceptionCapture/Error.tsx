@@ -1,4 +1,4 @@
-import { Result } from 'antd';
+import { Result, Button } from 'antd';
 import styles from './index.module.sass';
 
 /**
@@ -7,9 +7,11 @@ import styles from './index.module.sass';
 const Error = () => (
   <div className={styles.status}>
     <Result
-      status="404"
-      title="404"
-      subTitle="没有找到对应的页面，请确认地址是否正确" />
+      status="500"
+      title="500"
+      subTitle="出现未知的错误，请联系系统管理员"
+      extra={<Button type="primary">返回上一级</Button>}
+    />
   </div>
 );
 

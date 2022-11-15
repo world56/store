@@ -7,7 +7,7 @@ import { useActions, useStore } from '@/hooks';
 import { useNavigate } from 'react-router-dom';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
-import type { TypeSystemUser } from '@/interface/system/user';
+import type { TypeAdminUser } from '@/interface/system/user';
 
 const Login = () => {
 
@@ -15,7 +15,7 @@ const Login = () => {
   const actions = useActions();
   const naviagte = useNavigate();
 
-  const [form] = Form.useForm<TypeSystemUser.Login>();
+  const [form] = Form.useForm<TypeAdminUser.Login>();
 
   async function onSumbit() {
     const values = await form.validateFields();

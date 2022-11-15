@@ -1,10 +1,9 @@
 import { GoBack } from "@/layout/Button";
 import styles from './index.module.sass';
 import { useEffect, useMemo } from 'react';
-import { Form, message, Spin } from "antd";
 import BasicInfo from "./components/BasicInfo";
-import Statistics from "./components/Statistics";
 import { useActions, useGetDetails } from '@/hooks';
+import { Card, Form, message, Spin, Input } from "antd";
 import SupplierProduct from "./components/SupplierProduct";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { formToServer, serverToForm, editParams } from './utils';
@@ -39,9 +38,6 @@ const EditPurchaseOrder = () => {
   async function onSumbit() {
     const values = await form.validateFields();
     const data = formToServer(values);
-    data.products.forEach(v => {
-      v.remark = '9999'
-    })
     if (id) await updatePurchaseOrder(data);
     else await insertPurchaseOrder(data);
     form.resetFields();
@@ -73,7 +69,11 @@ const EditPurchaseOrder = () => {
         <Form.Item noStyle shouldUpdate={shouldUpdate}>
           {() => <SupplierProduct form={form} editStatus={editStatus} />}
         </Form.Item>
-        <Statistics />
+        <Card title='采购备注'>
+          <Form.Item noStyle name='remark'>
+            <Input.TextArea placeholder="清输入备注" allowClear rows={4} />
+          </Form.Item>
+        </Card>
         <GoBack onSumbit={editStatus ? undefined : onSumbit} />
       </Form>
     </Spin>

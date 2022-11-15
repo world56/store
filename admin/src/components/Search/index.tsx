@@ -1,9 +1,10 @@
-import { useMemo } from 'react';
 import styles from './index.module.sass';
-import { initColumns, searchSelect } from './utils';
+import { useEffect, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { DatePicker } from '@/components/Formatting';
 import OperatingButton from './components/OperatingButton';
 import { Row, Col, Form, Input, Select, Cascader, TreeSelect } from 'antd';
+import { initColumns, searchSelect, filterFormQueryValue, getInitQuery } from './utils';
 
 import type { FormInstance } from 'antd/es';
 import type { TypeCommon } from '@/interface/common';
@@ -96,7 +97,7 @@ function toComType(value: Columns, callback: () => void, size: SizeType) {
 
 /**
  * @name Search 搜索
- * @description 快速创建一个搜索组件（Form）
+ * @description 快速创建一个搜索组件(Form) 支持query参数读写
  */
 const Search: TypeSearchProps = ({
   form,
@@ -106,6 +107,8 @@ const Search: TypeSearchProps = ({
   children,
   spanSize = 6,
 }) => {
+
+  const [query, setQuery] = useSearchParams();
 
   const Columns = useMemo(() => initColumns(columns), [columns]);
 
@@ -126,12 +129,25 @@ const Search: TypeSearchProps = ({
     </Col>
   )), [form, spanSize, Columns, onSearch, size]);
 
+  function onFinish(value: Record<string, string>) {
+    const { update, clear } = filterFormQueryValue(query, value);
+    setQuery(update, { replace: true });
+    clear.forEach(key => query.delete(key));
+  };
+
   function onClear() {
     form.resetFields();
   };
 
+  useEffect(() => {
+    // 这里只负责初始化读取query参数
+    const store = getInitQuery(query, columns);
+    form.setFieldsValue(store);
+    // eslint-disable-next-line
+  }, [form, query]);
+
   return (
-    <Form form={form} className={styles.layout} {...CONF.FORM_LAYOUT}>
+    <Form form={form} onFinish={onFinish} className={styles.layout} {...CONF.FORM_LAYOUT}>
       <Form.Item shouldUpdate className={styles.shouldUpdate}>
         {() => <Row gutter={24}>
           {iniaializa}

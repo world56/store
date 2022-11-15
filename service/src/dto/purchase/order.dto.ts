@@ -27,6 +27,15 @@ export class PurchaseOrderDTO extends IntersectionType(
   PickType(CommonDTO, ['remark'] as const),
 ) {
   /**
+   * @param status 采购流程状态
+   */
+  @ApiProperty({ description: '采购流程状态' })
+  @IsEnum(ENUM_PURCHASE.PURCHASE_PROCESS_STATUS)
+  @Type(() => Number)
+  @IsInt()
+  status: ENUM_PURCHASE.PURCHASE_PROCESS_STATUS;
+
+  /**
    * @param estimatedDate 预期抵达时间
    */
   @ApiProperty({ description: '预计送达时间' })
@@ -39,16 +48,16 @@ export class PurchaseOrderDTO extends IntersectionType(
    */
   @ApiProperty({ description: '结算方式' })
   @Type(() => Number)
-  @IsEnum(ENUM_PURCHASE.SUPPLIER_SETTLEMENT)
-  settlement: ENUM_PURCHASE.SUPPLIER_SETTLEMENT;
+  @IsEnum(ENUM_PURCHASE.PURCHASE_SETTLEMENT_METHOD)
+  settlement: ENUM_PURCHASE.PURCHASE_SETTLEMENT_METHOD;
 
   /**
    * @param shippingMethod 发货方式
    */
   @ApiProperty({ description: '发货方式' })
   @Type(() => Number)
-  @IsEnum(ENUM_PURCHASE.SUPPLIER_SHIPPING_METHOD)
-  shippingMethod: ENUM_PURCHASE.SUPPLIER_SHIPPING_METHOD;
+  @IsEnum(ENUM_PURCHASE.PURCHASE_SHIPPING_METHOD)
+  shippingMethod: ENUM_PURCHASE.PURCHASE_SHIPPING_METHOD;
 
   /**
    * @param logisticsCompanyId 物流公司ID

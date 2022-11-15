@@ -1,8 +1,9 @@
 import request from "@/utils/request";
+
 import { ENUM_HTTP } from "@/enum/http";
 
 import type { TypeCommon } from "@/interface/common";
-import type { TypeSystemUser } from "@/interface/system/user";
+import type { TypeAdminUser } from "@/interface/system/user";
 import type { TypeSystemRole } from "@/interface/system/role";
 import type { TypeSystemPermission } from "@/interface/system/permission";
 import type { TypeSystemDepartment } from "@/interface/system/department";
@@ -14,8 +15,8 @@ import type { TypeSystemDepartment } from "@/interface/system/department";
 /**
  * @name getUserList 用户管理-获取用户列表
  */
-export function getUserList(params: TypeSystemUser.QueryList) {
-  return request<TypeCommon.ServiceReturn<TypeSystemUser.DTO[]>>(
+export function getUserList(params: TypeAdminUser.QueryList) {
+  return request<TypeCommon.ServiceReturn<TypeAdminUser.DTO[]>>(
     "system/user/list",
     {
       method: ENUM_HTTP.REQUEST_MODE.GET,
@@ -38,7 +39,7 @@ export function resetAdminUserPwd(data: TypeCommon.DatabaseMainParameter) {
  * @name getAdminUserInfo 用户管理-获取用户详情
  */
 export function getAdminUserInfo(params: TypeCommon.DatabaseMainParameter) {
-  return request<TypeSystemUser.DTO>("system/user/details", {
+  return request<TypeAdminUser.DTO>("system/user/details", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
     params,
   });
@@ -47,7 +48,7 @@ export function getAdminUserInfo(params: TypeCommon.DatabaseMainParameter) {
 /**
  * @name addAdminUser 用户管理-新增用户
  */
-export function addAdminUser(data: TypeSystemUser.DTO) {
+export function addAdminUser(data: TypeAdminUser.DTO) {
   return request("system/user/insert", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,
@@ -57,7 +58,7 @@ export function addAdminUser(data: TypeSystemUser.DTO) {
 /**
  * @name addAdminUser 用户管理-编辑用户
  */
-export function updateAdminUser(data: TypeSystemUser.DTO) {
+export function updateAdminUser(data: TypeAdminUser.DTO) {
   return request("system/user/update", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,
@@ -67,7 +68,7 @@ export function updateAdminUser(data: TypeSystemUser.DTO) {
 /**
  * @name checkAdminUserField 用户管理-字段查重
  */
-export function checkAdminUserField(params: Partial<TypeSystemUser.DTO>) {
+export function checkAdminUserField(params: Partial<TypeAdminUser.DTO>) {
   return request<boolean>("system/user/checkFields", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
     params,
@@ -77,7 +78,7 @@ export function checkAdminUserField(params: Partial<TypeSystemUser.DTO>) {
 /**
  * @name freezeAdminUser 用户管理-冻结用户
  */
-export function freezeAdminUser(data: TypeSystemUser.FreezeStatusChange) {
+export function freezeAdminUser(data: TypeAdminUser.FreezeStatusChange) {
   return request("system/user/freeze", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,

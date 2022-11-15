@@ -1,11 +1,11 @@
 import { useRequest } from "ahooks";
-import { editableBtn } from './utils';
 import { serviceToForm } from './utils';
 import { GoBack } from "@/layout/Button";
 import styles from './index.module.sass';
 import { Form, Spin, message } from 'antd';
 import Purchase from './components/Purchase';
 import BasicInfo from "./components/BasicInfo";
+import { showCountTheGoods } from '../list/utils';
 import ProductConfirm from "./components/ProductConfirm";
 import { useNavigate, useParams } from "react-router-dom";
 import { confirmWarehousing, getWarehousingInfo } from "@/api/warehouse";
@@ -40,7 +40,7 @@ const WarehousingPurchase = () => {
     navigate(-1);
   };
 
-  const isEdit = editableBtn(data?.status);
+  const isEdit = showCountTheGoods(data?.status);
 
   return (
     <Spin spinning={loading}>

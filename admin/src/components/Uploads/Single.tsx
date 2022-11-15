@@ -13,8 +13,8 @@ import type { MessageType } from 'antd/es/message';
 import type { TypeCommon } from '@/interface/common';
 
 interface TypeUploadsProps<T = TypeCommon.File> {
-  /** @param type avatar 头像 any 任意格式文件 */
-  type?: 'avatar' | 'any';
+  /** @param type avatar 头像 other 任意格式文件 */
+  type?: 'avatar' | 'other';
   value?: T;
   onFile?(val: T): void;
   onChange?(url: string): void;
@@ -81,7 +81,7 @@ class Single extends Component<TypeUploadsProps, TypeUploadsState> {
   render() {
     const { load } = this.state;
     const { value, type } = this.props;
-    const isAny = type === 'any';
+    const isOther = type === 'other';
     return (
       <Upload<TypeCommon.File>
         headers={this.headers}
@@ -90,7 +90,7 @@ class Single extends Component<TypeUploadsProps, TypeUploadsState> {
         className={styles.single}
         beforeUpload={this.beforeUpload}
         showUploadList={false}>
-        {isAny ? <span className='btn'>上传</span> : <Tooltip title='点击上传头像'>
+        {isOther ? <span className='btn'>上传</span> : <Tooltip title='点击上传头像'>
           <Spin spinning={load} tip='正在上传'>
             <Avatar size={128} icon={<UserOutlined />} src={value} />
           </Spin>

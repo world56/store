@@ -17,7 +17,7 @@ export class DepartmentService {
     const { skip, take, name, userId } = query;
     const where = {
       name: { contains: name },
-      users: { some: { id: userId } },
+      users: userId ? { some: { id: userId } } : undefined,
     };
     const [count, list] = await Promise.all([
       this.PrismaService.department.count({ where }),

@@ -15,9 +15,9 @@ import { ENUM_COMMON } from '@/enum/common';
 import { ENUM_SYSTEM } from '@/enum/system';
 import { DB_PRIMARY_KEY } from '@/config/db';
 
-import type { TypeSystemUser } from '@/interface/system/user';
+import type { TypeAdminUser } from '@/interface/system/user';
 
-interface TypeQueryUserList extends TypeSystemUser.QueryList {
+interface TypeQueryUserList extends TypeAdminUser.QueryList {
   time?: number[];
 };
 
@@ -48,12 +48,12 @@ const AdminUser = () => {
     run(values);
   }, [run, search, pageSize, currentPage]);
 
-  const onChangeEdit = useCallback((row?: TypeSystemUser.DTO) => {
+  const onChangeEdit = useCallback((row?: TypeAdminUser.DTO) => {
     setEditParam(s => ({ visible: !s.visible, id: row?.id }));
     !row && initializa();
   }, [initializa]);
 
-  function onChangeFreeze(data: TypeSystemUser.DTO) {
+  function onChangeFreeze(data: TypeAdminUser.DTO) {
     const { id, status } = data;
     const userStatus = status === ENUM_COMMON.STATUS.FREEZE ?
       ENUM_COMMON.STATUS.ACTIVATE : ENUM_COMMON.STATUS.FREEZE;
@@ -71,7 +71,7 @@ const AdminUser = () => {
     });
   };
 
-  async function resetPwd(row: TypeSystemUser.DTO) {
+  async function resetPwd(row: TypeAdminUser.DTO) {
     Modal.confirm({
       title: '您确定要执行该操作？',
       icon: <ExclamationCircleOutlined />,
@@ -125,7 +125,7 @@ const AdminUser = () => {
     },
     {
       title: '操作', key: DB_PRIMARY_KEY,
-      render: (row: TypeSystemUser.DTO) => (
+      render: (row: TypeAdminUser.DTO) => (
         <>
           <Btn onClick={() => onChangeEdit(row)}>编辑</Btn>
           <Btn onClick={() => resetPwd(row)}>重置密码</Btn>

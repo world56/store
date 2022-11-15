@@ -25,7 +25,7 @@ export class WarehousePositionDTO extends PickType(CommonDTO, [
   @ApiProperty({ description: '状态' })
   @Type(() => Number)
   @IsOptional()
-  @IsEnum(ENUM_WAREHOUSE.STATUS)
+  @IsEnum(ENUM_WAREHOUSE.WAREHOUSE_STATUS)
   @IsInt()
   status?: number;
 

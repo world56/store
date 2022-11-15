@@ -4,7 +4,7 @@ import styles from './index.module.sass';
 import { TOKEN_KEY } from '@/config/user';
 import UserIcon from '@/resource/icon.jpg';
 import { useNavigate } from 'react-router-dom';
-import { Menu, Dropdown, message } from 'antd';
+import { Dropdown, message } from 'antd';
 import { useStore, useActions } from '@/hooks';
 import EditUserInfo from '@/components/EditUserInfo';
 import EditUserPassword from '@/components/EditUserInfo/EditUserPassword';
@@ -19,14 +19,14 @@ const MENU_LIST = [
     key: '1',
     label: <>
       <SettingOutlined />
-      <span>个人信息</span>
+      <span> 个人信息</span>
     </>
   },
   {
     key: '2',
     label: <>
       <LockOutlined />
-      <span>修改密码</span>
+      <span> 修改密码</span>
     </>,
   },
   {
@@ -34,7 +34,7 @@ const MENU_LIST = [
     danger: true,
     label: <>
       <LoginOutlined />
-      <span>退出登录</span>
+      <span> 退出登录</span>
     </>
   }
 ];
@@ -68,9 +68,7 @@ const UserHandler = () => {
 
   return (
     <div className={styles.user}>
-      <Dropdown overlay={
-        <Menu onClick={onClick} className={styles.userSelect} items={MENU_LIST} />
-      }>
+      <Dropdown menu={{ items: MENU_LIST, onClick }}>
         <div>
           <img className={styles.icon} src={user.avatar || UserIcon} alt="#" />
           <span>{user.name}</span>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Select, Tooltip } from "antd";
 import styles from './index.module.sass';
 import { useActions, useStore } from '@/hooks';
@@ -14,7 +14,7 @@ import type { TypeNestingComp } from '@/utils/filter';
 
 type TypeCategoryKeys = Pick<TypeCategoryProps<keyof TypeCommon.Store['category']>, 'type'>;
 
-type TypeCategoryValue = number | number[];
+type TypeCategoryValue<T = TypeCommon.PrimaryKey> = T | T[];
 
 interface TypeCategorySelectProps<T = TypeCategoryValue> extends React.FC<TypeCategoryKeys & Omit<SelectProps<T, TypeNestingComp>, 'value' | 'onChange'> & {
   value?: T;
@@ -29,15 +29,13 @@ const selectShow = { keepParent: false };
  */
 const CategorySelect: TypeCategorySelectProps = ({ type, value, onChange, disabled, ...props }) => {
 
-  const isCategory = Object.keys(ENUM_STORE.CATEGORY).includes(type);
-
   const [key, setKey] = useState<TypeCategoryValue>();
 
   const actions = useActions();
   const { category } = useStore();
 
   function onSelectChange(val?: TypeCategoryValue) {
-    onChange ? onChange?.(val) : setKey(val);
+    onChange ? onChange(val) : setKey(val);
   };
 
   // 重新获取最新类目
@@ -46,6 +44,10 @@ const CategorySelect: TypeCategorySelectProps = ({ type, value, onChange, disabl
   };
 
   const val = onChange ? value : key;
+
+  const isCategory = useMemo(() => (
+    Object.keys(ENUM_STORE.CATEGORY).includes(type)
+  ), [type]);
 
   const tool = (
     disabled ? null : <>
@@ -60,6 +62,9 @@ const CategorySelect: TypeCategorySelectProps = ({ type, value, onChange, disabl
     </>
   );
 
+  // id name remark 是category类型的交集（constant除外😂）
+  const list = category[type]?.LIST as Omit<TypeCommon.Category, 'type'>[];
+
   return (
     <Select
       showArrow
@@ -71,11 +76,9 @@ const CategorySelect: TypeCategorySelectProps = ({ type, value, onChange, disabl
       className={styles.select}
       onChange={onSelectChange}
       filterOption={filterOptionTooltip}
-      getPopupContainer={triggerNode => triggerNode.parentNode}
-      {...props}>
-      {category[type]?.LIST?.map(v => <Option key={v.id} value={v.id} >
-        {/* // ? */}
-        <Tooltip title={v.name} destroyTooltipOnHide={selectShow}>
+      getPopupContainer={triggerNode => triggerNode.parentNode} {...props}>
+      {list?.map(v => <Option key={v.id} value={v.id} >
+        <Tooltip title={v.remark} destroyTooltipOnHide={selectShow}>
           <p>{v.name}</p>
         </Tooltip>
       </Option>)}

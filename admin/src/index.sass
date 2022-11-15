@@ -19,13 +19,20 @@ $defaultBorderColor: rgba(0,0,0,.06)
             position: absolute
   @content
 
-// /*
-//  * @name drawerWidth 抽屉宽度
-//  */
-// @mixin drawerWidth($width)
-//   :global(.ant-drawer-content-wrapper)
-//     width: #{$width}px !important
-//   @content
+/*
+ * @name modalDetails 弹窗详情
+ */
+@mixin modalDetails()
+  :global(.ant-modal-body)
+    padding: 0
+    :global(.ant-tabs-nav)
+      margin-bottom: 0
+      :global(.ant-tabs-nav-wrap)
+        display: flex
+        justify-content: center
+    :global(.ant-tabs-content-holder)
+      width: 100%
+  @content
 
 /*
  * @name dialog 对话框宽度

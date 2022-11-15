@@ -1,18 +1,20 @@
 import { memo } from 'react';
-import { Comment } from "antd";
-import { useRequest } from "ahooks";
 import Status from "@/layout/Status";
-import { useCategorys } from "@/hooks";
 import { getLogs } from "@/api/common";
-import { toTime } from "@/utils/format";
+import Refresh from './components/Refresh';
+import Message from './components/Message';
 import Container from './components/Container';
+import { useCategorys, useGetDetails } from "@/hooks";
 
 import type { TypeLog } from "@/interface/log";
 import type { TypeCommon } from "@/interface/common";
 
-interface TypeLogsProps extends Partial<TypeCommon.DatabaseMainParameter>, Pick<TypeLog.QueryList, 'module'> {
+export interface TypeLogsProps
+  extends
+  Partial<TypeCommon.DatabaseMainParameter>,
+  Partial<Pick<TypeLog.QueryList, 'module'>> {
   /**
-   * @name onClose 传递该参数则为抽屉打开
+   * @name onClose 传递该参数则为抽屉打开（有关闭按钮 肯定是弹窗撒）
    */
   onClose?(): void;
 };
@@ -28,18 +30,11 @@ const Logs: React.FC<TypeLogsProps> = ({
   id: relationId,
 }) => {
 
-  const { ADMIN_USER } = useCategorys([ENUM_CATEGORY.ADMIN_USER]);
+  const category = useCategorys([ENUM_CATEGORY.ADMIN_USER]);
 
-  const { data, loading } = useRequest(async () => relationId ? getLogs({ relationId, module }) : [], {
-    refreshDeps: [relationId, module]
-  });
-
-  const statusStyle: React.CSSProperties = {
-    right: 0,
-    position: 'absolute',
-    top: onClose ? 1 : -2,
-    fontSize: onClose ? 13 : 14,
-  };
+  const { value, loading, run } = useGetDetails(async () => (
+    getLogs({ relationId: relationId!, module: module! })
+  ), [relationId, module]);
 
   return (
     <Container
@@ -47,21 +42,14 @@ const Logs: React.FC<TypeLogsProps> = ({
       loading={loading}
       onCancel={onClose}
       visible={Boolean(relationId)}>
-      {data?.map(v => {
-        const user = ADMIN_USER?.OBJ?.[v.creatorId];
-        return <Comment
-          key={v._id}
-          author={user?.name}
-          avatar={user?.avatar}
-          content={v.remark}
-          datetime={
-            <>
-              <span>{toTime(v.createTime)}</span>
-              <Status status={v.type} style={statusStyle} matching={Status.type.WAREHOUSING_STATUS} />
-            </>
-          }
-        />
-      })}
+      {value?.length ? value?.map(v => <Message
+        key={v._id}
+        time={v.createTime}
+        user={category.ADMIN_USER?.OBJ?.[v.creatorId]}
+        status={<Status status={v.type} matching={category.PURCHASE_PROCESS_STATUS.OBJ} />}>
+        {v.remark}
+      </Message>
+      ) : <Refresh onClick={run} />}
     </Container>
   );
 };

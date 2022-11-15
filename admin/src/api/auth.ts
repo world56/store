@@ -1,12 +1,12 @@
 import request from "@/utils/request";
 import { ENUM_HTTP } from "@/enum/http";
 
-import type { TypeSystemUser } from "@/interface/system/user";
+import type { TypeAdminUser } from "@/interface/system/user";
 
 /**
  * @name register 注册
  */
-export function register(data: TypeSystemUser.Register) {
+export function register(data: TypeAdminUser.Register) {
   return request<boolean>("auth/register", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,
@@ -16,7 +16,7 @@ export function register(data: TypeSystemUser.Register) {
 /**
  * @name login 登陆
  */
-export function login(data: TypeSystemUser.Login) {
+export function login(data: TypeAdminUser.Login) {
   return request<string>("auth/login", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,
@@ -36,7 +36,7 @@ export function logOut() {
  * @name getPubilcKey 获取公匙
  */
 export function getPubilcKey() {
-  return request<TypeSystemUser.PubilcKey>("auth/establish", {
+  return request<TypeAdminUser.PubilcKey>("auth/establish", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
   });
 }
@@ -45,7 +45,7 @@ export function getPubilcKey() {
  * @name getUserInfo 获取当前用户信息
  */
 export function getUserInfo() {
-  return request<TypeSystemUser.DTO>("auth/userInfo", {
+  return request<TypeAdminUser.DTO>("auth/userInfo", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
   });
 }
@@ -62,7 +62,7 @@ export function superAdminStatus() {
 /**
  * @name updateUserPwd 修改用户密码
  */
-export function updateUserPwd(data:TypeSystemUser.EditUserPassword) {
+export function updateUserPwd(data:TypeAdminUser.EditUserPassword) {
   return request<boolean>("auth/updatePwd", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data

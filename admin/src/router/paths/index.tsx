@@ -1,5 +1,5 @@
-import { Suspense } from 'react';
 import routes from './pubilc';
+import { Suspense } from 'react';
 import Loading from '../component/Loading';
 import { Route, createRoutesFromElements, createBrowserRouter } from "react-router-dom";
 
@@ -15,6 +15,7 @@ const loadLazyRoutes = (routes: TypeRoute.Route[]) => (
     key={r.id}
     path={r.path!}
     loader={r.loader}
+    errorElement={r.errorElement}
     element={
       <Suspense fallback={<Loading />}>
         <r.element />

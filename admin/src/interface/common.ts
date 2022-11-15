@@ -2,7 +2,7 @@ import { ENUM_STORE } from "@/enum/store";
 import { ENUM_COMMON } from "@/enum/common";
 
 import type store from "@/store";
-import type { TypeSystemUser } from "./system/user";
+import type { TypeAdminUser } from "./system/user";
 
 /**
  * @name TypeCommon 公共接口
@@ -60,11 +60,6 @@ export namespace TypeCommon {
   export interface FieldsIsRepeatDTO extends Pick<DTO, "id" | "name"> {}
 
   /**
-   * @name PromiseReturns Promise
-   */
-  export type PromiseReturns<T> = T extends Promise<infer R> ? R : never;
-
-  /**
    * @name Store Redux 状态机
    */
   export type Store = ReturnType<typeof store.getState>;
@@ -120,6 +115,6 @@ export namespace TypeCommon {
     createTime?: string;
     type: ENUM_COMMON.FILE_TYPE;
     status?: ENUM_COMMON.UPLOAD_STATUS;
-    user?: Pick<TypeSystemUser.DTO, "id" | "name">;
+    user?: Pick<TypeAdminUser.DTO, "id" | "name">;
   }
 }

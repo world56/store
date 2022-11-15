@@ -10,22 +10,34 @@ const BUTTON_COLOR = {
 };
 
 export interface TypeBtnProps {
-  /** @param  confirmTips 操作提示（确认后触发onClick） */
+  /** 
+   * @param  confirmTips 操作提示（确认后触发onClick） 
+   */
   confirmTips?: string | boolean;
-  /** @name onClick 点击事件 */
+  /** 
+   * @name onClick 点击事件
+   */
   onClick?: () => void | void;
-  /** @param type 按钮类型（颜色） */
+  /** 
+   * @param type 按钮类型（颜色）
+   */
   type?: keyof typeof BUTTON_COLOR;
+  /**
+   * @param show 是否显示按钮
+   */
+  show?: boolean;
   children?: React.ReactNode;
 };
 
 /**
- * @name Btn 按钮 纯text按钮
+ * @name Btn 按钮（蓝色）
+ * @description 纯text按钮 通常用于点击交互场景
  */
 const Btn: React.FC<TypeBtnProps> = ({
   onClick,
   children,
   confirmTips,
+  show = true,
   type = 'default',
 }) => {
 
@@ -44,11 +56,11 @@ const Btn: React.FC<TypeBtnProps> = ({
     </button>
   );
 
-  return confirmTips ?
+  return show ? confirmTips ?
     <Popconfirm
       title={confirmTips === true ? '确认操作？' : confirmTips}
       onConfirm={onConfirm}>{btn}</Popconfirm>
-    : btn;
+    : btn : null;
 };
 
 export default Btn;

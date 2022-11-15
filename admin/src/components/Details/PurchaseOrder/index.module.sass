@@ -1,0 +1,73 @@
+@import '@/index.sass'
+
+// 有差异 红色提示
+.actualDifference
+  font-weight: bold
+  color: $error
+
+.uncountered
+  font-weight: bold
+  color: rgba(0, 0, 0, 0.55)
+
+.layout
+  transition: 0.25s
+  @include modalDetails()
+  .remark
+    text-align: left
+
+  // 基本信息
+  .card
+    padding: 10px
+    :global(.ant-descriptions)
+      margin-bottom: 10px
+      :global(.ant-descriptions-header)
+        margin-bottom: 10px
+    :global(.ant-descriptions-item-label)
+      width: 150px
+      text-align: center
+      font-weight: bold
+    & > :global(.ant-descriptions):nth-last-child(1)
+      margin-bottom: 0
+
+    // 联系人
+    .contacts
+      margin-bottom: 10px
+      :global(.ant-descriptions-row)
+        :global(.ant-descriptions-item-label)
+          font-weight: bold
+          text-align: center
+        & > :nth-child(1)
+          width: 150px
+          span > span
+            font-weight: normal
+        & > :nth-child(2)
+          width: 170px
+        & > :nth-child(3)
+          width: 100px
+        & > :nth-child(4)
+          width: 170px
+        & > :nth-child(5)
+          width: 100px
+        & > :nth-child(6)
+          span
+            width: 450px
+            display: block
+            overflow: hidden
+            text-overflow: ellipsis
+            white-space: nowrap
+
+  // 表格横向展示两个单位
+  .horizontal
+    :global(.ant-descriptions-item-content)
+      width: 340px
+
+  // 预计采购 实际清点有差异
+  .difference
+    background: rgba($error,.1)
+    & > td:nth-last-child(1)
+      @extend .actualDifference
+
+  // 提示未清点
+  .waiting
+    & > td:nth-last-child(1)
+      @extend .uncountered

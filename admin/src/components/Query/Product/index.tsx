@@ -45,7 +45,7 @@ const QueryProduct: QueryProductComponentsProps = ({
   <div className={styles.func} style={{ justifyContent }}>
     <SelectProduct {...restProps} width={width} ref={ref} />
     <ProductBatchAdd {...restProps} />
-    <Popconfirm onConfirm={onReset} title='确定操作？'>
+    <Popconfirm onConfirm={onReset} title='确定清空产品列表？'>
       <Button danger>重置</Button>
     </Popconfirm>
   </div>

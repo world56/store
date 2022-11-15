@@ -1,31 +1,46 @@
 @import '@/index.sass'
 
-@mixin commentDefalut($spacing:0)
-  :global(.ant-comment)
-    background: #fff
-    margin-bottom: #{$spacing}px
-    border-bottom: 1px solid $defaultBorderColor
-    :global(.ant-comment-content-author)
-      position: relative
+.userHint
+  margin: 0
 
+// 新增记录
 .addLog
   :global(.ant-modal-body)
     padding-bottom: 0
   :global(.ant-form-item):nth-last-child(1)
     margin-bottom: 0
 
+// 抽屉日志弹窗
 .drawer
   @include dialog(drawer,600)
   :global(.ant-drawer-body)
     padding: 0 10px 10px 10px
-    @include commentDefalut()
 
+// 平铺日志列表
 .list
-  span
-    font-size: 14px
-  @include commentDefalut(10)
-  :global(.ant-comment-inner)
-    padding: 16px 12px
-  :global(.ant-comment-content-detail)
-    font-size: 15px
-    margin-top: 5px
+  .msg
+    padding: 16px 10px
+  & > .msg:nth-last-child(1)
+    border-bottom: none
+
+.msg
+  width: 100%
+  padding: 16px 0
+  display: flex
+  background: #fff
+  border-bottom: 1px solid $defaultBorderColor
+  .icon
+    margin: 4px 10px 0 0
+  .ctx
+    width: 100%
+    .title
+      display: flex
+      justify-content: space-between
+      align-items: center
+      font-size: 13px
+      margin-bottom: 3px
+      span > span:nth-child(1)
+        color: rgba(0, 0, 0, 0.5)
+      span > span:nth-child(2)
+        margin-left: 8px
+        color: rgba(0, 0, 0, 0.42)

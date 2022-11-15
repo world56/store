@@ -30,10 +30,18 @@
       & > :global(.ant-card):nth-child(2)
         :global(.ant-descriptions-view)
           :global(.ant-descriptions-row)
-            & > :global(.ant-descriptions-item-content):nth-child(2)
+            & > :nth-child(2)
               width: 280px
-            & > :global(.ant-descriptions-item-content):nth-child(4)
+            & > :nth-child(4)
               width: 250px
+            & > :nth-child(6)
+              span
+                width: 450px
+                display: block
+                overflow: hidden
+                text-overflow: ellipsis
+                white-space: nowrap
+
     &:nth-last-child(1)
       margin-bottom: 10px
 

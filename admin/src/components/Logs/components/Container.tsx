@@ -1,3 +1,4 @@
+import { Spin } from "antd";
 import { Drawer } from "@/layout/PopUp";
 import styles from '../index.module.sass';
 
@@ -13,15 +14,15 @@ const LogsContainer: React.FC<TypeLogsContainer> = ({
   visible,
   onCancel,
   children,
-}) => {
-  return onCancel ? <Drawer
-    title='日志记录'
-    open={visible}
-    loading={loading}
-    onCancel={onCancel}
-    className={styles.drawer}>
-    {children}
-  </Drawer> : <div className={styles.list}>{children}</div>
-};
+}) => onCancel ? <Drawer
+  title='日志记录'
+  open={visible}
+  loading={loading}
+  onCancel={onCancel}
+  className={styles.drawer}>
+  {children}
+</Drawer> : <Spin spinning={loading}>
+    <div className={styles.list}>{children}</div>
+  </Spin>;
 
 export default LogsContainer;

@@ -90,7 +90,7 @@ const Position = () => {
       key: 'status',
       dataIndex: 'status',
       title: '状态',
-      render: (status: number) => <Status status={status} matching={Status.type.WAREHOURE_STATUS} />
+      render: (status: number) => <Status status={status} matching={category.WAREHOUSING_PROCESS_STATUS.OBJ} />
     },
     { key: 'remark', dataIndex: 'remark', title: '备注' },
     {

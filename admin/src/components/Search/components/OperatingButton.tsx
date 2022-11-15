@@ -20,10 +20,10 @@ const OperatingButton: React.FC<OperatingButtonProps> = ({
   children
 }) => (
   <Col className={styles.searchBtn}>
-    <Button onClick={onSumbit} type="primary">
+    <Button onClick={onSumbit} type="primary" htmlType="submit">
       <SearchOutlined /> 搜索
     </Button>
-    <Button danger onClick={onEmpty} className="formSearchClear">
+    <Button danger onClick={onEmpty} htmlType="button" className="formSearchClear">
       <DeleteOutlined /> 重置
     </Button>
     {children ? children : null}

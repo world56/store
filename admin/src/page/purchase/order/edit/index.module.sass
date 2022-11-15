@@ -3,13 +3,18 @@
 .layout
   :global(.ant-card)
     margin-bottom: 12px
+
   & > :global(.ant-card):nth-child(1)
     :global(.ant-card-body)
       padding: 24px 24px 0 24px
+
   & > :global(.ant-card):nth-child(2)
     border-bottom: none
     :global(.ant-card-body)
       padding: 1px 0 0 0
+      :global(.ant-form-item)
+        margin-bottom: 0
+
   :global(.ant-table-summary)
     td
       border-bottom: none

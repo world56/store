@@ -1,11 +1,11 @@
 import { UserTextRule } from '.';
+import { useStore } from '@/hooks';
+import { encryption } from '@/utils';
 import { FormHideKey } from '../Form';
-import { encryption } from '@/utils/crypto';
 import { Form, Input, message, Modal } from "antd";
 import { getPubilcKey, updateUserPwd } from '@/api/auth';
 
-import type { TypeSystemUser } from "@/interface/system/user";
-import { useStore } from '@/hooks';
+import type { TypeAdminUser } from "@/interface/system/user";
 
 interface TypeEditUserPasswordProps {
   /** @param visible 开启修改密码弹窗 */
@@ -21,7 +21,7 @@ const EditUserPassword: React.FC<TypeEditUserPasswordProps> = ({ visible, onClos
 
   const { user } = useStore();
 
-  const [form] = Form.useForm<TypeSystemUser.EditUserPassword>();
+  const [form] = Form.useForm<TypeAdminUser.EditUserPassword>();
 
   async function onSumbit() {
     const values = await form.validateFields();

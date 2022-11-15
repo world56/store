@@ -1,10 +1,13 @@
 import { LogService } from '@/common/log/log.service';
-import { PrimaryKeyDTO } from '@/dto/common/common.dto';
-import { AdminUserDTO } from '@/dto/system/admin-user.dto';
-import { PurchaseOrderDTO } from '@/dto/purchase/order.dto';
 import { UtilsService } from '@/common/utils/utils.service';
 import { PrismaService } from '@/common/prisma/prisma.service';
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { WarehousingService } from '@/module/warehouse/warehousing/warehousing.service';
+
+import { PrimaryKeyDTO } from '@/dto/common/common.dto';
+import { AdminUserDTO } from '@/dto/system/admin-user.dto';
+import { PurchaseOrderDTO } from '@/dto/purchase/order.dto';
+import { PurchaseOrderUpdateDTO } from './dto/pruchase-order-update.dto';
 import { PurchaseOrderQueryListDTO } from './dto/purchase-order-query-list.dto';
 
 import { ENUM_COMMON } from '@/enum/common';
@@ -17,6 +20,7 @@ export class OrderService {
     private readonly LogService: LogService,
     private readonly UtilsService: UtilsService,
     private readonly PrismaService: PrismaService,
+    private readonly WarehousingService: WarehousingService,
   ) {}
 
   private statistics(products: PurchaseOrderDTO['products']) {
@@ -31,8 +35,7 @@ export class OrderService {
     return { total, totalPrice };
   }
 
-  async getList({ skip, take, status, ...query }: PurchaseOrderQueryListDTO) {
-    const where = { ...query, warehousing: { status } };
+  async getList({ skip, take, ...where }: PurchaseOrderQueryListDTO) {
     const [count, list] = await Promise.all([
       this.PrismaService.purchaseOrder.count({ where }),
       this.PrismaService.purchaseOrder.findMany({
@@ -43,7 +46,7 @@ export class OrderService {
           supplier: true,
           logisticsCompany: true,
           creator: { select: { id: true, name: true } },
-          warehousing: { select: { id: true, status: true, type: true } },
+          warehousing: { select: { id: true, type: true } },
         },
         orderBy: { createTime: 'desc' },
       }),
@@ -56,10 +59,10 @@ export class OrderService {
     const data = await this.PrismaService.purchaseOrder.findUnique({
       where: { id },
       include: {
-        supplier: { include: { contacts: true } },
         creator: true,
         logisticsCompany: true,
-        warehousing: { select: { status: true } },
+        supplier: { include: { contacts: true } },
+        warehousing: { select: { id: true } },
         products: {
           include: {
             spec: true,
@@ -88,44 +91,44 @@ export class OrderService {
     return { ...data, products };
   }
 
-  async insert(dto: PurchaseOrderDTO, user: AdminUserDTO) {
+  async insert(dto: PurchaseOrderUpdateDTO, user: AdminUserDTO) {
     const { products, settlement, ...data } = dto;
     data.creatorId = user.id;
     const { total, totalPrice } = this.statistics(products);
     // 根据结算方式 发起对应流程
-    const status =
-      settlement === ENUM_PURCHASE.SUPPLIER_SETTLEMENT.CASH_ON_DELIVERY
-        ? ENUM_WAREHOUSE.WAREHOUSING_PROCESS.GOODS_TO_BE_RECEIVED
-        : ENUM_WAREHOUSE.WAREHOUSING_PROCESS.WAITING_FOR_PAYMENT;
+    const iscashOnDelivery =
+      settlement === ENUM_PURCHASE.PURCHASE_SETTLEMENT_METHOD.CASH_ON_DELIVERY;
     const info = await this.PrismaService.purchaseOrder.create({
       data: {
         ...data,
         total,
+        status: iscashOnDelivery
+          ? ENUM_PURCHASE.PURCHASE_PROCESS_STATUS.GOODS_TO_BE_RECEIVED
+          : ENUM_PURCHASE.PURCHASE_PROCESS_STATUS.WAITING_FOR_PAYMENT,
         totalPrice,
         settlement,
         no: `NO${new Date().valueOf()}`,
         products: { createMany: { data: products } },
-        warehousing: {
-          create: {
-            status,
-            no: `NO${new Date().valueOf()}`,
-            creator: { connect: { id: user.id } },
-            type: ENUM_WAREHOUSE.WAREHOUSING_TYPE.PURCHASE,
-          },
-        },
       },
-      include: { warehousing: true },
     });
+    if (iscashOnDelivery) {
+      await this.WarehousingService.insert({
+        orderId: info.id,
+        no: info.no,
+        type: ENUM_WAREHOUSE.WAREHOUSE_AUDIT_TYPE.PURCHASE,
+        status: ENUM_WAREHOUSE.WAREHOUSING_PROCESS_STATUS.GOODS_TO_BE_RECEIVED,
+      });
+    }
     this.LogService.insert({
-      type: status,
-      remark: '新建采购单',
-      relationId: info.warehousing.id,
+      type: info.status,
+      relationId: info.id,
       module: ENUM_COMMON.LOG_MODULE.PURCHASE,
+      remark: `新建采购单 ${info.remark ? `：${info.remark}` : ''}`,
     });
     return info;
   }
 
-  async update(dto: PurchaseOrderDTO) {
+  async update(dto: PurchaseOrderUpdateDTO) {
     const { id, products, ...data } = dto;
     const next = await this.editable(id);
     if (next) {
@@ -162,37 +165,52 @@ export class OrderService {
             })),
           },
         },
-        include: { warehousing: true },
       });
       this.LogService.insert({
-        type: updateData.warehousing.status,
-        remark: '更新了采购单信息',
+        type: updateData.status,
         relationId: updateData.id,
         module: ENUM_COMMON.LOG_MODULE.PURCHASE,
+        remark: `更新了采购单 ${data.remark ? `：${data.remark}` : ''}`,
       });
     } else {
       throw new BadRequestException('无法编辑采购单，请确认当前流程是否错误');
     }
   }
 
+  async termination(body: PrimaryKeyDTO) {
+    const data = await this.PrismaService.purchaseOrder.update({
+      where: { id: body.id },
+      data: {
+        status: ENUM_PURCHASE.PURCHASE_PROCESS_STATUS.ABANDONED,
+        warehousing: {
+          update: { status: ENUM_WAREHOUSE.WAREHOUSING_PROCESS_STATUS.ABANDONED },
+        },
+      },
+    });
+    this.LogService.insert({
+      type: data.status,
+      relationId: data.id,
+      remark: '终止了采购流程',
+      module: ENUM_COMMON.LOG_MODULE.PURCHASE,
+    });
+    return true;
+  }
+
   /**
-   * @name editable 可否编辑
+   * @name editable 可否编辑(update order)
    */
   async editable(id: number) {
-    const {
-      settlement,
-      warehousing: { status },
-    } = await this.PrismaService.purchaseOrder.findUnique({
-      where: { id },
-      include: { warehousing: true },
-    });
-    if (settlement === ENUM_PURCHASE.SUPPLIER_SETTLEMENT.CASH_ON_DELIVERY) {
+    const { status, settlement } =
+      await this.PrismaService.purchaseOrder.findUnique({
+        where: { id },
+      });
+    if (settlement === ENUM_PURCHASE.PURCHASE_SETTLEMENT_METHOD.CASH_ON_DELIVERY) {
       return (
-        status === ENUM_WAREHOUSE.WAREHOUSING_PROCESS.GOODS_TO_BE_RECEIVED ||
-        status === ENUM_WAREHOUSE.WAREHOUSING_PROCESS.WAITING_FOR_STORAGE
+        status === ENUM_PURCHASE.PURCHASE_PROCESS_STATUS.GOODS_TO_BE_RECEIVED ||
+        status === ENUM_PURCHASE.PURCHASE_PROCESS_STATUS.WAITING_FOR_STORAGE
       );
     } else {
-      return status === ENUM_WAREHOUSE.WAREHOUSING_PROCESS.WAITING_FOR_PAYMENT;
+      return status === ENUM_PURCHASE.PURCHASE_PROCESS_STATUS.WAITING_FOR_PAYMENT;
     }
   }
 }

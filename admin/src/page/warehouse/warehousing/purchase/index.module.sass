@@ -6,7 +6,11 @@
     :global(.ant-card-body)
       padding: 0
   & > :global(.ant-card):nth-child(4)
-      white-space: pre-line
+    white-space: pre-line
+
+  :global(.ant-input-number)
+    width: 100%
+
 .basic
   @include info(180)
 
@@ -17,4 +21,11 @@
   span
     margin-left: 15px
     span
+      font-weight: bold
+
+.difference
+  background: rgba($error,.1)
+  & > td:nth-last-child(1)
+    span
+      color: $error
       font-weight: bold
