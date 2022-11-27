@@ -50,25 +50,20 @@ export namespace ENUM_STORE {
   }
 
   /**
-   * @name CATEGORY_DEFAULT 词典类目 （本地默认写死的）
+   * @name CATEGORY_CONSTANT 词典类目 （本地默认写死的）
+   * @description 有些组件会根据参数来取redux category的值，并且区分需要请求的枚举
    */
-  export enum CATEGORY_DEFAULT {
-    /** @name STATUS 基础状态（冻结、激活） */
-    STATUS = "STATUS",
-
-    /** @name FILE_TYPE 文件类型状态 */
-    FILE_TYPE = "FILE_TYPE",
-
+  export enum CATEGORY_CONSTANT {
     /** @name PURCHASE_SHIPPING_METHOD 采购单运输方式 */
     PURCHASE_SHIPPING_METHOD = "PURCHASE_SHIPPING_METHOD",
 
     /** @name PURCHASE_SETTLEMENT_METHOD 采购订单结算方式 */
     PURCHASE_SETTLEMENT_METHOD = "PURCHASE_SETTLEMENT_METHOD",
 
-    /** @name PERMISSION_TYPE 权限类型 */
-    PERMISSION_TYPE = "PERMISSION_TYPE",
+    /** @name PURCHASE_PROCESS_STAT 采购流程状态 */
+    PURCHASE_PROCESS_STATUS = "PURCHASE_PROCESS_STATUS",
 
-    /** @name WAREHOUSE_STATUS 仓位状态 */
-    WAREHOUSE_STATUS = "WAREHOUSE_STATUS",
+    /** @name SUPPLIER_LOG_TYPE 供应商供应报告日志 */
+    SUPPLIER_LOG_TYPE = "SUPPLIER_LOG_TYPE",
   }
 }

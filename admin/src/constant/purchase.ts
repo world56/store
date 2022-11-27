@@ -11,12 +11,35 @@ export namespace CONSTANT_PURCHASE {
    * @name SUPPLIER_LOG_TYPE 供应商日志类型
    */
   export const SUPPLIER_LOG_TYPE = toCategorys([
-    { id: ENUM_PURCHASE.SUPPLIER_LOG_TYPE.QUALITY, name: "质量" },
-    { id: ENUM_PURCHASE.SUPPLIER_LOG_TYPE.PRICE, name: "价格" },
-    { id: ENUM_PURCHASE.SUPPLIER_LOG_TYPE.PUNCTUALITY, name: "准时性" },
-    { id: ENUM_PURCHASE.SUPPLIER_LOG_TYPE.AFTER_SALES, name: "售后服务" },
-    { id: ENUM_PURCHASE.SUPPLIER_LOG_TYPE.STATUS, name: "状态变更" },
-    { id: ENUM_PURCHASE.SUPPLIER_LOG_TYPE.OTHER, name: "其他" },
+    {
+      id: ENUM_PURCHASE.SUPPLIER_LOG_TYPE.QUALITY,
+      name: "质量",
+      color: ENUM_COMMON.COLOR.RED,
+    },
+    {
+      id: ENUM_PURCHASE.SUPPLIER_LOG_TYPE.PRICE,
+      name: "价格",
+      color: ENUM_COMMON.COLOR.YELLOW,
+    },
+    {
+      id: ENUM_PURCHASE.SUPPLIER_LOG_TYPE.PUNCTUALITY,
+      name: "准时性",
+      color: ENUM_COMMON.COLOR.ORANGE,
+    },
+    {
+      id: ENUM_PURCHASE.SUPPLIER_LOG_TYPE.AFTER_SALES,
+      name: "售后服务",
+      color: ENUM_COMMON.COLOR.PURPLE,
+    },
+    {
+      id: ENUM_PURCHASE.SUPPLIER_LOG_TYPE.STATUS,
+      name: "状态变更",
+      color: ENUM_COMMON.COLOR.RED,
+    },
+    {
+      id: ENUM_PURCHASE.SUPPLIER_LOG_TYPE.OTHER,
+      name: "其他",
+    },
   ]);
 
   /**

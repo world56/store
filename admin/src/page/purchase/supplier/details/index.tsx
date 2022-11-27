@@ -1,11 +1,13 @@
 import { Tabs } from 'antd';
-import Logs from './components/Logs';
+import BasicInfo from './BasicInfo';
+import Logs from '@/components/Logs';
 import styles from './index.module.sass';
 import { GoBack } from '@/layout/Button';
 import SupplierOrder from '../../order/list';
-import BasicInfo from './components/BasicInfo';
 import { useParams, useSearchParams } from "react-router-dom";
 import SupplierProductList from "@/page/purchase/product/list";
+
+import { ENUM_COMMON } from '@/enum/common';
 
 import type { TypeCommon } from '@/interface/common';
 
@@ -59,8 +61,8 @@ const SupplierDetails = () => {
           },
           {
             key: '6',
-            label: '跟进日志',
-            children: <Logs id={id} />
+            label: '日志',
+            children: <Logs id={id} module={ENUM_COMMON.LOG_MODULE.SUPPLIER} search />
           }
         ]}
       />

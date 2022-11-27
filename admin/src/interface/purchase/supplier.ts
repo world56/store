@@ -52,27 +52,13 @@ export namespace TypePurchaseSupplier {
   }
 
   /**
-   * @name LogDTO 供应商日志
-   * @param content 内容（原因）
-   * @param user 用户信息
-   * @param type 日志类型
-   */
-  export interface LogDTO extends Pick<TypeCommon.DTO, "id" | "createTime"> {
-    /** @param type 日志类型 */
-    content: string;
-    type: ENUM_PURCHASE.SUPPLIER_LOG_TYPE;
-    user: Pick<TypeAdminUser.DTO, "id" | "name" | "avatar">;
-  }
-
-  /** @name QueryLog 查询日志列表 */
-  export interface QueryLog extends Partial<Pick<LogDTO, "id" | "type">> {}
-
-  /**
    * @name EditStatus 改变供应商状态
    * @param status 状态 激活、冻结
+   * @param type 日志类型
    */
-  export interface EditStatus extends Omit<LogDTO, "type"> {
+  export interface EditStatus extends Pick<DTO, "id"> {
     status: ENUM_COMMON.STATUS;
+    type: ENUM_PURCHASE.SUPPLIER_LOG_TYPE;
   }
 
   /**

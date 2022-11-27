@@ -92,26 +92,6 @@ export function updatePurchaseSupplier(data: TypePurchaseSupplier.EditDTO) {
 }
 
 /**
- * @name getPurchaseSupplierLogs 供应商日志
- */
-export function getPurchaseSupplierLogs(params: TypePurchaseSupplier.QueryLog) {
-  return request<TypePurchaseSupplier.LogDTO[]>("purchase/supplier/logs", {
-    method: ENUM_HTTP.REQUEST_MODE.GET,
-    params,
-  });
-}
-
-/**
- * @name insertPurchaseSupplierLog 新增供应商日志
- */
-export function insertPurchaseSupplierLog(data: TypePurchaseSupplier.LogDTO) {
-  return request<TypePurchaseSupplier.LogDTO>("purchase/supplier/addLog", {
-    method: ENUM_HTTP.REQUEST_MODE.POST,
-    data,
-  });
-}
-
-/**
  * --------------------- 产品规格 ----------------------
  */
 

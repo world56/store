@@ -5,7 +5,7 @@ interface TypeRefreshProps {
   /**
    * @name onClick 刷新按钮
    */
-  onClick(): void;
+  onClick?(): void;
 };
 
 /**
@@ -14,7 +14,7 @@ interface TypeRefreshProps {
 const Refresh: React.FC<TypeRefreshProps> = ({ onClick }) => (
   <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={
     <>
-      暂无日志 <Btn onClick={onClick}>刷新</Btn>
+      暂无日志 {onClick ? <Btn onClick={onClick}>刷新</Btn> : null}
     </>
   } />
 );

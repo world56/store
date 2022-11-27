@@ -42,10 +42,12 @@ export namespace ENUM_COMMON {
 
   /**
    * @name LOG_MODULE 日志模块
-   * @param PURCHASE 采购模块
+   * @param PURCHASE 采购日志
+   * @param SUPPLIER 供应商日志
    */
   export enum LOG_MODULE {
     PURCHASE,
+    SUPPLIER,
   }
 
   /**

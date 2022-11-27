@@ -26,6 +26,11 @@ export namespace TypeCommon {
    */
   export type GenericObject<T = React.Key> = Record<React.Key, T>;
 
+  /** 
+   * @name ConstantVal 取Object Value
+   */
+  export type ConstantVal<T> = T[keyof T];
+
   /**
    * @name DefaultKey 统一约束定义的枚举键值对
    */

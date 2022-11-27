@@ -37,6 +37,7 @@ export interface SearchFormProps {
   form: FormInstance;
   columns: Columns[];
   children?: React.ReactNode;
+  style?: React.CSSProperties;
 };
 
 export interface TypeSearchProps extends React.FC<SearchFormProps> {
@@ -102,6 +103,7 @@ function toComType(value: Columns, callback: () => void, size: SizeType) {
 const Search: TypeSearchProps = ({
   form,
   size,
+  style,
   columns,
   onSearch,
   children,
@@ -147,7 +149,12 @@ const Search: TypeSearchProps = ({
   }, [form, query]);
 
   return (
-    <Form form={form} onFinish={onFinish} className={styles.layout} {...CONF.FORM_LAYOUT}>
+    <Form
+      form={form}
+      style={style}
+      onFinish={onFinish}
+      {...CONF.FORM_LAYOUT}
+      className={styles.layout}>
       <Form.Item shouldUpdate className={styles.shouldUpdate}>
         {() => <Row gutter={24}>
           {iniaializa}

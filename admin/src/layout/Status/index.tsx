@@ -8,7 +8,7 @@ import { CONSTANT_COMMON } from '@/constant/common';
 import { TypeCommon } from '@/interface/common';
 
 interface TypeMatching extends Pick<TypeCommon.DTO, 'id' | 'name'> {
-  color: ENUM_COMMON.COLOR;
+  color?: ENUM_COMMON.COLOR;
 };
 
 interface TypeStatusProps {

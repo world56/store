@@ -47,13 +47,13 @@ const BasicInfo = () => {
                 label='结算方式'
                 name='settlement'
                 tooltip='确定结算方式后不得更改'>
-                <Categorys.Select disabled={id} type={ENUM_STORE.CATEGORY_DEFAULT.PURCHASE_SETTLEMENT_METHOD} />
+                <Categorys.Select disabled={id} type={ENUM_STORE.CATEGORY_CONSTANT.PURCHASE_SETTLEMENT_METHOD} />
               </Form.Item>
             </Col>
 
             <Col span={8}>
               <Form.Item label='运输方式' name='shippingMethod' rules={rules}>
-                <Categorys.Select type={ENUM_STORE.CATEGORY_DEFAULT.PURCHASE_SHIPPING_METHOD} />
+                <Categorys.Select type={ENUM_STORE.CATEGORY_CONSTANT.PURCHASE_SHIPPING_METHOD} />
               </Form.Item>
             </Col>
 
