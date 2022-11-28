@@ -86,6 +86,7 @@ const EditSupplier: React.FC<TypeEditSupplierProps> = ({ id, visible, onClose })
 
   return (
     <Drawer
+      width={550}
       title={title}
       open={visible}
       loading={loading}

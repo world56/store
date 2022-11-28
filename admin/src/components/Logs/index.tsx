@@ -17,9 +17,10 @@ import type { TypeCommon } from "@/interface/common";
 
 export interface TypeLogsProps extends Partial<TypeCommon.DatabaseMainParameter>, Partial<Pick<TypeLog.Query, 'module'>> {
   /**
-   * @param modal 是否以弹窗的形式展示
+   * @param spacing 是否使用间距
+   * @description 每条记录都会单独隔开
    */
-  modal?: boolean;
+  spacing?: boolean;
   /**
    * @param search 显示筛选组件
    */
@@ -38,6 +39,7 @@ const { ENUM_CATEGORY } = useCategorys;
 const Logs: React.FC<TypeLogsProps> = ({
   module,
   search,
+  spacing,
   onClose,
   id: relationId,
 }) => {
@@ -76,6 +78,7 @@ const Logs: React.FC<TypeLogsProps> = ({
   return (
     <Container
       title='采购日志'
+      spacing={spacing}
       loading={loading}
       onCancel={onClose}
       visible={Boolean(relationId)}>

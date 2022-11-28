@@ -9,6 +9,7 @@ export interface TypeFooterButtonProps {
   onRefresh?(): void;
   align?: 'left' | 'right' | 'center';
   style?: React.CSSProperties;
+  children?: React.ReactNode;
 };
 
 /**

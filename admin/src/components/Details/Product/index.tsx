@@ -1,9 +1,10 @@
 import { memo } from "react";
 import Status from "@/layout/Status";
+import { Modal } from "@/layout/PopUp";
 import { useGetDetails } from '@/hooks';
 import styles from './index.module.sass';
 import Categorys from "@/components/Categorys";
-import { Modal, Descriptions, Button, Image } from "antd";
+import { Descriptions, Button, Image } from "antd";
 import { getSupplierProductDetails } from '@/api/purchase';
 
 import { STATIC_RESOURCE } from '@/config/request'
@@ -19,7 +20,7 @@ interface TypeProductDetailsProps extends Partial<Pick<TypeSupplierProduct.DTO, 
  */
 const ProductDetails: React.FC<TypeProductDetailsProps> = ({ id, onClose }) => {
 
-  const { value } = useGetDetails(async () => {
+  const { value, loading } = useGetDetails(async () => {
     return await getSupplierProductDetails({ id: id! });
   }, [id]);
 
@@ -29,7 +30,9 @@ const ProductDetails: React.FC<TypeProductDetailsProps> = ({ id, onClose }) => {
 
   return (
     <Modal
+      width={800}
       title='产品详情'
+      loading={loading}
       open={Boolean(id)}
       className={styles.layout}
       onCancel={() => onClose()}
@@ -38,13 +41,12 @@ const ProductDetails: React.FC<TypeProductDetailsProps> = ({ id, onClose }) => {
         <Button onClick={() => onClose()} key='1'>关闭</Button>,
       ]}>
 
-      <Descriptions layout="vertical" bordered size='middle'>
+      <Descriptions bordered size='middle' layout="vertical">
+
         <Descriptions.Item span={3} label="名称">
           {value?.name}
         </Descriptions.Item>
-      </Descriptions>
 
-      <Descriptions bordered size='middle' layout="vertical">
         <Descriptions.Item label="品牌">
           {value?.brand?.name}
         </Descriptions.Item>
@@ -54,9 +56,6 @@ const ProductDetails: React.FC<TypeProductDetailsProps> = ({ id, onClose }) => {
         <Descriptions.Item label="状态">
           <Status status={value?.status} />
         </Descriptions.Item>
-      </Descriptions>
-
-      <Descriptions bordered size='middle' layout="vertical">
 
         <Descriptions.Item label="类目" span={3}>
           <Categorys.Tag maxWidth={720} list={value?.category} />
@@ -72,7 +71,7 @@ const ProductDetails: React.FC<TypeProductDetailsProps> = ({ id, onClose }) => {
 
         <Descriptions.Item span={3} label="图片" >
           <Image.PreviewGroup>
-            {value?.pictures.map(v => <Image key={v.id} width='25%' src={`${STATIC_RESOURCE}/${v.path}`} />)}
+            {value?.pictures.map(v => <Image key={v.id} width='23.9%' src={`${STATIC_RESOURCE}/${v.path}`} />)}
           </Image.PreviewGroup>
         </Descriptions.Item>
 

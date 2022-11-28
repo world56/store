@@ -1,20 +1,15 @@
-@import '@/index.sass'
-
 .layout
-  @include dialog(modal,800)
-  :global(.ant-modal-body)
-    padding: 0
-    :global(.ant-descriptions-item-label)
-      font-weight: bold
-    :global(.ant-descriptions-item-content)
-      color: rgba(0, 0, 0, 0.8)
-    :global(.ant-descriptions-view)
-      border: none
-    & > :global(.ant-descriptions):nth-child(2)
-      border-top: 1px solid #f0f0f0
-      border-bottom: 1px solid #f0f0f0
-      :global(.ant-descriptions-item-label)
-      :global(.ant-descriptions-item-content)
-        width: 266px !important
   .context
     white-space: pre-line
+  :global(.ant-image)
+    border-radius: 8px
+    overflow: hidden
+    margin-right: 10px
+    margin-bottom: 5px
+  :global(.ant-descriptions-item-label)
+    font-weight: bold
+  :global(.ant-image):nth-child(4n)
+    margin-right: 0px
+  tbody
+    tr:nth-last-child(1) > td
+      padding-bottom: 0 !important

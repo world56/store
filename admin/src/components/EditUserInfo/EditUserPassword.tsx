@@ -2,7 +2,8 @@ import { UserTextRule } from '.';
 import { useStore } from '@/hooks';
 import { encryption } from '@/utils';
 import { FormHideKey } from '../Form';
-import { Form, Input, message, Modal } from "antd";
+import { Modal } from "@/layout/PopUp";
+import { Form, Input, message } from "antd";
 import { getPubilcKey, updateUserPwd } from '@/api/auth';
 
 import type { TypeAdminUser } from "@/interface/system/user";
@@ -39,7 +40,11 @@ const EditUserPassword: React.FC<TypeEditUserPasswordProps> = ({ visible, onClos
   };
 
   return (
-    <Modal title='修改密码' open={visible} onOk={onSumbit} onCancel={onCancel}>
+    <Modal
+      title='修改密码'
+      open={visible}
+      onOk={onSumbit}
+      onCancel={onCancel}>
       <Form form={form}>
 
         <FormHideKey initialValue={user.id} />

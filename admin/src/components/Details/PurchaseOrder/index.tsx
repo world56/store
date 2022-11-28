@@ -91,6 +91,7 @@ const PurchaseOrder: React.FC<TypePurchaseOrderProps> = ({ id, onClose, children
     <Modal
       open={open}
       title='采购详情'
+      spacing={false}
       loading={loading}
       onCancel={onCancel}
       destroyOnClose={open}

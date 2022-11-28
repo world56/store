@@ -1,6 +1,6 @@
 import { message } from "antd";
 import Cookies from "js-cookie";
-import { encryption } from '@/utils';
+import { encryption } from "@/utils";
 import { ActionsUser } from "../user";
 import { TOKEN_KEY } from "@/config/user";
 import ActionsMiddleware from "./actions";
@@ -11,6 +11,7 @@ import { SAGA_DEBOUNCE } from "@/config/request";
 
 import type { PayloadAction } from "@reduxjs/toolkit/dist";
 import type { TypeAdminUser } from "@/interface/system/user";
+import store from "..";
 
 type TypeActionsTaskInUserLogin = PayloadAction<
   TypeAdminUser.Login,
@@ -33,6 +34,9 @@ function* taskInGetUserInfo() {
     yield put(ActionsUser.setUserInfo(user));
   } catch {
     message.error("获取用户信息失败");
+    Cookies.remove(TOKEN_KEY);
+    store.dispatch(ActionsUser.delUserInfo());
+    window.location.href = "/login";
   }
 }
 

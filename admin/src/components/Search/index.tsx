@@ -25,7 +25,8 @@ export interface Columns {
   hide?: (f: FormInstance) => boolean;
   /**
    * @param props 各类组件props
-   * @description 暂不具体定义 参考antd组件文档 https://ant.design/components/overview-cn/
+   * @description 暂不具体定义 参考antd组件文档
+   * @see https://ant.design/components/overview-cn
    */
   props?: any;
 };

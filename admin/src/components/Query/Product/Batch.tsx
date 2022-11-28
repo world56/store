@@ -1,7 +1,8 @@
+import { Modal } from "@/layout/PopUp";
 import styles from './index.module.sass';
 import { useMemo, useState } from 'react';
+import { Input, Table, Button, Tooltip } from 'antd';
 import { PreviewPicture } from '@/components/Details';
-import { Input, Table, Modal, Button, Tooltip } from 'antd';
 
 import { DB_PRIMARY_KEY } from '@/config/db';
 
@@ -78,6 +79,7 @@ const ProductBatchAdd: React.FC<TypeProductBatchAddProps> = ({
 
       <Modal
         open={visible}
+        spacing={false}
         onOk={onSumbit}
         title='批量选择产品'
         onCancel={onVisible}

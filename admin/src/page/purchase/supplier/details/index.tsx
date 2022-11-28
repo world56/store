@@ -62,7 +62,7 @@ const SupplierDetails = () => {
           {
             key: '6',
             label: '日志',
-            children: <Logs id={id} module={ENUM_COMMON.LOG_MODULE.SUPPLIER} search />
+            children: <Logs id={id} module={ENUM_COMMON.LOG_MODULE.SUPPLIER} search spacing />
           }
         ]}
       />

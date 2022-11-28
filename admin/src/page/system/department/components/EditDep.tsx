@@ -50,6 +50,7 @@ const EditDep: React.FC<TypeEditDepProps> = ({ id, visible, onClose }) => {
 
   return (
     <Modal
+      spacing
       title={title}
       open={visible}
       onOk={onSumbit}

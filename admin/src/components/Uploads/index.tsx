@@ -111,7 +111,7 @@ class Uploads extends React.Component<TypeUploadsProps, TypeUploadsState> {
     return Array.prototype.filter.call(files, (f: File) => {
       const suffix = f.name.split('.')?.pop();
       if (f.size >= this.fileSize) {
-        notification.warn({
+        notification.warning({
           message: '警告',
           icon: <WarningOutlined />,
           description: <><strong>{f.name}</strong> 文件超过 <strong>最大限制30MB</strong> ，请检查后在尝试上传。</>,
@@ -123,7 +123,7 @@ class Uploads extends React.Component<TypeUploadsProps, TypeUploadsState> {
         if (suffix) {
           return this.props?.verifyFormat(suffix);
         } else {
-          notification.warn({ message: '警告', icon: <WarningOutlined />, description: '文件格式未知，请上传正确的文件' });
+          notification.warning({ message: '警告', icon: <WarningOutlined />, description: '文件格式未知，请上传正确的文件' });
           return false
         }
       }

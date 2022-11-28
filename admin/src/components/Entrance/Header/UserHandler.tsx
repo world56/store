@@ -56,7 +56,7 @@ const UserHandler = () => {
       case '0':
         Cookies.remove(TOKEN_KEY);
         actions.delUserInfo();
-        message.warn('退出成功');
+        message.warning('退出成功');
         return navigate('/login');
       case '1':
         return setEditUserVis(true);

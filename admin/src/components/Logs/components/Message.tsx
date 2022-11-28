@@ -3,6 +3,7 @@ import styles from '../index.module.sass';
 import { User } from '@/components/Tooltip';
 
 import { TypeAdminUser } from '@/interface/system/user';
+import React from "react";
 
 interface TypeMessageProps {
   /** @param time 日志生成时间 */
@@ -11,6 +12,7 @@ interface TypeMessageProps {
   user?: TypeAdminUser.DTO;
   /** @param 日志操作状态 */
   status?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 /**

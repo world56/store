@@ -55,7 +55,7 @@ request.interceptors.response.use(
         case ENUM_HTTP.HTTP_CODE.UNAUTHORIZED:
           Cookies.remove(TOKEN_KEY);
           store.dispatch(ActionsUser.delUserInfo());
-          message.warn(data?.message || "账户异常");
+          message.warning(data?.message || "账户异常");
           setTimeout(() => window.location.reload());
           return Promise.reject();
         default:

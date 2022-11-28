@@ -66,7 +66,7 @@ const SupplierProduct: React.FC<TypeSupplierProductProps> = ({ form, editStatus 
 
   function validator(rule: RuleObject, value: []) {
     const length = !value?.length;
-    length && message.warn('订单产品列表不得为空');
+    length && message.warning('订单产品列表不得为空');
     return length ? Promise.reject() : Promise.resolve();
   };
 

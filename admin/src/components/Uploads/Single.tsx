@@ -9,8 +9,8 @@ import { API_URL_UPLOAD } from '@/api/common';
 import { STATIC_RESOURCE } from '@/config/request';
 
 import { type UploadProps } from 'antd/lib/upload';
-import type { MessageType } from 'antd/es/message';
 import type { TypeCommon } from '@/interface/common';
+import { MessageType } from 'antd/es/message/interface';
 
 interface TypeUploadsProps<T = TypeCommon.File> {
   /** @param type avatar 头像 other 任意格式文件 */
@@ -92,7 +92,7 @@ class Single extends Component<TypeUploadsProps, TypeUploadsState> {
         showUploadList={false}>
         {isOther ? <span className='btn'>上传</span> : <Tooltip title='点击上传头像'>
           <Spin spinning={load} tip='正在上传'>
-            <Avatar size={128} icon={<UserOutlined />} src={value} />
+            <Avatar size={128} icon={<UserOutlined />} src={<>{value}</>} />
           </Spin>
         </Tooltip>}
       </Upload>

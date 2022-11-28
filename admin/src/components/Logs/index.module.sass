@@ -12,7 +12,6 @@
 
 // 抽屉日志弹窗
 .drawer
-  @include dialog(drawer,600)
   :global(.ant-drawer-body)
     padding: 0 10px 10px 10px
 
@@ -27,14 +26,15 @@
     margin: 0
     padding: 25px 0 20px 0
     background: #fff
-  
-  .msg
-    padding: 16px 10px
-  & > .msg:nth-last-child(1)
-    border-bottom: none
 
+.spacing
+  .msg
+    border-radius: 8px
+    padding: 16px 15px !important
+    margin-bottom: 10px
+
+  
 .msg
-  width: 100%
   padding: 16px 0
   display: flex
   background: #fff

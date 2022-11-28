@@ -35,17 +35,6 @@ $defaultBorderColor: rgba(0,0,0,.06)
   @content
 
 /*
- * @name dialog 对话框宽度
- */
-@mixin dialog($type,$width)
-  @if ($type == modal)
-    width: #{$width}px !important
-  @else if ($type == drawer)
-    :global(.ant-drawer-content-wrapper)
-      width: #{$width}px !important
-  @content
-
-/*
  * @name drawerTabs 抽屉对话框 Tabs居中
  */
 .drawerTabs

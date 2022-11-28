@@ -65,6 +65,7 @@ const EditSpecParameter: React.FC<TypeEditSpecParameterProps> = ({
 
   return (
     <Drawer
+      width={550}
       open={visible}
       loading={loading}
       onCancel={onCancel}

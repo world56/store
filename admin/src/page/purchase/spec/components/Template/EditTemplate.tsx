@@ -54,6 +54,7 @@ const EditTemplate: React.FC<TypeEditSpecTemplateProps> = ({
 
   return (
     <Drawer
+      width={550}
       open={visible}
       title='编辑规格模板'
       loading={loading}
