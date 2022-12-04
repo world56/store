@@ -8,7 +8,7 @@ import { SpecTemplateService } from './spec-template.service';
 import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
 import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto';
 
-@ApiTags('产品规格模板')
+@ApiTags('采购管理-产品规格模板')
 @Controller('purchase/spec/template')
 export class SpecTemplateController {
   public constructor(

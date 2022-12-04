@@ -1,39 +1,25 @@
-import { PrimaryKeyDTO } from '@/dto/common/common.dto';
-import { SupplierLogDTO } from './dto/supplier-log.dto';
+import { LogService } from '@/common/log/log.service';
 import { UtilsService } from '@/common/utils/utils.service';
 import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from '@/common/prisma/prisma.service';
+
+import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { SupplierAddFileDTO } from './dto/supplier-edit-file.dto';
 import { PurchaseSupplierDTO } from '@/dto/purchase/supplier.dto';
-import { SupplierQueryLogsDTO } from './dto/supplier-query-logs.dto';
 import { SupplierQueryListDTO } from './dto/supplier-query-list.dto';
 import { SupplierChangeStatusDTO } from './dto/supplier-change-status.dto';
 import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto';
 
+import { ENUM_COMMON } from '@/enum/common';
 import { ENUM_PURCHASE } from '@/enum/purchase';
 
 @Injectable()
 export class SupplierService {
   public constructor(
+    private readonly LogService: LogService,
     private readonly UtilsService: UtilsService,
     private readonly PrismaService: PrismaService,
   ) {}
-
-  getLogs({ id, type }: SupplierQueryLogsDTO) {
-    // return this.PrismaService.purchaseSupplierLog.findMany({
-    //   where: { supplierId: id, type },
-    //   orderBy: { createTime: 'desc' },
-    //   include: { user: { select: { id: true, name: true, avatar: true } } },
-    // });
-  }
-
-  addLog(dto: SupplierLogDTO, userId: number) {
-    // const { id, ...data } = dto;
-    // return this.PrismaService.purchaseSupplier.update({
-    //   where: { id },
-    //   data: { log: { create: { ...data, userId } } },
-    // });
-  }
 
   getAll() {
     return this.PrismaService.purchaseSupplier.findMany();
@@ -89,7 +75,7 @@ export class SupplierService {
     );
   }
 
-  async changeStatus(dto: SupplierChangeStatusDTO, userId: number) {
+  async changeStatus(dto: SupplierChangeStatusDTO) {
     const { id, content, status } = dto;
     const targer = await this.PrismaService.purchaseSupplier.findUnique({
       where: { id },
@@ -99,14 +85,17 @@ export class SupplierService {
         '改变的状态与当前状态一致，请重新选择状态或刷新页面',
       );
     }
-    return await this.PrismaService.purchaseSupplier.update({
+    const data = await this.PrismaService.purchaseSupplier.update({
       where: { id },
-      data: {
-        status,
-        // log: {
-        //   create: { userId, content, type: ENUM_PURCHASE.LOG_TYPE.STATUS },
-        // },
-      },
+      data: { status },
+    });
+    await this.LogService.insert({
+      type: ENUM_PURCHASE.LOG_TYPE.STATUS,
+      relationId: data.id,
+      module: ENUM_COMMON.LOG_MODULE.SUPPLIER,
+      remark: `供应商状态变更为：${data.status ? '激活' : '冻结'} ${
+        content || ''
+      }`,
     });
   }
 

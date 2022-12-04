@@ -26,10 +26,10 @@ const List: React.FC<TypeCloudListProps> = ({ list, onRemove }) => {
 
   function onDelete(val: TypeCommon.File, i: number, type: ENUM_COMMON.UPLOAD_STATUS) {
     if (val.status !== ENUM_COMMON.UPLOAD_STATUS.LOADING) {
-      onRemove?.(val, i, type)
+      onRemove?.(val, i, type);
     } else {
-      message.warning('不能操作正在上传中的文件')
-    }
+      message.warning('不能操作正在上传中的文件');
+    };
   };
 
   return (

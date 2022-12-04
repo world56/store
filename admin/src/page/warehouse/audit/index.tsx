@@ -1,4 +1,5 @@
 import { useRequest } from "ahooks";
+import Status from '@/layout/Status';
 import { Btn } from "@/layout/Button";
 import { toTime } from '@/utils/format';
 import { Card, Form, Table } from "antd";
@@ -14,6 +15,7 @@ import { DB_PRIMARY_KEY } from "@/config/db";
 import type { TypeCommon } from "@/interface/common";
 import type { TypeAdminUser } from "@/interface/system/user";
 import type { TypeWarehousingAudit } from "@/interface/warehouse/audit";
+import { ENUM_WAREHOUSE } from "@/enum/warehouse";
 
 const { ENUM_CATEGORY } = useCategorys;
 
@@ -88,7 +90,9 @@ const WarehousingAudit = () => {
     {
       dataIndex: 'status',
       title: '审核状态',
-      render: (status: TypeWarehousingAudit.DTO['status']) => WAREHOUSING_AUDIT_STATUS.OBJ[status].name
+      render: (status: TypeWarehousingAudit.DTO['status']) => (
+        <Status status={status} matching={WAREHOUSING_AUDIT_STATUS.OBJ} />
+      )
     },
     { dataIndex: 'createTime', title: '创建时间', width: 180, render: toTime },
     { dataIndex: 'auditTime', title: '审核时间', width: 180, render: toTime },
@@ -100,7 +104,13 @@ const WarehousingAudit = () => {
     {
       title: '操作',
       key: DB_PRIMARY_KEY,
-      render: (row: TypeWarehousingAudit.DTO) => <Btn onClick={() => onAudit(row)}>审批</Btn>
+      render: (row: TypeWarehousingAudit.DTO) => {
+        const audit = row.status === ENUM_WAREHOUSE.WAREHOUSING_AUDIT_STATUS.PENDING;
+        return <>
+          {audit ? <Btn onClick={() => onAudit(row)}>审批</Btn> : null}
+          <Btn onClick={() => onAudit(row)}>详情</Btn>
+        </>
+      }
     }
   ], [WAREHOUSING_AUDIT_STATUS, WAREHOUSE_AUDIT_TYPE, onAudit]);
 

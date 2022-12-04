@@ -46,7 +46,6 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     if (tips && isRepeat) {
       throw new PreconditionFailedException('字段值存在重复，无法保存');
     }
-
     return isRepeat;
   }
 

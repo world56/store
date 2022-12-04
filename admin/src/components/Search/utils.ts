@@ -36,8 +36,14 @@ export function initColumns(columns: Columns[] = []): Columns[] {
   return columns;
 }
 
-export function searchSelect(input: string, option: { children: string }) {
-  return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+export function searchSelect(
+  input: string,
+  option: { label: { props: { children: string[] } } },
+) {
+  return option.label.props.children
+    .at(-1)
+    ?.toLowerCase()
+    .includes(input.toLowerCase());
 }
 
 /**

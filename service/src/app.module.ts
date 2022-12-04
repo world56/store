@@ -10,6 +10,8 @@ import { JwtAuthModule } from './common/jwtAuth/jwtAuth.module';
 import { CategoryModule } from './common/category/category.module';
 import { PurchaseModule } from './module/purchase/purchase.module';
 import { WarehouseModule } from './module/warehouse/warehouse.module';
+import { PaymentModule } from './module/finance/payment/payment.module';
+import { FinanceModule } from './module/finance/finance.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { WarehouseModule } from './module/warehouse/warehouse.module';
     WarehouseModule,
     CategoryModule,
     PurchaseModule,
+    PaymentModule,
+    FinanceModule,
   ],
   providers: [
     {

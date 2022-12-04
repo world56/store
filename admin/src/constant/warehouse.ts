@@ -84,9 +84,21 @@ export namespace CONSTANT_WAREHOUSE {
    * @name WAREHOUSING_AUDIT_STATUS 入库审核状态
    */
   export const WAREHOUSING_AUDIT_STATUS = toCategorys([
-    { id: ENUM_WAREHOUSE.WAREHOUSING_AUDIT_STATUS.PENDING, name: "待审核" },
-    { id: ENUM_WAREHOUSE.WAREHOUSING_AUDIT_STATUS.RESOLVED, name: "通过" },
-    { id: ENUM_WAREHOUSE.WAREHOUSING_AUDIT_STATUS.REJECT, name: "拒绝" },
+    {
+      id: ENUM_WAREHOUSE.WAREHOUSING_AUDIT_STATUS.PENDING,
+      name: "待审核",
+      color: ENUM_COMMON.COLOR.YELLOW,
+    },
+    {
+      id: ENUM_WAREHOUSE.WAREHOUSING_AUDIT_STATUS.RESOLVED,
+      name: "通过",
+      color: ENUM_COMMON.COLOR.GREEN,
+    },
+    {
+      id: ENUM_WAREHOUSE.WAREHOUSING_AUDIT_STATUS.REJECT,
+      name: "拒绝",
+      color: ENUM_COMMON.COLOR.RED,
+    },
   ]);
 
   /**

@@ -10,7 +10,7 @@ import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { UserCheckFilesDto } from './dto/admin-user-check-fields.dto';
 import { AdminUserStatusChangeDto } from './dto/admin-user-status-change.dto';
 
-@ApiTags('系统用户')
+@ApiTags('系统管理-系统用户')
 @Controller('system/user')
 export class UserController {
   constructor(private readonly UserService: UserService) {}

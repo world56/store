@@ -7,7 +7,7 @@ import { PermissionCheckRepeat } from './dto/permission-check-repeat';
 import { PermissionQueryListDto } from './dto/permission-query-list.dto';
 import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
 
-@ApiTags('系统权限')
+@ApiTags('系统管理-系统权限')
 @Controller('system/permission')
 export class PermissionController {
   constructor(private readonly PermissionService: PermissionService) {}

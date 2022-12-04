@@ -1,4 +1,5 @@
 import styles from './index.module.sass';
+import Badge from '@/layout/Status/Badge';
 import { useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { DatePicker } from '@/components/Formatting';
@@ -21,7 +22,7 @@ export interface Columns {
   placeholder?: string;
   initialValue?: React.Key;
   type: ENUM_SEARCH.COMP_TYPE;
-  list?: TypeCommon.DefaultKey[];
+  list?: Array<TypeCommon.DefaultKey & Pick<TypeCommon.Category, 'color'>>;
   hide?: (f: FormInstance) => boolean;
   /**
    * @param props 各类组件props
@@ -45,7 +46,7 @@ export interface TypeSearchProps extends React.FC<SearchFormProps> {
   ENUM: typeof ENUM_SEARCH;
 };
 
-function toComType(value: Columns, callback: () => void, size: SizeType) {
+function toComponents(value: Columns, callback: () => void, size: SizeType) {
   const { type, list, placeholder, props = {} } = value;
   switch (type) {
     case ENUM_SEARCH.COMP_TYPE.INPUT:
@@ -58,16 +59,21 @@ function toComType(value: Columns, callback: () => void, size: SizeType) {
           {...props} />
       );
     case ENUM_SEARCH.COMP_TYPE.SELECT:
+      const tag = list?.find(v => v.color);
+      const options = list?.map(v => ({
+        value: v.id,
+        label: <>{tag ? <Badge color={v.color} /> : null} {v.name}</>,
+      }));
       return (
         <Select
           allowClear
           showSearch
           size={size}
+          options={options}
           placeholder={placeholder}
           filterOption={searchSelect}
-          optionFilterProp="children" {...props}>
-          {list?.map(v => <Select.Option key={v.id} value={v.id}>{v.name}</Select.Option>)}
-        </Select>
+          optionFilterProp="children"
+          {...props} />
       );
     case ENUM_SEARCH.COMP_TYPE.CASCADER:
       return (
@@ -94,8 +100,7 @@ function toComType(value: Columns, callback: () => void, size: SizeType) {
     default:
       return <span>NULL</span>
   };
-}
-
+};
 
 /**
  * @name Search 搜索
@@ -127,7 +132,7 @@ const Search: TypeSearchProps = ({
         label={v.label}
         rules={v.rules}
         initialValue={v.initialValue}>
-        {toComType(v, onSearch, size)}
+        {toComponents(v, onSearch, size)}
       </Form.Item>
     </Col>
   )), [form, spanSize, Columns, onSearch, size]);

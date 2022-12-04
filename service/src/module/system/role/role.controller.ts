@@ -7,7 +7,7 @@ import { RuleQueryListDTO } from './dto/rule-query-list.dto';
 import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
 import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto';
 
-@ApiTags('角色管理')
+@ApiTags('系统管理-角色管理')
 @Controller('system/role')
 export class RoleController {
   constructor(private readonly RoleService: RoleService) {}

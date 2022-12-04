@@ -139,6 +139,12 @@ export default [
         title: '应付款',
         path: '/finance/financePayment',
         element: lazy(() => import('@/page/finance/payment'))
+      },
+      {
+        id: 'financeAccount',
+        title: '供应商收款账户',
+        path: '/finance/financeAccount',
+        element: lazy(() => import('@/page/finance/account'))
       }
     ]
   }

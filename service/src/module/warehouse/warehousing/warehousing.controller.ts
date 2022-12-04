@@ -10,7 +10,7 @@ import { AdminUserDTO } from '@/dto/system/admin-user.dto';
 import { WarehousingQueryList } from './dto/warehousing-query-list.dto';
 import { ConfirmPurchaseWarehousingDTO } from './dto/confirm-purchase-warehousing.dto';
 
-@ApiTags('仓库产品入库')
+@ApiTags('仓储管理-产品待入库')
 @Controller('warehouse/warehousing')
 export class WarehousingController {
   public constructor(private readonly WarehousingService: WarehousingService) {}

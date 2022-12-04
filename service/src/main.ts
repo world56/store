@@ -1,8 +1,8 @@
+import { join } from 'path';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { join } from 'path';
 import { AppModule } from './app.module';
 import { NestFactory } from '@nestjs/core';
 import multipart from '@fastify/multipart';
@@ -12,7 +12,7 @@ import { HttpExceptionFilter } from './filter/http-exception.filter';
 import { fastifyRequestContextPlugin } from '@fastify/request-context';
 import { HttpSucessInterceptor } from '@/interceptor/http-sucess.interceptor';
 
-(BigInt.prototype as any).toJSON  = function () {
+(BigInt.prototype as any).toJSON = function () {
   const int = Number.parseInt(this.toString());
   return int ?? this.toString();
 };

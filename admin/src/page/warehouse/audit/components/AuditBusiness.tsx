@@ -1,9 +1,10 @@
 import { useCategorys } from "@/hooks";
+import { Modal } from "@/layout/PopUp";
 import { FormHideKey } from "@/components/Form";
 import { auditWarehouse } from "@/api/warehouse";
 import { AuditOutlined } from '@ant-design/icons';
 import { memo, useEffect, useMemo, useState } from "react";
-import { Button, Form, Input, message, Modal, Select } from "antd";
+import { Button, Form, Input, message, Select } from "antd";
 
 import { ENUM_WAREHOUSE } from "@/enum/warehouse";
 

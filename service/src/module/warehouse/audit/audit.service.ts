@@ -1,21 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { LogService } from '@/common/log/log.service';
+import { WarehousingService } from '../warehousing/warehousing.service';
 
 import { WarehouseAuditDTO } from './dto/warehouse-audit.dto';
 import { PrismaService } from '@/common/prisma/prisma.service';
 import { WarehouseAuditQueryListDTO } from './dto/warehouse-audit-query-list.dto';
 import { QueryWarehousePurchaseOrderAuditDTO } from './dto/query-warehouse-pruchase-order-audit.dto';
 
+import { ENUM_COMMON } from '@/enum/common';
 import { ENUM_PURCHASE } from '@/enum/purchase';
 import { ENUM_WAREHOUSE } from '@/enum/warehouse';
-import { ENUM_COMMON } from '@/enum/common';
 import { PurchaseOrder, Warehousing } from '@prisma/client';
+
+WarehousingService;
 
 @Injectable()
 export class AuditService {
   public constructor(
     private readonly LogService: LogService,
     private readonly PrismaService: PrismaService,
+    private readonly WarehousingService: WarehousingService,
   ) {}
 
   async getList({ take, skip, no, ...params }: WarehouseAuditQueryListDTO) {
@@ -64,7 +68,7 @@ export class AuditService {
       include: { order: true },
     });
     if (body.status === ENUM_WAREHOUSE.WAREHOUSING_AUDIT_STATUS.RESOLVED) {
-      return this.purchaseApproved(data); // 通过
+      return this.purchaseApproved(data, body); // 通过
     }
     return true;
   }
@@ -73,7 +77,10 @@ export class AuditService {
    * @name purchaseApproved 采购入库 通过审核
    * @description 货到付款：下一步财务付款  先付款在到货：完整采购入库流程
    */
-  private async purchaseApproved(data: Warehousing & { order: PurchaseOrder }) {
+  private async purchaseApproved(
+    data: Warehousing & { order: PurchaseOrder },
+    body: WarehouseAuditDTO,
+  ) {
     const { id, settlement } = data.order;
     if (
       // 货到付款：更新产品数量、入库、审核状态标记为完成、启动付款流程
@@ -93,6 +100,11 @@ export class AuditService {
               },
             },
           },
+          // payment: {
+          //   create: {
+          //     totalAmount: 1,
+          //   },
+          // },
         },
         include: { products: true },
       });
@@ -100,12 +112,21 @@ export class AuditService {
         type: update.status,
         relationId: update.id,
         module: ENUM_COMMON.LOG_MODULE.PURCHASE,
-        remark: `审核通过${update.remark ? `：${update.remark}` : ''}`,
+        remark: `审核通过${body.remark ? `：${body.remark}` : ''}`,
       });
+    } else {
+      // 先付款后发货
     }
-
     return true;
   }
+
+  /**
+   * @name rejectApproval 采购入库 拒绝通过
+   */
+  private async rejectApproval(
+    data: Warehousing & { order: PurchaseOrder },
+    body: WarehouseAuditDTO,
+  ) {}
 
   // insertAudit(
   //   dto: Pick<

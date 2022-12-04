@@ -16,7 +16,7 @@ import { WarehouseAuditDTO } from './dto/warehouse-audit.dto';
 import { WarehouseAuditQueryListDTO } from './dto/warehouse-audit-query-list.dto';
 import { QueryWarehousePurchaseOrderAuditDTO } from './dto/query-warehouse-pruchase-order-audit.dto';
 
-@ApiTags('入库审核')
+@ApiTags('仓储管理-入库审核')
 @Controller('warehouse/audit')
 export class AuditController {
   public constructor(private readonly AuditService: AuditService) {}

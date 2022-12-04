@@ -6,7 +6,7 @@ import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto';
 import { WarehousePositionQueryListDTO } from './dto/warehouse-position-list-query';
 
-@ApiTags('仓位编排')
+@ApiTags('仓储管理-仓位编排')
 @Controller('warehouse/position')
 export class PositionController {
   public constructor(private readonly PositionService: PositionService) {}

@@ -26,7 +26,7 @@ export namespace TypeCommon {
    */
   export type GenericObject<T = React.Key> = Record<React.Key, T>;
 
-  /** 
+  /**
    * @name ConstantVal 取Object Value
    */
   export type ConstantVal<T> = T[keyof T];
@@ -74,6 +74,7 @@ export namespace TypeCommon {
    */
   export interface Category extends Pick<DTO, "id" | "name" | "remark"> {
     type: ENUM_STORE.CATEGORY;
+    color?: string;
   }
 
   /**

@@ -64,8 +64,7 @@ const Product: React.FC<TypeSupplierProductPageProps> = ({ supplierId }) => {
   };
 
   function skipDetails(val: TypeSupplierProduct.DTO) {
-    const jump = supplierId ? window.open : navigate;
-    jump(`/purchase/supplierProductDetails/${val.id}`);
+    navigate(`/purchase/supplierProductDetails/${val.id}`);
   };
 
   const query = useMemo(() => [

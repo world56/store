@@ -30,23 +30,26 @@ export namespace ENUM_STORE {
     /** @name PURCHASE_SUPPLIER 供应商 */
     PURCHASE_SUPPLIER = "PURCHASE_SUPPLIER",
 
-    /** @name WAREHOUSE_POSITION 仓库仓位位置（用户自定义） */
+    /** @name WAREHOUSE_POSITION 仓库仓位位置 */
     WAREHOUSE_POSITION = "WAREHOUSE_POSITION",
 
-    /** @name PURCHASE_PRODUCT_TYPE 供应商类型（用户自定义） */
+    /** @name PURCHASE_PRODUCT_TYPE 供应商类型 */
     PURCHASE_PRODUCT_TYPE = "PURCHASE_PRODUCT_TYPE",
 
-    /** @name WAREHOUSE_UNIT 库房计量单位（用户自定义） */
+    /** @name WAREHOUSE_UNIT 库房计量单位 */
     WAREHOUSE_UNIT = "WAREHOUSE_UNIT",
 
-    /** @name WAREHOUSE_PRODUCT_TYPE 仓库产品类型（用户自定义） */
+    /** @name WAREHOUSE_PRODUCT_TYPE 仓库产品类型 */
     WAREHOUSE_PRODUCT_TYPE = "WAREHOUSE_PRODUCT_TYPE",
 
-    /** @name PRODUCT_BRAND 产品品牌（用户自定义） */
+    /** @name PRODUCT_BRAND 产品品牌 */
     PRODUCT_BRAND = "PRODUCT_BRAND",
 
-    /** @name LOGISTSCS_COMPANY 物流公司（用户自定义） */
+    /** @name LOGISTSCS_COMPANY 物流公司 */
     LOGISTSCS_COMPANY = "LOGISTSCS_COMPANY",
+
+    /** @name BANK 银行 */
+    BANK = "BANK",
   }
 
   /**

@@ -3,7 +3,7 @@
  */
 export namespace ENUM_PURCHASE {
   /**
-   * @name SUPPLIER_LOG_TYPE 日志类型
+   * @name SUPPLIER_LOG_TYPE 供应商日志类型
    * @param STATUS 供应商状态变更
    * @param QUALITY 产品质量
    * @param PRICE 价格

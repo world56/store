@@ -21,21 +21,24 @@ generator js {
 
 // 静态资源
 model Files {
-  id                Int               @id() @default(autoincrement())
-  path              String            @db.Char(100) // 文件地址
-  name              String            @db.Char(100) // 文件名称
-  type              Int               @db.Int() // 文件类型
-  createTime        DateTime?         @default(now()) @map("create_time")
-  userId            Int               @map("user_id") @db.Int() // 上传人id 
-  supplierId        Int?              @map("supplier_id") @db.Int() // 供应商附件
-  supplierProductId Int?              @map("supplier_product_id") @db.Int() // 供应产品
-  user              AdminUser         @relation(fields: [userId], references: [id])
-  supplier          PurchaseSupplier? @relation(fields: [supplierId], references: [id])
-  supplierProduct   SupplierProduct?  @relation(fields: [supplierProductId], references: [id])
+  id                Int                @id() @default(autoincrement())
+  path              String             @db.Char(100) // 文件地址
+  name              String             @db.Char(100) // 文件名称
+  type              Int                @db.Int() // 文件类型
+  createTime        DateTime?          @default(now()) @map("create_time")
+  userId            Int                @map("user_id") @db.Int() // 上传人id 
+  supplierId        Int?               @map("supplier_id") @db.Int() // 供应商附件
+  supplierProductId Int?               @map("supplier_product_id") @db.Int() // 供应产品
+  paymentId         Int?               @map("payment_id") @db.Int()
+  user              AdminUser          @relation(fields: [userId], references: [id])
+  supplier          PurchaseSupplier?  @relation(fields: [supplierId], references: [id])
+  supplierProduct   SupplierProduct?   @relation(fields: [supplierProductId], references: [id])
+  paymentVoucher    FinancialPayables? @relation(fields: [paymentId], references: [id])
 
   @@index([name])
   @@index([type])
   @@index([userId])
+  @@index([paymentId])
   @@index([supplierId])
   @@index([supplierProductId])
   @@map("files")
@@ -182,6 +185,7 @@ model PurchaseSupplier {
   contacts       PurchaseSupplierContacts[]
   purchaseOrders PurchaseOrder[]
   product        RelSupplierOnProduct[]
+  PaymentAccount PaymentAccount[]
 
   @@index([name])
   @@map("purchase_supplier")
@@ -376,15 +380,39 @@ model WarehousePosition {
 
 // ***********************财务****************************
 
+// 付款账户
+model PaymentAccount {
+  id             Int      @id() @default(autoincrement())
+  accountName    String   @map("account_name") @db.Char(10)
+  accountNumber  String   @map("account_number") @db.VarChar(30)
+  organizationId Int      @map("organization_id") @db.Int()
+  remark         String?  @db.VarChar(255)
+  createTime     DateTime @default(now()) @map("create_time") @db.Timestamp(6) // 创建时间
+
+  supplierId Int              @db.Int()
+  supplier   PurchaseSupplier @relation(fields: [supplierId], references: [id])
+
+  @@unique([supplierId, accountName, accountNumber, organizationId])
+  @@index([accountName])
+  @@index([accountNumber])
+  @@index([organizationId])
+  @@map("payment_account")
+}
+
 // 财务应付款
 model FinancialPayables {
-  id              Int     @id() @default(autoincrement())
-  no              String? @db.VarChar(100) // 采购单流水号
-  type            Int     @default(0)
-  status          Int     @default(0)
-  totalAmount     BigInt  @map("total_amount") // 应付款额度
-  purchaseOrderId Int?    @unique() @map("purchase_order_id") @db.Int()
+  id            Int      @id() @default(autoincrement())
+  no            String?  @db.VarChar(100) // 采购单流水号
+  type          Int      @default(0)
+  status        Int      @default(0)
+  totalAmount   BigInt   @map("total_amount") // 应付款额度
+  actualPayment BigInt   @map("actual_payment") // 实际付款额度
+  createTime    DateTime @default(now()) @map("create_time") @db.Timestamp(6) // 创建时间
+  remark        String?  @db.VarChar(255) // 备注
 
+  purchaseOrderId Int? @unique() @map("purchase_order_id") @db.Int()
+
+  vouchers      Files[]
   purchaseOrder PurchaseOrder? @relation(fields: [purchaseOrderId], references: [id])
 
   @@index([type])

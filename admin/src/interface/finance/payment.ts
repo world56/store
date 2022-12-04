@@ -12,16 +12,21 @@ export namespace TypeFinancePayment {
    * @param no 流水号
    * @param type 付款类型
    * @param status 流程状态
-   * @param totalAmount 付款额度
+   * @param totalAmount 应付款总额
+   * @param actualPayment 实际付款金额
    * @param pruchaseOrderId 采购单ID
    * @param pruchaseOrder 采购单DTO
+   * @param vouchers 付款凭证
+   * @param remark 备注
    */
-  export interface DTO extends Pick<TypeCommon.DTO, "id" | "no"> {
+  export interface DTO extends Pick<TypeCommon.DTO, "id" | "no" | "remark"> {
     type: ENUM_FINANCE.FINANCE_PAYABLES_TYPE;
     status: ENUM_FINANCE.FINANCIAL_PAYABLES_STATUS;
     totalAmount: number;
+    actualPayment: number;
     pruchaseOrderId: TypePurchaseOrder.DTO["id"];
     purchaseOrder: TypePurchaseOrder.DTO;
+    vouchers: TypeCommon.File[];
   }
 
   /**
@@ -29,5 +34,5 @@ export namespace TypeFinancePayment {
    */
   export interface Query
     extends TypeCommon.PageTurning,
-      Pick<DTO, "no" | "type" | "status"> {}
+      Partial<Pick<DTO, "no" | "type" | "status">> {}
 }

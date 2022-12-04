@@ -1,6 +1,7 @@
 import { Select, Tooltip } from "antd";
 import styles from './index.module.sass';
 import { useMemo, useState } from 'react';
+import Badge from '@/layout/Status/Badge';
 import { useActions, useStore } from '@/hooks';
 import { filterOptionTooltip } from '@/utils/filter';
 import { SyncOutlined, CloseCircleOutlined } from '@ant-design/icons';
@@ -65,6 +66,8 @@ const CategorySelect: TypeCategorySelectProps = ({ type, value, onChange, disabl
   // id name remark 是category类型的交集（constant除外😂）
   const list = category[type]?.LIST as Omit<TypeCommon.Category, 'type'>[];
 
+  const color = list?.find(v => v.color);
+
   return (
     <Select
       showArrow
@@ -79,7 +82,10 @@ const CategorySelect: TypeCategorySelectProps = ({ type, value, onChange, disabl
       getPopupContainer={triggerNode => triggerNode.parentNode} {...props}>
       {list?.map(v => <Option key={v.id} value={v.id} >
         <Tooltip title={v.remark} destroyTooltipOnHide={selectShow}>
-          <p>{v.name}</p>
+          <p>
+            {color ? <Badge color={v.color} /> : null}&nbsp;
+            {v.name}
+          </p>
         </Tooltip>
       </Option>)}
     </Select>

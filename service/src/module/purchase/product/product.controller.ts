@@ -8,7 +8,7 @@ import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
 import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto';
 import { SupplierProductQueryListDTO } from './dto/supplier-product-query-list.dto';
 
-@ApiTags('供应产品')
+@ApiTags('采购管理-供应产品')
 @Controller('purchase/product')
 export class ProductController {
   public constructor(private readonly ProductService: ProductService) {}

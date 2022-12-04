@@ -13,7 +13,7 @@ import type { MenuInfo } from 'rc-menu/lib/interface';
 
 interface NavigationProps {
   collapsed: boolean;
-}
+};
 
 function filterMenu(list: TypeRoute.Route[]): MenuProps['items'] {
   return list.filter(v => !v.hide).map(v => {
@@ -45,7 +45,6 @@ const Navigation: React.FC<NavigationProps> = ({ collapsed }) => {
     onClick,
     mode: "inline",
     theme: "light",
-    key: collapsed,
     selectedKeys: openKeys,
     defaultOpenKeys: collapsed ? [] : openKeys,
   } as MenuProps;

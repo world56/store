@@ -1,19 +1,16 @@
-import { User } from '@/decorator/user';
 import { SupplierService } from './supplier.service';
 import { QueryListPipe } from '@/pipe/query-list.pipe';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { SupplierLogDTO } from './dto/supplier-log.dto';
+import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
+
 import { PrimaryKeyDTO } from '@/dto/common/common.dto';
-import { AdminUserDTO } from '@/dto/system/admin-user.dto';
 import { PurchaseSupplierDTO } from '@/dto/purchase/supplier.dto';
 import { SupplierAddFileDTO } from './dto/supplier-edit-file.dto';
 import { SupplierQueryListDTO } from './dto/supplier-query-list.dto';
-import { SupplierQueryLogsDTO } from './dto/supplier-query-logs.dto';
 import { SupplierChangeStatusDTO } from './dto/supplier-change-status.dto';
-import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
 import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto';
 
-@ApiTags('供应商管理')
+@ApiTags('采购管理-供应商管理')
 @Controller('purchase/supplier')
 export class SupplierController {
   public constructor(private readonly SupplierService: SupplierService) {}
@@ -49,28 +46,13 @@ export class SupplierController {
     return this.SupplierService.update(data);
   }
 
-  @ApiOperation({ summary: '供应商日志' })
-  @Get('logs')
-  getLogs(@Query() query: SupplierQueryLogsDTO) {
-    return this.SupplierService.getLogs(query);
-  }
-
-  @ApiOperation({ summary: '新增供应商日志' })
-  @Post('addLog')
-  addLog(@Body() data: SupplierLogDTO) {
-    // this.SupplierService.addLog(data, user.id);
-  }
-
   @ApiOperation({
     summary: '冻结、激活供应商状态',
     description: '冻结后，无法在向该供应商发起采购订单',
   })
   @Post('status')
-  changeStatus(
-    @Body() data: SupplierChangeStatusDTO,
-    @User() user: AdminUserDTO,
-  ) {
-    return this.SupplierService.changeStatus(data, user.id);
+  changeStatus(@Body() data: SupplierChangeStatusDTO) {
+    return this.SupplierService.changeStatus(data);
   }
 
   @ApiOperation({

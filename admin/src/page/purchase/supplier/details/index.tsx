@@ -1,15 +1,19 @@
 import { Tabs } from 'antd';
 import BasicInfo from './BasicInfo';
 import Logs from '@/components/Logs';
+import { lazy, Suspense } from 'react';
 import styles from './index.module.sass';
 import { GoBack } from '@/layout/Button';
-import SupplierOrder from '../../order/list';
+import Loading from '@/router/component/Loading';
 import { useParams, useSearchParams } from "react-router-dom";
-import SupplierProductList from "@/page/purchase/product/list";
 
 import { ENUM_COMMON } from '@/enum/common';
 
 import type { TypeCommon } from '@/interface/common';
+
+const SupplierOrder = lazy(() => import('../../order/list'));
+const SupplierPaymentAccount = lazy(() => import('@/page/finance/account'));
+const SupplierProductList = lazy(() => import("@/page/purchase/product/list"));
 
 interface TypeSupplierDetailsRouteParam extends Partial<TypeCommon.DatabaseMainParameter<string>> { }
 
@@ -42,17 +46,23 @@ const SupplierDetails = () => {
           {
             key: '2',
             label: '供应产品',
-            children: <SupplierProductList supplierId={id} />
+            children: <Suspense fallback={<Loading />}>
+              <SupplierProductList supplierId={id} />
+            </Suspense>
           },
           {
             key: '3',
             label: '采购记录',
-            children: <SupplierOrder supplierId={id} />
+            children: <Suspense fallback={<Loading />}>
+              <SupplierOrder supplierId={id} />
+            </Suspense>
           },
           {
             key: '4',
             label: '付款账号',
-            children: null
+            children: <Suspense fallback={<Loading />}>
+              <SupplierPaymentAccount supplierId={id} />
+            </Suspense>
           },
           {
             key: '5',

@@ -11,7 +11,7 @@ import { AdminUserDTO } from '@/dto/system/admin-user.dto';
 import { PurchaseOrderUpdateDTO } from './dto/pruchase-order-update.dto';
 import { PurchaseOrderQueryListDTO } from './dto/purchase-order-query-list.dto';
 
-@ApiTags('采购订单')
+@ApiTags('采购管理-采购订单')
 @Controller('purchase/order')
 export class OrderController {
   public constructor(private readonly OrderService: OrderService) {}

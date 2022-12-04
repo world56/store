@@ -7,7 +7,7 @@ import { DepartmentQueryListDTO } from './dto/department-query-list.dto';
 import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
 import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto';
 
-@ApiTags('部门管理')
+@ApiTags('系统管理-部门管理')
 @Controller('system/department')
 export class DepartmentController {
   constructor(private readonly DepartmentService: DepartmentService) {}

@@ -35,7 +35,7 @@ export class LogService {
   }
 
   getLogs(dto: QueryLogListDTO) {
-    const { module, relationId } = dto;
-    return this.getModel(module).find({ relationId });
+    const { module, ...where } = dto;
+    return this.getModel(module).find(where);
   }
 }

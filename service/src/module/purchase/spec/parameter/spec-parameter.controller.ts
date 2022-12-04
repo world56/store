@@ -8,7 +8,7 @@ import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto'
 import { SpecParameterGetDetailsDTO } from './dto/spec-parameter-get-details.dto';
 import { SpecParameterRelationCategoryDTO } from './dto/spec-parameter-relation-category.dto';
 
-@ApiTags('产品规格参数')
+@ApiTags('采购管理-产品规格参数')
 @Controller('purchase/spec/parameter')
 export class SpecParameterController {
   public constructor(

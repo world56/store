@@ -138,15 +138,16 @@ const SupplierList: React.FC<TypeSupplierListProps> = ({ productId }) => {
   return (
     <Card title='供应商列表'>
       <Search form={form} columns={query} onSearch={initializa}>
-        <Button icon={<AuditOutlined />}
+        <Button
+          icon={<AuditOutlined />}
           onClick={() => setEdit({ visible: true })}>
           新增供应商
         </Button>
       </Search>
       <Table
         loading={loading}
-        rowKey={DB_PRIMARY_KEY}
         columns={columns}
+        rowKey={DB_PRIMARY_KEY}
         dataSource={data?.list}
       />
       <EditSupplier {...edit} onClose={onEdit} />

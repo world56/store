@@ -77,7 +77,7 @@ const Logs: React.FC<TypeLogsProps> = ({
 
   return (
     <Container
-      title='采购日志'
+      title='日志'
       spacing={spacing}
       loading={loading}
       onCancel={onClose}
