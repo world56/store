@@ -5,8 +5,8 @@ import { ENUM_STORE } from "@/enum/store";
 
 import type { TypeCommon } from "@/interface/common";
 import type { TypeSpec } from "@/interface/purchase/spec";
+import type { TypeAdminUser } from "@/interface/system/user";
 import type { TypeSystemRole } from "@/interface/system/role";
-import type { TypeSystemUser } from "@/interface/system/user";
 import type { TypeSystemDepartment } from "@/interface/system/department";
 import type { TypeWarehousePosition } from "@/interface/warehouse/position";
 
@@ -74,7 +74,7 @@ export function checkCategoryFields(
  * @name getAllAdminUserList 用户列表
  */
 export function getAllAdminUserList() {
-  return request<TypeSystemUser.DTO[]>("system/user/all", {
+  return request<TypeAdminUser.DTO[]>("system/user/all", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
   });
 }
@@ -107,9 +107,9 @@ export function getWarehouseAllList() {
 }
 
 /**
- * @name getPurchaseSpplierList 供应商列表
+ * @name getPurchaseSupplierList 供应商列表
  */
-export function getPurchaseSpplierList() {
+export function getPurchaseSupplierList() {
   return request<TypeWarehousePosition.DTO[]>("purchase/supplier/all", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
   });

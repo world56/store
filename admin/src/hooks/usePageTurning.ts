@@ -1,4 +1,5 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import type { TypeCommon } from "@/interface/common";
 
@@ -11,20 +12,27 @@ function showTotal(total: number) {
 export default function usePageTurning(totalNum: number | undefined) {
   const total = totalNum || 0;
 
+  const [query, setQuery] = useSearchParams();
+
   const [pagination, setPage] = useState<TypeCommon.PageTurning>({
-    pageSize: 20,
-    currentPage: 1,
+    pageSize: Number(query.get("pageSize")) || 20,
+    currentPage: Number(query.get("currentPage")) || 1,
   });
 
   const { pageSize, currentPage } = pagination;
   const pageIndex = (currentPage - 1) * pageSize;
 
-  const onChange = useCallback(
-    (currentPage: number, size?: number) => {
-      setPage({ currentPage, pageSize: size || pageSize });
-    },
-    [pageSize],
-  );
+  function onChange(currentPage: number, pageSize: number) {
+    setPage({ currentPage, pageSize });
+    setQuery(
+      {
+        ...Object.fromEntries(query.entries()),
+        pageSize: pageSize.toString(),
+        currentPage: currentPage.toString(),
+      },
+      { replace: true },
+    );
+  }
 
   return {
     total,

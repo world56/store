@@ -30,51 +30,43 @@ export namespace ENUM_STORE {
     /** @name PURCHASE_SUPPLIER 供应商 */
     PURCHASE_SUPPLIER = "PURCHASE_SUPPLIER",
 
-    /** @name WAREHOUSE_POSITION 仓库仓位位置（用户自定义） */
+    /** @name WAREHOUSE_POSITION 仓库仓位位置 */
     WAREHOUSE_POSITION = "WAREHOUSE_POSITION",
 
-    /** @name PURCHASE_PRODUCT_TYPE 供应商类型（用户自定义） */
+    /** @name PURCHASE_PRODUCT_TYPE 供应商类型 */
     PURCHASE_PRODUCT_TYPE = "PURCHASE_PRODUCT_TYPE",
 
-    /** @name WAREHOUSE_UNIT 库房计量单位（用户自定义） */
+    /** @name WAREHOUSE_UNIT 库房计量单位 */
     WAREHOUSE_UNIT = "WAREHOUSE_UNIT",
 
-    /** @name WAREHOUSE_PRODUCT_TYPE 仓库产品类型（用户自定义） */
+    /** @name WAREHOUSE_PRODUCT_TYPE 仓库产品类型 */
     WAREHOUSE_PRODUCT_TYPE = "WAREHOUSE_PRODUCT_TYPE",
 
-    /** @name PRODUCT_BRAND 产品品牌（用户自定义） */
+    /** @name PRODUCT_BRAND 产品品牌 */
     PRODUCT_BRAND = "PRODUCT_BRAND",
 
-    /** @name LOGISTSCS_COMPANY 物流公司（用户自定义） */
+    /** @name LOGISTSCS_COMPANY 物流公司 */
     LOGISTSCS_COMPANY = "LOGISTSCS_COMPANY",
+
+    /** @name BANK 银行 */
+    BANK = "BANK",
   }
 
   /**
-   * @name CATEGORY_DEFAULT 词典类目 （本地默认写死的）
+   * @name CATEGORY_CONSTANT 词典类目 （本地默认写死的）
+   * @description 有些组件会根据参数来取redux category的值，并且区分需要请求的枚举
    */
-  export enum CATEGORY_DEFAULT {
-    /** @name STATUS 状态 */
-    STATUS = "STATUS",
+  export enum CATEGORY_CONSTANT {
+    /** @name PURCHASE_SHIPPING_METHOD 采购单运输方式 */
+    PURCHASE_SHIPPING_METHOD = "PURCHASE_SHIPPING_METHOD",
 
-    /** @name FILE_TYPE 状态 */
-    FILE_TYPE = "FILE_TYPE",
+    /** @name PURCHASE_SETTLEMENT_METHOD 采购订单结算方式 */
+    PURCHASE_SETTLEMENT_METHOD = "PURCHASE_SETTLEMENT_METHOD",
 
-    /** @name SUPPLIER_LOG_TYPE 供应商日志类型 */
+    /** @name PURCHASE_PROCESS_STAT 采购流程状态 */
+    PURCHASE_PROCESS_STATUS = "PURCHASE_PROCESS_STATUS",
+
+    /** @name SUPPLIER_LOG_TYPE 供应商供应报告日志 */
     SUPPLIER_LOG_TYPE = "SUPPLIER_LOG_TYPE",
-
-    /** @name SUPPLIER_SHIPPING_METHOD 采购订单运输方式 */
-    SUPPLIER_SHIPPING_METHOD = "SUPPLIER_SHIPPING_METHOD",
-
-    /** @name SUPPLIER_SETTLEMENT 采购订单结算方式 */
-    SUPPLIER_SETTLEMENT = "SUPPLIER_SETTLEMENT",
-
-    /** @name SUPPLIER_ORDER_STATUS 采购订单状态 */
-    SUPPLIER_ORDER_STATUS = "SUPPLIER_ORDER_STATUS",
-
-    /** @name PERMISSION_TYPE 权限类型 */
-    PERMISSION_TYPE = "PERMISSION_TYPE",
-
-    /** @name WAREHOUSE_STATUS 仓位状态 */
-    WAREHOUSE_STATUS = "WAREHOUSE_STATUS",
   }
 }

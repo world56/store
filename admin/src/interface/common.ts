@@ -2,7 +2,7 @@ import { ENUM_STORE } from "@/enum/store";
 import { ENUM_COMMON } from "@/enum/common";
 
 import type store from "@/store";
-import type { TypeSystemUser } from "./system/user";
+import type { TypeAdminUser } from "./system/user";
 
 /**
  * @name TypeCommon 公共接口
@@ -22,9 +22,19 @@ export namespace TypeCommon {
   }
 
   /**
+   * @name ChangeStatus 修改状态
+   */
+  export interface ChangeStatus extends Pick<DTO, "id" | "status" | "remark"> {}
+
+  /**
    * @name GenericObject 通用对象
    */
   export type GenericObject<T = React.Key> = Record<React.Key, T>;
+
+  /**
+   * @name ConstantVal 取Object Value
+   */
+  export type ConstantVal<T> = T[keyof T];
 
   /**
    * @name DefaultKey 统一约束定义的枚举键值对
@@ -60,11 +70,6 @@ export namespace TypeCommon {
   export interface FieldsIsRepeatDTO extends Pick<DTO, "id" | "name"> {}
 
   /**
-   * @name PromiseReturns Promise
-   */
-  export type PromiseReturns<T> = T extends Promise<infer R> ? R : never;
-
-  /**
    * @name Store Redux 状态机
    */
   export type Store = ReturnType<typeof store.getState>;
@@ -74,6 +79,7 @@ export namespace TypeCommon {
    */
   export interface Category extends Pick<DTO, "id" | "name" | "remark"> {
     type: ENUM_STORE.CATEGORY;
+    color?: string;
   }
 
   /**
@@ -120,6 +126,6 @@ export namespace TypeCommon {
     createTime?: string;
     type: ENUM_COMMON.FILE_TYPE;
     status?: ENUM_COMMON.UPLOAD_STATUS;
-    user?: Pick<TypeSystemUser.DTO, "id" | "name">;
+    user?: Pick<TypeAdminUser.DTO, "id" | "name">;
   }
 }

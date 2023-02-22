@@ -1,4 +1,5 @@
 import { useRequest } from 'ahooks';
+import Statistics from "./Statistics";
 import { Btn } from '@/layout/Button';
 import styles from '../index.module.sass';
 import { QueryProduct } from '@/components/Query';
@@ -9,7 +10,7 @@ import { querySupplierProduct } from '@/api/purchase';
 import { InputNumber } from '@/components/Formatting';
 import { ProductDetails } from '@/components/Details';
 import { FormHideKey, ReadOnlytext } from '@/components/Form';
-import { Form, Table, Card, Select, Tooltip, Input, message } from "antd";
+import { Form, Table, Card, Select, Tooltip, message } from "antd";
 
 import type { FormInstance } from 'antd/es';
 import type { TypeCommon } from '@/interface/common';
@@ -65,7 +66,7 @@ const SupplierProduct: React.FC<TypeSupplierProductProps> = ({ form, editStatus 
 
   function validator(rule: RuleObject, value: []) {
     const length = !value?.length;
-    length && message.warn('订单产品列表不得为空');
+    length && message.warning('订单产品列表不得为空');
     return length ? Promise.reject() : Promise.resolve();
   };
 
@@ -144,15 +145,6 @@ const SupplierProduct: React.FC<TypeSupplierProductProps> = ({ form, editStatus 
       )
     },
     {
-      title: '备注',
-      width: 200,
-      render: (field: FormListFieldData) => (
-        <Form.Item name={[field.name, 'remark']}>
-          <Input.TextArea rows={1} placeholder='请输入备注' disabled={editStatus} />
-        </Form.Item>
-      )
-    },
-    {
       title: '操作',
       width: 80,
       render: (field: FormListFieldData) => (
@@ -184,6 +176,7 @@ const SupplierProduct: React.FC<TypeSupplierProductProps> = ({ form, editStatus 
           dataSource={fields}
           className={styles.table} />}
       </Form.List>
+      <Statistics />
     </Card>
   );
 };

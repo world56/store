@@ -36,7 +36,7 @@ const EditPosition: React.FC<TypeEditPositionProps> = ({ id, visible, onClose })
     form.setFieldsValue(data);
   }, [id, form]);
 
-  async function onSumbit() {
+  async function onSubmit() {
     const values = await form.validateFields();
     if (id) await updateWarehousePosition(values);
     else await insertWarehousePosition(values);
@@ -53,7 +53,7 @@ const EditPosition: React.FC<TypeEditPositionProps> = ({ id, visible, onClose })
     <Modal
       open={visible}
       title='编辑仓位'
-      onOk={onSumbit}
+      onOk={onSubmit}
       loading={loading}
       onCancel={onCancel}>
       <Form form={form} {...formStyle}>
@@ -82,7 +82,7 @@ const EditPosition: React.FC<TypeEditPositionProps> = ({ id, visible, onClose })
           label='状态'
           name='status'
           rules={rules}
-          initialValue={ENUM_WAREHOUSE.STATUS.NORMAL}>
+          initialValue={ENUM_WAREHOUSE.WAREHOUSE_STATUS.NORMAL}>
           <Select
             showSearch
             optionFilterProp='children'

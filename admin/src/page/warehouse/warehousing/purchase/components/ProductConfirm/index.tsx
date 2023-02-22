@@ -36,6 +36,12 @@ const ProductConfirm: React.FC<TypeProductConfirmProps> = ({ form, total, isEdit
     }
   }, [form]);
 
+  // 有效数量 与 采购数量不一致 则Table背景色标记为红色
+  function rowClassName(row: FormListFieldData) {
+    const value = form?.getFieldValue('products')[row.name];
+    return value.actualQuantity !== value.quantity ? styles.difference : '';
+  };
+
   const columns = [
     {
       title: '产品名称',
@@ -79,7 +85,7 @@ const ProductConfirm: React.FC<TypeProductConfirmProps> = ({ form, total, isEdit
           <QuestionCircleOutlined />
         </Tooltip>
       </>,
-      width: 150,
+      width: 160,
       render: (field: FormListFieldData) => (
         <Form.Item name={[field.name, 'quantity']}>
           <ReadOnlytext />
@@ -89,7 +95,7 @@ const ProductConfirm: React.FC<TypeProductConfirmProps> = ({ form, total, isEdit
     {
       title: <>
         <span>有效数量&nbsp;</span>
-        <Tooltip title='到货产品出现破损、丢失等情况，需要与采购部确认“有效到货量”'>
+        <Tooltip title='产品出现破损、丢失等情况，需要与采购部确认“有效到货量”'>
           <QuestionCircleOutlined />
         </Tooltip>
       </>,
@@ -99,15 +105,7 @@ const ProductConfirm: React.FC<TypeProductConfirmProps> = ({ form, total, isEdit
           {isEdit ? <InputNumber placeholder='仅数字' min={0} /> : <ReadOnlytext />}
         </Form.Item>
       )
-    },
-    {
-      title: '备注',
-      render: (field: FormListFieldData) => (
-        <Form.Item name={[field.name, 'remark']}>
-          <ReadOnlytext />
-        </Form.Item>
-      )
-    },
+    }
   ];
 
   return (
@@ -116,14 +114,18 @@ const ProductConfirm: React.FC<TypeProductConfirmProps> = ({ form, total, isEdit
 
         <FormHideKey />
 
-        <Form.List name='products'>
-          {(fields) => <Table
-            rowKey='name'
-            columns={columns}
-            pagination={false}
-            dataSource={fields}
-            className={styles.table} />}
-        </Form.List>
+        <Form.Item shouldUpdate noStyle>
+          {() => <Form.List name='products'>
+            {(fields) => <Table
+              rowKey='name'
+              columns={columns}
+              pagination={false}
+              dataSource={fields}
+              className={styles.table}
+              rowClassName={rowClassName} />}
+          </Form.List>}
+        </Form.Item>
+
       </Card>
 
       <Card title='入库备注'>

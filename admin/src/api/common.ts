@@ -37,7 +37,7 @@ export function uploadFile(file: File) {
 /**
  * @name getLogs 查询日志
  */
-export function getLogs(params: TypeLog.QueryList) {
+export function getLogs(params: TypeLog.Query) {
   return request<TypeLog.DTO[]>("log/list", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
     params,

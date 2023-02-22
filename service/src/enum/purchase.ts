@@ -21,23 +21,40 @@ export namespace ENUM_PURCHASE {
   }
 
   /**
-   * @name SUPPLIER_SHIPPING_METHOD 采购订单运输方式
+   * @name PURCHASE_SHIPPING_METHOD 采购订单运输方式
    * @param LOGISTICS 物流
    * @param NOT_LOGISTICS 非物流
    */
-  export enum SUPPLIER_SHIPPING_METHOD {
+   export enum PURCHASE_SHIPPING_METHOD {
     LOGISTICS,
     NOT_LOGISTICS,
   }
 
   /**
-   * @name SUPPLIER_SETTLEMENT 采购订单结算方式
+   * @name PURCHASE_PROCESS_STATUS 供应商采购流程状态
+   * @param GOODS_TO_BE_RECEIVED 待收货
+   * @param WAITING_FOR_STORAGE 待入库
+   * @param UNDER_REVIEW 待审核
+   * @param WAITING_FOR_PAYMENT 待付款
+   * @param COMPLETE 完成
+   * @param ABANDONED 废弃
+   */
+   export enum PURCHASE_PROCESS_STATUS {
+    GOODS_TO_BE_RECEIVED,
+    WAITING_FOR_STORAGE,
+    UNDER_REVIEW,
+    WAITING_FOR_PAYMENT,
+    COMPLETE,
+    ABANDONED,
+  }
+
+  /**
+   * @name PURCHASE_SETTLEMENT_METHOD 采购订单结算方式
    * @param CASH_ON_DELIVERY 货到付款
    * @param DELIVERY_AFTER_PAYMENT 先付款后发货
    */
-  export enum SUPPLIER_SETTLEMENT {
+   export enum PURCHASE_SETTLEMENT_METHOD {
     CASH_ON_DELIVERY,
     DELIVERY_AFTER_PAYMENT,
   }
-
 }

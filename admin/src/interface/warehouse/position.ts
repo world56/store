@@ -1,7 +1,7 @@
-import type { TypeCommon } from "../common";
-import type { TypeSystemUser } from "../system/user";
-
 import { ENUM_WAREHOUSE } from "@/enum/warehouse";
+
+import type { TypeCommon } from "../common";
+import type { TypeAdminUser } from "../system/user";
 
 /**
  * @name TypeWarehousePosition 仓位编排
@@ -14,9 +14,9 @@ export namespace TypeWarehousePosition {
    * @param person 责任人
    */
   export interface DTO extends Pick<TypeCommon.DTO, "id" | "name" | "remark"> {
-    status: ENUM_WAREHOUSE.STATUS;
+    status: ENUM_WAREHOUSE.WAREHOUSE_STATUS;
     personId: number;
-    person: Pick<TypeSystemUser.DTO, "name" | "phone">;
+    person: Pick<TypeAdminUser.DTO, "name" | "phone">;
   }
 
   /**

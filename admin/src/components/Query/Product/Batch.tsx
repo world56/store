@@ -1,7 +1,8 @@
+import { Modal } from "@/layout/PopUp";
 import styles from './index.module.sass';
 import { useMemo, useState } from 'react';
+import { Input, Table, Button, Tooltip } from 'antd';
 import { PreviewPicture } from '@/components/Details';
-import { Input, Table, Modal, Button, Tooltip } from 'antd';
 
 import { DB_PRIMARY_KEY } from '@/config/db';
 
@@ -30,7 +31,7 @@ const ProductBatchAdd: React.FC<TypeProductBatchAddProps> = ({
   const [visible, setVisible] = useState(false);
   const [key, setKey] = useState<TypeSelectKey>({});
 
-  function onSumbit() {
+  function onSubmit() {
     const value: Array<TypeProductDTO> = [];
     Object.entries(key).forEach(([k, v]) => v && value.push(v));
     onChange?.(value);
@@ -78,7 +79,8 @@ const ProductBatchAdd: React.FC<TypeProductBatchAddProps> = ({
 
       <Modal
         open={visible}
-        onOk={onSumbit}
+        spacing={false}
+        onOk={onSubmit}
         title='批量选择产品'
         onCancel={onVisible}
         className={styles.modal}>

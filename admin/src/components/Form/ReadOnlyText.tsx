@@ -8,7 +8,7 @@ interface TypeReadOnlyTextProps {
    * @param replaceValue 如果value值为空 则显示该字段值
    */
   replaceValue: React.Key;
-  children: React.ReactChild;
+  children: React.ReactNode;
   onClick(): void;
 };
 

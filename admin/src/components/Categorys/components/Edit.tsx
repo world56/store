@@ -7,17 +7,14 @@ import { Form, Input, message } from 'antd';
 import { DB_PRIMARY_KEY } from '@/config/db';
 import { insertCategory, updateCategory, getCategoryDetails, checkCategoryFields } from '@/api/enum';
 
-import { ENUM_STORE } from '@/enum/store';
-
+import type { TypeCategoryProps } from '../';
 import type { TypeCommon } from '@/interface/common';
 
-export interface TypeEditUnitProps extends Partial<TypeCommon.DatabaseMainParameter> {
+export interface TypeEditUnitProps extends TypeCategoryProps, Partial<TypeCommon.DatabaseMainParameter> {
   /** @param visible 开启弹窗 */
   visible: boolean;
   /** @name onClose 关闭弹窗 */
   onClose(): void;
-  /** @param type 类型 */
-  type: ENUM_STORE.CATEGORY;
 };
 
 const rules = [{ required: true }];
@@ -29,7 +26,7 @@ const EditUnit: React.FC<TypeEditUnitProps> = ({ id, type, visible, onClose }) =
 
   const [form] = Form.useForm<TypeCommon.Category>();
 
-  async function onSumbit() {
+  async function onSubmit() {
     const values = await form.validateFields();
     if (id) await updateCategory(values);
     else await insertCategory(values);
@@ -57,7 +54,7 @@ const EditUnit: React.FC<TypeEditUnitProps> = ({ id, type, visible, onClose }) =
   return (
     <Modal
       open={visible}
-      onOk={onSumbit}
+      onOk={onSubmit}
       loading={loading}
       onCancel={onCancel}
       className={styles.edit}
@@ -71,7 +68,7 @@ const EditUnit: React.FC<TypeEditUnitProps> = ({ id, type, visible, onClose }) =
         ]}>
           <Input placeholder={`请输入${name}名称`} allowClear />
         </Form.Item>
-        <Form.Item label='单位备注' name='remark' rules={rules}>
+        <Form.Item label='备注' name='remark' rules={rules}>
           <Input.TextArea placeholder={`请输入${name}备注`} allowClear />
         </Form.Item>
       </Form>

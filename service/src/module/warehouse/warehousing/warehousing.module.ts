@@ -5,6 +5,7 @@ import { WarehousingController } from './warehousing.controller';
 
 @Module({
   imports: [LogModule],
+  exports: [WarehousingService],
   controllers: [WarehousingController],
   providers: [WarehousingService],
 })

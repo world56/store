@@ -1,20 +1,18 @@
 import { useRequest } from "ahooks";
-import Status from "@/layout/Status";
-import Logs from '@/components/Logs';
-import Link from "@/components/Link";
 import { Btn } from "@/layout/Button";
-import { editableBtn } from './utils';
-import styles from './index.module.sass';
+import { Link } from 'react-router-dom';
 import Search from "@/components/Search";
-import { DB_PRIMARY_KEY } from "@/config/db";
+import { User } from '@/components/Tooltip';
+import { Status } from "@/components/Status";
 import { toTime as render } from '@/utils/format';
 import { Card, Form, message, Table } from "antd";
-import { Link as LinkTo } from 'react-router-dom';
+import { PurchaseOrder } from "@/components/Details";
 import { useCategorys, usePageTurning } from "@/hooks";
+import { showConfirmReceipt, showCountTheGoods } from './utils';
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { confirmReceiving, getWarehousingList } from "@/api/warehouse";
 
-import { ENUM_COMMON } from "@/enum/common";
+import { DB_PRIMARY_KEY } from "@/config/db";
 import { ENUM_WAREHOUSE } from "@/enum/warehouse";
 
 import type { TypeCommon } from "@/interface/common";
@@ -27,7 +25,7 @@ const { ENUM_CATEGORY } = useCategorys;
  */
 const Warehousing = () => {
 
-  const [logId, setLogId] = useState<TypeCommon.PrimaryKey>();
+  const [id, setId] = useState<TypeCommon.PrimaryKey>();
 
   const category = useCategorys([ENUM_CATEGORY.ADMIN_USER]);
   const [form] = Form.useForm<TypeWarehouseWarehousing.Query>();
@@ -50,9 +48,9 @@ const Warehousing = () => {
     initializa();
   };
 
-  const onViewLog = useCallback((row?: TypeWarehouseWarehousing.DTO) => {
-    setLogId(row?.id);
-  }, [])
+  const onView = useCallback((row?: TypeWarehouseWarehousing.DTO) => {
+    setId(row?.id);
+  }, []);
 
   const query = useMemo(() => [
     {
@@ -65,11 +63,17 @@ const Warehousing = () => {
       name: 'status',
       label: '入库状态',
       type: Search.ENUM.COMP_TYPE.SELECT,
-      list: category?.WAREHOUSING_PROCESS?.LIST
+      list: category?.WAREHOUSING_PROCESS_STATUS?.LIST,
     },
     {
       name: 'creatorId',
       label: '创建人',
+      type: Search.ENUM.COMP_TYPE.SELECT,
+      list: category?.ADMIN_USER?.LIST
+    },
+    {
+      name: 'consigneeId',
+      label: '收货人',
       type: Search.ENUM.COMP_TYPE.SELECT,
       list: category?.ADMIN_USER?.LIST
     },
@@ -88,28 +92,43 @@ const Warehousing = () => {
       key: DB_PRIMARY_KEY,
       title: '流水号',
       render: (row: TypeWarehouseWarehousing.DTO) => (
-        <Link to={`/warehouse/warehousingPurchase/${row.id}`}>{row.no}</Link>
+        <Btn onClick={() => onView(row)}>{row.order.no}</Btn>
       )
     },
     {
       dataIndex: 'type',
       title: '入库类型',
       render: (text: ENUM_WAREHOUSE.WAREHOUSING_TYPE) => (
-        <Status status={text} matching={Status.type.WAREHOUSING_TYPE} />
+        <Status status={text} matching={category.WAREHOUSING_TYPE.OBJ} />
       )
     },
     {
       dataIndex: 'status',
       title: '入库状态',
-      render: (status: ENUM_WAREHOUSE.WAREHOUSING_PROCESS) => (
-        <Status status={status} matching={Status.type.WAREHOUSING_STATUS} />
+      render: (status: ENUM_WAREHOUSE.WAREHOUSING_PROCESS_STATUS) => (
+        <Status status={status} matching={category.WAREHOUSING_PROCESS_STATUS.OBJ} />
       )
     },
-    { dataIndex: ['creator', 'name'], title: '流程创建人' },
     {
-      dataIndex: 'inspector',
+      key: 'id',
+      title: '流程创建人',
+      render: (row: TypeWarehouseWarehousing.DTO) => (
+        <User user={category.ADMIN_USER?.OBJ?.[row.order.creatorId]} />
+      )
+    },
+    {
+      key: 'id',
+      title: '收货人',
+      render: (row: TypeWarehouseWarehousing.DTO) => (
+        <User user={category.ADMIN_USER?.OBJ?.[row.consigneeId]} />
+      )
+    },
+    {
+      key: 'id',
       title: '入库清点人',
-      render: (user: TypeWarehouseWarehousing.DTO['user']) => user?.name || '-'
+      render: (row: TypeWarehouseWarehousing.DTO) => (
+        <User user={category.ADMIN_USER?.OBJ?.[row.inspectorId]} />
+      )
     },
     { dataIndex: 'createTime', title: '创建时间', render },
     { dataIndex: 'updateTime', title: '检验时间', render },
@@ -117,14 +136,12 @@ const Warehousing = () => {
       id: 'id',
       title: '操作',
       render: (row: TypeWarehouseWarehousing.DTO) => {
-        const isEdit = editableBtn(row.status);
-        const waitingForReceipt = row.status === ENUM_WAREHOUSE.WAREHOUSING_PROCESS.GOODS_TO_BE_RECEIVED
+        const isEdit = showCountTheGoods(row.status);
+        const waitingForReceipt = showConfirmReceipt(row.status);
         return <>
-          {waitingForReceipt ? <Btn onClick={() => onConfirm(row)} >确认收货</Btn> :
-            <LinkTo className={styles.link} to={`/warehouse/warehousingPurchase/${row.id}`}>
-              {isEdit ? '清点入库' : '详情'}
-            </LinkTo>}
-          <Btn onClick={() => onViewLog(row)}>日志</Btn>
+          <Btn onClick={() => onConfirm(row)} show={waitingForReceipt}>确认收货</Btn>
+          {isEdit ? <Link to={`/warehouse/warehousingPurchase/${row.id}`}>清点入库</Link> : null}
+          <Btn onClick={() => onView(row)}>详情</Btn>
         </>
       }
     },
@@ -142,7 +159,7 @@ const Warehousing = () => {
         rowKey={DB_PRIMARY_KEY}
         dataSource={data?.list}
         pagination={pagination} />
-      <Logs id={logId} module={ENUM_COMMON.LOG_MODULE.PURCHASE} onClose={onViewLog} />
+      <PurchaseOrder id={id} onClose={onView} />
     </Card>
   );
 };

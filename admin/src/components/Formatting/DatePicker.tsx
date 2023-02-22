@@ -1,21 +1,15 @@
 import dayjs from 'dayjs';
 import { useMemo } from 'react';
 import weekday from "dayjs/plugin/weekday";
-import 'antd/es/date-picker/style/index.css';
 import localeData from "dayjs/plugin/localeData";
-import dayjsGenerateConfig from 'rc-picker/es/generate/dayjs';
-import generatePicker from 'antd/es/date-picker/generatePicker';
+import { DatePicker as AntdDatePicker } from 'antd';
 
 import type { Dayjs } from 'dayjs';
 import type { RangeValue } from 'rc-picker/lib/interface';
-import type { RangePickerSharedProps, } from 'rc-picker/lib/RangePicker';
+import type { RangePickerSharedProps } from 'rc-picker/lib/RangePicker';
 
 dayjs.extend(weekday);
 dayjs.extend(localeData);
-
-// 暂时这么解决 后期等升级React18 antd5
-const DatePickerComponent = generatePicker(dayjsGenerateConfig);
-const RangePickerToDayJS = DatePickerComponent.RangePicker as unknown as React.FC<Pick<RangePickerSharedProps<Dayjs>, 'value' | 'onChange'>>;
 
 type TypeTimeScope = Array<number | undefined> | undefined;
 
@@ -52,7 +46,7 @@ const DatePicker: React.FC<DatePickerScopeProps> = ({
     }
   };
 
-  return <RangePickerToDayJS {...props} value={values} onChange={onRangePicker} />;
+  return <AntdDatePicker.RangePicker {...props} value={values} onChange={onRangePicker} />;
 };
 
 export { DatePicker };

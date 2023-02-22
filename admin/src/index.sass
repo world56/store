@@ -19,23 +19,19 @@ $defaultBorderColor: rgba(0,0,0,.06)
             position: absolute
   @content
 
-// /*
-//  * @name drawerWidth 抽屉宽度
-//  */
-// @mixin drawerWidth($width)
-//   :global(.ant-drawer-content-wrapper)
-//     width: #{$width}px !important
-//   @content
-
 /*
- * @name dialog 对话框宽度
+ * @name modalDetails 弹窗详情
  */
-@mixin dialog($type,$width)
-  @if ($type == modal)
-    width: #{$width}px !important
-  @else if ($type == drawer)
-    :global(.ant-drawer-content-wrapper)
-      width: #{$width}px !important
+@mixin modalDetails()
+  :global(.ant-modal-body)
+    padding: 0
+    :global(.ant-tabs-nav)
+      margin-bottom: 0
+      :global(.ant-tabs-nav-wrap)
+        display: flex
+        justify-content: center
+    :global(.ant-tabs-content-holder)
+      width: 100%
   @content
 
 /*
@@ -66,6 +62,7 @@ $defaultBorderColor: rgba(0,0,0,.06)
 
   :global(.ant-tabs-nav-wrap)
     background: #fff
+    border-radius: 8px
     padding: 4px 10px 8px 25px
 
   :global(.ant-card)

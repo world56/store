@@ -1,11 +1,11 @@
 import { useRequest } from "ahooks";
-import { editableBtn } from './utils';
 import { serviceToForm } from './utils';
 import { GoBack } from "@/layout/Button";
 import styles from './index.module.sass';
 import { Form, Spin, message } from 'antd';
 import Purchase from './components/Purchase';
 import BasicInfo from "./components/BasicInfo";
+import { showCountTheGoods } from '../list/utils';
 import ProductConfirm from "./components/ProductConfirm";
 import { useNavigate, useParams } from "react-router-dom";
 import { confirmWarehousing, getWarehousingInfo } from "@/api/warehouse";
@@ -33,14 +33,14 @@ const WarehousingPurchase = () => {
     return values;
   }, { refreshDeps: [id] });
 
-  async function onSumbit() {
+  async function onSubmit() {
     const values = await form.validateFields();
     await confirmWarehousing(values);
     message.success('提交成功，审核成功后生效');
     navigate(-1);
   };
 
-  const isEdit = editableBtn(data?.status);
+  const isEdit = showCountTheGoods(data?.status);
 
   return (
     <Spin spinning={loading}>
@@ -48,7 +48,12 @@ const WarehousingPurchase = () => {
         <BasicInfo data={data} />
         <Purchase data={data?.order} />
         <ProductConfirm form={form} isEdit={isEdit} total={data?.order?.total} />
-        <GoBack onSumbit={isEdit ? onSumbit : undefined} top={28} bottom={24} />
+        <GoBack
+          top={28}
+          bottom={24}
+          onSubmitTips='确认清点无误？'
+          onSubmit={isEdit ? onSubmit : undefined}
+        />
       </Form>
     </Spin>
   );

@@ -56,13 +56,6 @@ export default [
         element: lazy(() => import("@/page/purchase/order/edit")),
       },
       {
-        id: "supplierOrderDetails",
-        title: "采购单详情",
-        hide: true,
-        path: "/purchase/supplierOrderDetails/:id",
-        element: lazy(() => import("@/page/purchase/order/details")),
-      },
-      {
         id: "supplierList",
         path: "/purchase/supplierList",
         title: "供应商",
@@ -109,9 +102,9 @@ export default [
         element: lazy(() => import("@/page/warehouse/warehousing/list")),
       },
       {
-        id: "warehousingAudit",
+        id: "warehouseAudit",
         title: "库存审核",
-        path: "/warehouse/audit",
+        path: "/warehouse/warehouseAudit",
         element: lazy(() => import("@/page/warehouse/audit")),
       },
       {
@@ -135,4 +128,24 @@ export default [
       },
     ],
   },
+  {
+    id: 'finance',
+    path: '/finance',
+    title: '财务管理',
+    element: Outlet,
+    children: [
+      {
+        id: 'financePayment',
+        title: '应付款',
+        path: '/finance/financePayment',
+        element: lazy(() => import('@/page/finance/payment'))
+      },
+      {
+        id: 'financeAccount',
+        title: '供应商收款账户',
+        path: '/finance/financeAccount',
+        element: lazy(() => import('@/page/finance/account'))
+      }
+    ]
+  }
 ] as TypeRoute.Route[];

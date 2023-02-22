@@ -46,7 +46,7 @@ const EditSupplier: React.FC<TypeEditSupplierProps> = ({ id, visible, onClose })
     form.setFieldsValue(dtoServiceToForm(data));
   }, [id, form]);
 
-  async function onSumbit() {
+  async function onSubmit() {
     try {
       const values = await form.validateFields();
       if (id) await updatePurchaseSupplier(values);
@@ -86,11 +86,12 @@ const EditSupplier: React.FC<TypeEditSupplierProps> = ({ id, visible, onClose })
 
   return (
     <Drawer
+      width={550}
       title={title}
       open={visible}
       loading={loading}
       onCancel={onCancel}
-      onSumbit={onSumbit}
+      onSubmit={onSubmit}
       className={styles.layout}>
       <Form form={form} layout='vertical'>
         <Tabs

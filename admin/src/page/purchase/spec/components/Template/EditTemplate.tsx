@@ -35,7 +35,7 @@ const EditTemplate: React.FC<TypeEditSpecTemplateProps> = ({
 
   const [form] = Form.useForm<TypeSpec.EditDTO>();
 
-  async function onSumbit() {
+  async function onSubmit() {
     const values = await form.validateFields();
     if (id) await updateSpecTemplate(values);
     else await insertSpecTemplate(values);
@@ -54,10 +54,11 @@ const EditTemplate: React.FC<TypeEditSpecTemplateProps> = ({
 
   return (
     <Drawer
+      width={550}
       open={visible}
       title='编辑规格模板'
       loading={loading}
-      onSumbit={onSumbit}
+      onSubmit={onSubmit}
       onCancel={onCancel}
       className={styles.edit}>
       <Form form={form} layout='vertical'>
@@ -77,8 +78,7 @@ const EditTemplate: React.FC<TypeEditSpecTemplateProps> = ({
             placeholder='请选择该模板关联的规格'
             filterOption={filterOptionTooltip}>
             {spec?.LIST?.map(v => <Option key={v.id} value={v.id} >
-              {/* /// ? */}
-              <Tooltip title={v.name} destroyTooltipOnHide={selectShow}>
+              <Tooltip title={v.remark} destroyTooltipOnHide={selectShow}>
                 <p>{v.name}</p>
               </Tooltip>
             </Option>)}

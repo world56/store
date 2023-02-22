@@ -6,12 +6,12 @@ import type { DrawerProps } from 'antd/lib/drawer';
 
 export interface TypePopUpProps extends Omit<DrawerProps, 'onClose'> {
   loading?: boolean;
-  onSumbit?(): void;
+  onSubmit?(): void;
   onCancel?(): void;
 };
 
 const Drawers: React.FC<TypePopUpProps> = ({
-  onSumbit,
+  onSubmit,
   onCancel,
   children,
   className,
@@ -24,14 +24,14 @@ const Drawers: React.FC<TypePopUpProps> = ({
   };
 
   function onOk() {
-    onSumbit?.();
+    onSubmit?.();
   };
 
   return (
     <Drawer
       {...props}
       onClose={onClose}
-      footer={<FooterButton onSumbit={onSumbit ? onOk : undefined} onCancel={onClose} />}
+      footer={<FooterButton onSubmit={onSubmit ? onOk : undefined} onCancel={onClose} />}
       className={`${styles.drawer} ${className ? className : ''}`}>
       <Spin spinning={loading}>
         {children}

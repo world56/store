@@ -26,8 +26,8 @@ export class WarehouseAuditDTO extends PickType(CommonDTO, [
   @ApiProperty({ description: '审核状态', required: true })
   @IsInt()
   @Type(() => Number)
-  @IsEnum(ENUM_WAREHOUSE.WAREHOUSE_AUDIT_STATUS)
-  status: ENUM_WAREHOUSE.WAREHOUSE_AUDIT_STATUS;
+  @IsEnum(ENUM_WAREHOUSE.WAREHOUSING_AUDIT_STATUS)
+  status: ENUM_WAREHOUSE.WAREHOUSING_AUDIT_STATUS;
 
   /**
    * @param auditTime 审核时间

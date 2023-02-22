@@ -44,9 +44,9 @@ export function listToTree<
  * @name toCategorys 转为标准字典类型
  */
 export function toCategorys<
-  T extends Pick<TypeCommon.DTO, "id" | "name"> = Pick<
+  T extends Pick<TypeCommon.DTO, "id" | "name" | "remark"> = Pick<
     TypeCommon.DTO,
-    "id" | "name"
+    "id" | "name" | "remark"
   >,
 >(LIST: T[]) {
   return { LIST, OBJ: Object.fromEntries(LIST.map((v) => [v.id, v])) };

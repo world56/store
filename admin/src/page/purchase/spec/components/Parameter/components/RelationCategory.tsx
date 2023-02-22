@@ -31,7 +31,7 @@ const RelationCategory: React.FC<TypeRelationCategoryProps> = ({ id, onClose }) 
     form.setFieldsValue(specParameterServiceToFrom(data));
   }, [id, form]);
 
-  async function onSumbit() {
+  async function onSubmit() {
     const values = await form.validateFields();
     await updatesSpecParameterRelation(values);
     message.success('操作完成');
@@ -44,7 +44,7 @@ const RelationCategory: React.FC<TypeRelationCategoryProps> = ({ id, onClose }) 
   };
 
   const footer = (
-    <FooterButton onSumbit={onSumbit} onCancel={onCancel}>
+    <FooterButton onSubmit={onSubmit} onCancel={onCancel}>
       <Button onClick={category?.run} icon={<SyncOutlined />}>更新类目</Button>
     </FooterButton>
   );

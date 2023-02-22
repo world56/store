@@ -11,7 +11,7 @@ export class UndefinedToNullPipe<T extends UndefinedToNullPipeParam>
   }
 
   transform(value: T, metadata: ArgumentMetadata) {
-    if (this.valueIsObject) {
+    if (this.valueIsObject(value)) {
       return Object.fromEntries(
         Object.entries(value).map(([k, v]) => [k, v === undefined ? null : v]),
       );

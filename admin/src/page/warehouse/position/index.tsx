@@ -1,6 +1,6 @@
 import { useRequest } from "ahooks";
-import Status from "@/layout/Status";
 import Search from "@/components/Search";
+import { Status } from "@/components/Status";
 import { BtnEditDel } from '@/layout/Button';
 import { InboxOutlined } from '@ant-design/icons';
 import EditPosition from "./components/EditPosition";
@@ -90,7 +90,7 @@ const Position = () => {
       key: 'status',
       dataIndex: 'status',
       title: '状态',
-      render: (status: number) => <Status status={status} matching={Status.type.WAREHOURE_STATUS} />
+      render: (status: number) => <Status status={status} matching={category.WAREHOUSING_PROCESS_STATUS.OBJ} />
     },
     { key: 'remark', dataIndex: 'remark', title: '备注' },
     {

@@ -1,9 +1,9 @@
 import { useRequest } from 'ahooks';
-import Status from '@/layout/Status';
 import { useCategorys } from '@/hooks';
 import Search from '@/components/Search';
 import { listToTree } from '@/utils/format';
 import { BtnEditDel } from '@/layout/Button';
+import { Status } from '@/components/Status';
 import { KeyOutlined } from '@ant-design/icons';
 import { useEffect, useState, useCallback } from 'react';
 import EditPermission from './components/EditPermission';

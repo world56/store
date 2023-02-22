@@ -22,7 +22,7 @@ const Container: React.FC<{ children?: React.ReactNode; }> = ({ children }) => (
       </div>
     </div>
     <footer className={styles.footer}>
-      Copyright © 2000-2021  @Ming 版权没有
+      Copyright © 2000-2021  @Ming 版权所有
     </footer>
   </>
 );

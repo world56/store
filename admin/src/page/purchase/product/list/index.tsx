@@ -1,5 +1,4 @@
 import { useRequest } from "ahooks";
-import Status from "@/layout/Status";
 import { Btn } from "@/layout/Button";
 import Search from "@/components/Search";
 import { useNavigate } from "react-router-dom";
@@ -8,14 +7,16 @@ import { Button, Card, Form, Table } from "antd";
 import EditProduct from "./components/EditProduct";
 import { useCategorys, usePageTurning } from "@/hooks";
 import { CodeSandboxOutlined } from '@ant-design/icons';
-import { getSupplierProductList } from "@/api/purchase";
+import { Switch, EditStatus } from "@/components/Status";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { getSupplierProductList, changeSupplierProductStatus } from "@/api/purchase";
 
 import { ENUM_COMMON } from "@/enum/common";
 import { DB_PRIMARY_KEY } from "@/config/db";
 
 import type { TypeEditProductProps } from './components/EditProduct';
 import type { TypeSupplierProduct } from "@/interface/purchase/product";
+import type { TypeEditStatusProps } from '@/components/Status/EditStatus';
 
 type TypeEditProductParam = Omit<TypeEditProductProps, 'onClose'>;
 
@@ -40,6 +41,7 @@ const Product: React.FC<TypeSupplierProductPageProps> = ({ supplierId }) => {
 
   const [search] = Form.useForm<TypeSupplierProduct.Query>();
 
+  const [editStatus, setEditStatus] = useState<TypeEditStatusProps>();
   const [edit, setEdit] = useState<TypeEditProductParam>({ visible: false });
 
   const { data, loading, run } = useRequest(getSupplierProductList, { manual: true });
@@ -63,9 +65,13 @@ const Product: React.FC<TypeSupplierProductPageProps> = ({ supplierId }) => {
     bol || initializa();
   };
 
+  async function onProductStatusChange(row?: TypeSupplierProduct.DTO) {
+    setEditStatus({ id: row?.id, status: row?.status });
+    row || initializa();
+  };
+
   function skipDetails(val: TypeSupplierProduct.DTO) {
-    const jump = supplierId ? window.open : navigate;
-    jump(`/purchase/supplierProductDetails/${val.id}`);
+    navigate(`/purchase/supplierProductDetails/${val.id}`);
   };
 
   const query = useMemo(() => [
@@ -104,15 +110,13 @@ const Product: React.FC<TypeSupplierProductPageProps> = ({ supplierId }) => {
       title: '商品名称',
       render: (row: TypeSupplierProduct.DTO) => <Btn onClick={() => skipDetails(row)}>{row.name}</Btn>
     },
+    { dataIndex: ['brand', 'name'], title: '品牌' },
     {
-      dataIndex: 'brand',
-      title: '品牌',
-      render: (row: TypeSupplierProduct.DTO['brand']) => row.name
-    },
-    {
-      dataIndex: 'status',
-      title: '状态',
-      render: (status: ENUM_COMMON.STATUS) => <Status status={status} />
+      key: DB_PRIMARY_KEY,
+      title: <Switch.Title title='冻结后无法对该产品发起采购' />,
+      render: (row: TypeSupplierProduct.DTO) => (
+        <Switch onChange={() => onProductStatusChange(row)} checked={row.status} />
+      )
     },
     {
       dataIndex: 'category',
@@ -148,6 +152,11 @@ const Product: React.FC<TypeSupplierProductPageProps> = ({ supplierId }) => {
         rowKey={DB_PRIMARY_KEY}
         pagination={pagination} />
       <EditProduct {...edit} supplierId={supplierId} onClose={onEdit} />
+      <EditStatus
+        {...editStatus}
+        onClose={onProductStatusChange}
+        requestFn={changeSupplierProductStatus}
+      />
     </Card>
   );
 };

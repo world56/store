@@ -23,9 +23,11 @@ export namespace TypeLog {
   }
 
   /**
-   * @name QueryList 查询日志列表
+   * @name Query 查询日志列表
+   * @param status 状态
    */
-  export interface QueryList extends Pick<DTO, "relationId"> {
+  export interface Query extends Pick<DTO, "relationId" | "creatorId"> {
+    status?: number;
     module: ENUM_COMMON.LOG_MODULE;
   }
 
@@ -33,6 +35,6 @@ export namespace TypeLog {
    * @name Insert 新增日志记录
    */
   export interface Insert
-    extends Omit<DTO, "type" | "relationId">,
-      Pick<QueryList, "module"> {}
+    extends Omit<DTO, "type">,
+      Pick<Query, "module"> {}
 }

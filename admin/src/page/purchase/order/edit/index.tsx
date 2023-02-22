@@ -1,13 +1,13 @@
+import { useEffect } from 'react';
 import { GoBack } from "@/layout/Button";
 import styles from './index.module.sass';
-import { useEffect, useMemo } from 'react';
-import { Form, message, Spin } from "antd";
 import BasicInfo from "./components/BasicInfo";
-import Statistics from "./components/Statistics";
+import { editPurchaseOrder } from "@/utils/status";
 import { useActions, useGetDetails } from '@/hooks';
+import { formToServer, serverToForm } from './utils';
+import { Card, Form, message, Spin, Input } from "antd";
 import SupplierProduct from "./components/SupplierProduct";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { formToServer, serverToForm, editParams } from './utils';
 import { getPurchaseOrderDetails, insertPurchaseOrder, updatePurchaseOrder } from "@/api/purchase";
 
 import { ENUM_STORE } from '@/enum/store';
@@ -36,12 +36,9 @@ const EditPurchaseOrder = () => {
     return data;
   }, [id, form]);
 
-  async function onSumbit() {
+  async function onSubmit() {
     const values = await form.validateFields();
     const data = formToServer(values);
-    data.products.forEach(v => {
-      v.remark = '9999'
-    })
     if (id) await updatePurchaseOrder(data);
     else await insertPurchaseOrder(data);
     form.resetFields();
@@ -49,7 +46,7 @@ const EditPurchaseOrder = () => {
     id && navigate(-1);
   };
 
-  const editStatus = useMemo(() => editParams(value), [value]);
+  const editStatus = editPurchaseOrder(value);
 
   useEffect(() => {
     actions.getCategory([
@@ -73,8 +70,12 @@ const EditPurchaseOrder = () => {
         <Form.Item noStyle shouldUpdate={shouldUpdate}>
           {() => <SupplierProduct form={form} editStatus={editStatus} />}
         </Form.Item>
-        <Statistics />
-        <GoBack onSumbit={editStatus ? undefined : onSumbit} />
+        <Card title='采购备注'>
+          <Form.Item noStyle name='remark'>
+            <Input.TextArea placeholder="清输入备注" allowClear rows={4} />
+          </Form.Item>
+        </Card>
+        <GoBack onSubmit={editStatus ? undefined : onSubmit} />
       </Form>
     </Spin>
   );

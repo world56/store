@@ -41,7 +41,7 @@ const EditSpecParameter: React.FC<TypeEditSpecParameterProps> = ({
     }
   }, [visible, ids, form]);
 
-  async function onSumbit() {
+  async function onSubmit() {
     const values = await form.validateFields();
     if (ids.length) await updatesSpecParameter(values);
     else await insertsSpecParameter(values);
@@ -65,10 +65,11 @@ const EditSpecParameter: React.FC<TypeEditSpecParameterProps> = ({
 
   return (
     <Drawer
+      width={550}
       open={visible}
       loading={loading}
       onCancel={onCancel}
-      onSumbit={onSumbit}
+      onSubmit={onSubmit}
       className={styles.edit}
       title={`${isAdd ? '新增' : '编辑'}产品规格`}>
       <Form form={form}>

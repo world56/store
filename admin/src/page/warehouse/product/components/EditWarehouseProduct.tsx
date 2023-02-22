@@ -31,7 +31,7 @@ const EditWarehouseProduct: React.FC<TypeEditWarehouseProductProps> = ({ id, vis
 
   const [form] = Form.useForm<TypeWarehouseProduct.DTO>();
 
-  async function onSumbit() {
+  async function onSubmit() {
     const value = await form.validateFields();
     console.log(value);
   };
@@ -42,8 +42,8 @@ const EditWarehouseProduct: React.FC<TypeEditWarehouseProductProps> = ({ id, vis
       title='编辑仓库产品状态'
       className={styles.edit}
       footer={[
-        <Button key='1' onClick={onSumbit}>取消</Button>,
-        <Button key='2' type='primary' onClick={onSumbit}>提交</Button>,
+        <Button key='1' onClick={onSubmit}>取消</Button>,
+        <Button key='2' type='primary' onClick={onSubmit}>提交</Button>,
       ]}>
       <Form form={form} layout='vertical'>
 

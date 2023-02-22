@@ -8,7 +8,7 @@ import { ENUM_STORE } from "@/enum/store";
 import type { DependencyList } from "react";
 
 /**
- * @name useCategorys 获取类目（枚举）
+ * @name useCategorys 获取类目（字典）
  */
 export default function useCategorys(
   prop?: Parameters<typeof Actions.getCategory>[0],
@@ -20,7 +20,7 @@ export default function useCategorys(
 
   useEffect(
     () => {
-      prop && actions.getCategory(prop);
+      prop?.length && actions.getCategory(prop);
     },
     // eslint-disable-next-line
     deps ? [actions, ...deps] : [actions],

@@ -48,7 +48,7 @@ const SpecTemplate: React.FC<TypeSelectSpecProps> = ({ onChange }) => {
     run({ currentPage: 1, pageSize: 9999, name, status: ENUM_COMMON.STATUS.ACTIVATE })
   ), [name, run]);
 
-  function onSumbit() {
+  function onSubmit() {
     onChange(select.map(v => v.parameter.map(v => v.id)).flat());
     onCancel();
   };
@@ -86,10 +86,10 @@ const SpecTemplate: React.FC<TypeSelectSpecProps> = ({ onChange }) => {
       <Modal
         open={visible}
         title='规格模板'
-        onOk={onSumbit}
+        onOk={onSubmit}
         onCancel={onCancel}
         className={styles.specTemplate}
-        footer={<FooterButton onSumbit={onSumbit} onCancel={onCancel} onRefresh={initializa} />}>
+        footer={<FooterButton onSubmit={onSubmit} onCancel={onCancel} onRefresh={initializa} />}>
         <Input value={name} onChange={onNameChange} placeholder="请输入模板名称" allowClear />
         <Table
           size='small'

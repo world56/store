@@ -92,26 +92,6 @@ export function updatePurchaseSupplier(data: TypePurchaseSupplier.EditDTO) {
 }
 
 /**
- * @name getPurchaseSupplierLogs 供应商日志
- */
-export function getPurchaseSupplierLogs(params: TypePurchaseSupplier.QueryLog) {
-  return request<TypePurchaseSupplier.LogDTO[]>("purchase/supplier/logs", {
-    method: ENUM_HTTP.REQUEST_MODE.GET,
-    params,
-  });
-}
-
-/**
- * @name insertPurchaseSupplierLog 新增供应商日志
- */
-export function insertPurchaseSupplierLog(data: TypePurchaseSupplier.LogDTO) {
-  return request<TypePurchaseSupplier.LogDTO>("purchase/supplier/addLog", {
-    method: ENUM_HTTP.REQUEST_MODE.POST,
-    data,
-  });
-}
-
-/**
  * --------------------- 产品规格 ----------------------
  */
 
@@ -289,6 +269,16 @@ export function querySupplierProduct(
 }
 
 /**
+ * @name changeSupplierProductStatus 更改供应商产品状态
+ */
+export function changeSupplierProductStatus(data: TypeCommon.ChangeStatus) {
+  return request<boolean>("purchase/product/status", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
+}
+
+/**
  * @name getSupplierProductDetails 获取供应产品详情
  */
 export function getSupplierProductDetails(
@@ -376,6 +366,18 @@ export function insertPurchaseOrder(data: TypePurchaseOrder.EditDTO) {
  */
 export function updatePurchaseOrder(data: TypePurchaseOrder.EditDTO) {
   return request<boolean>("purchase/order/update", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
+}
+
+/**
+ * @name terminationPurchaseOrder 冻结、终止采购订单
+ */
+export function terminationPurchaseOrder(
+  data: Pick<TypePurchaseOrder.DTO, "id">,
+) {
+  return request<boolean>("purchase/order/termination", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,
   });

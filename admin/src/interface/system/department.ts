@@ -1,5 +1,5 @@
 import type { TypeCommon } from "../common";
-import type { TypeSystemUser } from "./user";
+import type { TypeAdminUser } from "./user";
 
 /**
  * @name TypeSystemDepartment 系统管理-部门
@@ -14,7 +14,7 @@ export namespace TypeSystemDepartment {
    * @name DTO 部门基本信息
    */
   export interface DTO extends Pick<TypeCommon.DTO, "id" | "name" | "remark"> {
-    users: TypeSystemUser.DTO[];
+    users: TypeAdminUser.DTO[];
   }
 
   /**

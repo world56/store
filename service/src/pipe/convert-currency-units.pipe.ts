@@ -11,12 +11,12 @@ export class ConvertCurrencyUnitsPipe implements PipeTransform {
     this.location = location;
   }
 
-  private getValues(value, loc: string[]) {
+  private getValues(value: {}, loc: string[]) {
     const [key, ...nextLoc] = loc;
     return nextLoc.length ? value[key] : this.getValues(value[key], nextLoc);
   }
 
-  public transform(value, metadata: ArgumentMetadata) {
+  public transform(value: {}, metadata: ArgumentMetadata) {
     if (value) {
       const target = this.getValues(value, this.location);
       const key = this.location.at(-1);

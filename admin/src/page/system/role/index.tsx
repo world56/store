@@ -1,7 +1,7 @@
 import { useRequest } from 'ahooks';
-import Status from '@/layout/Status';
 import Search from '@/components/Search';
 import { BtnEditDel } from '@/layout/Button';
+import { Status } from '@/components/Status';
 import EditRole from './components/EditRole';
 import { toTime, listToTree } from '@/utils/format';
 import { UserAddOutlined } from '@ant-design/icons';
@@ -85,7 +85,8 @@ const Role = () => {
   const columns = [
     { title: '角色名称', dataIndex: 'name' },
     {
-      title: '状态', dataIndex: 'status',
+      title: '状态',
+      dataIndex: 'status',
       render: (key: ENUM_COMMON.STATUS) => <Status status={key} />
     },
     { title: '创建时间', dataIndex: 'createTime', render: toTime },

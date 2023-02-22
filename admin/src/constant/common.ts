@@ -10,8 +10,16 @@ export namespace CONSTANT_COMMON {
    * @param STATUS 状态
    */
   export const STATUS = toCategorys([
-    { id: ENUM_COMMON.STATUS.ACTIVATE, name: "激活" },
-    { id: ENUM_COMMON.STATUS.FREEZE, name: "冻结" },
+    {
+      id: ENUM_COMMON.STATUS.ACTIVATE,
+      name: "激活",
+      color: ENUM_COMMON.COLOR.GREEN,
+    },
+    {
+      id: ENUM_COMMON.STATUS.FREEZE,
+      name: "冻结",
+      color: ENUM_COMMON.COLOR.RED,
+    },
   ]);
 
   /**

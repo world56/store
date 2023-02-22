@@ -1,12 +1,12 @@
 import Uploads from '../Uploads';
 import { useEffect } from 'react';
+import { encryption } from '@/utils';
 import { FormHideKey } from '../Form';
 import { Modal } from "@/layout/PopUp";
-import { encryption } from '@/utils/crypto';
 import { CONSTANT_REG } from '@/constant/reg';
 import { Switch } from '@/components/Formatting';
 import { checkAdminUserField } from '@/api/system';
-import { register, getPubilcKey } from '@/api/auth';
+import { register, getPublicKey } from '@/api/auth';
 import { Form, Input, Select, message } from 'antd';
 import { useActions, useGetDetails, useStore } from '@/hooks';
 import { addAdminUser, updateAdminUser, getAdminUserInfo } from '@/api/system';
@@ -17,7 +17,7 @@ import { ENUM_SYSTEM } from '@/enum/system';
 import { DB_PRIMARY_KEY } from '@/config/db';
 
 import type { TypeCommon } from '@/interface/common';
-import type { TypeSystemUser } from '@/interface/system/user';
+import type { TypeAdminUser } from "@/interface/system/user";
 
 export const UserTextRule = {
   message: '只允许包含数字、字母、下划线',
@@ -46,7 +46,7 @@ const EditUserInfo: React.FC<TypeEditUserInfoProps> = ({ id, type, visible, onCl
   const isSuperAdmin = type === ENUM_SYSTEM.EDIT_USER.SUPER; // 超管
   const isPersonal = type === ENUM_SYSTEM.EDIT_USER.PERSONAL;
 
-  const [form] = Form.useForm<TypeSystemUser.DTO>();
+  const [form] = Form.useForm<TypeAdminUser.DTO>();
 
   const actions = useActions();
   const { user, category: { DEPARTMENT, ROLE } } = useStore();
@@ -57,12 +57,12 @@ const EditUserInfo: React.FC<TypeEditUserInfoProps> = ({ id, type, visible, onCl
     data && form.setFieldsValue(data);
   }, [id, form]);
 
-  async function onSumbit() {
+  async function onSubmit() {
     const values = await form.validateFields();
     if (id) {
       await updateAdminUser(values);
     } else {
-      const key = await getPubilcKey();
+      const key = await getPublicKey();
       values.password = encryption(key, values.password);
       const request = isSuperAdmin ? register : addAdminUser;
       await request(values);
@@ -77,7 +77,7 @@ const EditUserInfo: React.FC<TypeEditUserInfoProps> = ({ id, type, visible, onCl
   };
 
   // 如果是注册超级用户 则在注册时统一校验
-  async function checkFields(field: keyof TypeSystemUser.DTO, value: string) {
+  async function checkFields(field: keyof TypeAdminUser.DTO, value: string) {
     const bol = await checkAdminUserField({ [DB_PRIMARY_KEY]: id, [field]: value });
     return bol ? Promise.reject('该字符已被占用，请更换后重试') : bol;
   };
@@ -94,7 +94,7 @@ const EditUserInfo: React.FC<TypeEditUserInfoProps> = ({ id, type, visible, onCl
   return (
     <Modal
       open={visible}
-      onOk={onSumbit}
+      onOk={onSubmit}
       loading={loading}
       onCancel={onCancel}
       title={isSuperAdmin ? '注册超级管理员' : id ? isPersonal ? '编辑个人信息' : '编辑用户' : '新增用户'}>
@@ -181,9 +181,9 @@ const EditUserInfo: React.FC<TypeEditUserInfoProps> = ({ id, type, visible, onCl
             </Select>
           </Form.Item>
 
-          <Form.Item name='status' label='用户状态' initialValue={ENUM_COMMON.STATUS.ACTIVATE}>
+          {isPersonal ? null : <Form.Item name='status' label='用户状态' initialValue={ENUM_COMMON.STATUS.ACTIVATE}>
             <Switch />
-          </Form.Item>
+          </Form.Item>}
 
           <Form.Item name='remark' label='备注'>
             <Input.TextArea placeholder='请输入备注' />

@@ -1,27 +1,29 @@
 import { useRequest } from "ahooks";
-import Link from "@/components/Link";
-import Status from "@/layout/Status";
 import { Btn } from "@/layout/Button";
+import { showAbandoned } from './utils';
 import Search from '@/components/Search';
-import { showEditBtn, showAbandoned } from './utils';
+import { Status } from "@/components/Status";
+import { editPurchaseOrder } from "@/utils/status";
+import { PurchaseOrder } from "@/components/Details";
 import { getPurchaseOrderList } from "@/api/purchase";
-import { scrapPurchaseOrder } from "@/api/warehouse";
 import { useCategorys, usePageTurning } from "@/hooks";
 import { OrderedListOutlined } from '@ant-design/icons';
-import { useCallback, useEffect, useMemo } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Button, Card, Form, message, Table } from "antd";
+import { terminationPurchaseOrder } from "@/api/purchase";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { toTime as render, monetaryUnit, urlSearchParams } from '@/utils/format';
 
 import { DB_PRIMARY_KEY } from '@/config/db';
 import { ENUM_PURCHASE } from "@/enum/purchase";
-import { ENUM_WAREHOUSE } from '@/enum/warehouse';
 
+import type { TypeCommon } from "@/interface/common";
 import type { TypePurchaseOrder } from "@/interface/purchase/order";
 
 interface TypeSupplierOrderProps extends Pick<TypePurchaseOrder.Query, 'supplierId'> { }
 
 const { ENUM_CATEGORY } = useCategorys;
+
 
 /**
  * @name SupplierOrder 采购订单
@@ -35,6 +37,8 @@ const SupplierOrder: React.FC<TypeSupplierOrderProps> = ({ supplierId }) => {
   ]);
 
   const navigate = useNavigate();
+
+  const [warehouseOrderId, setWarehouseOrderId] = useState<TypeCommon.PrimaryKey>();
 
   const [search] = Form.useForm<TypePurchaseOrder.Query>();
   const { run, data, loading } = useRequest(getPurchaseOrderList, { manual: true });
@@ -56,12 +60,15 @@ const SupplierOrder: React.FC<TypeSupplierOrderProps> = ({ supplierId }) => {
     });
   }, [navigate, supplierId]);
 
-  const onAbandoned = useCallback(async (row: TypePurchaseOrder.DTO) => {
-    const { id } = row.warehousing;
-    await scrapPurchaseOrder({ id });
+  const onAbandoned = useCallback(async ({ id }: TypePurchaseOrder.DTO) => {
+    await terminationPurchaseOrder({ id });
     message.success('订单已废弃');
     initializa();
   }, [initializa]);
+
+  const onView = useCallback((row?: TypePurchaseOrder.DTO) => {
+    setWarehouseOrderId(row?.warehousing?.id);
+  }, []);
 
   const query = useMemo(() => [
     { name: 'no', label: '流 水 号', type: Search.ENUM.COMP_TYPE.INPUT },
@@ -70,7 +77,7 @@ const SupplierOrder: React.FC<TypeSupplierOrderProps> = ({ supplierId }) => {
       name: 'shippingMethod',
       label: '发货方式',
       type: Search.ENUM.COMP_TYPE.SELECT,
-      list: category?.SUPPLIER_SHIPPING_METHOD?.LIST
+      list: category?.PURCHASE_SHIPPING_METHOD?.LIST
     },
     {
       name: 'logisticsCompanyId',
@@ -90,13 +97,13 @@ const SupplierOrder: React.FC<TypeSupplierOrderProps> = ({ supplierId }) => {
       name: 'settlement',
       label: '结算方式',
       type: Search.ENUM.COMP_TYPE.SELECT,
-      list: category?.SUPPLIER_SETTLEMENT?.LIST
+      list: category?.PURCHASE_SETTLEMENT_METHOD?.LIST
     },
     {
       name: 'status',
       label: '订单状态',
       type: Search.ENUM.COMP_TYPE.SELECT,
-      list: category?.WAREHOUSING_PROCESS?.LIST
+      list: category?.PURCHASE_PROCESS_STATUS?.LIST
     },
     {
       name: 'creatorId',
@@ -113,7 +120,7 @@ const SupplierOrder: React.FC<TypeSupplierOrderProps> = ({ supplierId }) => {
         key: DB_PRIMARY_KEY,
         title: '流水号',
         render: (row: TypePurchaseOrder.DTO) => (
-          <Link to={`/purchase/supplierOrderDetails/${row.id}`}>{row.no}</Link>
+          <Btn onClick={() => onView(row)}>{row?.no}</Btn>
         )
       },
       {
@@ -131,33 +138,33 @@ const SupplierOrder: React.FC<TypeSupplierOrderProps> = ({ supplierId }) => {
         dataIndex: 'settlement',
         width: 150,
         title: '结算方式',
-        render: (type: ENUM_PURCHASE.SUPPLIER_SETTLEMENT) => (
-          <Status status={type} matching={Status.type.PURCHASE_ORDER_SETTLEMENT} />
+        render: (type: ENUM_PURCHASE.PURCHASE_SETTLEMENT_METHOD) => (
+          <Status status={type} matching={category.PURCHASE_SETTLEMENT_METHOD.OBJ} />
         )
       },
       {
         title: '订单状态',
-        dataIndex: ['warehousing', 'status'],
-        render: (status: ENUM_WAREHOUSE.WAREHOUSING_PROCESS) => (
-          <Status status={status} matching={Status.type.WAREHOUSING_STATUS} />
+        dataIndex: 'status',
+        render: (status: ENUM_PURCHASE.PURCHASE_PROCESS_STATUS) => (
+          <Status status={status} matching={category.PURCHASE_PROCESS_STATUS.OBJ} />
         )
       },
       {
         key: 'status',
         title: '操作',
-        width: 140,
+        width: 150,
         render: (row: TypePurchaseOrder.DTO) => (
           <>
             {showAbandoned(row) && <Btn confirmTips type='danger' onClick={() => onAbandoned(row)}>作废</Btn>}
-            {showEditBtn(row) && <Btn onClick={() => onEdit(row)}>编辑</Btn>}
-            <Link to={`/purchase/supplierOrderDetails/${row.id}`}>详情</Link>
+            {!editPurchaseOrder(row) && <Btn onClick={() => onEdit(row)}>编辑</Btn>}
+            <Btn onClick={() => onView(row)}>详情</Btn>
           </>
         )
       }
     ]
     supplierId && list.splice(1, 1);
     return list;
-  }, [supplierId, onEdit, onAbandoned]);
+  }, [category, supplierId, onEdit, onView, onAbandoned]);
 
   useEffect(() => {
     initializa();
@@ -176,6 +183,7 @@ const SupplierOrder: React.FC<TypeSupplierOrderProps> = ({ supplierId }) => {
         rowKey={DB_PRIMARY_KEY}
         dataSource={data?.list}
         pagination={pagination} />
+      <PurchaseOrder id={warehouseOrderId} onClose={onView} />
     </Card>
   );
 };

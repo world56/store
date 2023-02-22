@@ -60,7 +60,7 @@ export class FileService {
     });
     list?.forEach((v) => {
       const path = this.storagePath(v.path);
-      stat(path, (e, s) => s.isFile() && unlink(path, () => {}));
+      stat(path, (e, s) => s?.isFile() && unlink(path, () => {}));
     });
     await this.PrismaService.files.deleteMany({
       where: { id: { in: list.map((v) => v.id) } },

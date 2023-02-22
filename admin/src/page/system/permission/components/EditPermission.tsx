@@ -57,7 +57,7 @@ const EditPermission: React.FC<TypeEditPermissionProps> = ({
     return listToTree(res, 0, id);
   }, [visible, id]);
 
-  async function onSumbit() {
+  async function onSubmit() {
     const values = await form.validateFields();
     if (id) await updatePermission(values);
     else await insertPermission(values);
@@ -73,7 +73,7 @@ const EditPermission: React.FC<TypeEditPermissionProps> = ({
   return (
     <Modal
       open={visible}
-      onOk={onSumbit}
+      onOk={onSubmit}
       loading={loading}
       onCancel={onCancel}
       title={id ? '编辑权限' : '新增权限'}>

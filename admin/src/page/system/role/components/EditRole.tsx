@@ -43,7 +43,7 @@ const EditRole: React.FC<TypeEditRoleProps> = ({
     info && form.setFieldsValue(serviceToForm(info));
   }, [id]);
 
-  async function onSumbit() {
+  async function onSubmit() {
     const values = await form.validateFields();
     if (id) await updateRole(values);
     else await insertRole(values);
@@ -63,7 +63,7 @@ const EditRole: React.FC<TypeEditRoleProps> = ({
       forceRender
       title={title}
       open={visible}
-      onOk={onSumbit}
+      onOk={onSubmit}
       loading={loading}
       onCancel={onCancel}>
       <Form form={form} {...formStyle}>

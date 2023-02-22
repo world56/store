@@ -13,7 +13,10 @@ import { Min, IsInt, IsOptional } from 'class-validator';
  */
 export class QueryDTO extends IntersectionType(
   PartialType(PickType(CommonDTO, ['name'] as const)),
-  PickType(CommonDTO, ['id', 'name', 'status', 'userId'] as const),
+  IntersectionType(
+    PartialType(PickType(CommonDTO, ['no'] as const)),
+    PickType(CommonDTO, ['id', 'name', 'status', 'userId'] as const),
+  ),
 ) {
   /**
    * @param currentPage 当前页码
@@ -21,6 +24,7 @@ export class QueryDTO extends IntersectionType(
   @ApiProperty({
     description: '当前页码',
     required: true,
+    default: 1,
   })
   @Type(() => Number)
   @Min(1)
@@ -33,6 +37,7 @@ export class QueryDTO extends IntersectionType(
   @ApiProperty({
     description: '每页条数',
     required: true,
+    default: 20,
   })
   @Min(1)
   @Type(() => Number)
@@ -53,7 +58,7 @@ export class QueryDTO extends IntersectionType(
    */
   @ApiProperty({ description: '时间范围' })
   @Type(() => Number)
-  @IsOptional({message:'1'})
-  @IsInt({ each: true,message:'0' })
+  @IsOptional({ message: '1' })
+  @IsInt({ each: true, message: '0' })
   createTime?: { gte: Date; lt: Date };
 }

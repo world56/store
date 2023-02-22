@@ -6,7 +6,12 @@ import { LogController } from './log.controller';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: 'pruchaseLog', schema: LogSchema }]),
+    MongooseModule.forFeature([
+      { name: 'pruchaseLog', schema: LogSchema },
+      { name: 'supplierLog', schema: LogSchema },
+      { name: 'adminUserLog', schema: LogSchema },
+      { name: 'supplierProductLog', schema: LogSchema },
+    ]),
   ],
   providers: [LogService],
   exports: [LogService],

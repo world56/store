@@ -24,7 +24,6 @@ export const filterOptionTooltip: FilterFunc<TypeNestingComp> = (
   val,
   option,
 ) => {
-  
   const show = (option?.children?.props!?.children?.props)?.children as
     | string
     | void;

@@ -107,15 +107,6 @@ export function getWarehousingInfo(data: TypeCommon.DatabaseMainParameter) {
   );
 }
 
-/**
- * @name scrapPurchaseOrder 废弃采购订单
- */
-export function scrapPurchaseOrder(data: TypeCommon.DatabaseMainParameter) {
-  return request<boolean>("warehouse/warehousing/void", {
-    method: ENUM_HTTP.REQUEST_MODE.POST,
-    data,
-  });
-}
 
 /**
  * @name confirmReceiving 确认收货
@@ -143,11 +134,11 @@ export function confirmWarehousing(
 }
 
 /**
- * --------------------- 入库审核 ----------------------
+ * --------------------- 仓储审核 ----------------------
  */
 
 /**
- * @name getWarehouseAuditList 获取入库审核列表
+ * @name getWarehouseAuditList 获取仓储审核列表
  */
 export function getWarehouseAuditList(params: TypeWarehousingAudit.Query) {
   return request<TypeCommon.ServiceReturn<TypeWarehousingAudit.DTO>>(
@@ -157,4 +148,29 @@ export function getWarehouseAuditList(params: TypeWarehousingAudit.Query) {
       params,
     },
   );
+}
+
+/**
+ * @name getWarehouseAuditPurchaseDetails 获取仓储审核关联信息-采购入库
+ */
+export function getWarehouseAuditPurchaseDetails(
+  data: TypeWarehousingAudit.QueryPurchaseOrderAudit,
+) {
+  return request<TypeWarehousingAudit.PurchaseOrderAuditDetails>(
+    "warehouse/audit/purchase",
+    {
+      method: ENUM_HTTP.REQUEST_MODE.POST,
+      data,
+    },
+  );
+}
+
+/**
+ * @name auditWarehouse 审核出入库单
+ */
+export function auditWarehouse(data: TypeWarehousingAudit.AuditBusiness) {
+  return request<boolean>(`warehouse/audit/${data.id}`, {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
 }

@@ -4,6 +4,7 @@ import { ENUM_STORE } from "@/enum/store";
 import { REQUEST } from "./middleware/category";
 import { CONSTANT_SYSTEM } from "@/constant/system";
 import { CONSTANT_COMMON } from "@/constant/common";
+import { CONSTANT_FINANCE } from "@/constant/finance";
 import { CONSTANT_PURCHASE } from "@/constant/purchase";
 import { CONSTANT_WAREHOUSE } from "@/constant/warehouse";
 
@@ -27,13 +28,14 @@ export type TypeCategorysUserDefind = Record<
 >;
 
 export interface TypeCategorysState
-  extends TypeCategorysUserDefind,
+  extends Partial<TypeCategorysUserDefind>,
     Partial<TypeCategorysBusiness>,
     Required<typeof DEFAULT_DICTIONARY> {}
 
 export const DEFAULT_DICTIONARY = {
   ...CONSTANT_COMMON,
   ...CONSTANT_SYSTEM,
+  ...CONSTANT_FINANCE,
   ...CONSTANT_PURCHASE,
   ...CONSTANT_WAREHOUSE,
 };

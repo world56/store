@@ -81,4 +81,11 @@ export class CommonDTO extends PartialType(PrimaryKeyDTO) {
   @Type(() => Number)
   @IsInt({ each: true })
   ids: number[];
+
+  /**
+   * @param no 流水号
+   */
+  @ApiProperty({ description: '流水号' })
+  @IsString()
+  no: string;
 }

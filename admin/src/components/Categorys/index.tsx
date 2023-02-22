@@ -10,12 +10,11 @@ import { Modal, List, Avatar, Button, Empty } from 'antd';
 import { SyncOutlined, FontSizeOutlined } from '@ant-design/icons';
 import EditUnit, { type TypeEditUnitProps } from './components/Edit';
 
-import { ENUM_STORE } from '@/enum/store';
-import { TypeCommon } from '@/interface/common';
+import { CATEGORY_NAME } from './utils';
 
 type TypeEditCategory = Pick<TypeEditUnitProps, 'visible' | 'id'>;
 
-export interface TypeCategoryProps<T = ENUM_STORE.CATEGORY> {
+export interface TypeCategoryProps<T = (keyof typeof CATEGORY_NAME)> {
   type: T;
 };
 
@@ -34,6 +33,7 @@ export interface TypeCategorys extends React.FC<TypeCategoryProps> {
   SpecTemplate: typeof SpecTemplate;
 };
 
+
 /**
  * @name Categorys 类目管理
  */
@@ -45,10 +45,6 @@ const Categorys: TypeCategorys = ({ type }) => {
   const [visible, setVisible] = useState(false);
   const [edit, setEdit] = useState<TypeEditCategory>({ visible: false });
 
-  function visibleChange() {
-    setVisible(b => !b);
-  };
-
   const getWarehouseUnit = useCallback(() => {
     actions.getCategory([type]);
   }, [actions, type]);
@@ -57,6 +53,10 @@ const Categorys: TypeCategorys = ({ type }) => {
     const visible = !edit.visible;
     setEdit({ id, visible });
     id || getWarehouseUnit();
+  };
+
+  function visibleChange() {
+    setVisible(b => !b);
   };
 
   const list = category[type]?.LIST;
@@ -77,13 +77,13 @@ const Categorys: TypeCategorys = ({ type }) => {
         ]}
       >
         {list ? <List
+          dataSource={list}
           itemLayout="horizontal"
-          dataSource={list as TypeCommon.Category[]}
           renderItem={item => (
             <List.Item actions={[<BtnEditDel value={item.id} onEdit={onEdit} />]}>
               <List.Item.Meta
                 title={item.name}
-                description={item.remark} 
+                description={item.remark}
                 avatar={<Avatar>{item.name}</Avatar>}
               />
             </List.Item>
