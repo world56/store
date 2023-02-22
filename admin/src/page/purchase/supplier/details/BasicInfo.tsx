@@ -1,7 +1,7 @@
-import Status from '@/layout/Status';
 import { useGetDetails } from '@/hooks';
 import { toTime } from '@/utils/format';
 import Uploads from '@/components/Uploads';
+import { Status } from '@/components/Status';
 import Categorys from '@/components/Categorys';
 import { Card, Tooltip, Descriptions, message } from "antd";
 import { addPurchaseSupplierFile, getPurchaseSupplierDetails } from '@/api/purchase';
@@ -44,7 +44,7 @@ const BasicInfo: React.FC<TypeCommon.DatabaseMainParameter> = ({ id }) => {
       </Card>
 
       <Card title='联系人'>
-        {value?.contacts.map(v => <Descriptions key={v.id} size='small' bordered column={3}>
+        {value?.contacts.map(v => <Descriptions key={v.id} size='middle' bordered column={3}>
           <Item label="名称">{v.name}</Item>
           <Item label="联系电话">{v.phone}</Item>
           <Item label="备注">

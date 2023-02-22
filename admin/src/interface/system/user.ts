@@ -6,9 +6,9 @@ import type { TypeSystemDepartment } from "./department";
  */
 export namespace TypeAdminUser {
   /**
-   * @name PubilcKey 用户模块-公匙
+   * @name PublicKey 用户模块-公匙
    */
-  export type PubilcKey = string;
+  export type PublicKey = string;
 
   /**
    * @name Login 用户模块-登录信息
@@ -32,7 +32,7 @@ export namespace TypeAdminUser {
    * @param isSuper 是否超管
    * @param role    权限角色
    * @param email   电子邮件
-   * @param Record  状态
+   * @param status  状态
    * @param remark  备注
    */
   export interface DTO
@@ -54,11 +54,6 @@ export namespace TypeAdminUser {
       Omit<DTO, "token" | "isSuper"> {
     departmentId: number;
   }
-
-  /**
-   * @name FreezeStatusChange 用户账号状态改变
-   */
-  export interface FreezeStatusChange extends Pick<DTO, "id" | "status"> {}
 
   /**
    * @name EditUserPassword 修改用户密码

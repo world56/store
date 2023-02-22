@@ -6,7 +6,7 @@ import { Modal } from "@/layout/PopUp";
 import { CONSTANT_REG } from '@/constant/reg';
 import { Switch } from '@/components/Formatting';
 import { checkAdminUserField } from '@/api/system';
-import { register, getPubilcKey } from '@/api/auth';
+import { register, getPublicKey } from '@/api/auth';
 import { Form, Input, Select, message } from 'antd';
 import { useActions, useGetDetails, useStore } from '@/hooks';
 import { addAdminUser, updateAdminUser, getAdminUserInfo } from '@/api/system';
@@ -57,12 +57,12 @@ const EditUserInfo: React.FC<TypeEditUserInfoProps> = ({ id, type, visible, onCl
     data && form.setFieldsValue(data);
   }, [id, form]);
 
-  async function onSumbit() {
+  async function onSubmit() {
     const values = await form.validateFields();
     if (id) {
       await updateAdminUser(values);
     } else {
-      const key = await getPubilcKey();
+      const key = await getPublicKey();
       values.password = encryption(key, values.password);
       const request = isSuperAdmin ? register : addAdminUser;
       await request(values);
@@ -94,7 +94,7 @@ const EditUserInfo: React.FC<TypeEditUserInfoProps> = ({ id, type, visible, onCl
   return (
     <Modal
       open={visible}
-      onOk={onSumbit}
+      onOk={onSubmit}
       loading={loading}
       onCancel={onCancel}
       title={isSuperAdmin ? '注册超级管理员' : id ? isPersonal ? '编辑个人信息' : '编辑用户' : '新增用户'}>

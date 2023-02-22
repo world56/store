@@ -107,9 +107,9 @@ export function getWarehouseAllList() {
 }
 
 /**
- * @name getPurchaseSpplierList 供应商列表
+ * @name getPurchaseSupplierList 供应商列表
  */
-export function getPurchaseSpplierList() {
+export function getPurchaseSupplierList() {
   return request<TypeWarehousePosition.DTO[]>("purchase/supplier/all", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
   });

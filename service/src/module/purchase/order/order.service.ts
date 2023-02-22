@@ -182,6 +182,7 @@ export class OrderService {
       where: { id: body.id },
       data: {
         status: ENUM_PURCHASE.PURCHASE_PROCESS_STATUS.ABANDONED,
+        // TODO 两种情况
         warehousing: {
           update: { status: ENUM_WAREHOUSE.WAREHOUSING_PROCESS_STATUS.ABANDONED },
         },

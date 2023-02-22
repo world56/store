@@ -1,8 +1,8 @@
 import { memo } from "react";
-import Status from "@/layout/Status";
 import { Modal } from "@/layout/PopUp";
 import { useGetDetails } from '@/hooks';
 import styles from './index.module.sass';
+import { Status } from "@/components/Status";
 import Categorys from "@/components/Categorys";
 import { Descriptions, Button, Image } from "antd";
 import { getSupplierProductDetails } from '@/api/purchase';

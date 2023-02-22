@@ -4,8 +4,10 @@ import {
   INestApplication,
   PreconditionFailedException,
 } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
+
 import { PrimaryKeyDTO } from '@/dto/common/common.dto';
-import { type Prisma, PrismaClient } from '@prisma/client';
+import { ChangeStatusDTO } from '@/dto/common/change-status.dto';
 
 interface TypeCheckFieldsRepeatDTO extends Partial<PrimaryKeyDTO> {
   WHERE?: object;
@@ -50,10 +52,23 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
   }
 
   /**
+   * @name changeStatus 修改状态
+   * @param data 修改的状态DTO
+   * @param tableName 表名
+   */
+  async changeStatus(data: ChangeStatusDTO, tableName: string) {
+    const { id, status } = data;
+    return await this[tableName].update({
+      where: { id },
+      data: { status },
+    });
+  }
+
+  /**
    * @name createNO 创建流水号
    * @param tableName table
    */
-  async createNO(tableName: string) {    
+  async createNO(tableName: string) {
     const [val]: object[] = await this.$queryRaw`
     select 
       concat('NO',date_format(now(),'%Y%m%d') , 

@@ -24,7 +24,7 @@ const EditUserPassword: React.FC<TypeEditUserPasswordProps> = ({ visible, onClos
 
   const [form] = Form.useForm<TypeAdminUser.EditUserPassword>();
 
-  async function onSumbit() {
+  async function onSubmit() {
     const values = await form.validateFields();
     const key = await getPubilcKey();
     values.password = encryption(key, values.password);
@@ -43,7 +43,7 @@ const EditUserPassword: React.FC<TypeEditUserPasswordProps> = ({ visible, onClos
     <Modal
       title='修改密码'
       open={visible}
-      onOk={onSumbit}
+      onOk={onSubmit}
       onCancel={onCancel}>
       <Form form={form}>
 

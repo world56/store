@@ -6,11 +6,16 @@ import { ENUM_COMMON } from '@/enum/common';
 export const VIDEO_SUFFIX = [
   '.MP4',
   '.RMVB',
+  '.RM',
   '.AVI',
   '.MKV',
   '.MPG',
   '.MPEG',
+  '.MPE',
   '.3GP',
+  '.FLV',
+  '.WMV',
+  '.MOV',
 ];
 // 图片
 export const IMAGE_SUFFIX = [
@@ -22,13 +27,19 @@ export const IMAGE_SUFFIX = [
   '.JPEG',
   '.TIFF',
   '.WEBP',
+  '.PCX',
+  '.PSD',
+  '.AI',
+  '.EPS',
+  '.ICO',
+  '.AVIF',
+  '.APNG',
 ];
 // 音频
 export const AUDIO_SUFFIX = [
   '.CD',
   '.MP3',
   '.OGG',
-  '.WMV',
   '.ASF',
   '.RM',
   '.APE',
@@ -37,9 +48,26 @@ export const AUDIO_SUFFIX = [
   '.APE',
   '.CUE',
   '.PCM',
+  '.WAVE',
+  '.MIDI',
+  '.WMA',
+  '.VQF',
+  '.OGG',
+  '.AMR',
+  '.AAC',
 ];
+
 // 压缩文件
-export const COMPRESS_SUFFIX = ['.7Z', '.RAR', '.ZIP', '.TAR', '.GZIP', '.ISO'];
+export const COMPRESS_SUFFIX = [
+  '.7Z',
+  '.RAR',
+  '.ZIP',
+  '.TAR',
+  '.GZIP',
+  '.ISO',
+  '.JAR',
+];
+
 // 文本
 export const TEXT_SUFFIX = [
   '.DOC',

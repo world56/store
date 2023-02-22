@@ -3,7 +3,7 @@ import { Modal } from "@/layout/PopUp";
 import { FormHideKey } from "@/components/Form";
 import { auditWarehouse } from "@/api/warehouse";
 import { AuditOutlined } from '@ant-design/icons';
-import { memo, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button, Form, Input, message, Select } from "antd";
 
 import { ENUM_WAREHOUSE } from "@/enum/warehouse";
@@ -16,9 +16,9 @@ type TypeFormWatchAuditType = TypeWarehousingAudit.AuditBusiness['status'];
 
 interface TypeAuditBusiness extends Partial<Pick<TypeWarehouseWarehousing.DTO, 'id'>> {
   /**
-   * @name onClose 关闭审核意见提交弹窗
+   * @name onSubmitted 提交审核后的回调
    */
-  onClose?(): void;
+  onSubmitted(): void;
 };
 
 const { Option } = Select;
@@ -27,7 +27,7 @@ const { Option } = Select;
  * @name AuditBusiness 审核业务
  * @description 审核 采购入库、审核入库等
  */
-const AuditBusiness: React.FC<TypeAuditBusiness> = ({ id }) => {
+const AuditBusiness: React.FC<TypeAuditBusiness> = ({ id, onSubmitted }) => {
 
   const { WAREHOUSING_AUDIT_STATUS } = useCategorys();
 
@@ -37,11 +37,12 @@ const AuditBusiness: React.FC<TypeAuditBusiness> = ({ id }) => {
 
   const AuditType = Form.useWatch<TypeFormWatchAuditType>('status', form);
 
-  async function onSumbit() {
+  async function onSubmit() {
     const values = await form.validateFields();
     await auditWarehouse(values);
     message.success('操作成功');
     onCancel();
+    onSubmitted();
   };
 
   function onCancel() {
@@ -69,7 +70,7 @@ const AuditBusiness: React.FC<TypeAuditBusiness> = ({ id }) => {
   return (
     <>
       <Button onClick={onAudit} type="primary" icon={<AuditOutlined />}>审核</Button>
-      <Modal title='审核意见' open={open} onOk={onSumbit} onCancel={onCancel}>
+      <Modal title='审核意见' open={open} onOk={onSubmit} onCancel={onCancel}>
         <Form form={form} layout='vertical'>
           <FormHideKey />
           <Form.Item label='审核意见' name='status' rules={[{ required: true }]}>
@@ -86,4 +87,4 @@ const AuditBusiness: React.FC<TypeAuditBusiness> = ({ id }) => {
   );
 };
 
-export default memo(AuditBusiness);
+export default (AuditBusiness);

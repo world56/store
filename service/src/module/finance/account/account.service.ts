@@ -83,4 +83,11 @@ export class AccountService {
     });
     return true;
   }
+
+  changeStatus(id: number, status: number) {
+    return this.PrismaService.paymentAccount.update({
+      where: { id },
+      data: { status },
+    });
+  }
 }

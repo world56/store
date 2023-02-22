@@ -1,13 +1,13 @@
 import { useRequest } from "ahooks";
-import Status from "@/layout/Status";
 import { Btn } from "@/layout/Button";
 import { showAbandoned } from './utils';
 import Search from '@/components/Search';
+import { Status } from "@/components/Status";
+import { editPurchaseOrder } from "@/utils/status";
 import { PurchaseOrder } from "@/components/Details";
 import { getPurchaseOrderList } from "@/api/purchase";
 import { useCategorys, usePageTurning } from "@/hooks";
 import { OrderedListOutlined } from '@ant-design/icons';
-import { purchaseWaitWarehoused } from '@/utils/status';
 import { NavLink, useNavigate } from "react-router-dom";
 import { Button, Card, Form, message, Table } from "antd";
 import { terminationPurchaseOrder } from "@/api/purchase";
@@ -23,6 +23,7 @@ import type { TypePurchaseOrder } from "@/interface/purchase/order";
 interface TypeSupplierOrderProps extends Pick<TypePurchaseOrder.Query, 'supplierId'> { }
 
 const { ENUM_CATEGORY } = useCategorys;
+
 
 /**
  * @name SupplierOrder 采购订单
@@ -155,7 +156,7 @@ const SupplierOrder: React.FC<TypeSupplierOrderProps> = ({ supplierId }) => {
         render: (row: TypePurchaseOrder.DTO) => (
           <>
             {showAbandoned(row) && <Btn confirmTips type='danger' onClick={() => onAbandoned(row)}>作废</Btn>}
-            {purchaseWaitWarehoused(row) && <Btn onClick={() => onEdit(row)}>编辑</Btn>}
+            {!editPurchaseOrder(row) && <Btn onClick={() => onEdit(row)}>编辑</Btn>}
             <Btn onClick={() => onView(row)}>详情</Btn>
           </>
         )

@@ -13,7 +13,8 @@ export namespace TypeFinancePaymentAccount {
    * @param organizationId 账户类型（比如支付宝、各种银行）
    * @param supplier 供应商DTO
    */
-  export interface DTO extends Pick<TypeCommon.DTO, "id" | "remark"> {
+  export interface DTO
+    extends Pick<TypeCommon.DTO, "id" | "status" | "remark"> {
     accountName: string;
     accountNumber: string;
     supplierId: TypeCommon.PrimaryKey;
@@ -32,4 +33,9 @@ export namespace TypeFinancePaymentAccount {
           "accountName" | "accountNumber" | "supplierId" | "organizationId"
         >
       > {}
+
+  /**
+   * @name EditStatus 更改供应商收款账户状态
+   */
+  export interface EditStatus extends Pick<DTO, "id" | "status"> {}
 }

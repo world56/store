@@ -33,10 +33,10 @@ export function logOut() {
 }
 
 /**
- * @name getPubilcKey 获取公匙
+ * @name getPublicKey 获取公匙
  */
-export function getPubilcKey() {
-  return request<TypeAdminUser.PubilcKey>("auth/establish", {
+export function getPublicKey() {
+  return request<TypeAdminUser.PublicKey>("auth/establish", {
     method: ENUM_HTTP.REQUEST_MODE.GET,
   });
 }

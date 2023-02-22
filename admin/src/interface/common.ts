@@ -22,6 +22,11 @@ export namespace TypeCommon {
   }
 
   /**
+   * @name ChangeStatus 修改状态
+   */
+  export interface ChangeStatus extends Pick<DTO, "id" | "status" | "remark"> {}
+
+  /**
    * @name GenericObject 通用对象
    */
   export type GenericObject<T = React.Key> = Record<React.Key, T>;

@@ -1,10 +1,18 @@
+import {
+  Get,
+  Post,
+  Body,
+  Query,
+  Param,
+  Controller,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { AccountService } from './account.service';
 import { QueryListPipe } from '@/pipe/query-list.pipe';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { FinanceAccountDTO } from '@/dto/finance/account';
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 
 import { PrimaryKeyDTO } from '@/dto/common/common.dto';
+import { FinanceAccountDTO } from '@/dto/finance/account';
 import { FinanceAccountQueryListDTO } from './dto/finance-account-query-list.dto';
 
 @ApiTags('财务-供应商付款账户管理')
@@ -34,5 +42,17 @@ export class AccountController {
   @Post('update')
   update(@Body() body: FinanceAccountDTO) {
     return this.AccountService.update(body);
+  }
+
+  @ApiOperation({
+    summary: '激活、冻结付款庄户状态',
+    description: '冻结后不能选择该账户进行登记付款记录',
+  })
+  @Post('status/:id')
+  changeStatus(
+    @Param('id', new ParseIntPipe()) id: number,
+    @Body('status', new ParseIntPipe()) status: number,
+  ) {
+    return this.AccountService.changeStatus(id, status);
   }
 }

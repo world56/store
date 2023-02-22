@@ -1,31 +1,33 @@
 import { useEffect } from "react";
 import { useCategorys } from "@/hooks";
-import { rules } from './EditSupplier';
 import { Modal } from "@/layout/PopUp";
 import { statusReversal } from "@/utils";
 import { FormHideKey } from "@/components/Form";
-import { Form, Input, message, Select } from "antd";
-import { changePurchaseSupplierStatus } from "@/api/purchase";
+import { Form, Input, Select, message } from "antd";
 
-import type { TypePurchaseSupplier } from "@/interface/purchase/supplier";
+import type { TypeCommon } from "@/interface/common";
 
-export interface TypeEditStatus extends Partial<Pick<TypePurchaseSupplier.EditStatus, 'status' | 'id'>> {
+export interface TypeEditStatusProps extends Partial<TypeCommon.ChangeStatus> { };
+
+export type TypeEditStatus<T = TypeEditStatusProps> = T & {
+  requestFn(data: T): Promise<boolean>;
   onClose(): void;
 };
 
 const { Option } = Select;
+const rules = [{ required: true }];
 
 /**
- * @name EditStatus 改变供应商状态（冻结、激活）
+ * @name EditStatus 修改状态（冻结、激活）
  */
-const EditStatus: React.FC<TypeEditStatus> = ({ id, status, onClose }) => {
+const EditStatus: React.FC<TypeEditStatus> = ({ id, requestFn, status, onClose }) => {
 
   const { STATUS } = useCategorys();
-  const [form] = Form.useForm<TypePurchaseSupplier.EditStatus>();
+  const [form] = Form.useForm<TypeCommon.ChangeStatus>();
 
-  async function onSumbit() {
+  async function onSubmit() {
     const values = await form.validateFields();
-    await changePurchaseSupplierStatus(values);
+    await requestFn(values);
     message.success('操作成功');
     onCancel();
   };
@@ -41,9 +43,9 @@ const EditStatus: React.FC<TypeEditStatus> = ({ id, status, onClose }) => {
 
   return (
     <Modal
-      onOk={onSumbit}
+      title='状态编辑'
+      onOk={onSubmit}
       open={Boolean(id)}
-      title='供应商状态编辑'
       onCancel={onCancel}>
       <Form form={form} layout='vertical'>
 
@@ -52,14 +54,14 @@ const EditStatus: React.FC<TypeEditStatus> = ({ id, status, onClose }) => {
         <Form.Item
           label='状态'
           name='status'
-          tooltip='如被冻结则无法向该供应商发起采购订单'
+          tooltip='状态被冻结后，无法在发起任何关联操作'
           rules={[{ required: true, message: '请选择状态' }]}>
           <Select placeholder='请选择状态'>
             {STATUS?.LIST.map(v => <Option key={v.id} value={v.id} >{v.name}</Option>)}
           </Select>
         </Form.Item>
 
-        <Form.Item name='content' label='操作原因' rules={rules}>
+        <Form.Item name='content' label='状态变更原因' rules={rules}>
           <Input.TextArea rows={3} allowClear />
         </Form.Item>
 

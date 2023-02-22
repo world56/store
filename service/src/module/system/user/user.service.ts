@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import { LogService } from '@/common/log/log.service';
+import { PrismaService } from '@/common/prisma/prisma.service';
+import { EncryptionService } from '@/common/encryption/encryption.service';
+
 import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { AdminUserDTO } from '@/dto/system/admin-user.dto';
 import { AdminUserQuery } from './dto/admin-user-query.dto';
-import { PrismaService } from '@/common/prisma/prisma.service';
+import { ChangeStatusDTO } from '@/dto/common/change-status.dto';
 import { AdminUserUpdateDTO } from './dto/admin-user-update.dto';
 import { UserCheckFilesDto } from './dto/admin-user-check-fields.dto';
-import { EncryptionService } from '@/common/encryption/encryption.service';
-import { AdminUserStatusChangeDto } from './dto/admin-user-status-change.dto';
 
 import { ENUM_COMMON } from '@/enum/common';
 import { ENUM_SYSTEM } from '@/enum/system';
@@ -15,6 +17,7 @@ import { ENUM_SYSTEM } from '@/enum/system';
 export class UserService {
   constructor(
     // private readonly UtilsService: UtilsService,
+    private readonly LogService: LogService,
     private readonly PrismaService: PrismaService,
     private readonly EncryptionService: EncryptionService,
   ) {}
@@ -27,8 +30,8 @@ export class UserService {
       phone,
       status,
       account,
-      departmentId,
       createTime,
+      departmentId,
     } = query;
     const where = {
       status,
@@ -62,7 +65,7 @@ export class UserService {
         departments: true,
       },
       where: {
-        status: ENUM_COMMON.STATUS.ACTIVATE,
+        // status: ENUM_COMMON.STATUS.ACTIVATE,
         // isSuper: ENUM_SYSTEM.SUPER_ADMIN.NOT_SUPER,
       },
     });
@@ -87,18 +90,28 @@ export class UserService {
   async resetPassword(body: PrimaryKeyDTO) {
     const { id } = body;
     const pwd = String(new Date().valueOf());
-    await this.PrismaService.adminUser.update({
+    const data = await this.PrismaService.adminUser.update({
       where: { id },
       data: { password: this.EncryptionService.md5(pwd) },
+    });
+    this.LogService.insert({
+      module: ENUM_COMMON.LOG_MODULE.ADMIN_USER,
+      type: data.status,
+      relationId: data.id,
+      remark: `重制了用户密码`,
     });
     return pwd;
   }
 
-  freezeStatus({ id, status }: AdminUserStatusChangeDto) {
-    return this.PrismaService.adminUser.update({
-      where: { id },
-      data: { status },
+  async changeStatus(body: ChangeStatusDTO) {
+    const data = await this.PrismaService.changeStatus(body, 'adminUser');
+    this.LogService.insert({
+      module: ENUM_COMMON.LOG_MODULE.ADMIN_USER,
+      type: data.status,
+      relationId: data.id,
+      remark: `编辑了用户状态${body.remark ? `：${body.remark}` : ''}`,
     });
+    return true;
   }
 
   async insert(dto: AdminUserDTO) {

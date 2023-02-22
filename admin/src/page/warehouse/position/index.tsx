@@ -1,6 +1,6 @@
 import { useRequest } from "ahooks";
-import Status from "@/layout/Status";
 import Search from "@/components/Search";
+import { Status } from "@/components/Status";
 import { BtnEditDel } from '@/layout/Button';
 import { InboxOutlined } from '@ant-design/icons';
 import EditPosition from "./components/EditPosition";

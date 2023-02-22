@@ -1,9 +1,9 @@
 import { useRequest } from "ahooks";
-import Status from '@/layout/Status';
 import { Btn } from "@/layout/Button";
 import { toTime } from '@/utils/format';
 import { Card, Form, Table } from "antd";
 import Search from "@/components/Search";
+import { Status } from '@/components/Status';
 import { PurchaseOrder } from "@/components/Details";
 import { useCategorys, usePageTurning } from "@/hooks";
 import AuditBusiness from "./components/AuditBusiness";
@@ -11,11 +11,11 @@ import { getWarehouseAuditList } from "@/api/warehouse";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { DB_PRIMARY_KEY } from "@/config/db";
+import { ENUM_WAREHOUSE } from "@/enum/warehouse";
 
 import type { TypeCommon } from "@/interface/common";
 import type { TypeAdminUser } from "@/interface/system/user";
 import type { TypeWarehousingAudit } from "@/interface/warehouse/audit";
-import { ENUM_WAREHOUSE } from "@/enum/warehouse";
 
 const { ENUM_CATEGORY } = useCategorys;
 
@@ -48,7 +48,8 @@ const WarehousingAudit = () => {
 
   const onAudit = useCallback((row?: TypeWarehousingAudit.DTO) => {
     setWarehouseOrderId(row?.warehousing?.id);
-  }, []);
+    row || initializa();
+  }, [initializa]);
 
   const query = useMemo(() => [
     { name: 'no', label: '流水号', type: Search.ENUM.COMP_TYPE.INPUT },
@@ -128,7 +129,7 @@ const WarehousingAudit = () => {
         rowKey={DB_PRIMARY_KEY}
         pagination={pagination} />
       <PurchaseOrder onClose={onAudit} id={warehouseOrderId}>
-        <AuditBusiness id={warehouseOrderId} onClose={onAudit} />
+        <AuditBusiness id={warehouseOrderId} onSubmitted={onAudit} />
       </PurchaseOrder>
     </Card>
   );

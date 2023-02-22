@@ -1,8 +1,8 @@
-import Status from "@/layout/Status";
 import { useCategorys } from "@/hooks";
 import { toTime } from "@/utils/format";
 import { Card, Descriptions } from "antd";
 import styles from '../index.module.sass';
+import { Status } from "@/components/Status";
 
 import type { TypeWarehouseWarehousing } from "@/interface/warehouse/warehousing";
 
@@ -35,6 +35,6 @@ const BasicInfo: React.FC<TypeWarehousingBasicInfo> = ({ data }) => {
       </Descriptions>
     </Card>
   );
-}
+};
 
 export default BasicInfo;

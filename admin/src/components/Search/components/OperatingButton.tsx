@@ -4,8 +4,8 @@ import { SearchOutlined, DeleteOutlined } from '@ant-design/icons';
 import React from 'react';
 
 interface OperatingButtonProps {
-  /** @param onSumbit 提交 */
-  onSumbit(): void;
+  /** @param onSubmit 提交 */
+  onSubmit(): void;
   /** @param onEmpty 重制清空初始化 */
   onEmpty(): void;
   children?: React.ReactNode;
@@ -16,11 +16,11 @@ interface OperatingButtonProps {
  */
 const OperatingButton: React.FC<OperatingButtonProps> = ({
   onEmpty,
-  onSumbit,
+  onSubmit,
   children
 }) => (
   <Col className={styles.searchBtn}>
-    <Button onClick={onSumbit} type="primary" htmlType="submit">
+    <Button onClick={onSubmit} type="primary" htmlType="submit">
       <SearchOutlined /> 搜索
     </Button>
     <Button danger onClick={onEmpty} htmlType="button" className="formSearchClear">

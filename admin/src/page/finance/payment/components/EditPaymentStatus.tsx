@@ -18,7 +18,7 @@ const EditPaymentStatus = () => {
 
   const [form] = Form.useForm<TypeFinancePayment.DTO>();
 
-  async function onSumbit() {
+  async function onSubmit() {
     const values = await form.validateFields();
     console.log('@-values', values);
   }
@@ -42,7 +42,7 @@ const EditPaymentStatus = () => {
   return (
     <Modal
       // open={true}
-      onOk={onSumbit}
+      onOk={onSubmit}
       title='确认付款信息'
       onCancel={onCancel}
       className={styles.edit}>

@@ -43,7 +43,7 @@ const EditSupplierCollectionAccount: React.FC<TypeEditSupplierCollectionAccountP
     form.setFieldsValue(data);
   }, [id, form]);
 
-  async function onSumbit() {
+  async function onSubmit() {
     const values = await form.validateFields();
     if (id) await updateCollectionAccount(values);
     else await insertCollectionAccount(values);
@@ -62,7 +62,7 @@ const EditSupplierCollectionAccount: React.FC<TypeEditSupplierCollectionAccountP
     <Modal
       open={open}
       title={title}
-      onOk={onSumbit}
+      onOk={onSubmit}
       loading={loading}
       onCancel={onCancel}
       className={styles.edit}>

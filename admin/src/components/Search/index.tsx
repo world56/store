@@ -1,6 +1,6 @@
 import styles from './index.module.sass';
-import Badge from '@/layout/Status/Badge';
 import { useEffect, useMemo } from 'react';
+import Badge from '@/components/Status/Badge';
 import { useSearchParams } from 'react-router-dom';
 import { DatePicker } from '@/components/Formatting';
 import OperatingButton from './components/OperatingButton';
@@ -164,7 +164,7 @@ const Search: TypeSearchProps = ({
       <Form.Item shouldUpdate className={styles.shouldUpdate}>
         {() => <Row gutter={24}>
           {iniaializa}
-          <OperatingButton onEmpty={onClear} onSumbit={onSearch}>
+          <OperatingButton onEmpty={onClear} onSubmit={onSearch}>
             {children ? children : null}
           </OperatingButton>
         </Row>}

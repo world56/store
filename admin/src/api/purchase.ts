@@ -269,6 +269,16 @@ export function querySupplierProduct(
 }
 
 /**
+ * @name changeSupplierProductStatus 更改供应商产品状态
+ */
+export function changeSupplierProductStatus(data: TypeCommon.ChangeStatus) {
+  return request<boolean>("purchase/product/status", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
+}
+
+/**
  * @name getSupplierProductDetails 获取供应产品详情
  */
 export function getSupplierProductDetails(
@@ -364,7 +374,9 @@ export function updatePurchaseOrder(data: TypePurchaseOrder.EditDTO) {
 /**
  * @name terminationPurchaseOrder 冻结、终止采购订单
  */
-export function terminationPurchaseOrder(data: Pick<TypePurchaseOrder.DTO, "id">) {
+export function terminationPurchaseOrder(
+  data: Pick<TypePurchaseOrder.DTO, "id">,
+) {
   return request<boolean>("purchase/order/termination", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,

@@ -36,7 +36,7 @@ const EditProduct: React.FC<TypeEditProductProps> = ({ id, visible, supplierId, 
     form.setFieldsValue(serverToForm(data));
   }, [id, form]);
 
-  async function onSumbit() {
+  async function onSubmit() {
     try {
       const values = await form.validateFields();
       if (id) await updateSupplierProduct(values);
@@ -72,7 +72,7 @@ const EditProduct: React.FC<TypeEditProductProps> = ({ id, visible, supplierId, 
       open={visible}
       loading={loading}
       onCancel={onCancel}
-      onSumbit={onSumbit}
+      onSubmit={onSubmit}
       className={styles.edit}
       title={id ? '编辑产品' : '新增产品'}>
       <Form form={form} layout='vertical'>

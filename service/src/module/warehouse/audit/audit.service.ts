@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, PreconditionFailedException } from '@nestjs/common';
 import { LogService } from '@/common/log/log.service';
 import { WarehousingService } from '../warehousing/warehousing.service';
 
@@ -65,9 +65,13 @@ export class AuditService {
   async audit(warehousingId: number, body: WarehouseAuditDTO) {
     const data = await this.PrismaService.warehousing.findUnique({
       where: { id: warehousingId },
-      include: { order: true },
+      include: { order: true, audit: true },
     });
-    if (body.status === ENUM_WAREHOUSE.WAREHOUSING_AUDIT_STATUS.RESOLVED) {
+    if (data.audit.status !== ENUM_WAREHOUSE.WAREHOUSING_AUDIT_STATUS.PENDING) {
+      throw new PreconditionFailedException('此订单已被审核');
+    } else if (
+      body.status === ENUM_WAREHOUSE.WAREHOUSING_AUDIT_STATUS.RESOLVED
+    ) {
       return this.purchaseApproved(data, body); // 通过
     }
     return true;
@@ -127,21 +131,4 @@ export class AuditService {
     data: Warehousing & { order: PurchaseOrder },
     body: WarehouseAuditDTO,
   ) {}
-
-  // insertAudit(
-  //   dto: Pick<
-  //     WarehouseAuditDTO,
-  //     'type' | 'operatorId' | 'warehouseingId' | 'remark'
-  //   >,
-  // ) {
-  //   return this.PrismaService.inventoryAudit.create({
-  //     data: {
-  //       status: ENUM_WAREHOUSE.WAREHOUSE_AUDIT_STATUS.PENDING,
-  //       type: dto.type,
-  //       operator: { connect: { id: dto.operatorId } },
-  //       warehouseing: { connect: { id: dto.warehouseingId } },
-  //       remark: dto.remark,
-  //     },
-  //   });
-  // }
 }

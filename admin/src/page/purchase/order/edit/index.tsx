@@ -1,12 +1,13 @@
+import { useEffect } from 'react';
 import { GoBack } from "@/layout/Button";
 import styles from './index.module.sass';
-import { useEffect, useMemo } from 'react';
 import BasicInfo from "./components/BasicInfo";
+import { editPurchaseOrder } from "@/utils/status";
 import { useActions, useGetDetails } from '@/hooks';
+import { formToServer, serverToForm } from './utils';
 import { Card, Form, message, Spin, Input } from "antd";
 import SupplierProduct from "./components/SupplierProduct";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { formToServer, serverToForm, editParams } from './utils';
 import { getPurchaseOrderDetails, insertPurchaseOrder, updatePurchaseOrder } from "@/api/purchase";
 
 import { ENUM_STORE } from '@/enum/store';
@@ -35,7 +36,7 @@ const EditPurchaseOrder = () => {
     return data;
   }, [id, form]);
 
-  async function onSumbit() {
+  async function onSubmit() {
     const values = await form.validateFields();
     const data = formToServer(values);
     if (id) await updatePurchaseOrder(data);
@@ -45,7 +46,7 @@ const EditPurchaseOrder = () => {
     id && navigate(-1);
   };
 
-  const editStatus = useMemo(() => editParams(value), [value]);
+  const editStatus = editPurchaseOrder(value);
 
   useEffect(() => {
     actions.getCategory([
@@ -74,7 +75,7 @@ const EditPurchaseOrder = () => {
             <Input.TextArea placeholder="清输入备注" allowClear rows={4} />
           </Form.Item>
         </Card>
-        <GoBack onSumbit={editStatus ? undefined : onSumbit} />
+        <GoBack onSubmit={editStatus ? undefined : onSubmit} />
       </Form>
     </Spin>
   );

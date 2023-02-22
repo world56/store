@@ -5,14 +5,14 @@ import type { TypeFooterButtonProps } from './FooterButton';
 
 interface TypeGoBackProps
   extends
-  Pick<TypeFooterButtonProps, 'onSumbit'>,
+  Pick<TypeFooterButtonProps, 'onSubmit' | 'onSubmitTips'>,
   Partial<Record<'top' | 'bottom', number>> { }
-
 
 /**
  * @name GoBack 返回上一页
+ * @description 新增了返回功能
  */
-const GoBack: React.FC<TypeGoBackProps> = ({ onSumbit, top, bottom }) => {
+const GoBack: React.FC<TypeGoBackProps> = ({ onSubmit, top, bottom, onSubmitTips }) => {
 
   const navigate = useNavigate();
 
@@ -20,7 +20,8 @@ const GoBack: React.FC<TypeGoBackProps> = ({ onSumbit, top, bottom }) => {
     <FooterButton
       align='center'
       onCancelText='返回'
-      onSumbit={onSumbit}
+      onSubmit={onSubmit}
+      onSubmitTips={onSubmitTips}
       onCancel={() => navigate(-1)}
       style={{ marginTop: top, marginBottom: bottom }} />
   );

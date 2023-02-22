@@ -26,7 +26,7 @@ const EditUnit: React.FC<TypeEditUnitProps> = ({ id, type, visible, onClose }) =
 
   const [form] = Form.useForm<TypeCommon.Category>();
 
-  async function onSumbit() {
+  async function onSubmit() {
     const values = await form.validateFields();
     if (id) await updateCategory(values);
     else await insertCategory(values);
@@ -54,7 +54,7 @@ const EditUnit: React.FC<TypeEditUnitProps> = ({ id, type, visible, onClose }) =
   return (
     <Modal
       open={visible}
-      onOk={onSumbit}
+      onOk={onSubmit}
       loading={loading}
       onCancel={onCancel}
       className={styles.edit}

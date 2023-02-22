@@ -33,7 +33,7 @@ const WarehousingPurchase = () => {
     return values;
   }, { refreshDeps: [id] });
 
-  async function onSumbit() {
+  async function onSubmit() {
     const values = await form.validateFields();
     await confirmWarehousing(values);
     message.success('提交成功，审核成功后生效');
@@ -48,7 +48,12 @@ const WarehousingPurchase = () => {
         <BasicInfo data={data} />
         <Purchase data={data?.order} />
         <ProductConfirm form={form} isEdit={isEdit} total={data?.order?.total} />
-        <GoBack onSumbit={isEdit ? onSumbit : undefined} top={28} bottom={24} />
+        <GoBack
+          top={28}
+          bottom={24}
+          onSubmitTips='确认清点无误？'
+          onSubmit={isEdit ? onSubmit : undefined}
+        />
       </Form>
     </Spin>
   );

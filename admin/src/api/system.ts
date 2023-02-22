@@ -78,8 +78,8 @@ export function checkAdminUserField(params: Partial<TypeAdminUser.DTO>) {
 /**
  * @name freezeAdminUser 用户管理-冻结用户
  */
-export function freezeAdminUser(data: TypeAdminUser.FreezeStatusChange) {
-  return request("system/user/freeze", {
+export function freezeAdminUser(data: TypeCommon.ChangeStatus) {
+  return request("system/user/status", {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,
   });

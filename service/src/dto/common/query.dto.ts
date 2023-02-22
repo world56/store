@@ -6,7 +6,7 @@ import {
 } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { CommonDTO } from './common.dto';
-import { Min, IsInt, IsOptional, IsString } from 'class-validator';
+import { Min, IsInt, IsOptional } from 'class-validator';
 
 /**
  * @name QueryDTO 查询通用DTO
@@ -61,15 +61,4 @@ export class QueryDTO extends IntersectionType(
   @IsOptional({ message: '1' })
   @IsInt({ each: true, message: '0' })
   createTime?: { gte: Date; lt: Date };
-
-  // /**
-  //  * @param no 流水号
-  //  */
-  // @ApiProperty({
-  //   description: '流水号',
-  //   required: false,
-  // })
-  // @IsOptional()
-  // @IsString()
-  // no?: string;
 }

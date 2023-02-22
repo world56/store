@@ -1,12 +1,13 @@
 import { IsInt } from 'class-validator';
 import { Type } from 'class-transformer';
 import { PickType, ApiProperty } from '@nestjs/swagger';
+
 import { SupplierProductQueryListDTO } from './supplier-product-query-list.dto';
 
 /**
- * @name SupplierProductQuery 过滤返回匹配供应产品
+ * @name SupplierProductQueryDTO 过滤返回匹配供应产品
  */
-export class SupplierProductQuery extends PickType(
+export class SupplierProductQueryDTO extends PickType(
   SupplierProductQueryListDTO,
   ['name'] as const,
 ) {

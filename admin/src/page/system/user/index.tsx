@@ -1,21 +1,21 @@
 import { useRequest } from 'ahooks';
-import Status from '@/layout/Status';
+import { Btn } from '@/layout/Button';
 import { toTime } from '@/utils/format';
 import Search from '@/components/Search';
-import { Btn, StatusChange } from '@/layout/Button';
 import EditUserInfo from '@/components/EditUserInfo';
 import { useCategorys, usePageTurning } from '@/hooks';
+import { Card, Form, Table, Button, Modal } from 'antd';
+import { EditStatus, Switch } from '@/components/Status';
 import { UsergroupAddOutlined } from '@ant-design/icons';
-import { Card, Form, Table, Button, Modal, message } from 'antd';
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { ExclamationCircleOutlined, SmileOutlined } from '@ant-design/icons';
 import { getUserList, freezeAdminUser, resetAdminUserPwd } from '@/api/system';
 
-import { ENUM_COMMON } from '@/enum/common';
 import { ENUM_SYSTEM } from '@/enum/system';
 import { DB_PRIMARY_KEY } from '@/config/db';
 
 import type { TypeAdminUser } from '@/interface/system/user';
+import type { TypeEditStatusProps } from '@/components/Status/EditStatus';
 
 interface TypeQueryUserList extends TypeAdminUser.QueryList {
   time?: number[];
@@ -36,6 +36,7 @@ const AdminUser = () => {
   const [search] = Form.useForm<TypeQueryUserList>();
 
   const [editParam, setEditParam] = useState({ visible: false });
+  const [editStatus, setEditStatus] = useState<TypeEditStatusProps>();
 
   const { data, loading, run } = useRequest(getUserList, { manual: true });
   const pagination = usePageTurning(data?.count);
@@ -53,22 +54,9 @@ const AdminUser = () => {
     !row && initializa();
   }, [initializa]);
 
-  function onChangeFreeze(data: TypeAdminUser.DTO) {
-    const { id, status } = data;
-    const userStatus = status === ENUM_COMMON.STATUS.FREEZE ?
-      ENUM_COMMON.STATUS.ACTIVATE : ENUM_COMMON.STATUS.FREEZE;
-    Modal.confirm({
-      title: '您确定要执行该操作？',
-      icon: <ExclamationCircleOutlined />,
-      content: userStatus === ENUM_COMMON.STATUS.ACTIVATE ?
-        '激活操作，将会赋予用户在本系统拥有的角色权限。' :
-        '冻结操作，将会冻结该用户所有的权限（包括登陆），请谨慎操作！',
-      async onOk() {
-        await freezeAdminUser({ id, status: userStatus });
-        message.success('操作成功');
-        initializa();
-      },
-    });
+  function onUserStatusChange(row?: TypeAdminUser.DTO) {
+    setEditStatus({ id: row?.id, status: row?.status });
+    row || initializa();
   };
 
   async function resetPwd(row: TypeAdminUser.DTO) {
@@ -113,8 +101,11 @@ const AdminUser = () => {
     { title: '登陆账号', key: 'account', dataIndex: 'account' },
     { title: '联系电话', key: 'phone', dataIndex: 'phone' },
     {
-      title: '当前状态', key: 'status', dataIndex: 'status',
-      render: (key: ENUM_COMMON.STATUS) => <Status status={key} />
+      title: '当前状态',
+      key: DB_PRIMARY_KEY,
+      render: (row: TypeAdminUser.DTO) => (
+        <Switch checked={row.status} onClick={() => onUserStatusChange(row)} />
+      )
     },
     {
       title: '注册时间',
@@ -129,7 +120,6 @@ const AdminUser = () => {
         <>
           <Btn onClick={() => onChangeEdit(row)}>编辑</Btn>
           <Btn onClick={() => resetPwd(row)}>重置密码</Btn>
-          <StatusChange status={row.status} onClick={() => onChangeFreeze(row)} />
         </>
       )
     }
@@ -156,6 +146,11 @@ const AdminUser = () => {
         {...editParam}
         onClose={onChangeEdit}
         type={ENUM_SYSTEM.EDIT_USER.ADMIN} />
+      <EditStatus
+        {...editStatus}
+        requestFn={freezeAdminUser}
+        onClose={onUserStatusChange}
+      />
     </Card>
   );
 };

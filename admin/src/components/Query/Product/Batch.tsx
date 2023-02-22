@@ -31,7 +31,7 @@ const ProductBatchAdd: React.FC<TypeProductBatchAddProps> = ({
   const [visible, setVisible] = useState(false);
   const [key, setKey] = useState<TypeSelectKey>({});
 
-  function onSumbit() {
+  function onSubmit() {
     const value: Array<TypeProductDTO> = [];
     Object.entries(key).forEach(([k, v]) => v && value.push(v));
     onChange?.(value);
@@ -80,7 +80,7 @@ const ProductBatchAdd: React.FC<TypeProductBatchAddProps> = ({
       <Modal
         open={visible}
         spacing={false}
-        onOk={onSumbit}
+        onOk={onSubmit}
         title='批量选择产品'
         onCancel={onVisible}
         className={styles.modal}>

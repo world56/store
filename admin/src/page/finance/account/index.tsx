@@ -3,12 +3,13 @@ import { Btn } from "@/layout/Button";
 import { toTime } from "@/utils/format";
 import { Link } from "react-router-dom";
 import Search from "@/components/Search";
-import { Button, Card, Form, Table } from "antd";
+import Switch from '@/components/Status/Switch';
 import { useCategorys, usePageTurning } from "@/hooks";
-import { getCollectionAccountList } from "@/api/finance";
 import { MoneyCollectOutlined } from '@ant-design/icons';
 import EditSupplierCollectionAccount from "./components";
+import { Button, Card, Form, Table, message } from "antd";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { changeCollectionAccountStatus, getCollectionAccountList } from "@/api/finance";
 
 import { DB_PRIMARY_KEY } from "@/config/db";
 
@@ -52,6 +53,13 @@ const PaymentAccount: React.FC<TypePatmentAccountPageProps> = ({ supplierId }) =
     row || initializa();
   };
 
+  async function onAccountStatusChange(row: TypeFinancePaymentAccount.DTO) {
+    const { id, status } = row;
+    await changeCollectionAccountStatus({ id, status: Number(!status) });
+    message.success('操作成功');
+    initializa();
+  };
+
   const query = useMemo(() => [
     { name: 'accountName', label: '收款人名', type: Search.ENUM.COMP_TYPE.INPUT },
     { name: 'accountNumber', label: '收款账号', type: Search.ENUM.COMP_TYPE.INPUT },
@@ -59,7 +67,8 @@ const PaymentAccount: React.FC<TypePatmentAccountPageProps> = ({ supplierId }) =
       name: 'organizationId',
       label: '账户类型',
       type: Search.ENUM.COMP_TYPE.SELECT,
-      list: BANK?.LIST
+      list: BANK?.LIST,
+      user: Search.ENUM.COMP_TYPE.SELECT,
     },
     {
       name: 'supplierId',
@@ -94,6 +103,13 @@ const PaymentAccount: React.FC<TypePatmentAccountPageProps> = ({ supplierId }) =
     },
     {
       key: 'id',
+      title: <Switch.Title title='冻结后无法选择对应账户进行记录' />,
+      render: (row: TypeFinancePaymentAccount.DTO) => (
+        <Switch checked={row.status} onChange={() => onAccountStatusChange(row)} />
+      )
+    },
+    {
+      key: 'id',
       title: '操作',
       width: 150,
       render: (row: TypeFinancePaymentAccount.DTO) => <>
@@ -111,8 +127,7 @@ const PaymentAccount: React.FC<TypePatmentAccountPageProps> = ({ supplierId }) =
     <Card title='供应商收款账户'>
       <Search form={search} onSearch={initializa} columns={query}>
         <Button onClick={() => onEditSupplierAccount()}>
-          <MoneyCollectOutlined />
-          新增供应商收款账户
+          <MoneyCollectOutlined /> 新增供应商收款账户
         </Button>
       </Search>
       <Table

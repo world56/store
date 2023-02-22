@@ -67,7 +67,13 @@ const FilesTable: React.FC<TypeFilesTableProps> = ({ list, onCreate }) => {
   ];
 
   return (
-    <Table rowKey={DB_PRIMARY_KEY} columns={column} dataSource={list} pagination={false} />
+    <Table
+      bordered
+      columns={column}
+      dataSource={list}
+      pagination={false}
+      rowKey={DB_PRIMARY_KEY}
+    />
   );
 };
 

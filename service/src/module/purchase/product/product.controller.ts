@@ -1,10 +1,12 @@
 import { ProductService } from './product.service';
 import { QueryListPipe } from '@/pipe/query-list.pipe';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
+
 import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { SupplierProductDTO } from '@/dto/purchase/product.dto';
-import { SupplierProductQuery } from './dto/supplier-product-query.dto';
-import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
+import { ChangeStatusDTO } from '@/dto/common/change-status.dto';
+import { SupplierProductQueryDTO } from './dto/supplier-product-query.dto';
 import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto';
 import { SupplierProductQueryListDTO } from './dto/supplier-product-query-list.dto';
 
@@ -22,7 +24,7 @@ export class ProductController {
 
   @ApiOperation({ summary: '查询供应商旗下产品' })
   @Get('query')
-  query(@Query() query: SupplierProductQuery) {
+  query(@Query() query: SupplierProductQueryDTO) {
     return this.ProductService.query(query);
   }
 
@@ -48,5 +50,14 @@ export class ProductController {
   @Get('check')
   checkFields(@Query() query: CheckFieldsIsRepeatDTO) {
     return this.ProductService.checkFields(query);
+  }
+
+  @ApiOperation({
+    summary: '冻结、激活产品状态',
+    description: '冻结后无法对该产品发起采购',
+  })
+  @Post('status')
+  changeStatus(@Body() body: ChangeStatusDTO) {
+    return this.ProductService.changeStatus(body);
   }
 }

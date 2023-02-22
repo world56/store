@@ -7,14 +7,14 @@ generator client {
 }
 
 datasource db {
-  provider             = "mysql"
-  url                  = env("DATABASE_MYSQL_URL")
-  referentialIntegrity = "prisma"
+  provider     = "mysql"
+  url          = env("DATABASE_MYSQL_URL")
+  relationMode = "prisma"
 }
 
 generator js {
-  provider        = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity", "interactiveTransactions"]
+  provider = "prisma-client-js"
+  // previewFeatures = ["referentialIntegrity", "interactiveTransactions"]
 }
 
 // ***********************公共****************************
@@ -386,6 +386,7 @@ model PaymentAccount {
   accountName    String   @map("account_name") @db.Char(10)
   accountNumber  String   @map("account_number") @db.VarChar(30)
   organizationId Int      @map("organization_id") @db.Int()
+  status         Int      @default(1) @db.Int
   remark         String?  @db.VarChar(255)
   createTime     DateTime @default(now()) @map("create_time") @db.Timestamp(6) // 创建时间
 

@@ -53,31 +53,3 @@ export function formToServer(form: TypePurchaseOrder.EditDTO) {
     products: form.products.sort((l, r) => l.productId! - r.productId!),
   };
 }
-
-/**
- * @name editParams 编辑价格、规格、采购数
- * @desc 货到付款 待收货、待入库可编辑
- *       先款后货 待付款可编辑
- */
-export function editParams(data?: TypePurchaseOrder.DTO) {
-  if (data) {
-    const { status, settlement } = data;
-    if (
-      settlement === ENUM_PURCHASE.PURCHASE_SETTLEMENT_METHOD.CASH_ON_DELIVERY
-    ) {
-      return !(
-        status === ENUM_PURCHASE.PURCHASE_PROCESS_STATUS.GOODS_TO_BE_RECEIVED ||
-        status === ENUM_PURCHASE.PURCHASE_PROCESS_STATUS.WAITING_FOR_STORAGE
-      );
-    } else if (
-      settlement ===
-      ENUM_PURCHASE.PURCHASE_SETTLEMENT_METHOD.DELIVERY_AFTER_PAYMENT
-    ) {
-      return !(
-        status === ENUM_PURCHASE.PURCHASE_PROCESS_STATUS.WAITING_FOR_PAYMENT
-      );
-    } else {
-      return true;
-    }
-  }
-}

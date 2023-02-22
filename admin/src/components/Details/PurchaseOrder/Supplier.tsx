@@ -1,7 +1,7 @@
-import Status from '@/layout/Status';
 import { toTime } from '@/utils/format';
 import styles from './index.module.sass';
 import { Descriptions, Tooltip } from "antd";
+import { Status } from '@/components/Status';
 import Categorys from '@/components/Categorys';
 
 import type { TypePurchaseSupplier } from "@/interface/purchase/supplier";

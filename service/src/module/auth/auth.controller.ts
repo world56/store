@@ -15,7 +15,7 @@ export class UserController {
   @ApiOperation({ summary: '获取密钥' })
   @Get('establish')
   @ReqWhiteList()
-  getPubilcKey() {
+  getPublicKey() {
     return this.AuthService.createKeys();
   }
 

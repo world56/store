@@ -1,5 +1,5 @@
 import store from "@/store";
-import Cookies from "js-cookie";
+import cookie from "js-cookie";
 import { redirect } from "react-router-dom";
 import { ActionsMiddleware } from "@/store/middleware";
 
@@ -14,18 +14,18 @@ let uninstall: () => void;
  * @param _arg 自带参数
  */
 export default async function Authentication(_arg: LoaderFunctionArgs) {
-  return new Promise((reslove) => {
-    const token = Cookies.get(TOKEN_KEY);
+  return new Promise((resolve) => {
+    const token = cookie.get(TOKEN_KEY);
     const { id } = store.getState().user;
     if (token && !id) {
       store.dispatch(ActionsMiddleware.getUserInfo());
       uninstall = store.subscribe(
-        () => (store.getState().user.id && uninstall()) || reslove(undefined),
+        () => (store.getState().user.id && uninstall()) || resolve(null),
       );
     } else if (!token) {
-      reslove(redirect("/login"));
+      resolve(redirect("/login"));
     } else {
-      reslove(undefined);
+      resolve(null);
     }
   });
 }

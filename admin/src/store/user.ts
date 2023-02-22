@@ -1,4 +1,4 @@
-import Cookie from "js-cookie";
+import cookie from "js-cookie";
 import { createSlice } from "@reduxjs/toolkit";
 
 import { TOKEN_KEY } from "@/config/user";
@@ -15,7 +15,7 @@ const userSlice = createSlice({
     setUserInfo: (state, action: PayloadAction<TypeAdminUser.DTO, string>) =>
       action.payload,
     delUserInfo() {
-      Cookie.remove(TOKEN_KEY);
+      cookie.remove(TOKEN_KEY);
       return {};
     },
   },

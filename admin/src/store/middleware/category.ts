@@ -23,7 +23,7 @@ export const REQUEST = {
   [ENUM_STORE.CATEGORY.ADMIN_USER]: API.getAllAdminUserList,
   [ENUM_STORE.CATEGORY.DEPARTMENT]: API.getAllDepartmentList,
   [ENUM_STORE.CATEGORY.WAREHOUSE_POSITION]: API.getWarehouseAllList,
-  [ENUM_STORE.CATEGORY.PURCHASE_SUPPLIER]: API.getPurchaseSpplierList,
+  [ENUM_STORE.CATEGORY.PURCHASE_SUPPLIER]: API.getPurchaseSupplierList,
 };
 
 function* handlerCategory(

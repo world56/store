@@ -34,7 +34,7 @@ const AddLog: React.FC<TypeAddLogsProps> = ({ id, type, module, onClose }) => {
   const [open, setOpen] = useState(false);
   const [form] = Form.useForm<TypeLog.Insert>();
 
-  async function onSumbit() {
+  async function onSubmit() {
     if (id && !isVoid(module)) {
       const values = await form.validateFields();
       values.relationId = id;
@@ -60,7 +60,7 @@ const AddLog: React.FC<TypeAddLogsProps> = ({ id, type, module, onClose }) => {
       <Button onClick={onOpen} icon={<FileAddOutlined />}>新增日志</Button>
       <Modal
         open={open}
-        onOk={onSumbit}
+        onOk={onSubmit}
         title='添加日志记录'
         onCancel={onCancel}
         className={styles.addLog}>

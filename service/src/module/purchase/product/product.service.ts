@@ -1,22 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { PrimaryKeyDTO } from '@/dto/common/common.dto';
+import { LogService } from '@/common/log/log.service';
 import { UtilsService } from '@/common/utils/utils.service';
 import { PrismaService } from '@/common/prisma/prisma.service';
+
+import { PrimaryKeyDTO } from '@/dto/common/common.dto';
 import { SupplierProductDTO } from '@/dto/purchase/product.dto';
-import { SupplierProductQuery } from './dto/supplier-product-query.dto';
+import { SupplierProductQueryDTO } from './dto/supplier-product-query.dto';
 import { CheckFieldsIsRepeatDTO } from '@/dto/common/check-fields-is-repeat.dto';
 import { SupplierProductQueryListDTO } from './dto/supplier-product-query-list.dto';
 
 import { ENUM_COMMON } from '@/enum/common';
+import { ChangeStatusDTO } from '@/dto/common/change-status.dto';
 
 @Injectable()
 export class ProductService {
   constructor(
+    private readonly LogService: LogService,
     private readonly UtilsService: UtilsService,
     private readonly PrismaService: PrismaService,
   ) {}
 
-  async query(query: SupplierProductQuery) {
+  async query(query: SupplierProductQueryDTO) {
     const { name, supplierId } = query;
     const list = await this.PrismaService.supplierProduct.findMany({
       where: {
@@ -82,6 +86,17 @@ export class ProductService {
       id,
       name,
     });
+  }
+
+  async changeStatus(body: ChangeStatusDTO) {
+    const data = await this.PrismaService.changeStatus(body, 'supplierProduct');
+    this.LogService.insert({
+      type: data.status,
+      relationId: data.id,
+      module: ENUM_COMMON.LOG_MODULE.SUPPLIER_PRODUCT,
+      remark: `修改了产品状态${body.remark ? `：${body.remark}` : ''}`,
+    });
+    return true;
   }
 
   insert(dto: SupplierProductDTO) {

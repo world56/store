@@ -15,6 +15,9 @@ export class LogService {
   public constructor(
     @InjectModel('pruchaseLog') private readonly pruchaseLogModel: Model<Log>,
     @InjectModel('supplierLog') private readonly supplierLogModel: Model<Log>,
+    @InjectModel('adminUserLog') private readonly adminUserLogModel: Model<Log>,
+    @InjectModel('supplierProductLog')
+    private readonly supplierProductLog: Model<Log>,
   ) {}
 
   private getModel(type: ENUM_COMMON.LOG_MODULE) {
@@ -23,6 +26,10 @@ export class LogService {
         return this.pruchaseLogModel;
       case ENUM_COMMON.LOG_MODULE.SUPPLIER:
         return this.supplierLogModel;
+      case ENUM_COMMON.LOG_MODULE.ADMIN_USER:
+        return this.adminUserLogModel;
+      case ENUM_COMMON.LOG_MODULE.SUPPLIER_PRODUCT:
+        return this.supplierProductLog;
       default:
         throw new BadRequestException('日志参数错误');
     }

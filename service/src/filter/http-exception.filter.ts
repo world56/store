@@ -16,17 +16,12 @@ interface TypeResponseData {
 export class HttpExceptionFilter implements ExceptionFilter {
   public catch(exception: HttpException, host: ArgumentsHost): void {
     const status = exception.getResponse() as TypeResponseData;
-    // const message = `${exception.message} ${
-    //   status.message ? String(status.message) : ''
-    // }`;
-    host
-      .switchToHttp()
-      .getResponse()
-      .status(HttpStatus.OK)
-      .send({
-        code: exception.getStatus(),
-        message: String(status.message),
-        timestamp: new Date().valueOf(),
-      });
+    const message =
+      typeof status === 'string' ? status : String(status.message);
+    host.switchToHttp().getResponse().status(HttpStatus.OK).send({
+      code: exception.getStatus(),
+      message,
+      timestamp: new Date().valueOf(),
+    });
   }
 }

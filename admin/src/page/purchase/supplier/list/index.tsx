@@ -1,33 +1,29 @@
 import { useRequest } from "ahooks";
-import Status from "@/layout/Status";
+import { Btn } from "@/layout/Button";
 import Search from '@/components/Search';
 import { useNavigate } from "react-router-dom";
 import Categorys from "@/components/Categorys";
 import { Button, Card, Form, Table } from "antd";
 import { AuditOutlined } from '@ant-design/icons';
-import ChangeStatus from "./components/EditStatus";
-import { Btn, StatusChange } from "@/layout/Button";
 import EditSupplier from "./components/EditSupplier";
 import { useCategorys, usePageTurning } from "@/hooks";
-import { getPurchaseSupplierList } from "@/api/purchase";
+import { Switch, EditStatus } from "@/components/Status";
 import { useCallback, useEffect, useState, useMemo } from "react";
+import { getPurchaseSupplierList, changePurchaseSupplierStatus } from "@/api/purchase";
 
-import { ENUM_COMMON } from "@/enum/common";
 import { DB_PRIMARY_KEY } from "@/config/db";
 
-import type { TypeCommon } from "@/interface/common";
-import type { TypeEditStatus } from './components/EditStatus';
 import type { TypeEditSupplierProps } from './components/EditSupplier';
+import type { TypeSupplierProduct } from "@/interface/purchase/product";
+import type { TypeEditStatusProps } from "@/components/Status/EditStatus";
 import type { TypePurchaseSupplier } from "@/interface/purchase/supplier";
-
-type TypeEditStatusInfo = Omit<TypeEditStatus, 'onClose'>;
-type TypeEditSupplierInfo = Omit<TypeEditSupplierProps, 'onClose'>;
 
 const { ENUM_CATEGORY } = useCategorys;
 
+type TypeEditSupplierInfo = Omit<TypeEditSupplierProps, 'onClose'>;
 
 interface TypeSupplierListProps {
-  productId?: TypeCommon.DatabaseMainParameter['id'];
+  productId?: TypeSupplierProduct.DTO['id'];
 };
 
 /**
@@ -43,7 +39,7 @@ const SupplierList: React.FC<TypeSupplierListProps> = ({ productId }) => {
 
   const [form] = Form.useForm<TypePurchaseSupplier.Query>();
 
-  const [statusParam, setStatusParam] = useState<TypeEditStatusInfo>();
+  const [editStatus, setEditStatus] = useState<TypeEditStatusProps>();
   const [edit, setEdit] = useState<TypeEditSupplierInfo>({ visible: false });
 
   const { data, run, loading } = useRequest(getPurchaseSupplierList, { manual: true, debounceWait: 200 });
@@ -64,8 +60,8 @@ const SupplierList: React.FC<TypeSupplierListProps> = ({ productId }) => {
   };
 
   function changeStatus(val?: TypePurchaseSupplier.DTO) {
-    statusParam && initializa();
-    setStatusParam(val ? { id: val.id, status: val.status } : undefined);
+    editStatus && initializa();
+    setEditStatus(val ? { id: val.id, status: val.status } : undefined);
   };
 
   function onSkip(val: TypePurchaseSupplier.DTO) {
@@ -105,17 +101,17 @@ const SupplierList: React.FC<TypeSupplierListProps> = ({ productId }) => {
       render: (row: TypePurchaseSupplier.DTO) => <Btn onClick={() => onSkip(row)}>{row.name}</Btn>
     },
     {
-      key: 'category',
-      dataIndex: 'category',
-      title: '供应类型',
       width: 250,
-      render: (val: TypeCommon.Category[]) => <Categorys.Tag list={val} maxWidth={210} />
+      title: '供应类型',
+      key: DB_PRIMARY_KEY,
+      render: (row: TypePurchaseSupplier.DTO) => <Categorys.Tag list={row.category} maxWidth={210} />
     },
     {
-      title: '当前状态',
-      key: 'status',
-      dataIndex: 'status',
-      render: (key: ENUM_COMMON.STATUS) => <Status status={key} />
+      key: DB_PRIMARY_KEY,
+      title: <Switch.Title title='冻结供应商后无法再次发起采购订单' />,
+      render: (row: TypePurchaseSupplier.DTO) => (
+        <Switch checked={row.status} onChange={() => changeStatus(row)} />
+      )
     },
     { key: 'remark', dataIndex: 'remark', title: '备注' },
     {
@@ -125,7 +121,6 @@ const SupplierList: React.FC<TypeSupplierListProps> = ({ productId }) => {
         <>
           <Btn onClick={() => onSkip(row)} >详情</Btn>
           <Btn onClick={() => onEdit(row)} >编辑</Btn>
-          <StatusChange status={row.status} onClick={() => changeStatus(row)} />
         </>
       )
     }
@@ -138,10 +133,8 @@ const SupplierList: React.FC<TypeSupplierListProps> = ({ productId }) => {
   return (
     <Card title='供应商列表'>
       <Search form={form} columns={query} onSearch={initializa}>
-        <Button
-          icon={<AuditOutlined />}
-          onClick={() => setEdit({ visible: true })}>
-          新增供应商
+        <Button onClick={() => setEdit({ visible: true })}>
+          <AuditOutlined /> 新增供应商
         </Button>
       </Search>
       <Table
@@ -151,7 +144,11 @@ const SupplierList: React.FC<TypeSupplierListProps> = ({ productId }) => {
         dataSource={data?.list}
       />
       <EditSupplier {...edit} onClose={onEdit} />
-      <ChangeStatus {...statusParam} onClose={changeStatus} />
+      <EditStatus
+        {...editStatus}
+        onClose={changeStatus}
+        requestFn={changePurchaseSupplierStatus}
+      />
     </Card>
   );
 };

@@ -8,7 +8,7 @@ import { AdminUserQuery } from './dto/admin-user-query.dto';
 import { AdminUserUpdateDTO } from './dto/admin-user-update.dto';
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { UserCheckFilesDto } from './dto/admin-user-check-fields.dto';
-import { AdminUserStatusChangeDto } from './dto/admin-user-status-change.dto';
+import { ChangeStatusDTO } from '@/dto/common/change-status.dto';
 
 @ApiTags('系统管理-系统用户')
 @Controller('system/user')
@@ -58,9 +58,9 @@ export class UserController {
     summary: '冻结、解冻用户',
     description: '冻结后，该用户禁止登录、使用本系统',
   })
-  @Post('freeze')
-  freeze(@Body() body: AdminUserStatusChangeDto) {
-    return this.UserService.freezeStatus(body);
+  @Post('status')
+  freeze(@Body() body: ChangeStatusDTO) {
+    return this.UserService.changeStatus(body);
   }
 
   @ApiOperation({ summary: '重制系统用户密码' })

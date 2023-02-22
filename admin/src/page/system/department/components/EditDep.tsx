@@ -33,7 +33,7 @@ const EditDep: React.FC<TypeEditDepProps> = ({ id, visible, onClose }) => {
     data && form.setFieldsValue(filterServiceToForm(data));
   }, [id, form]);
 
-  async function onSumbit() {
+  async function onSubmit() {
     const values = await form.validateFields();
     if (id) await updateDepartment(values);
     else await insertDepartment(values);
@@ -53,7 +53,7 @@ const EditDep: React.FC<TypeEditDepProps> = ({ id, visible, onClose }) => {
       spacing
       title={title}
       open={visible}
-      onOk={onSumbit}
+      onOk={onSubmit}
       loading={loading}
       onCancel={onCancel}>
       <Form form={form} {...formStyle}>

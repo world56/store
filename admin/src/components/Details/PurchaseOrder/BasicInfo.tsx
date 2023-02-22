@@ -1,8 +1,8 @@
 import { Descriptions } from "antd";
-import Status from '@/layout/Status';
 import { useCategorys } from "@/hooks";
 import { toTime } from "@/utils/format";
 import styles from './index.module.sass';
+import { Status } from '@/components/Status';
 import { Details, User } from '@/components/Tooltip';
 
 import { ENUM_PURCHASE } from "@/enum/purchase";

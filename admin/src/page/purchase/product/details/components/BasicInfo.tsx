@@ -1,7 +1,7 @@
 import { useRequest } from 'ahooks';
-import Status from '@/layout/Status';
 import styles from '../index.module.sass';
 import { NavLink } from "react-router-dom";
+import { Status } from '@/components/Status';
 import Categorys from '@/components/Categorys';
 import { getSupplierProductDetails } from '@/api/purchase';
 import { Carousel, Card, Image, Descriptions, Table } from 'antd';

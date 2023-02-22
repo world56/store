@@ -1,20 +1,10 @@
+@import '@/index.sass'
+
 .layout
-  :global(.ant-tabs-nav)
-    margin-bottom: 10px
+  @extend .detailsTabs
 
-  :global(.ant-tabs-nav-wrap)
-    background: #fff
-    padding: 4px 10px 8px 24px
-
-  :global(.ant-card)
-    margin-bottom: 10px
-
-  :global(.ant-descriptions)
-    margin-bottom: 10px
-
-  :global(.ant-card-body)
-    & > :global(.ant-descriptions):nth-last-child(1)
-      margin-bottom: 0
+  .extendInfo
+    text-align: left
 
   :global(.ant-tabs-tabpane)
     &:nth-child(1)
@@ -41,9 +31,3 @@
                 overflow: hidden
                 text-overflow: ellipsis
                 white-space: nowrap
-
-    &:nth-last-child(1)
-      margin-bottom: 10px
-
-  .extendInfo
-    text-align: left

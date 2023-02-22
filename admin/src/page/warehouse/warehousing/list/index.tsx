@@ -1,10 +1,9 @@
 import { useRequest } from "ahooks";
-import Status from "@/layout/Status";
 import { Btn } from "@/layout/Button";
 import { Link } from 'react-router-dom';
 import Search from "@/components/Search";
 import { User } from '@/components/Tooltip';
-import { DB_PRIMARY_KEY } from "@/config/db";
+import { Status } from "@/components/Status";
 import { toTime as render } from '@/utils/format';
 import { Card, Form, message, Table } from "antd";
 import { PurchaseOrder } from "@/components/Details";
@@ -13,6 +12,7 @@ import { showConfirmReceipt, showCountTheGoods } from './utils';
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { confirmReceiving, getWarehousingList } from "@/api/warehouse";
 
+import { DB_PRIMARY_KEY } from "@/config/db";
 import { ENUM_WAREHOUSE } from "@/enum/warehouse";
 
 import type { TypeCommon } from "@/interface/common";

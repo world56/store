@@ -1,18 +1,19 @@
+import { Tabs } from 'antd';
 import Supplier from './Supplier';
 import Products from './Products';
-import { Button, Tabs } from 'antd';
 import BasicInfo from './BasicInfo';
 import Logs from '@/components/Logs';
 import { Modal } from "@/layout/PopUp";
 import { useGetDetails } from '@/hooks';
 import styles from './index.module.sass';
+import { FooterButton } from '@/layout/Button';
 import { memo, useMemo, useState } from 'react';
-import { SyncOutlined } from '@ant-design/icons';
 import StatisticsBanner from "../StatisticsBanner";
 import { purchaseWaitWarehoused } from '@/utils/status';
 import { getWarehouseAuditPurchaseDetails } from '@/api/warehouse';
 
 import { ENUM_COMMON } from '@/enum/common';
+import { ENUM_WAREHOUSE } from '@/enum/warehouse';
 
 import type { ModalProps } from 'antd/lib/modal';
 import type { TypePurchaseOrder } from '@/interface/purchase/order';
@@ -87,6 +88,9 @@ const PurchaseOrder: React.FC<TypePurchaseOrderProps> = ({ id, onClose, children
     return { show, className, actualTotal, actualTotalPrice };
   }, [value]);
 
+  // 是否为待审核状态
+  const WAIT_APPROVAL = value?.audit?.status === ENUM_WAREHOUSE.WAREHOUSING_AUDIT_STATUS.PENDING;
+
   return (
     <Modal
       open={open}
@@ -97,11 +101,14 @@ const PurchaseOrder: React.FC<TypePurchaseOrderProps> = ({ id, onClose, children
       destroyOnClose={open}
       width={width[activeKey]}
       className={styles.layout}
-      footer={<>
-        <Button disabled={loading} icon={<SyncOutlined spin={loading} />} onClick={run}>刷新</Button>
-        {children}
-        <Button onClick={onCancel}>关闭</Button>
-      </>}>
+      footer={
+        <FooterButton
+          onRefresh={run}
+          loading={loading}
+          onCancel={onCancel}>
+          {WAIT_APPROVAL ? children : null}
+        </FooterButton>
+      }>
       <Tabs
         activeKey={activeKey}
         onChange={setActiveKey}
@@ -114,7 +121,7 @@ const PurchaseOrder: React.FC<TypePurchaseOrderProps> = ({ id, onClose, children
           },
           {
             key: '1',
-            label: '采购列表',
+            label: '采购单',
             children: <Products order={value?.order} {...statistics} />,
           },
           {
@@ -125,7 +132,7 @@ const PurchaseOrder: React.FC<TypePurchaseOrderProps> = ({ id, onClose, children
           {
             key: '3',
             label: '日志',
-            children: <Logs id={id} module={ENUM_COMMON.LOG_MODULE.PURCHASE} />
+            children: <Logs id={value?.order?.id} module={ENUM_COMMON.LOG_MODULE.PURCHASE} />
           },
         ]}
       />

@@ -1,11 +1,11 @@
 import { Form } from 'antd';
 import Search from '../Search';
-import Status from "@/layout/Status";
 import { memo, useMemo } from 'react';
 import { getLogs } from "@/api/common";
 import AddLog from './components/AddLog';
 import Refresh from './components/Refresh';
 import Message from './components/Message';
+import { Status } from "@/components/Status";
 import Container from './components/Container';
 import { useCategorys, useGetDetails } from "@/hooks";
 

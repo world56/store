@@ -1,10 +1,10 @@
 import { useRequest } from "ahooks";
-import Status from "@/layout/Status";
 import { toTime } from '@/utils/format';
 import { statusReversal } from '@/utils';
 import Search from "@/components/Search";
 import EditTemplate from "./EditTemplate";
 import { Button, Form, Table } from "antd";
+import { Status } from "@/components/Status";
 import Categorys from "@/components/Categorys";
 import { Btn, StatusChange } from "@/layout/Button";
 import { SpecParatter } from "@/components/Details";

@@ -65,10 +65,22 @@ export function insertCollectionAccount(data: TypeFinancePaymentAccount.DTO) {
 }
 
 /**
- * @name updateCollectionAccount 更新供应商付款账户信息
+ * @name updateCollectionAccount 编辑供应商付款账户信息
  */
 export function updateCollectionAccount(data: TypeFinancePaymentAccount.DTO) {
   return request<boolean>("finance/account/update", {
+    method: ENUM_HTTP.REQUEST_MODE.POST,
+    data,
+  });
+}
+
+/**
+ * @name changeCollectionAccountStatus 冻结、激活供应商收款账号状态
+ */
+export function changeCollectionAccountStatus(
+  data: TypeFinancePaymentAccount.EditStatus,
+) {
+  return request<boolean>(`finance/account/status/${data.id}`, {
     method: ENUM_HTTP.REQUEST_MODE.POST,
     data,
   });
